@@ -28,7 +28,7 @@ on:
 
 # Certain actions will only run when this is the main repo.
 env:
-  MAIN_REPO: moleculemaker/ChemScraper-frontend
+  MAIN_REPO: moleculemaker/novostoic-frontend
   DOCKERHUB_ORG: moleculemaker
 
 jobs:
@@ -50,7 +50,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            moleculemaker/ChemScraper-frontend
+            moleculemaker/novostoic-frontend
           tags: |
             # set latest tag for default branch
             type=raw,value=latest,enable={{is_default_branch}}
