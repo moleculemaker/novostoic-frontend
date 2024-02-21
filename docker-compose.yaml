@@ -10,9 +10,9 @@ networks:
 
 
 services:
-  chemscraper:
-    image: moleculemaker/chemscraper-frontend:localdev
-    container_name: chemscraper-frontend
+  novostoic:
+    image: moleculemaker/novostoic-frontend:localdev
+    container_name: novostoic-frontend
     build:
       context: .
       secrets:
