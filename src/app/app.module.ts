@@ -27,6 +27,8 @@ import { RadioButtonModule } from "primeng/radiobutton";
 import { CheckboxModule } from "primeng/checkbox";
 import { CardModule } from "primeng/card";
 import { ChipModule } from "primeng/chip";
+import { TabViewModule } from "primeng/tabview";
+
 import { LandingPageComponent } from "./components/landing-page/landing-page.component";
 
 // import { ConfigurationComponent} from './components/chemscraper/configuration/configuration.component';
@@ -49,6 +51,7 @@ import { DialogModule } from "primeng/dialog";
 
 import { ApiModule, Configuration } from "@api/mmli-backend/v1";
 import { SafePipe } from "./pipes/safe.pipe";
+import { AboutNovostoicComponent } from "./components/novostoic/about-novostoic/about-novostoic.component";
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -60,6 +63,7 @@ const initAppFn = (envService: EnvironmentService) => {
     SafePipe,
 
     LandingPageComponent,
+    AboutNovostoicComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,
@@ -86,6 +90,7 @@ const initAppFn = (envService: EnvironmentService) => {
     StepsModule,
     DropdownModule,
     TableModule,
+    TabViewModule,
     InputTextModule,
     ListboxModule,
     OverlayPanelModule,
