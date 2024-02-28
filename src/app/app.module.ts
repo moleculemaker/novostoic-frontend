@@ -26,6 +26,7 @@ import { SidebarModule } from "primeng/sidebar";
 import { RadioButtonModule } from "primeng/radiobutton";
 import { CheckboxModule } from "primeng/checkbox";
 import { CardModule } from "primeng/card";
+import { ChipModule } from "primeng/chip";
 import { LandingPageComponent } from "./components/landing-page/landing-page.component";
 
 // import { ConfigurationComponent} from './components/chemscraper/configuration/configuration.component';
@@ -75,6 +76,7 @@ const initAppFn = (envService: EnvironmentService) => {
     MessagesModule,
     ButtonModule,
     CardModule,
+    ChipModule,
     InputTextareaModule,
     PanelModule,
     ProgressBarModule,

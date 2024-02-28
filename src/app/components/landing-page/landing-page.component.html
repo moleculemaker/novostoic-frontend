@@ -44,8 +44,6 @@
             <h3 class="text-bold pb-6">Common Workflow of Novostoic</h3>
             <div class="flex gap-2">
                 <p-card
-                    header="Overall Stoichiometry"
-                    subheader="optstoic"
                     [styleClass]="
                         'rounded-none shadow-none border-2 border-solid border-bluegray-100 cursor-pointer '
                         + (displayedResearchNeed$.value === NovostoicTools.OVERALL_STOICHIOMETRY ? 'bg-gray-50': '')
@@ -55,10 +53,17 @@
                 >
                     <ng-template pTemplate="header">
                         <div class="flex items-center justify-center p-2 pb-0">
-                            <img
-                                src="assets/overall_stoichiometry.png"
-                                alt="overall_stoichiometry"
-                            />
+                            <div class="relative">
+                                <img
+                                    src="assets/overall_stoichiometry.png"
+                                    alt="overall_stoichiometry"
+                                />
+                                <p-chip
+                                    class="absolute left-0 top-0 ml-2 mt-2"
+                                    styleClass="bg-white/50"
+                                    label="Commonly First Used"
+                                ></p-chip>
+                            </div>
                         </div>
                     </ng-template>
                     <ng-template pTemplate="footer">
@@ -73,7 +78,10 @@
                             </button>
                         </div>
                     </ng-template>
-                    <ul class="ml-6 list-disc">
+
+                    <h3 class="-mt-6">Overall Stoichiometry</h3>
+                    <h6 class="mb-4 font-light">Optstoic</h6>
+                    <ul class="-mb-10 ml-6 list-disc">
                         <li class="pl-2">
                             You <i>have</i> a target molecule and a precursor
                         </li>
@@ -84,10 +92,31 @@
                     </ul>
                 </p-card>
 
-                <div class="flex items-center">>>>></div>
+                <div class="flex items-center">
+                    <svg
+                        width="46"
+                        height="8"
+                        viewBox="0 0 46 8"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M6.32324 4L39.4999 4"
+                            stroke="#1F2024"
+                            stroke-linecap="round"
+                        />
+                        <path
+                            d="M41.5475 3.28035L36.5157 0.152562C35.9129 -0.222171 35.1357 0.133851 35.0158 0.780589C34.9947 0.894278 35.0201 1.01018 35.0593 1.11895L36.0979 4.00003L35.0593 6.88111C35.0201 6.98989 34.9947 7.10578 35.0158 7.21947C35.1342 7.85706 35.8925 8.21483 36.4954 7.85977L41.5272 4.89661C42.1487 4.53065 42.1596 3.66082 41.5475 3.28035Z"
+                            fill="#1F2024"
+                        />
+                        <path
+                            d="M0.5 4C0.500001 2.067 2.067 0.499999 4 0.5C5.933 0.5 7.5 2.067 7.5 4C7.5 5.933 5.933 7.5 4 7.5C2.067 7.5 0.5 5.933 0.5 4Z"
+                            fill="white"
+                            stroke="#1F2024"
+                        />
+                    </svg>
+                </div>
                 <p-card
-                    header="Pathway Search"
-                    subheader="Novostoic 1.0"
                     [styleClass]="
                         'rounded-none shadow-none border-2 border-solid border-bluegray-100 cursor-pointer '
                         + (displayedResearchNeed$.value === NovostoicTools.PATHWAY_SEARCH ? 'bg-gray-50': '')
@@ -115,7 +144,10 @@
                             </button>
                         </div>
                     </ng-template>
-                    <ul class="ml-6 list-disc">
+
+                    <h3 class="-mt-6">Pathway Search</h3>
+                    <h6 class="mb-4 font-light">Novostoic 1.0</h6>
+                    <ul class="-mb-10 ml-6 list-disc">
                         <li class="pl-2">You <i>have</i> the stoichiometry</li>
                         <li class="pl-2 pt-2">
                             You <i>get</i> the possible retrobiosynthesis
@@ -124,11 +156,42 @@
                     </ul>
                 </p-card>
 
-                <div class="flex items-center">>>>></div>
+                <div class="flex items-center">
+                    <svg
+                        width="57"
+                        height="247"
+                        viewBox="0 0 57 247"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M51.7907 4H29.0002C24.582 4 21.0002 7.58172 21.0002 12V235C21.0002 239.418 24.582 243 29.0002 243H51.7907"
+                            stroke="#1F2024"
+                            stroke-linecap="round"
+                        />
+                        <path
+                            d="M21.0003 124L5.98291 124"
+                            stroke="#1F2024"
+                            stroke-linecap="round"
+                        />
+                        <path
+                            d="M52.5477 3.28035L47.5159 0.152562C46.9131 -0.222171 46.1359 0.133851 46.0161 0.780589C45.995 0.894278 46.0203 1.01018 46.0595 1.11895L47.0982 4.00003L46.0595 6.88111C46.0203 6.98989 45.995 7.10578 46.0161 7.21947C46.1345 7.85706 46.8927 8.21483 47.4957 7.85977L52.5275 4.89661C53.1489 4.53065 53.1598 3.66082 52.5477 3.28035Z"
+                            fill="#1F2024"
+                        />
+                        <path
+                            d="M52.5477 242.28L47.5159 239.153C46.9131 238.778 46.1359 239.134 46.0161 239.781C45.995 239.894 46.0203 240.01 46.0595 240.119L47.0982 243L46.0595 245.881C46.0203 245.99 45.995 246.106 46.0161 246.219C46.1345 246.857 46.8927 247.215 47.4957 246.86L52.5275 243.897C53.1489 243.531 53.1598 242.661 52.5477 242.28Z"
+                            fill="#1F2024"
+                        />
+                        <path
+                            d="M0.500244 124C0.500245 122.067 2.06725 120.5 4.00024 120.5C5.93324 120.5 7.50024 122.067 7.50024 124C7.50024 125.933 5.93324 127.5 4.00024 127.5C2.06725 127.5 0.500244 125.933 0.500244 124Z"
+                            fill="white"
+                            stroke="#1F2024"
+                        />
+                    </svg>
+                </div>
+
                 <div class="flex flex-col gap-4">
                     <p-card
-                        header="Thermodynamical Feasibility"
-                        subheader="dgPredictor"
                         [styleClass]="
                             'rounded-none shadow-none border-2 border-solid border-bluegray-100 cursor-pointer '
                             + (displayedResearchNeed$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY ? 'bg-gray-50': '')
@@ -158,7 +221,10 @@
                                 </button>
                             </div>
                         </ng-template>
-                        <ul class="ml-6 list-disc">
+
+                        <h3 class="-mt-6">Thermodynamical Feasibility</h3>
+                        <h6 class="mb-4 font-light">dgPredictor</h6>
+                        <ul class="-mb-10 ml-6 list-disc">
                             <li class="pl-2">
                                 You <i>have</i> pathways or reactions
                             </li>
@@ -168,8 +234,6 @@
                         </ul>
                     </p-card>
                     <p-card
-                        header="Enzyme Activity"
-                        subheader="EnzRank"
                         [styleClass]="
                             'rounded-none shadow-none border-2 border-solid border-bluegray-100 cursor-pointer '
                             + (displayedResearchNeed$.value === NovostoicTools.ENZYME_ACTIVITY ? 'bg-gray-50': '')
@@ -199,7 +263,10 @@
                                 </button>
                             </div>
                         </ng-template>
-                        <ul class="ml-6 list-disc">
+
+                        <h3 class="-mt-6">Enzyme Activity</h3>
+                        <h6 class="mb-4 font-light">EnzRank</h6>
+                        <ul class="-mb-10 ml-6 list-disc">
                             <li class="pl-2">
                                 You <i>have</i> pathways or reactions
                             </li>
