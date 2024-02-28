@@ -9,3 +9,9 @@
 
 
 //**************** css ******************
+::ng-deep .dropdown-intention {
+    .p-dropdown-label {
+        margin-left: $padding * 2;
+        font-family: $font-family;
+    }
+}
