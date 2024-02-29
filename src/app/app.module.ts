@@ -29,6 +29,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { LandingPageComponent} from './components/landing-page/landing-page.component';
 import { SidebarComponent } from './components/novostoic/sidebar/sidebar.component';
 import { SubscriberEmailInputComponent } from './components/novostoic/subscriber-email-input/subscriber-email-input.component';
+import { OverallStoichiometryComponent } from './components/novostoic/overall-stoichiometry/overall-stoichiometry.component';
 
 // import { ConfigurationComponent} from './components/chemscraper/configuration/configuration.component';
 // import { ResultsComponent } from './components/chemscraper/results/results.component';
@@ -62,6 +63,7 @@ const initAppFn = (envService: EnvironmentService) => {
     SafePipe,
 
     LandingPageComponent,
+    OverallStoichiometryComponent,
     SidebarComponent,
     SubscriberEmailInputComponent,
   ],
