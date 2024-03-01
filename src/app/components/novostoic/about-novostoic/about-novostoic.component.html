@@ -1,5 +1,5 @@
-<div class="-mb-4 flex flex-col justify-center">
-    <div class="mt-6 flex flex-col items-center justify-center">
+<div class="-mb-4 flex h-full flex-col">
+    <div class="mt-6 flex h-full flex-col items-center">
         <div class="lg:w-screen-lg flex w-full p-4">
             <a class="font-bold" href="/">
                 <h6>
@@ -8,7 +8,7 @@
                 </h6>
             </a>
         </div>
-        <div class="lg:w-screen-lg flex w-full p-4">
+        <div class="lg:w-screen-lg flex w-full grow p-4 pb-0">
             <nav class="flex max-w-[300px] flex-col">
                 <button
                     class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
@@ -47,7 +47,7 @@
             <!-- About -->
             <main
                 *ngIf="activePanel$.value === ActiveAboutPanel.ABOUT"
-                class="-ml-0.5 h-screen border-l-2 border-solid border-[#e5e7eb] pl-16"
+                class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16"
             >
                 <h1 class="mb-4 font-bold">About</h1>
                 <p class="max-w-screen-md leading-6">
@@ -107,7 +107,7 @@
             <!-- Github -->
             <main
                 *ngIf="activePanel$.value === ActiveAboutPanel.GITHUB"
-                class="-ml-0.5 h-screen border-l-2 border-solid border-[#e5e7eb] pl-16"
+                class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16"
             >
                 <h1 class="mb-4 font-bold">Github</h1>
                 <p class="max-w-screen-md leading-6">
@@ -127,7 +127,7 @@
             <!-- Publications -->
             <main
                 *ngIf="activePanel$.value === ActiveAboutPanel.PUBLICATIONS"
-                class="-ml-0.5 h-screen border-l-2 border-solid border-[#e5e7eb] pl-16"
+                class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16"
             >
                 <h1 class="mb-4 font-bold">Publications</h1>
                 <p class="max-w-screen-md leading-6">
@@ -162,7 +162,7 @@
             <!-- Get Involved -->
             <main
                 *ngIf="activePanel$.value === ActiveAboutPanel.GET_INVOLVED"
-                class="-ml-0.5 h-screen border-l-2 border-solid border-[#e5e7eb] pl-16"
+                class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16"
             >
                 <h1 class="mb-4 font-bold">Get involved</h1>
                 <p class="max-w-screen-md leading-6">
