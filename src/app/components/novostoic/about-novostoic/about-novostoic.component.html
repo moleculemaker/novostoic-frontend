@@ -1,6 +1,6 @@
 <div class="-mb-4 flex flex-col justify-center">
     <div class="mt-6 flex flex-col items-center justify-center">
-        <div class="flex w-[1180px] p-4">
+        <div class="lg:w-screen-lg flex w-full p-4">
             <a class="font-bold" href="/">
                 <h6>
                     <i class="pi pi-chevron-left text-xs"></i>
@@ -8,7 +8,7 @@
                 </h6>
             </a>
         </div>
-        <div class="flex w-[1180px] p-4">
+        <div class="lg:w-screen-lg flex w-full p-4">
             <nav class="flex max-w-[300px] flex-col">
                 <button
                     class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
@@ -45,7 +45,7 @@
             </nav>
 
             <!-- About -->
-            <div
+            <main
                 *ngIf="activePanel$.value === ActiveAboutPanel.ABOUT"
                 class="-ml-0.5 h-screen border-l-2 border-solid border-[#e5e7eb] pl-16"
             >
@@ -102,10 +102,10 @@
                     velit. Egestas risus placerat facilisi sed enim interdum.
                     Lorem ipsum dolor sit amet consectetur.
                 </p>
-            </div>
+            </main>
 
             <!-- Github -->
-            <div
+            <main
                 *ngIf="activePanel$.value === ActiveAboutPanel.GITHUB"
                 class="-ml-0.5 h-screen border-l-2 border-solid border-[#e5e7eb] pl-16"
             >
@@ -122,10 +122,10 @@
                     Lorem ipsum dolor sit amet consectetur. Diam lacus neque
                     orci porttitor consectetur sed.
                 </p>
-            </div>
+            </main>
 
             <!-- Publications -->
-            <div
+            <main
                 *ngIf="activePanel$.value === ActiveAboutPanel.PUBLICATIONS"
                 class="-ml-0.5 h-screen border-l-2 border-solid border-[#e5e7eb] pl-16"
             >
@@ -157,10 +157,10 @@
                         <a><i class="pi pi-external-link mx-2"></i>DOI: TBD</a>
                     </li>
                 </ul>
-            </div>
+            </main>
 
             <!-- Get Involved -->
-            <div
+            <main
                 *ngIf="activePanel$.value === ActiveAboutPanel.GET_INVOLVED"
                 class="-ml-0.5 h-screen border-l-2 border-solid border-[#e5e7eb] pl-16"
             >
@@ -174,7 +174,7 @@
                         >email: novostoic-feedback@moleculemaker.org</a
                     >
                 </p>
-            </div>
+            </main>
         </div>
     </div>
 </div>
