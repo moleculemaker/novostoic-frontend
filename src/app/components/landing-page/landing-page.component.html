@@ -1,6 +1,6 @@
 <div class="flex flex-col justify-center pb-44">
     <div class="mt-16 flex justify-center">
-        <div class="w-[1180px] p-4">
+        <div class="lg:w-screen-lg p-4">
             <h1 class="font-bold">Welcome to Novostoic!</h1>
             <p class="mt-4 max-w-screen-md leading-6">
                 A unified web-based interface for the biosynthesis of
@@ -20,8 +20,8 @@
         <div class="flex items-center justify-between gap-4">
             <span class="italic">I have -> I need</span>
             <p-dropdown
-                class="dropdown-intention w-[480px] text-center"
-                styleClass="w-[480px]"
+                class="dropdown-intention text-center md:w-[480px]"
+                styleClass="md:w-[480px]"
                 [options]="researchNeeds"
                 [ngModel]="selectedResearchNeed$.value"
                 (onChange)="selectedResearchNeed$.next($event.value)"
@@ -40,7 +40,7 @@
     <!-- TODO: add animation -->
     <!-- TODO: the bottom margin of card is incorrect -->
     <div class="mt-16 flex justify-center">
-        <div class="w-[1180px] p-4">
+        <div class="lg:w-screen-lg p-4">
             <h3 class="text-bold pb-6">Common Workflow of Novostoic</h3>
             <div class="flex gap-2">
                 <p-card
