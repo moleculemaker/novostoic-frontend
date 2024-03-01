@@ -1,15 +1,227 @@
 <div class="flex h-full w-full gap-16">
     <app-sidebar></app-sidebar>
     <div class="grow pt-4">
-        <div class="flex h-full max-w-[1180px] flex-col justify-between">
+        <form
+            class="flex h-full max-w-[1180px] flex-col justify-between"
+            [formGroup]="stoichiometryForm"
+        >
             <div>
                 <h2 class="mb-2">Input your target molecule and precursor</h2>
                 <p class="leading-6">
                     You’ll get the overall stoichiometry and theoretical yield.
                     Input format: KEGG ID, Common name, SMILES.
                 </p>
+
+                <!-- Molecule Input -->
+                <div class="mt-8 flex gap-6">
+                    <div class="flex grow flex-col">
+                        <div class="flex items-center justify-between pb-2">
+                            <span
+                                class="with-green-indicator indicator-green relative ml-8 text-base font-semibold"
+                                >Primary Precursor</span
+                            >
+                            <span class="pr-1"
+                                >Example:
+                                <span class="font-semibold underline"
+                                    >Pyruvate</span
+                                >,
+                                <span class="font-semibold underline"
+                                    >C00022</span
+                                >,
+                                <span class="font-semibold underline"
+                                    >CC(=O)C(=O)O</span
+                                ></span
+                            >
+                        </div>
+                        <div class="marvin-filter-container">
+                            <div class="p-inputgroup">
+                                <input
+                                    pInputText
+                                    type="text"
+                                    class="border-0"
+                                    formControlName="primaryPrecursor"
+                                    placeholder="CC(=O)C(=O)O"
+                                />
+                                <button
+                                    pButton
+                                    class="p-button-secondary p-button-link p-button-outlined"
+                                    icon="pi pi-pencil mr-2"
+                                    (click)="showPrimaryPrecursorDialog$.next(true)"
+                                >
+                                    <span class="font-semibold"
+                                        >Draw / Upload</span
+                                    >
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="mt-4 flex h-[200px] grow flex-col rounded-md border-2 border-solid border-black"
+                        >
+                            Hello world
+                        </div>
+                    </div>
+                    <div class="mt-10 flex items-start">
+                        <svg
+                            width="37"
+                            height="37"
+                            viewBox="0 0 37 37"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M5.46118 7.52002L16.4412 18.5L5.46118 29.48H10.9512L21.9312 18.5L10.9512 7.52002H5.46118Z"
+                                fill="#224063"
+                            />
+                            <path
+                                d="M15.0688 7.52002L26.0488 18.5L15.0688 29.48H20.5588L31.5388 18.5L20.5588 7.52002H15.0688Z"
+                                fill="#224063"
+                            />
+                        </svg>
+                    </div>
+                    <div class="flex grow flex-col">
+                        <div class="flex items-center justify-between pb-2">
+                            <span
+                                class="with-blue-indicator indicator-green relative ml-8 text-base font-semibold"
+                                >Target Molecule</span
+                            >
+                            <span class="pr-1"
+                                >Example:
+                                <span class="font-semibold underline">3HP</span
+                                >,
+                                <span class="font-semibold underline"
+                                    >C01013</span
+                                >,
+                                <span class="font-semibold underline"
+                                    >O=C(CCO)O</span
+                                ></span
+                            >
+                        </div>
+                        <div class="marvin-filter-container">
+                            <div class="p-inputgroup">
+                                <input
+                                    pInputText
+                                    type="text"
+                                    class="border-0"
+                                    formControlName="targetMolecule"
+                                    placeholder="Name, SMILES, InChi, Kegg ID"
+                                />
+                                <button
+                                    pButton
+                                    class="p-button-secondary p-button-link p-button-outlined"
+                                    icon="pi pi-pencil mr-2"
+                                    (click)="showTargetMoleculeDialog$.next(true)"
+                                >
+                                    <span class="font-semibold"
+                                        >Draw / Upload</span
+                                    >
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="mt-4 flex h-[200px] grow flex-col rounded-md border-2 border-solid border-black"
+                        >
+                            Hello world
+                        </div>
+                    </div>
+                </div>
             </div>
-            <app-subscriber-email-input></app-subscriber-email-input>
-        </div>
+
+            <!-- Subscription Email Input -->
+            <div
+                class="flex justify-between rounded-t-md bg-[#F3F5FB] px-10 pt-8"
+            >
+                <div class="flex flex-col">
+                    <div class="mb-2 flex items-end justify-center">
+                        <span class="mb-1 pr-12">
+                            <h2 class="m-0 mr-2 inline">Email</h2>
+                            Leave an email to get an notification when your
+                            results are ready.</span
+                        >
+                    </div>
+                    <div class="w-full">
+                        <input
+                            id="subscriber-email"
+                            type="email"
+                            aria-describedby="subscriber-email-help"
+                            [class]="'h-12 w-full'
+                            + ((stoichiometryForm.controls['subscriberEmail'].invalid
+                                && stoichiometryForm.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
+                            pInputText
+                            placeholder="Enter email here"
+                            formControlName="subscriberEmail"
+                        />
+                        <small
+                            *ngIf="stoichiometryForm.controls['subscriberEmail'].invalid
+                                && stoichiometryForm.controls['subscriberEmail'].dirty"
+                            id="subscriber-email-help"
+                            class="p-error mt-2 block"
+                            >Email is invalid.</small
+                        >
+                    </div>
+                    <div class="py-4">
+                        <p-checkbox
+                            name="subscription"
+                            styleClass="subscription-checkbox"
+                            label="Agree to receive email notifications and updates about Novostoic."
+                            [binary]="true"
+                            [formControl]="stoichiometryForm.controls['agreeToSubscription']"
+                        ></p-checkbox>
+                    </div>
+                </div>
+                <p-button
+                    label="Get the Overall Stoichiometry"
+                    styleClass="bg-[#224063]"
+                    [disabled]="stoichiometryForm.invalid"
+                    iconPos="right"
+                    icon="pi pi-arrow-right"
+                ></p-button>
+            </div>
+        </form>
     </div>
 </div>
+
+<p-dialog
+    class="marvin-editor-container"
+    [visible]="showPrimaryPrecursorDialog$.value"
+    (visibleChange)="showPrimaryPrecursorDialog$.next($event)"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+>
+    <app-marvin-js-editor
+        class="marvin-editor"
+        [smiles]="stoichiometryForm.controls['primaryPrecursor'].value || ''"
+        (smilesChange)="stoichiometryForm.controls['primaryPrecursor'].setValue($event)"
+    ></app-marvin-js-editor>
+    <ng-template pTemplate="footer">
+        <p-button
+            icon="pi pi-check"
+            (click)="searchStructure(false)"
+            label="Search Structure"
+            styleClass="bg-[#224063]"
+        ></p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog
+    class="marvin-editor-container"
+    [visible]="showTargetMoleculeDialog$.value"
+    (visibleChange)="showTargetMoleculeDialog$.next($event)"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+>
+    <app-marvin-js-editor
+        class="marvin-editor"
+        [smiles]="stoichiometryForm.controls['targetMolecule'].value || ''"
+        (smilesChange)="stoichiometryForm.controls['targetMolecule'].setValue($event)"
+    ></app-marvin-js-editor>
+    <ng-template pTemplate="footer">
+        <p-button
+            icon="pi pi-check"
+            (click)="searchStructure(true)"
+            label="Search Structure"
+            styleClass="bg-[#224063]"
+        ></p-button>
+    </ng-template>
+</p-dialog>

@@ -29,10 +29,12 @@ import { CardModule } from "primeng/card";
 import { ChipModule } from "primeng/chip";
 import { TabViewModule } from "primeng/tabview";
 
-import { LandingPageComponent} from './components/landing-page/landing-page.component';
-import { SidebarComponent } from './components/novostoic/sidebar/sidebar.component';
-import { SubscriberEmailInputComponent } from './components/novostoic/subscriber-email-input/subscriber-email-input.component';
-import { OverallStoichiometryComponent } from './components/novostoic/overall-stoichiometry/overall-stoichiometry.component';
+import { LandingPageComponent } from "./components/landing-page/landing-page.component";
+import { SidebarComponent } from "./components/novostoic/sidebar/sidebar.component";
+import { SubscriberEmailInputComponent } from "./components/novostoic/subscriber-email-input/subscriber-email-input.component";
+import { OverallStoichiometryComponent } from "./components/novostoic/overall-stoichiometry/overall-stoichiometry.component";
+import { AboutNovostoicComponent } from "./components/novostoic/about-novostoic/about-novostoic.component";
+import { MarvinJsModule } from "./components/novostoic/marvinjs/marvinjs.module";
 
 // import { ConfigurationComponent} from './components/chemscraper/configuration/configuration.component';
 // import { ResultsComponent } from './components/chemscraper/results/results.component';
@@ -54,7 +56,7 @@ import { DialogModule } from "primeng/dialog";
 
 import { ApiModule, Configuration } from "@api/mmli-backend/v1";
 import { SafePipe } from "./pipes/safe.pipe";
-import { AboutNovostoicComponent } from "./components/novostoic/about-novostoic/about-novostoic.component";
+import { OverallStoichiometryResultComponent } from './components/novostoic/overall-stoichiometry-result/overall-stoichiometry-result.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -70,6 +72,7 @@ const initAppFn = (envService: EnvironmentService) => {
     SidebarComponent,
     SubscriberEmailInputComponent,
     AboutNovostoicComponent,
+    OverallStoichiometryResultComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,
@@ -116,7 +119,7 @@ const initAppFn = (envService: EnvironmentService) => {
 
     ApiModule.forRoot(() => new Configuration()),
     ReactiveFormsModule,
-    // MarvinJsModule,
+    MarvinJsModule,
     DialogModule,
   ],
   providers: [

@@ -665,7 +665,6 @@ p-panel {
     width: 50vw;
     min-width: $editor_min_width;
     min-height: $editor_min_height;
-    
     @media (width <= $editor_min_width) {
       width: 100vw;
       min-width: 0px;
