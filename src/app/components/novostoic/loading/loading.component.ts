@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
-import { interval, tap, throttle } from "rxjs";
+import { interval } from "rxjs";
 
 @Component({
   selector: "app-loading",
@@ -11,13 +10,5 @@ import { interval, tap, throttle } from "rxjs";
   },
 })
 export class LoadingComponent {
-  loadingValue$ = interval(200).pipe(
-    tap((x) => {
-      if (x > 100) {
-        this.router.navigate(["/overall-stoichiometry/result"]);
-      }
-    }),
-  );
-
-  constructor(private router: Router) {}
+  loadingValue$ = interval(200);
 }
