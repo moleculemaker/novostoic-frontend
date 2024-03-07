@@ -1,4 +1,4 @@
-<div class="flex h-full w-full gap-16">
+<div class="flex h-full w-full max-w-screen-lg gap-16">
     <app-sidebar></app-sidebar>
     <div class="grow pt-4">
         <div class="flex h-full max-w-screen-lg flex-col justify-between">
@@ -13,18 +13,246 @@
                             Submission Time: example submission time
                         </p>
                     </div>
-                    <div class="flex gap-2">
-                        <button>Cancel</button>
-                        <button>
-                            <i class="pi pi-plus"></i>
-                            Run a new Request
-                        </button>
+                    <div class="flex items-center">
+                        <div class="flex items-center gap-2">
+                            <button class="rounded-md border p-2 py-3">
+                                Cancel
+                            </button>
+
+                            <button class="rounded-md border p-2 py-3">
+                                <i class="pi pi-plus mx-2"></i>
+                                Run a new Request
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Molecule Input -->
-                <div class="mt-8 flex gap-6"></div>
+                <div class="mt-8 flex flex-col gap-6">
+                    <p-panel>
+                        <ng-template pTemplate="header">
+                            <div
+                                class="flex w-full items-center justify-between p-2 px-4"
+                            >
+                                <span class="text-lg font-bold">Input</span>
+                                <div>
+                                    Molecule Representation:
+                                    <p-dropdown
+                                        class="ml-2"
+                                        [options]="moleculeRepresentations"
+                                        [ngModel]="selectedMoleculeRepresentation$.value"
+                                        (ngModelChange)="selectedMoleculeRepresentation$.next($event)"
+                                    ></p-dropdown>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="content">
+                            <div class="flex w-full">
+                                <div
+                                    class="flex w-1/2 items-center justify-between p-4"
+                                >
+                                    <div class="flex items-center">
+                                        <span class="green-dot mx-2"></span>
+                                        <span class="text-base font-semibold"
+                                            >Primary Precursor</span
+                                        >
+                                    </div>
+                                    <span class="font-bold">CC=(O)C(=O)O</span>
+                                </div>
+                                <div
+                                    class="flex w-1/2 items-center justify-between border-l border-solid border-[--surface-d] p-4"
+                                >
+                                    <div class="flex items-center">
+                                        <span class="blue-dot mx-2"></span>
+                                        <span class="text-base font-semibold"
+                                            >Target Molecule</span
+                                        >
+                                    </div>
+                                    <span class="font-bold">O=C(O)CCO</span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-panel>
+
+                    <p-panel>
+                        <ng-template pTemplate="header">
+                            <div
+                                class="flex w-full items-center justify-between p-2 px-4"
+                            >
+                                <span class="text-l">Results</span>
+                                <button
+                                    class="flex items-center gap-2 rounded-lg border p-2"
+                                    (click)="showResultsFilter$.next(true)"
+                                >
+                                    <i class="pi pi-filter"></i>
+                                    Filter
+                                    <p-chip>1</p-chip>
+                                </button>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="content">
+                            <p-table
+                                [value]="results"
+                                [paginator]="true"
+                                [rows]="10"
+                                [showCurrentPageReport]="true"
+                                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                                [rowsPerPageOptions]="[10, 25, 50]"
+                            >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th pSortableColumn="stoichiometry">
+                                            <span
+                                                class="underline decoration-dotted"
+                                                >Overall Stoichiometry</span
+                                            >
+                                            <p-sortIcon
+                                                field="stoichiometry"
+                                            ></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="yield">
+                                            <span
+                                                class="underline decoration-dotted"
+                                                >Yield</span
+                                            >
+                                            <p-sortIcon
+                                                field="yield"
+                                            ></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="deltaG">
+                                            <span
+                                                class="underline decoration-dotted"
+                                                >ΔG</span
+                                            >
+                                            <p-sortIcon
+                                                field="deltaG"
+                                            ></p-sortIcon>
+                                        </th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-product>
+                                    <tr>
+                                        <td class="relative">
+                                            <div
+                                                #resultRow
+                                                class="flex max-w-[440px] items-center overflow-x-scroll"
+                                            >
+                                                <span>
+                                                    <span
+                                                        class="green-dot mt-1.5"
+                                                    ></span>
+                                                </span>
+                                                <span
+                                                    class="text-nowrap"
+                                                    *ngFor="let reactant of product.stoichiometry.reactants"
+                                                >
+                                                    <span class="mx-1">+</span>
+                                                    <span class="bg-gray-50 p-1"
+                                                        >{{ reactant.amount }}
+                                                        {{ reactant.name
+                                                        }}</span
+                                                    >
+                                                </span>
+                                                <i
+                                                    class="pi pi-angle-double-right mx-1 border border-dashed px-1 text-lg font-extrabold"
+                                                ></i>
+                                                <span
+                                                    class="text-nowrap"
+                                                    *ngFor="let reactant of product.stoichiometry.yield"
+                                                >
+                                                    <span class="bg-gray-50 p-1"
+                                                        >{{ reactant.amount }}
+                                                        {{ reactant.name
+                                                        }}</span
+                                                    >
+                                                    <span class="mx-1">+</span>
+                                                </span>
+                                                <span>
+                                                    <span
+                                                        class="blue-dot mt-1"
+                                                    ></span>
+                                                </span>
+                                            </div>
+                                            <button
+                                                [class.hidden]="!(resultRow.scrollWidth > resultRow.clientWidth
+                                                    && resultRow.scrollLeft < (resultRow.scrollWidth - resultRow.clientWidth - 1))"
+                                                class="absolute right-0 top-5"
+                                                (mouseenter)="startScrolling(resultRow, 1)"
+                                                (mouseleave)="endScrolling()"
+                                            >
+                                                <i
+                                                    class="pi pi-arrow-right bg-[#d9d9d9] p-1"
+                                                ></i>
+                                            </button>
+                                            <button
+                                                [class.hidden]="!(resultRow.scrollWidth > resultRow.clientWidth
+                                                    && resultRow.scrollLeft > 0)"
+                                                class="absolute left-2 top-5"
+                                                (mouseenter)="startScrolling(resultRow, -1)"
+                                                (mouseleave)="endScrolling()"
+                                            >
+                                                <i
+                                                    class="pi pi-arrow-right rotate-180 bg-[#d9d9d9] p-1"
+                                                ></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <span class="text-xl font-bold"
+                                                >{{product.yield | number :
+                                                '1.1-2'}}</span
+                                            ><span class="text-xs">mol</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-xl font-bold"
+                                                >{{product.deltaG}}</span
+                                            ><span class="text-xs">kJ/mol</span>
+                                        </td>
+                                        <td>
+                                            <button>
+                                                <p-chip styleClass="p-1 px-3"
+                                                    >Pathway Design
+                                                    <i
+                                                        class="pi pi-arrow-right ml-2"
+                                                    ></i
+                                                ></p-chip>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </ng-template>
+                    </p-panel>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<p-dialog
+    [visible]="showResultsFilter$.value"
+    (visibleChange)="showResultsFilter$.next($event)"
+    styleClass="w-[400px]"
+>
+    <ng-template pTemplate="header">
+        <div>
+            <i class="pi pi-filter px-2"></i>
+            Filter
+        </div>
+    </ng-template>
+    <div class="mb-2">
+        <p class="mb-4 mt-8 font-semibold">Molecules</p>
+        <p class="mb-2">Co-Reactants & Co-Products</p>
+        <p-multiSelect
+            placeholder="Select cofactors"
+            styleClass="w-full"
+            appendTo="body"
+        ></p-multiSelect>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="flex items-center justify-between pt-4">
+            <button class="rounded-md border p-2">Clear all filters</button>
+            <button pButton class="rounded-md border p-2">Apply Filters</button>
+        </div>
+    </ng-template>
+</p-dialog>

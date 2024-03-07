@@ -28,6 +28,8 @@ import { CheckboxModule } from "primeng/checkbox";
 import { CardModule } from "primeng/card";
 import { ChipModule } from "primeng/chip";
 import { TabViewModule } from "primeng/tabview";
+import { ScrollPanelModule } from "primeng/scrollpanel";
+import { MultiSelectModule } from "primeng/multiselect";
 
 import { LandingPageComponent } from "./components/landing-page/landing-page.component";
 import { SidebarComponent } from "./components/novostoic/sidebar/sidebar.component";
@@ -56,7 +58,8 @@ import { DialogModule } from "primeng/dialog";
 
 import { ApiModule, Configuration } from "@api/mmli-backend/v1";
 import { SafePipe } from "./pipes/safe.pipe";
-import { OverallStoichiometryResultComponent } from './components/novostoic/overall-stoichiometry-result/overall-stoichiometry-result.component';
+import { OverallStoichiometryResultComponent } from "./components/novostoic/overall-stoichiometry-result/overall-stoichiometry-result.component";
+import { LoadingComponent } from "./components/novostoic/loading/loading.component";
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -73,6 +76,7 @@ const initAppFn = (envService: EnvironmentService) => {
     SubscriberEmailInputComponent,
     AboutNovostoicComponent,
     OverallStoichiometryResultComponent,
+    LoadingComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,
@@ -95,6 +99,7 @@ const initAppFn = (envService: EnvironmentService) => {
     ProgressBarModule,
     SelectButtonModule,
     SkeletonModule,
+    ScrollPanelModule,
     ProgressSpinnerModule,
     StepsModule,
     DropdownModule,
@@ -116,6 +121,7 @@ const initAppFn = (envService: EnvironmentService) => {
     }),
     NgxMatomoRouterModule,
     MenuModule,
+    MultiSelectModule,
 
     ApiModule.forRoot(() => new Configuration()),
     ReactiveFormsModule,
