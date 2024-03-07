@@ -3,8 +3,8 @@
     <div class="grow pt-4">
         <form
             class="flex h-full flex-col justify-between"
-            [formGroup]="stoichiometryForm"
-            (ngSubmit)="onSubmit(stoichiometryForm)"
+            [formGroup]="overallStoichiometryRequest.form"
+            (ngSubmit)="onSubmit(overallStoichiometryRequest)"
         >
             <div>
                 <h2 class="mb-2">Input your target molecule and precursor</h2>
@@ -59,7 +59,7 @@
                             </div>
                         </div>
                         <div
-                            *ngIf="stoichiometryForm.controls['primaryPrecursor'].value"
+                            *ngIf="overallStoichiometryRequest.form.controls['primaryPrecursor'].value"
                             class="relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid border-[#00A907]"
                         >
                             <i
@@ -132,7 +132,7 @@
                             </div>
                         </div>
                         <div
-                            *ngIf="stoichiometryForm.controls['targetMolecule'].value"
+                            *ngIf="overallStoichiometryRequest.form.controls['targetMolecule'].value"
                             class="relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid border-[#3B82F6]"
                         >
                             <i
@@ -165,15 +165,15 @@
                             type="email"
                             aria-describedby="subscriber-email-help"
                             [class]="'h-12 w-full'
-                            + ((stoichiometryForm.controls['subscriberEmail'].invalid
-                                && stoichiometryForm.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
+                            + ((overallStoichiometryRequest.form.controls['subscriberEmail'].invalid
+                                && overallStoichiometryRequest.form.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
                             pInputText
                             placeholder="Enter email here"
                             formControlName="subscriberEmail"
                         />
                         <small
-                            *ngIf="stoichiometryForm.controls['subscriberEmail'].invalid
-                                && stoichiometryForm.controls['subscriberEmail'].dirty"
+                            *ngIf="overallStoichiometryRequest.form.controls['subscriberEmail'].invalid
+                                && overallStoichiometryRequest.form.controls['subscriberEmail'].dirty"
                             id="subscriber-email-help"
                             class="p-error mt-2 block"
                             >Email is invalid.</small
@@ -185,7 +185,7 @@
                             styleClass="subscription-checkbox"
                             label="Agree to receive email notifications and updates about Novostoic."
                             [binary]="true"
-                            [formControl]="stoichiometryForm.controls['agreeToSubscription']"
+                            [formControl]="overallStoichiometryRequest.form.controls['agreeToSubscription']"
                         ></p-checkbox>
                     </div>
                 </div>
@@ -193,7 +193,7 @@
                     label="Get the Overall Stoichiometry"
                     type="submit"
                     styleClass="bg-[#224063]"
-                    [disabled]="stoichiometryForm.invalid"
+                    [disabled]="overallStoichiometryRequest.form.invalid"
                     iconPos="right"
                     icon="pi pi-arrow-right"
                 ></p-button>
@@ -213,9 +213,9 @@
 >
     <app-marvin-js-editor
         class="marvin-editor"
-        [smiles]="stoichiometryForm.controls[currentFormControl$.value].value || ''"
+        [smiles]="overallStoichiometryRequest.form.controls[currentFormControl$.value].value || ''"
         (smilesChange)="
-        stoichiometryForm.controls[currentFormControl$.value].setValue($event)"
+        overallStoichiometryRequest.form.controls[currentFormControl$.value].setValue($event)"
     ></app-marvin-js-editor>
     <ng-template pTemplate="footer">
         <p-button

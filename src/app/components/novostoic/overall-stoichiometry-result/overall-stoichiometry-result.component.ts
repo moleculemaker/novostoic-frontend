@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
 @Component({
@@ -9,7 +9,7 @@ import { BehaviorSubject } from "rxjs";
     class: "grow",
   },
 })
-export class OverallStoichiometryResultComponent {
+export class OverallStoichiometryResultComponent implements OnInit {
   moleculeRepresentations = [
     {
       label: "SMILES",
@@ -223,8 +223,29 @@ export class OverallStoichiometryResultComponent {
   scrollingCounter$ = new BehaviorSubject(-1);
   showResultsFilter$ = new BehaviorSubject(false);
   selectedMoleculeRepresentation$ = new BehaviorSubject(
-    this.moleculeRepresentations[0],
+    this.moleculeRepresentations[0].value,
   );
+
+  // example job info
+  jobId = "exampleJobId";
+  submissionTime = "example submission time";
+  primaryPrecursor: { [key: string]: string } = {
+    smiles: "CC=(O)C(=O)O",
+    commonName: "commonName",
+    keggId: "keggId",
+  };
+  targetMolecule: { [key: string]: string } = {
+    smiles: "O=C(O)CCO",
+    commonName: "commonName",
+    keggId: "keggId",
+  };
+  loading = true;
+
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.loading = false;
+    }, 3000);
+  }
 
   startScrolling(container: HTMLElement, delta: number) {
     const timeoutId = setTimeout(() => {

@@ -1,16 +1,16 @@
 <div class="flex h-full w-full max-w-screen-lg gap-16">
     <app-sidebar></app-sidebar>
-    <div class="grow pt-4">
+    <div class="grow py-4">
         <div class="flex h-full max-w-screen-lg flex-col justify-between">
             <div>
                 <!-- TODO: use real data -->
                 <div class="flex justify-between">
                     <div>
                         <h2 class="mb-2">
-                            Job ID: example job id <i class="pi pi-copy"></i>
+                            Job ID: {{ jobId }} <i class="pi pi-copy"></i>
                         </h2>
                         <p class="leading-6">
-                            Submission Time: example submission time
+                            Submission Time: {{ submissionTime }}
                         </p>
                     </div>
                     <div class="flex items-center">
@@ -28,7 +28,7 @@
                 </div>
 
                 <!-- Molecule Input -->
-                <div class="mt-8 flex flex-col gap-6">
+                <div *ngIf="!loading" class="mt-8 flex flex-col gap-6">
                     <p-panel>
                         <ng-template pTemplate="header">
                             <div
@@ -57,7 +57,11 @@
                                             >Primary Precursor</span
                                         >
                                     </div>
-                                    <span class="font-bold">CC=(O)C(=O)O</span>
+                                    <span class="font-bold"
+                                        >{{
+                                        primaryPrecursor[selectedMoleculeRepresentation$.value]
+                                        }}</span
+                                    >
                                 </div>
                                 <div
                                     class="flex w-1/2 items-center justify-between border-l border-solid border-[--surface-d] p-4"
@@ -68,7 +72,11 @@
                                             >Target Molecule</span
                                         >
                                     </div>
-                                    <span class="font-bold">O=C(O)CCO</span>
+                                    <span class="font-bold"
+                                        >{{
+                                        targetMolecule[selectedMoleculeRepresentation$.value]
+                                        }}</span
+                                    >
                                 </div>
                             </div>
                         </ng-template>
@@ -224,6 +232,8 @@
                         </ng-template>
                     </p-panel>
                 </div>
+
+                <app-loading *ngIf="loading"></app-loading>
             </div>
         </div>
     </div>

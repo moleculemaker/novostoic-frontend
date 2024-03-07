@@ -1,9 +1,7 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { BehaviorSubject, map } from "rxjs";
-
-import { ImageExporter } from "../marvinjs";
+import { BehaviorSubject } from "rxjs";
+import { OverallStoichiometryRequest } from "~/app/models/overall-stoichiometry";
 
 @Component({
   selector: "app-overall-stoichiometry",
@@ -14,12 +12,7 @@ import { ImageExporter } from "../marvinjs";
   },
 })
 export class OverallStoichiometryComponent {
-  stoichiometryForm = new FormGroup({
-    primaryPrecursor: new FormControl("", [Validators.required]),
-    targetMolecule: new FormControl("", [Validators.required]),
-    agreeToSubscription: new FormControl(false),
-    subscriberEmail: new FormControl("", [Validators.email]),
-  });
+  overallStoichiometryRequest = new OverallStoichiometryRequest();
 
   currentFormControl$ = new BehaviorSubject<
     "primaryPrecursor" | "targetMolecule"
@@ -32,7 +25,7 @@ export class OverallStoichiometryComponent {
     this.showDialog$.next(false);
   }
 
-  onSubmit(form: FormGroup) {
+  onSubmit(form: OverallStoichiometryRequest) {
     this.router.navigate(["/loading"]);
   }
 }
