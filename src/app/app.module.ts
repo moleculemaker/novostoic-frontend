@@ -33,7 +33,6 @@ import { MultiSelectModule } from "primeng/multiselect";
 
 import { LandingPageComponent } from "./components/landing-page/landing-page.component";
 import { SidebarComponent } from "./components/novostoic/sidebar/sidebar.component";
-import { SubscriberEmailInputComponent } from "./components/novostoic/subscriber-email-input/subscriber-email-input.component";
 import { OverallStoichiometryComponent } from "./components/novostoic/overall-stoichiometry/overall-stoichiometry.component";
 import { AboutNovostoicComponent } from "./components/novostoic/about-novostoic/about-novostoic.component";
 import { MarvinJsModule } from "./components/novostoic/marvinjs/marvinjs.module";
@@ -73,7 +72,6 @@ const initAppFn = (envService: EnvironmentService) => {
     LandingPageComponent,
     OverallStoichiometryComponent,
     SidebarComponent,
-    SubscriberEmailInputComponent,
     AboutNovostoicComponent,
     OverallStoichiometryResultComponent,
     LoadingComponent,
