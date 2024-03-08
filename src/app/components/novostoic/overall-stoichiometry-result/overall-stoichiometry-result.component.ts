@@ -1,5 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
+import {
+  NovostoicMolecule,
+  OverallStoichiometryResponse,
+} from "~/app/models/overall-stoichiometry";
 
 @Component({
   selector: "app-overall-stoichiometry-result",
@@ -10,14 +14,17 @@ import { BehaviorSubject } from "rxjs";
   },
 })
 export class OverallStoichiometryResultComponent implements OnInit {
-  moleculeRepresentations = [
+  moleculeRepresentations: Array<{
+    label: string;
+    value: "smiles" | "commonNames" | "keggId";
+  }> = [
     {
       label: "SMILES",
       value: "smiles",
     },
     {
       label: "Common Name",
-      value: "commonName",
+      value: "commonNames",
     },
     {
       label: "Kegg ID",
@@ -25,200 +32,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
     },
   ];
 
-  results = [
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "NADH", amount: 1.0 },
-          { name: "NADH", amount: 1.0 },
-          { name: "NADH", amount: 1.0 },
-          { name: "NADH", amount: 1.0 },
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "NADH", amount: 1.0 },
-          { name: "NADH", amount: 1.0 },
-          { name: "NADH", amount: 1.0 },
-          { name: "NADH", amount: 1.0 },
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-    {
-      stoichiometry: {
-        reactants: [
-          { name: "NADH", amount: 1.0 },
-          { name: "CO2", amount: 2.0 },
-        ],
-        yield: [
-          { name: "NAD", amount: 1.5 },
-          { name: "Water", amount: 2.0 },
-        ],
-      },
-      yield: 3.0,
-      deltaG: 5,
-    },
-  ];
+  response = OverallStoichiometryResponse.example;
 
   scrollingCounter$ = new BehaviorSubject(-1);
   showResultsFilter$ = new BehaviorSubject(false);
@@ -229,16 +43,6 @@ export class OverallStoichiometryResultComponent implements OnInit {
   // example job info
   jobId = "exampleJobId";
   submissionTime = "example submission time";
-  primaryPrecursor: { [key: string]: string } = {
-    smiles: "CC=(O)C(=O)O",
-    commonName: "commonName",
-    keggId: "keggId",
-  };
-  targetMolecule: { [key: string]: string } = {
-    smiles: "O=C(O)CCO",
-    commonName: "commonName",
-    keggId: "keggId",
-  };
   loading = true;
 
   ngOnInit(): void {

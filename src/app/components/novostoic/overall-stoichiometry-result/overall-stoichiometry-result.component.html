@@ -59,7 +59,7 @@
                                     </div>
                                     <span class="font-bold"
                                         >{{
-                                        primaryPrecursor[selectedMoleculeRepresentation$.value]
+                                        response.primaryPrecursor[selectedMoleculeRepresentation$.value]
                                         }}</span
                                     >
                                 </div>
@@ -74,7 +74,7 @@
                                     </div>
                                     <span class="font-bold"
                                         >{{
-                                        targetMolecule[selectedMoleculeRepresentation$.value]
+                                        response.targetMolecule[selectedMoleculeRepresentation$.value]
                                         }}</span
                                     >
                                 </div>
@@ -100,7 +100,7 @@
                         </ng-template>
                         <ng-template pTemplate="content">
                             <p-table
-                                [value]="results"
+                                [value]="response.results"
                                 [paginator]="true"
                                 [rows]="10"
                                 [showCurrentPageReport]="true"
@@ -158,7 +158,8 @@
                                                     <span class="mx-1">+</span>
                                                     <span class="bg-gray-50 p-1"
                                                         >{{ reactant.amount }}
-                                                        {{ reactant.name
+                                                        {{
+                                                        reactant.molecule.commonNames[0]
                                                         }}</span
                                                     >
                                                 </span>
@@ -171,7 +172,8 @@
                                                 >
                                                     <span class="bg-gray-50 p-1"
                                                         >{{ reactant.amount }}
-                                                        {{ reactant.name
+                                                        {{
+                                                        reactant.molecule.commonNames[0]
                                                         }}</span
                                                     >
                                                     <span class="mx-1">+</span>

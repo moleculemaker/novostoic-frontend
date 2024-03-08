@@ -22,7 +22,7 @@ export class OverallStoichiometryRequest {
   }
 }
 
-interface NovostoicMolecule {
+export interface NovostoicMolecule {
   commonNames: string[]; // one molecule might have multiple common names
   smiles: string;
   keggId?: string;
@@ -52,4 +52,339 @@ export class OverallStoichiometryResponse {
     yield: number;
     deltaG: number;
   }>;
+
+  static get example(): OverallStoichiometryResponse {
+    return {
+      primaryPrecursor: {
+        smiles: "CC=(O)C(=O)O",
+        commonNames: ["commonName"],
+        keggId: "keggId",
+      },
+      targetMolecule: {
+        smiles: "O=C(O)CCO",
+        commonNames: ["commonName"],
+        keggId: "keggId",
+      },
+      results: [
+        {
+          stoichiometry: {
+            reactants: [
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 2.0,
+              },
+            ],
+            products: [
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 2.0,
+              },
+            ],
+          },
+          yield: 3.0,
+          deltaG: 5,
+        },
+        {
+          stoichiometry: {
+            reactants: [
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 2.0,
+              },
+            ],
+            products: [
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 2.0,
+              },
+            ],
+          },
+          yield: 3.0,
+          deltaG: 5,
+        },
+        {
+          stoichiometry: {
+            reactants: [
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.0,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 2.0,
+              },
+            ],
+            products: [
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 1.5,
+              },
+              {
+                molecule: {
+                  commonNames: ["commonName"],
+                  smiles: "smiles",
+                  keggId: "keggId",
+                },
+                amount: 2.0,
+              },
+            ],
+          },
+          yield: 3.0,
+          deltaG: 5,
+        },
+      ],
+    };
+  }
 }
