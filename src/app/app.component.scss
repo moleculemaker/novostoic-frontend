@@ -302,8 +302,8 @@ header {
 
 .content {
     flex-grow: 1;
-
-    padding: $padding;
+    display: flex;
+    justify-content: center;
 }
 
 footer {

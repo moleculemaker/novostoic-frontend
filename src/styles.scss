@@ -1,1 +1,21 @@
 //remember to add custom sass styles.scss to the angular.json so it builds during the base app
+/**************** tailwind *****************/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.green-dot {
+    display: inline-block;
+    height: .8rem;
+    width: .8rem;
+    border-radius: 50%;
+    background-color: #00A907;
+}
+
+.blue-dot {
+    display: inline-block;
+    height: .8rem;
+    width: .8rem;
+    border-radius: 50%;
+    background-color: #3B82F6;
+}

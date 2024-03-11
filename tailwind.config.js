@@ -11,6 +11,12 @@ module.exports = {
           100: "#dadee3",
         },
       },
+      spacing: {
+        "screen-lg": "1180px",
+      },
+      screens: {
+        lg: "1180px",
+      },
     },
   },
   plugins: [],
