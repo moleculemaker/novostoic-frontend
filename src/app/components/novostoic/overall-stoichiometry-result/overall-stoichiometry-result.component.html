@@ -15,14 +15,19 @@
                     </div>
                     <div class="flex items-center">
                         <div class="flex items-center gap-2">
-                            <button class="rounded-md border p-2 py-3">
+                            <button
+                                *ngIf="loading"
+                                class="rounded-md border p-2 py-3"
+                            >
                                 Cancel
                             </button>
 
-                            <button class="rounded-md border p-2 py-3">
-                                <i class="pi pi-plus mx-2"></i>
-                                Run a new Request
-                            </button>
+                            <a href="/overall-stoichiometry" target="_blank">
+                                <button class="rounded-md border p-2 py-3">
+                                    <i class="pi pi-plus mx-2"></i>
+                                    Run a new Request
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
