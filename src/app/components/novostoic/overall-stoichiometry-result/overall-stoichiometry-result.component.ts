@@ -40,6 +40,14 @@ export class OverallStoichiometryResultComponent implements OnInit {
     this.moleculeRepresentations[0].value,
   );
 
+  filters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
+  filterOptions = this.response.results
+    .map((result) => [
+      ...result.stoichiometry.reactants.map((reactant) => reactant.molecule),
+      ...result.stoichiometry.products.map((product) => product.molecule),
+    ])
+    .flat();
+
   // example job info
   jobId = "exampleJobId";
   submissionTime = "example submission time";

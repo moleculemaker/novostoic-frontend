@@ -57,7 +57,7 @@
                                             >Primary Precursor</span
                                         >
                                     </div>
-                                    <span class="font-bold"
+                                    <span class="text-end font-bold"
                                         >{{
                                         response.primaryPrecursor[selectedMoleculeRepresentation$.value]
                                         }}</span
@@ -72,7 +72,7 @@
                                             >Target Molecule</span
                                         >
                                     </div>
-                                    <span class="font-bold"
+                                    <span class="text-end font-bold"
                                         >{{
                                         response.targetMolecule[selectedMoleculeRepresentation$.value]
                                         }}</span
@@ -109,14 +109,11 @@
                             >
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th pSortableColumn="stoichiometry">
+                                        <th>
                                             <span
                                                 class="underline decoration-dotted"
                                                 >Overall Stoichiometry</span
                                             >
-                                            <p-sortIcon
-                                                field="stoichiometry"
-                                            ></p-sortIcon>
                                         </th>
                                         <th pSortableColumn="yield">
                                             <span
@@ -149,39 +146,300 @@
                                                 <span>
                                                     <span
                                                         class="green-dot mt-1.5"
-                                                    ></span>
+                                                        (mouseenter)="primaryPrecursorOverlay.show($event)"
+                                                        (mouseleave)="primaryPrecursorOverlay.hide()"
+                                                    >
+                                                        <p-overlayPanel
+                                                            #primaryPrecursorOverlay
+                                                        >
+                                                            <div
+                                                                class="w-[300px] p-4"
+                                                            >
+                                                                <div
+                                                                    class="mb-2 flex justify-center rounded-md border border-solid border-[#00A907] p-2"
+                                                                >
+                                                                    <img
+                                                                        class="h-[180px] w-auto"
+                                                                        [src]="response.primaryPrecursor.structure"
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    class="flex flex-col"
+                                                                >
+                                                                    <div
+                                                                        class="mt-2 flex justify-between"
+                                                                    >
+                                                                        <span
+                                                                            class="font-light"
+                                                                            >Common
+                                                                            Name</span
+                                                                        >
+                                                                        <span
+                                                                            class="text-end font-semibold"
+                                                                            >{{
+                                                                            response.primaryPrecursor.commonNames[0]
+                                                                            }}</span
+                                                                        >
+                                                                    </div>
+                                                                    <div
+                                                                        class="mt-2 flex justify-between"
+                                                                    >
+                                                                        <span
+                                                                            class="font-light"
+                                                                            >KEGG
+                                                                            ID</span
+                                                                        >
+                                                                        <span
+                                                                            class="text-end font-semibold"
+                                                                            >{{
+                                                                            response.primaryPrecursor.keggId
+                                                                            }}</span
+                                                                        >
+                                                                    </div>
+                                                                    <div
+                                                                        class="mt-2 flex justify-between"
+                                                                    >
+                                                                        <span
+                                                                            class="font-light"
+                                                                            >SMILES</span
+                                                                        >
+                                                                        <span
+                                                                            class="text-end font-semibold"
+                                                                            >{{
+                                                                            response.primaryPrecursor.smiles
+                                                                            }}</span
+                                                                        >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </p-overlayPanel>
+                                                    </span>
                                                 </span>
                                                 <span
                                                     class="text-nowrap"
                                                     *ngFor="let reactant of product.stoichiometry.reactants"
                                                 >
                                                     <span class="mx-1">+</span>
-                                                    <span class="bg-gray-50 p-1"
-                                                        >{{ reactant.amount }}
-                                                        {{
+                                                    <span
+                                                        class="bg-gray-50 p-1"
+                                                        (mouseenter)="coreactantOverlay.show($event)"
+                                                        (mouseleave)="coreactantOverlay.hide()"
+                                                        >{{ reactant.amount |
+                                                        number: '1.1-2' }} {{
                                                         reactant.molecule.commonNames[0]
-                                                        }}</span
-                                                    >
+                                                        }}
+                                                        <p-overlayPanel
+                                                            #coreactantOverlay
+                                                        >
+                                                            <div
+                                                                class="w-[300px] p-4"
+                                                            >
+                                                                <div
+                                                                    class="mb-2"
+                                                                >
+                                                                    <span
+                                                                        class="gray-dot"
+                                                                    ></span>
+                                                                    <span
+                                                                        class="ml-2 font-semibold"
+                                                                        >Co-Reactant</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    class="mb-2 flex justify-center rounded-md border border-solid p-2"
+                                                                >
+                                                                    <img
+                                                                        class="h-[180px] w-auto"
+                                                                        [src]="reactant.molecule.structure"
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    class="flex flex-col"
+                                                                >
+                                                                    <div
+                                                                        class="mt-2 flex justify-between"
+                                                                    >
+                                                                        <span
+                                                                            class="font-light"
+                                                                            >Common
+                                                                            Name</span
+                                                                        >
+                                                                        <span
+                                                                            class="text-end font-semibold"
+                                                                            >{{
+                                                                            reactant.molecule.commonNames[0]
+                                                                            }}</span
+                                                                        >
+                                                                    </div>
+                                                                    <div
+                                                                        class="mt-2 flex justify-between"
+                                                                    >
+                                                                        <span
+                                                                            class="font-light"
+                                                                            >KEGG
+                                                                            ID</span
+                                                                        >
+                                                                        <span
+                                                                            class="text-end font-semibold"
+                                                                            >{{
+                                                                            reactant.molecule.keggId
+                                                                            }}</span
+                                                                        >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </p-overlayPanel>
+                                                    </span>
                                                 </span>
                                                 <i
                                                     class="pi pi-angle-double-right mx-1 border border-dashed px-1 text-lg font-extrabold"
                                                 ></i>
                                                 <span
                                                     class="text-nowrap"
-                                                    *ngFor="let reactant of product.stoichiometry.yield"
+                                                    *ngFor="let reactant of product.stoichiometry.products"
+                                                    (mouseenter)="coproductOverlay.show($event)"
+                                                    (mouseleave)="coproductOverlay.hide()"
                                                 >
                                                     <span class="bg-gray-50 p-1"
-                                                        >{{ reactant.amount }}
-                                                        {{
+                                                        >{{ reactant.amount |
+                                                        number: '1.1-2' }} {{
                                                         reactant.molecule.commonNames[0]
-                                                        }}</span
-                                                    >
+                                                        }}
+                                                        <p-overlayPanel
+                                                            #coproductOverlay
+                                                        >
+                                                            <div
+                                                                class="w-[300px] p-4"
+                                                            >
+                                                                <div
+                                                                    class="mb-2"
+                                                                >
+                                                                    <span
+                                                                        class="gray-dot"
+                                                                    ></span>
+                                                                    <span
+                                                                        class="ml-2 font-semibold"
+                                                                        >Co-Product</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    class="mb-2 flex justify-center rounded-md border border-solid p-2"
+                                                                >
+                                                                    <img
+                                                                        class="h-[180px] w-auto"
+                                                                        [src]="reactant.molecule.structure"
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    class="flex flex-col"
+                                                                >
+                                                                    <div
+                                                                        class="mt-2 flex justify-between"
+                                                                    >
+                                                                        <span
+                                                                            class="font-light"
+                                                                            >Common
+                                                                            Name</span
+                                                                        >
+                                                                        <span
+                                                                            class="text-end font-semibold"
+                                                                            >{{
+                                                                            reactant.molecule.commonNames[0]
+                                                                            }}</span
+                                                                        >
+                                                                    </div>
+                                                                    <div
+                                                                        class="mt-2 flex justify-between"
+                                                                    >
+                                                                        <span
+                                                                            class="font-light"
+                                                                            >KEGG
+                                                                            ID</span
+                                                                        >
+                                                                        <span
+                                                                            class="text-end font-semibold"
+                                                                            >{{
+                                                                            reactant.molecule.keggId
+                                                                            }}</span
+                                                                        >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </p-overlayPanel>
+                                                    </span>
                                                     <span class="mx-1">+</span>
                                                 </span>
                                                 <span>
                                                     <span
                                                         class="blue-dot mt-1"
-                                                    ></span>
+                                                        (mouseenter)="targetMoleculeOverlay.show($event)"
+                                                        (mouseleave)="targetMoleculeOverlay.hide()"
+                                                    >
+                                                        <p-overlayPanel
+                                                            #targetMoleculeOverlay
+                                                        >
+                                                            <div
+                                                                class="w-[300px] p-4"
+                                                            >
+                                                                <div
+                                                                    class="mb-2 flex justify-center rounded-md border border-solid border-[#3B82F6] p-2"
+                                                                >
+                                                                    <img
+                                                                        class="h-[180px] w-auto"
+                                                                        [src]="response.targetMolecule.structure"
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    class="flex flex-col"
+                                                                >
+                                                                    <div
+                                                                        class="mt-2 flex justify-between"
+                                                                    >
+                                                                        <span
+                                                                            class="font-light"
+                                                                            >Common
+                                                                            Name</span
+                                                                        >
+                                                                        <span
+                                                                            class="text-end font-semibold"
+                                                                            >{{
+                                                                            response.primaryPrecursor.commonNames[0]
+                                                                            }}</span
+                                                                        >
+                                                                    </div>
+                                                                    <div
+                                                                        class="mt-2 flex justify-between"
+                                                                    >
+                                                                        <span
+                                                                            class="font-light"
+                                                                            >KEGG
+                                                                            ID</span
+                                                                        >
+                                                                        <span
+                                                                            class="text-end font-semibold"
+                                                                            >{{
+                                                                            response.primaryPrecursor.keggId
+                                                                            }}</span
+                                                                        >
+                                                                    </div>
+                                                                    <div
+                                                                        class="mt-2 flex justify-between"
+                                                                    >
+                                                                        <span
+                                                                            class="font-light"
+                                                                            >SMILES</span
+                                                                        >
+                                                                        <span
+                                                                            class="text-end font-semibold"
+                                                                            >{{
+                                                                            response.primaryPrecursor.smiles
+                                                                            }}</span
+                                                                        >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </p-overlayPanel>
+                                                    </span>
                                                 </span>
                                             </div>
                                             <button
@@ -215,7 +473,8 @@
                                         </td>
                                         <td>
                                             <span class="text-xl font-bold"
-                                                >{{product.deltaG}}</span
+                                                >{{product.deltaG | number:
+                                                '1.1-2'}}</span
                                             ><span class="text-xs">kJ/mol</span>
                                         </td>
                                         <td>
@@ -259,6 +518,10 @@
             placeholder="Select cofactors"
             styleClass="w-full"
             appendTo="body"
+            [options]="filterOptions"
+            [ngModel]="filters$.value"
+            (ngModelChange)="filters$.next($event)"
+            optionLabel="keggId"
         ></p-multiSelect>
     </div>
     <ng-template pTemplate="footer">
