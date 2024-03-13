@@ -40,36 +40,44 @@
                                 class="flex w-full items-center justify-between p-2 px-4"
                             >
                                 <span class="text-lg font-bold">Input</span>
-                                <div>
-                                    Molecule Representation:
-                                    <p-dropdown
-                                        class="ml-2"
-                                        [options]="moleculeRepresentations"
-                                        [ngModel]="selectedMoleculeRepresentation$.value"
-                                        (ngModelChange)="selectedMoleculeRepresentation$.next($event)"
-                                    ></p-dropdown>
-                                </div>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="content">
                             <div class="flex w-full">
                                 <div
-                                    class="flex w-1/2 items-center justify-between p-4"
+                                    class="flex w-1/2 flex-col justify-between p-4"
                                 >
-                                    <div class="flex items-center">
+                                    <div class="mb-2 flex items-center">
                                         <span class="green-dot mx-2"></span>
-                                        <span class="text-base font-semibold"
+                                        <span class="text-base"
                                             >Primary Precursor</span
                                         >
                                     </div>
-                                    <span class="text-end font-bold"
-                                        >{{
-                                        response.primaryPrecursor[selectedMoleculeRepresentation$.value]
-                                        }}</span
+                                    <div
+                                        class="flex items-stretch justify-between gap-4 px-2"
                                     >
+                                        <div
+                                            class="rounded-md border border-solid border-[--surface-d] p-2"
+                                        >
+                                            <img
+                                                class="h-auto w-[100px]"
+                                                [src]="response.primaryPrecursor.structure"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex grow flex-col justify-between"
+                                        >
+                                            <ng-container
+                                                *ngTemplateOutlet="moleculeInfo; context: {
+                                                $implicit: response.primaryPrecursor,
+                                                showSmiles: true
+                                            }"
+                                            ></ng-container>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div
-                                    class="flex w-1/2 items-center justify-between border-l border-solid border-[--surface-d] p-4"
+                                    class="flex w-1/2 flex-col justify-between border-l border-solid border-[--surface-d] p-4"
                                 >
                                     <div class="flex items-center">
                                         <span class="blue-dot mx-2"></span>
@@ -77,11 +85,28 @@
                                             >Target Molecule</span
                                         >
                                     </div>
-                                    <span class="text-end font-bold"
-                                        >{{
-                                        response.targetMolecule[selectedMoleculeRepresentation$.value]
-                                        }}</span
+                                    <div
+                                        class="flex items-stretch justify-between gap-4 px-2"
                                     >
+                                        <div
+                                            class="rounded-md border border-solid border-[--surface-d] p-2"
+                                        >
+                                            <img
+                                                class="h-auto w-[100px]"
+                                                [src]="response.targetMolecule.structure"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex grow flex-col justify-between"
+                                        >
+                                            <ng-container
+                                                *ngTemplateOutlet="moleculeInfo; context: {
+                                                $implicit: response.targetMolecule,
+                                                showSmiles: true
+                                            }"
+                                            ></ng-container>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </ng-template>
@@ -172,50 +197,12 @@
                                                                 <div
                                                                     class="flex flex-col"
                                                                 >
-                                                                    <div
-                                                                        class="mt-2 flex justify-between"
-                                                                    >
-                                                                        <span
-                                                                            class="font-light"
-                                                                            >Common
-                                                                            Name</span
-                                                                        >
-                                                                        <span
-                                                                            class="text-end font-semibold"
-                                                                            >{{
-                                                                            response.primaryPrecursor.commonNames[0]
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
-                                                                    <div
-                                                                        class="mt-2 flex justify-between"
-                                                                    >
-                                                                        <span
-                                                                            class="font-light"
-                                                                            >KEGG
-                                                                            ID</span
-                                                                        >
-                                                                        <span
-                                                                            class="text-end font-semibold"
-                                                                            >{{
-                                                                            response.primaryPrecursor.keggId
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
-                                                                    <div
-                                                                        class="mt-2 flex justify-between"
-                                                                    >
-                                                                        <span
-                                                                            class="font-light"
-                                                                            >SMILES</span
-                                                                        >
-                                                                        <span
-                                                                            class="text-end font-semibold"
-                                                                            >{{
-                                                                            response.primaryPrecursor.smiles
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
+                                                                    <ng-container
+                                                                        *ngTemplateOutlet="moleculeInfo; context: {
+                                                                            $implicit: response.primaryPrecursor,
+                                                                            showSmiles: true
+                                                                        }"
+                                                                    ></ng-container>
                                                                 </div>
                                                             </div>
                                                         </p-overlayPanel>
@@ -262,36 +249,12 @@
                                                                 <div
                                                                     class="flex flex-col"
                                                                 >
-                                                                    <div
-                                                                        class="mt-2 flex justify-between"
-                                                                    >
-                                                                        <span
-                                                                            class="font-light"
-                                                                            >Common
-                                                                            Name</span
-                                                                        >
-                                                                        <span
-                                                                            class="text-end font-semibold"
-                                                                            >{{
-                                                                            reactant.molecule.commonNames[0]
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
-                                                                    <div
-                                                                        class="mt-2 flex justify-between"
-                                                                    >
-                                                                        <span
-                                                                            class="font-light"
-                                                                            >KEGG
-                                                                            ID</span
-                                                                        >
-                                                                        <span
-                                                                            class="text-end font-semibold"
-                                                                            >{{
-                                                                            reactant.molecule.keggId
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
+                                                                    <ng-container
+                                                                        *ngTemplateOutlet="moleculeInfo; context: {
+                                                                        $implicit: reactant.molecule,
+                                                                        showSmiles: false
+                                                                    }"
+                                                                    ></ng-container>
                                                                 </div>
                                                             </div>
                                                         </p-overlayPanel>
@@ -339,36 +302,12 @@
                                                                 <div
                                                                     class="flex flex-col"
                                                                 >
-                                                                    <div
-                                                                        class="mt-2 flex justify-between"
-                                                                    >
-                                                                        <span
-                                                                            class="font-light"
-                                                                            >Common
-                                                                            Name</span
-                                                                        >
-                                                                        <span
-                                                                            class="text-end font-semibold"
-                                                                            >{{
-                                                                            reactant.molecule.commonNames[0]
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
-                                                                    <div
-                                                                        class="mt-2 flex justify-between"
-                                                                    >
-                                                                        <span
-                                                                            class="font-light"
-                                                                            >KEGG
-                                                                            ID</span
-                                                                        >
-                                                                        <span
-                                                                            class="text-end font-semibold"
-                                                                            >{{
-                                                                            reactant.molecule.keggId
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
+                                                                    <ng-container
+                                                                        *ngTemplateOutlet="moleculeInfo; context: {
+                                                                        $implicit: reactant.molecule,
+                                                                        showSmiles: false
+                                                                    }"
+                                                                    ></ng-container>
                                                                 </div>
                                                             </div>
                                                         </p-overlayPanel>
@@ -398,50 +337,12 @@
                                                                 <div
                                                                     class="flex flex-col"
                                                                 >
-                                                                    <div
-                                                                        class="mt-2 flex justify-between"
-                                                                    >
-                                                                        <span
-                                                                            class="font-light"
-                                                                            >Common
-                                                                            Name</span
-                                                                        >
-                                                                        <span
-                                                                            class="text-end font-semibold"
-                                                                            >{{
-                                                                            response.primaryPrecursor.commonNames[0]
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
-                                                                    <div
-                                                                        class="mt-2 flex justify-between"
-                                                                    >
-                                                                        <span
-                                                                            class="font-light"
-                                                                            >KEGG
-                                                                            ID</span
-                                                                        >
-                                                                        <span
-                                                                            class="text-end font-semibold"
-                                                                            >{{
-                                                                            response.primaryPrecursor.keggId
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
-                                                                    <div
-                                                                        class="mt-2 flex justify-between"
-                                                                    >
-                                                                        <span
-                                                                            class="font-light"
-                                                                            >SMILES</span
-                                                                        >
-                                                                        <span
-                                                                            class="text-end font-semibold"
-                                                                            >{{
-                                                                            response.primaryPrecursor.smiles
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
+                                                                    <ng-container
+                                                                        *ngTemplateOutlet="moleculeInfo; context: {
+                                                                        $implicit: response.targetMolecule,
+                                                                        showSmiles: true
+                                                                    }"
+                                                                    ></ng-container>
                                                                 </div>
                                                             </div>
                                                         </p-overlayPanel>
@@ -505,6 +406,23 @@
         </div>
     </div>
 </div>
+
+<ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">Common Name</span>
+        <span class="text-end font-semibold"
+            >{{ molecule.commonNames[0] }}</span
+        >
+    </div>
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">KEGG ID</span>
+        <span class="text-end font-semibold">{{ molecule.keggId }}</span>
+    </div>
+    <div *ngIf="showSmiles" class="mt-2 flex justify-between">
+        <span class="font-light">SMILES</span>
+        <span class="text-end font-semibold">{{ molecule.smiles }}</span>
+    </div>
+</ng-template>
 
 <p-dialog
     [visible]="showResultsFilter$.value"
