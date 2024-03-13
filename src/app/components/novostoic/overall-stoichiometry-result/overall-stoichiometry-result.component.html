@@ -94,12 +94,13 @@
                                 >
                                     <i class="pi pi-filter"></i>
                                     Filter
-                                    <p-chip>1</p-chip>
+                                    <p-chip>{{ filters$.value.length }}</p-chip>
                                 </button>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="content">
                             <p-table
+                                #resultsTable
                                 [value]="response.results"
                                 [paginator]="true"
                                 [rows]="10"
@@ -521,13 +522,27 @@
             [options]="filterOptions"
             [ngModel]="filters$.value"
             (ngModelChange)="filters$.next($event)"
-            optionLabel="keggId"
-        ></p-multiSelect>
+        >
+            <ng-template pTemplate="item" let-item>
+                {{ item.commonNames[0] }}
+            </ng-template>
+            <ng-template pTemplate="selectedItems">
+                {{ (filterValueStr$ | async) || 'Select cofactors' }}
+            </ng-template>
+        </p-multiSelect>
     </div>
     <ng-template pTemplate="footer">
         <div class="flex items-center justify-between pt-4">
-            <button class="rounded-md border p-2">Clear all filters</button>
-            <button pButton class="rounded-md border p-2">Apply Filters</button>
+            <button class="rounded-md border p-2" (click)="filters$.next([])">
+                Clear all filters
+            </button>
+            <button
+                pButton
+                class="rounded-md border p-2"
+                (click)="applyFilters()"
+            >
+                Apply Filters
+            </button>
         </div>
     </ng-template>
 </p-dialog>
