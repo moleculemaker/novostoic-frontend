@@ -1,0 +1,158 @@
+<div class="flex w-full items-center">
+    <!-- Primary Precursor -->
+    <span>
+        <span
+            class="green-dot mt-1.5"
+            (mouseenter)="primaryPrecursorOverlay.show($event)"
+            (mouseleave)="primaryPrecursorOverlay.hide()"
+        >
+            <p-overlayPanel #primaryPrecursorOverlay>
+                <div class="w-[300px] p-4">
+                    <div
+                        class="mb-2 flex justify-center rounded-md border border-solid border-[#00A907] p-2"
+                    >
+                        <img
+                            class="h-[180px] w-auto"
+                            [src]="primaryPrecursor.structure"
+                        />
+                    </div>
+                    <div class="flex flex-col">
+                        <ng-container
+                            *ngTemplateOutlet="moleculeInfo; context: {
+                            $implicit: primaryPrecursor,
+                            showSmiles: true
+                        }"
+                        ></ng-container>
+                    </div>
+                </div>
+            </p-overlayPanel>
+        </span>
+    </span>
+
+    <!-- Co-Reactant -->
+    <span class="text-nowrap" *ngFor="let reactant of stoichiometry.reactants">
+        <span class="mx-1">+</span>
+        <span
+            class="p-1"
+            [class]="moleculeStyleClass"
+            (mouseenter)="coreactantOverlay.show($event)"
+            (mouseleave)="coreactantOverlay.hide()"
+            >{{ reactant.amount | number: '1.1-2' }} {{
+            reactant.molecule.commonNames[0] }}
+            <p-overlayPanel #coreactantOverlay>
+                <div class="w-[300px] p-4">
+                    <div class="mb-2">
+                        <span class="gray-dot"></span>
+                        <span class="ml-2 font-semibold">Co-Reactant</span>
+                    </div>
+                    <div
+                        class="mb-2 flex justify-center rounded-md border border-solid p-2"
+                    >
+                        <img
+                            class="h-[180px] w-auto"
+                            [src]="reactant.molecule.structure"
+                        />
+                    </div>
+                    <div class="flex flex-col">
+                        <ng-container
+                            *ngTemplateOutlet="moleculeInfo; context: {
+                        $implicit: reactant.molecule,
+                        showSmiles: false
+                    }"
+                        ></ng-container>
+                    </div>
+                </div>
+            </p-overlayPanel>
+        </span>
+    </span>
+
+    <!-- Reaction -->
+    <i
+        class="pi pi-angle-double-right mx-1 border border-dashed px-1 text-lg font-extrabold"
+    ></i>
+
+    <!-- Co-Product -->
+    <span
+        class="text-nowrap"
+        *ngFor="let reactant of stoichiometry.products"
+        (mouseenter)="coproductOverlay.show($event)"
+        (mouseleave)="coproductOverlay.hide()"
+    >
+        <span class="p-1" [class]="moleculeStyleClass"
+            >{{ reactant.amount | number: '1.1-2' }} {{
+            reactant.molecule.commonNames[0] }}
+            <p-overlayPanel #coproductOverlay>
+                <div class="w-[300px] p-4">
+                    <div class="mb-2">
+                        <span class="gray-dot"></span>
+                        <span class="ml-2 font-semibold">Co-Product</span>
+                    </div>
+                    <div
+                        class="mb-2 flex justify-center rounded-md border border-solid p-2"
+                    >
+                        <img
+                            class="h-[180px] w-auto"
+                            [src]="reactant.molecule.structure"
+                        />
+                    </div>
+                    <div class="flex flex-col">
+                        <ng-container
+                            *ngTemplateOutlet="moleculeInfo; context: {
+                        $implicit: reactant.molecule,
+                        showSmiles: false
+                    }"
+                        ></ng-container>
+                    </div>
+                </div>
+            </p-overlayPanel>
+        </span>
+        <span class="mx-1">+</span>
+    </span>
+
+    <!-- Target Molecule -->
+    <span>
+        <span
+            class="blue-dot mt-1"
+            (mouseenter)="targetMoleculeOverlay.show($event)"
+            (mouseleave)="targetMoleculeOverlay.hide()"
+        >
+            <p-overlayPanel #targetMoleculeOverlay>
+                <div class="w-[300px] p-4">
+                    <div
+                        class="mb-2 flex justify-center rounded-md border border-solid border-[#3B82F6] p-2"
+                    >
+                        <img
+                            class="h-[180px] w-auto"
+                            [src]="targetMolecule.structure"
+                        />
+                    </div>
+                    <div class="flex flex-col">
+                        <ng-container
+                            *ngTemplateOutlet="moleculeInfo; context: {
+                        $implicit: targetMolecule,
+                        showSmiles: true
+                    }"
+                        ></ng-container>
+                    </div>
+                </div>
+            </p-overlayPanel>
+        </span>
+    </span>
+</div>
+
+<ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">Common Name</span>
+        <span class="text-end font-semibold"
+            >{{ molecule.commonNames[0] }}</span
+        >
+    </div>
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">KEGG ID</span>
+        <span class="text-end font-semibold">{{ molecule.keggId }}</span>
+    </div>
+    <div *ngIf="showSmiles" class="mt-2 flex justify-between">
+        <span class="font-light">SMILES</span>
+        <span class="text-end font-semibold">{{ molecule.smiles }}</span>
+    </div>
+</ng-template>
