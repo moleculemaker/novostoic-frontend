@@ -27,6 +27,7 @@
         >
             <a
                 class="flex items-center gap-2 text-gray-600"
+                [target]="openInNewPage ? '_blank' : ''"
                 href="/overall-stoichiometry"
                 [class.text-gray-400]="NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.OVERALL_STOICHIOMETRY] === ToolStatus.DISABLED"
                 [class.pointer-events-none]="NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.OVERALL_STOICHIOMETRY] === ToolStatus.DISABLED"
@@ -78,6 +79,7 @@
         >
             <a
                 class="flex items-center gap-2 text-gray-600"
+                [target]="openInNewPage ? '_blank' : ''"
                 href="/pathway-search"
                 [class.text-gray-400]="NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.PATHWAY_SEARCH] === ToolStatus.DISABLED"
                 [class.pointer-events-none]="NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.PATHWAY_SEARCH] === ToolStatus.DISABLED"
@@ -117,6 +119,7 @@
         >
             <a
                 class="flex items-center gap-2 text-gray-600"
+                [target]="openInNewPage ? '_blank' : ''"
                 href="/thermodynamical-feasibility"
                 [class.text-gray-400]="NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.THERMODYNAMICAL_FEASIBILITY] === ToolStatus.DISABLED"
                 [class.pointer-events-none]="NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.THERMODYNAMICAL_FEASIBILITY] === ToolStatus.DISABLED"
@@ -164,6 +167,7 @@
         >
             <a
                 class="flex items-center gap-2 text-gray-600"
+                [target]="openInNewPage ? '_blank' : ''"
                 href="/enzyme-selection"
                 [class.text-gray-400]="NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.ENZYME_ACTIVITY] === ToolStatus.DISABLED"
                 [class.pointer-events-none]="NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.ENZYME_ACTIVITY] === ToolStatus.DISABLED"

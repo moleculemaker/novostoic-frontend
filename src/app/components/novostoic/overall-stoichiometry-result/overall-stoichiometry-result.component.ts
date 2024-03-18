@@ -1,5 +1,7 @@
-import { Component, OnInit } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { FilterService } from "primeng/api";
+import { Table } from "primeng/table";
+import { BehaviorSubject, filter, map, tap } from "rxjs";
 import {
   NovostoicMolecule,
   OverallStoichiometryResponse,
@@ -14,6 +16,8 @@ import {
   },
 })
 export class OverallStoichiometryResultComponent implements OnInit {
+  @ViewChild("resultsTable") resultsTable: Table;
+
   moleculeRepresentations: Array<{
     label: string;
     value: "smiles" | "commonNames" | "keggId";
@@ -40,15 +44,48 @@ export class OverallStoichiometryResultComponent implements OnInit {
     this.moleculeRepresentations[0].value,
   );
 
+  filters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
+  filterOptions = this.response.results
+    .map((result) => [
+      ...result.stoichiometry.reactants.map((reactant) => reactant.molecule),
+      ...result.stoichiometry.products.map((product) => product.molecule),
+    ])
+    .flat();
+  filterValueStr$ = this.filters$.pipe(
+    map((filters) => filters.map((filter) => filter.commonNames[0]).join(",")),
+  );
+
   // example job info
   jobId = "exampleJobId";
   submissionTime = "example submission time";
   loading = true;
 
+  constructor(private filterService: FilterService) {}
+
   ngOnInit(): void {
     setTimeout(() => {
       this.loading = false;
     }, 3000);
+    this.filterService.register(
+      "containsMolecule",
+      (
+        value: OverallStoichiometryResponse["results"][0]["stoichiometry"],
+        filter: NovostoicMolecule[],
+      ) => {
+        const isSameMolecule = (m1: NovostoicMolecule, m2: NovostoicMolecule) =>
+          m1.smiles === m2.smiles ||
+          m1.keggId === m2.keggId ||
+          m1.commonNames.some((name) => m2.commonNames.includes(name));
+        return (
+          value.reactants.some(({ molecule }) =>
+            filter.some((m) => isSameMolecule(m, molecule)),
+          ) ||
+          value.products.some(({ molecule }) =>
+            filter.some((m) => isSameMolecule(m, molecule)),
+          )
+        );
+      },
+    );
   }
 
   startScrolling(container: HTMLElement, delta: number) {
@@ -62,5 +99,13 @@ export class OverallStoichiometryResultComponent implements OnInit {
   endScrolling() {
     clearTimeout(this.scrollingCounter$.value);
     this.scrollingCounter$.next(-1);
+  }
+
+  applyFilters() {
+    this.resultsTable.filter(
+      this.filters$.value,
+      "stoichiometry",
+      "containsMolecule",
+    );
   }
 }

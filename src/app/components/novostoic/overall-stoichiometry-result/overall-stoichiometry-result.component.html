@@ -1,5 +1,5 @@
 <div class="flex h-full w-full max-w-screen-lg gap-16">
-    <app-sidebar></app-sidebar>
+    <app-sidebar [openInNewPage]="true"></app-sidebar>
     <div class="grow py-4">
         <div class="flex h-full max-w-screen-lg flex-col justify-between">
             <div>
@@ -15,14 +15,19 @@
                     </div>
                     <div class="flex items-center">
                         <div class="flex items-center gap-2">
-                            <button class="rounded-md border p-2 py-3">
+                            <button
+                                *ngIf="loading"
+                                class="rounded-md border p-2 py-3"
+                            >
                                 Cancel
                             </button>
 
-                            <button class="rounded-md border p-2 py-3">
-                                <i class="pi pi-plus mx-2"></i>
-                                Run a new Request
-                            </button>
+                            <a href="/overall-stoichiometry" target="_blank">
+                                <button class="rounded-md border p-2 py-3">
+                                    <i class="pi pi-plus mx-2"></i>
+                                    Run a new Request
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -35,36 +40,44 @@
                                 class="flex w-full items-center justify-between p-2 px-4"
                             >
                                 <span class="text-lg font-bold">Input</span>
-                                <div>
-                                    Molecule Representation:
-                                    <p-dropdown
-                                        class="ml-2"
-                                        [options]="moleculeRepresentations"
-                                        [ngModel]="selectedMoleculeRepresentation$.value"
-                                        (ngModelChange)="selectedMoleculeRepresentation$.next($event)"
-                                    ></p-dropdown>
-                                </div>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="content">
                             <div class="flex w-full">
                                 <div
-                                    class="flex w-1/2 items-center justify-between p-4"
+                                    class="flex w-1/2 flex-col justify-between p-4"
                                 >
-                                    <div class="flex items-center">
+                                    <div class="mb-2 flex items-center">
                                         <span class="green-dot mx-2"></span>
-                                        <span class="text-base font-semibold"
+                                        <span class="text-base"
                                             >Primary Precursor</span
                                         >
                                     </div>
-                                    <span class="font-bold"
-                                        >{{
-                                        response.primaryPrecursor[selectedMoleculeRepresentation$.value]
-                                        }}</span
+                                    <div
+                                        class="flex items-stretch justify-between gap-4 px-2"
                                     >
+                                        <div
+                                            class="rounded-md border border-solid border-[--surface-d] p-2"
+                                        >
+                                            <img
+                                                class="h-auto w-[100px]"
+                                                [src]="response.primaryPrecursor.structure"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex grow flex-col justify-between"
+                                        >
+                                            <ng-container
+                                                *ngTemplateOutlet="moleculeInfo; context: {
+                                                $implicit: response.primaryPrecursor,
+                                                showSmiles: true
+                                            }"
+                                            ></ng-container>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div
-                                    class="flex w-1/2 items-center justify-between border-l border-solid border-[--surface-d] p-4"
+                                    class="flex w-1/2 flex-col justify-between border-l border-solid border-[--surface-d] p-4"
                                 >
                                     <div class="flex items-center">
                                         <span class="blue-dot mx-2"></span>
@@ -72,11 +85,28 @@
                                             >Target Molecule</span
                                         >
                                     </div>
-                                    <span class="font-bold"
-                                        >{{
-                                        response.targetMolecule[selectedMoleculeRepresentation$.value]
-                                        }}</span
+                                    <div
+                                        class="flex items-stretch justify-between gap-4 px-2"
                                     >
+                                        <div
+                                            class="rounded-md border border-solid border-[--surface-d] p-2"
+                                        >
+                                            <img
+                                                class="h-auto w-[100px]"
+                                                [src]="response.targetMolecule.structure"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex grow flex-col justify-between"
+                                        >
+                                            <ng-container
+                                                *ngTemplateOutlet="moleculeInfo; context: {
+                                                $implicit: response.targetMolecule,
+                                                showSmiles: true
+                                            }"
+                                            ></ng-container>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </ng-template>
@@ -94,12 +124,13 @@
                                 >
                                     <i class="pi pi-filter"></i>
                                     Filter
-                                    <p-chip>1</p-chip>
+                                    <p-chip>{{ filters$.value.length }}</p-chip>
                                 </button>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="content">
                             <p-table
+                                #resultsTable
                                 [value]="response.results"
                                 [paginator]="true"
                                 [rows]="10"
@@ -109,14 +140,11 @@
                             >
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th pSortableColumn="stoichiometry">
+                                        <th>
                                             <span
                                                 class="underline decoration-dotted"
                                                 >Overall Stoichiometry</span
                                             >
-                                            <p-sortIcon
-                                                field="stoichiometry"
-                                            ></p-sortIcon>
                                         </th>
                                         <th pSortableColumn="yield">
                                             <span
@@ -149,39 +177,176 @@
                                                 <span>
                                                     <span
                                                         class="green-dot mt-1.5"
-                                                    ></span>
+                                                        (mouseenter)="primaryPrecursorOverlay.show($event)"
+                                                        (mouseleave)="primaryPrecursorOverlay.hide()"
+                                                    >
+                                                        <p-overlayPanel
+                                                            #primaryPrecursorOverlay
+                                                        >
+                                                            <div
+                                                                class="w-[300px] p-4"
+                                                            >
+                                                                <div
+                                                                    class="mb-2 flex justify-center rounded-md border border-solid border-[#00A907] p-2"
+                                                                >
+                                                                    <img
+                                                                        class="h-[180px] w-auto"
+                                                                        [src]="response.primaryPrecursor.structure"
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    class="flex flex-col"
+                                                                >
+                                                                    <ng-container
+                                                                        *ngTemplateOutlet="moleculeInfo; context: {
+                                                                            $implicit: response.primaryPrecursor,
+                                                                            showSmiles: true
+                                                                        }"
+                                                                    ></ng-container>
+                                                                </div>
+                                                            </div>
+                                                        </p-overlayPanel>
+                                                    </span>
                                                 </span>
                                                 <span
                                                     class="text-nowrap"
                                                     *ngFor="let reactant of product.stoichiometry.reactants"
                                                 >
                                                     <span class="mx-1">+</span>
-                                                    <span class="bg-gray-50 p-1"
-                                                        >{{ reactant.amount }}
-                                                        {{
+                                                    <span
+                                                        class="bg-gray-50 p-1"
+                                                        (mouseenter)="coreactantOverlay.show($event)"
+                                                        (mouseleave)="coreactantOverlay.hide()"
+                                                        >{{ reactant.amount |
+                                                        number: '1.1-2' }} {{
                                                         reactant.molecule.commonNames[0]
-                                                        }}</span
-                                                    >
+                                                        }}
+                                                        <p-overlayPanel
+                                                            #coreactantOverlay
+                                                        >
+                                                            <div
+                                                                class="w-[300px] p-4"
+                                                            >
+                                                                <div
+                                                                    class="mb-2"
+                                                                >
+                                                                    <span
+                                                                        class="gray-dot"
+                                                                    ></span>
+                                                                    <span
+                                                                        class="ml-2 font-semibold"
+                                                                        >Co-Reactant</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    class="mb-2 flex justify-center rounded-md border border-solid p-2"
+                                                                >
+                                                                    <img
+                                                                        class="h-[180px] w-auto"
+                                                                        [src]="reactant.molecule.structure"
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    class="flex flex-col"
+                                                                >
+                                                                    <ng-container
+                                                                        *ngTemplateOutlet="moleculeInfo; context: {
+                                                                        $implicit: reactant.molecule,
+                                                                        showSmiles: false
+                                                                    }"
+                                                                    ></ng-container>
+                                                                </div>
+                                                            </div>
+                                                        </p-overlayPanel>
+                                                    </span>
                                                 </span>
                                                 <i
                                                     class="pi pi-angle-double-right mx-1 border border-dashed px-1 text-lg font-extrabold"
                                                 ></i>
                                                 <span
                                                     class="text-nowrap"
-                                                    *ngFor="let reactant of product.stoichiometry.yield"
+                                                    *ngFor="let reactant of product.stoichiometry.products"
+                                                    (mouseenter)="coproductOverlay.show($event)"
+                                                    (mouseleave)="coproductOverlay.hide()"
                                                 >
                                                     <span class="bg-gray-50 p-1"
-                                                        >{{ reactant.amount }}
-                                                        {{
+                                                        >{{ reactant.amount |
+                                                        number: '1.1-2' }} {{
                                                         reactant.molecule.commonNames[0]
-                                                        }}</span
-                                                    >
+                                                        }}
+                                                        <p-overlayPanel
+                                                            #coproductOverlay
+                                                        >
+                                                            <div
+                                                                class="w-[300px] p-4"
+                                                            >
+                                                                <div
+                                                                    class="mb-2"
+                                                                >
+                                                                    <span
+                                                                        class="gray-dot"
+                                                                    ></span>
+                                                                    <span
+                                                                        class="ml-2 font-semibold"
+                                                                        >Co-Product</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    class="mb-2 flex justify-center rounded-md border border-solid p-2"
+                                                                >
+                                                                    <img
+                                                                        class="h-[180px] w-auto"
+                                                                        [src]="reactant.molecule.structure"
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    class="flex flex-col"
+                                                                >
+                                                                    <ng-container
+                                                                        *ngTemplateOutlet="moleculeInfo; context: {
+                                                                        $implicit: reactant.molecule,
+                                                                        showSmiles: false
+                                                                    }"
+                                                                    ></ng-container>
+                                                                </div>
+                                                            </div>
+                                                        </p-overlayPanel>
+                                                    </span>
                                                     <span class="mx-1">+</span>
                                                 </span>
                                                 <span>
                                                     <span
                                                         class="blue-dot mt-1"
-                                                    ></span>
+                                                        (mouseenter)="targetMoleculeOverlay.show($event)"
+                                                        (mouseleave)="targetMoleculeOverlay.hide()"
+                                                    >
+                                                        <p-overlayPanel
+                                                            #targetMoleculeOverlay
+                                                        >
+                                                            <div
+                                                                class="w-[300px] p-4"
+                                                            >
+                                                                <div
+                                                                    class="mb-2 flex justify-center rounded-md border border-solid border-[#3B82F6] p-2"
+                                                                >
+                                                                    <img
+                                                                        class="h-[180px] w-auto"
+                                                                        [src]="response.targetMolecule.structure"
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    class="flex flex-col"
+                                                                >
+                                                                    <ng-container
+                                                                        *ngTemplateOutlet="moleculeInfo; context: {
+                                                                        $implicit: response.targetMolecule,
+                                                                        showSmiles: true
+                                                                    }"
+                                                                    ></ng-container>
+                                                                </div>
+                                                            </div>
+                                                        </p-overlayPanel>
+                                                    </span>
                                                 </span>
                                             </div>
                                             <button
@@ -215,7 +380,8 @@
                                         </td>
                                         <td>
                                             <span class="text-xl font-bold"
-                                                >{{product.deltaG}}</span
+                                                >{{product.deltaG | number:
+                                                '1.1-2'}}</span
                                             ><span class="text-xs">kJ/mol</span>
                                         </td>
                                         <td>
@@ -241,6 +407,23 @@
     </div>
 </div>
 
+<ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">Common Name</span>
+        <span class="text-end font-semibold"
+            >{{ molecule.commonNames[0] }}</span
+        >
+    </div>
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">KEGG ID</span>
+        <span class="text-end font-semibold">{{ molecule.keggId }}</span>
+    </div>
+    <div *ngIf="showSmiles" class="mt-2 flex justify-between">
+        <span class="font-light">SMILES</span>
+        <span class="text-end font-semibold">{{ molecule.smiles }}</span>
+    </div>
+</ng-template>
+
 <p-dialog
     [visible]="showResultsFilter$.value"
     (visibleChange)="showResultsFilter$.next($event)"
@@ -259,12 +442,30 @@
             placeholder="Select cofactors"
             styleClass="w-full"
             appendTo="body"
-        ></p-multiSelect>
+            [options]="filterOptions"
+            [ngModel]="filters$.value"
+            (ngModelChange)="filters$.next($event)"
+        >
+            <ng-template pTemplate="item" let-item>
+                {{ item.commonNames[0] }}
+            </ng-template>
+            <ng-template pTemplate="selectedItems">
+                {{ (filterValueStr$ | async) || 'Select cofactors' }}
+            </ng-template>
+        </p-multiSelect>
     </div>
     <ng-template pTemplate="footer">
         <div class="flex items-center justify-between pt-4">
-            <button class="rounded-md border p-2">Clear all filters</button>
-            <button pButton class="rounded-md border p-2">Apply Filters</button>
+            <button class="rounded-md border p-2" (click)="filters$.next([])">
+                Clear all filters
+            </button>
+            <button
+                pButton
+                class="rounded-md border p-2"
+                (click)="applyFilters()"
+            >
+                Apply Filters
+            </button>
         </div>
     </ng-template>
 </p-dialog>

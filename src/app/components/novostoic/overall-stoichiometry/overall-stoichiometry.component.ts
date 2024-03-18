@@ -26,6 +26,6 @@ export class OverallStoichiometryComponent {
   }
 
   onSubmit(form: OverallStoichiometryRequest) {
-    this.router.navigate(["/loading"]);
+    this.router.navigate(["/overall-stoichiometry/result"]);
   }
 }
