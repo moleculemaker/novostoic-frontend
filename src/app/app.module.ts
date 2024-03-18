@@ -63,6 +63,7 @@ import { OverallStoichiometryResultComponent } from "./components/novostoic/over
 import { LoadingComponent } from "./components/novostoic/loading/loading.component";
 import { PathwaySearchComponent } from "./components/novostoic/pathway-search/pathway-search.component";
 import { StoichiometryReactionComponent } from "./components/novostoic/stoichiometry-reaction/stoichiometry-reaction.component";
+import { PathwaySearchResultComponent } from "./components/novostoic/pathway-search-result/pathway-search-result.component";
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -82,6 +83,7 @@ const initAppFn = (envService: EnvironmentService) => {
     MarvinjsInputComponent,
     PathwaySearchComponent,
     StoichiometryReactionComponent,
+    PathwaySearchResultComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,

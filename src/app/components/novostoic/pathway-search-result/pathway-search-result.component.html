@@ -1,0 +1,101 @@
+<div class="flex h-full w-full max-w-screen-xl gap-16">
+    <app-sidebar></app-sidebar>
+    <div class="grow pt-4">
+        <div class="flex h-full max-w-screen-xl flex-col justify-between">
+            <div class="flex grow flex-col">
+                <!-- TODO: use real data -->
+                <div class="flex justify-between">
+                    <div>
+                        <h2 class="mb-2">
+                            Job ID: {{ jobId }} <i class="pi pi-copy"></i>
+                        </h2>
+                        <p class="leading-6">
+                            Submission Time: {{ submissionTime }}
+                        </p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="flex items-center gap-2">
+                            <button class="rounded-md border p-2 py-3">
+                                Cancel
+                            </button>
+
+                            <button class="rounded-md border p-2 py-3">
+                                <i class="pi pi-plus mx-2"></i>
+                                Run a new Request
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <!-- Molecule Input -->
+                <div *ngIf="!loading" class="mt-8 flex grow flex-col gap-6">
+                    <div class="flex justify-between">
+                        <div class="relative flex flex-col">
+                            <span class="text-sm font-light"
+                                >Selected Stoichiometry</span
+                            >
+                            <div
+                                #resultRow
+                                class="flex max-w-[600px] items-center overflow-x-scroll pt-2"
+                            >
+                                <app-stoichiometry-reaction
+                                    [primaryPrecursor]="primaryPrecursor$.value"
+                                    [targetMolecule]="targetMolecule$.value"
+                                    [stoichiometry]="stoichiometry$.value"
+                                ></app-stoichiometry-reaction>
+                            </div>
+                            <button
+                                [class.hidden]="!(resultRow.scrollWidth > resultRow.clientWidth
+                                    && resultRow.scrollLeft < (resultRow.scrollWidth - resultRow.clientWidth - 1))"
+                                class="absolute right-0 top-7"
+                                (mouseenter)="startScrolling(resultRow, 1)"
+                                (mouseleave)="endScrolling()"
+                            >
+                                <i
+                                    class="pi pi-arrow-right bg-[#d9d9d9] p-1"
+                                ></i>
+                            </button>
+                            <button
+                                [class.hidden]="!(resultRow.scrollWidth > resultRow.clientWidth
+                                    && resultRow.scrollLeft > 0)"
+                                class="absolute left-2 top-7"
+                                (mouseenter)="startScrolling(resultRow, -1)"
+                                (mouseleave)="endScrolling()"
+                            >
+                                <i
+                                    class="pi pi-arrow-right rotate-180 bg-[#d9d9d9] p-1"
+                                ></i>
+                            </button>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-light"
+                                >Auxiliary functions</span
+                            >
+                            <div class="mt-2 flex items-center">
+                                <span class="mr-4">Delta G (kJ/mol)</span>
+                                <p-checkbox class="mr-2"></p-checkbox> Enzyme
+                                selection
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2 flex grow">
+                        <div
+                            class="border-green-primary w-[200px] border border-solid"
+                        ></div>
+                        <div
+                            class="grow border border-solid border-[--surface-d]"
+                        ></div>
+                        <div
+                            class="border-blue-primary w-[200px] border border-solid"
+                        ></div>
+                    </div>
+                </div>
+
+                <app-loading *ngIf="loading"></app-loading>
+            </div>
+        </div>
+    </div>
+</div>
