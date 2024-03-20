@@ -17,30 +17,6 @@
   }
 }
 
-.with-green-indicator::before {
-    content: "";
-    position:absolute;
-    display:block;
-    left: -1.5rem;
-    top: .4rem;
-    height: .8rem;
-    width: .8rem;
-    border-radius: 50%;
-    background-color: #00A907;
-}
-
-.with-blue-indicator::before {
-    content: "";
-    position:absolute;
-    display:block;
-    left: -1.5rem;
-    top: .4rem;
-    height: .8rem;
-    width: .8rem;
-    border-radius: 50%;
-    background-color: #3B82F6;
-}
-
 ::ng-deep .subscription-checkbox {
     width:15px;
     height:15px;
