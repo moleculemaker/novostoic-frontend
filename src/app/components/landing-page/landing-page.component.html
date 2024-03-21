@@ -196,48 +196,51 @@
                 </div>
 
                 <div class="flex flex-col gap-4">
-                    <p-card
-                        [styleClass]="
+                    <a href="/thermodynamical-feasibility">
+                        <p-card
+                            [styleClass]="
                             'rounded-none shadow-none border-2 border-solid border-bluegray-100 cursor-pointer '
                             + (displayedResearchNeed$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY ? 'bg-gray-50': '')
                         "
-                        (mouseenter)="displayedResearchNeed$.next(NovostoicTools.THERMODYNAMICAL_FEASIBILITY)"
-                        (mouseleave)="displayedResearchNeed$.next(NovostoicTools.NA)"
-                    >
-                        <ng-template pTemplate="header">
-                            <div
-                                class="flex items-center justify-center p-2 pb-0"
-                            >
-                                <img
-                                    src="assets/thremodynamical_feasibility.png"
-                                    alt="thremodynamical_feasibility"
-                                />
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="footer">
-                            <div class="flex">
-                                <button
-                                    pButton
-                                    @fadeIn
-                                    class="-mx-2 -mb-2 mt-2 grow justify-center"
-                                    *ngIf="displayedResearchNeed$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY"
+                            (mouseenter)="displayedResearchNeed$.next(NovostoicTools.THERMODYNAMICAL_FEASIBILITY)"
+                            (mouseleave)="displayedResearchNeed$.next(NovostoicTools.NA)"
+                        >
+                            <ng-template pTemplate="header">
+                                <div
+                                    class="flex items-center justify-center p-2 pb-0"
                                 >
-                                    Start Using
-                                </button>
-                            </div>
-                        </ng-template>
+                                    <img
+                                        src="assets/thremodynamical_feasibility.png"
+                                        alt="thremodynamical_feasibility"
+                                    />
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="footer">
+                                <div class="flex">
+                                    <button
+                                        pButton
+                                        @fadeIn
+                                        class="-mx-2 -mb-2 mt-2 grow justify-center"
+                                        *ngIf="displayedResearchNeed$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY"
+                                    >
+                                        Start Using
+                                    </button>
+                                </div>
+                            </ng-template>
 
-                        <h3 class="-mt-6">Thermodynamical Feasibility</h3>
-                        <h6 class="mb-4 font-light">dgPredictor</h6>
-                        <ul class="-mb-10 ml-6 list-disc">
-                            <li class="pl-2">
-                                You <i>have</i> pathways or reactions
-                            </li>
-                            <li class="pl-2 pt-2">
-                                You <i>need</i> to calculate Gibbs Free Energy
-                            </li>
-                        </ul>
-                    </p-card>
+                            <h3 class="-mt-6">Thermodynamical Feasibility</h3>
+                            <h6 class="mb-4 font-light">dgPredictor</h6>
+                            <ul class="-mb-10 ml-6 list-disc">
+                                <li class="pl-2">
+                                    You <i>have</i> pathways or reactions
+                                </li>
+                                <li class="pl-2 pt-2">
+                                    You <i>need</i> to calculate Gibbs Free
+                                    Energy
+                                </li>
+                            </ul>
+                        </p-card>
+                    </a>
                     <p-card
                         [styleClass]="
                             'rounded-none shadow-none border-2 border-solid border-bluegray-100 cursor-pointer '

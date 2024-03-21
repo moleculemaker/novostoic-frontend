@@ -30,6 +30,8 @@ import { ChipModule } from "primeng/chip";
 import { TabViewModule } from "primeng/tabview";
 import { ScrollPanelModule } from "primeng/scrollpanel";
 import { MultiSelectModule } from "primeng/multiselect";
+import { InputNumberModule } from "primeng/inputnumber";
+import { SliderModule } from "primeng/slider";
 
 import { LandingPageComponent } from "./components/landing-page/landing-page.component";
 import { SidebarComponent } from "./components/novostoic/sidebar/sidebar.component";
@@ -59,6 +61,8 @@ import { ApiModule, Configuration } from "@api/mmli-backend/v1";
 import { SafePipe } from "./pipes/safe.pipe";
 import { OverallStoichiometryResultComponent } from "./components/novostoic/overall-stoichiometry-result/overall-stoichiometry-result.component";
 import { LoadingComponent } from "./components/novostoic/loading/loading.component";
+import { DgPredictorComponent } from "./components/novostoic/dg-predictor/dg-predictor.component";
+import { DgPredictorResultComponent } from './components/novostoic/dg-predictor-result/dg-predictor-result.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -75,6 +79,8 @@ const initAppFn = (envService: EnvironmentService) => {
     AboutNovostoicComponent,
     OverallStoichiometryResultComponent,
     LoadingComponent,
+    DgPredictorComponent,
+    DgPredictorResultComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,
@@ -93,11 +99,13 @@ const initAppFn = (envService: EnvironmentService) => {
     CardModule,
     ChipModule,
     InputTextareaModule,
+    InputNumberModule,
     PanelModule,
     ProgressBarModule,
     SelectButtonModule,
     SkeletonModule,
     ScrollPanelModule,
+    SliderModule,
     ProgressSpinnerModule,
     StepsModule,
     DropdownModule,
