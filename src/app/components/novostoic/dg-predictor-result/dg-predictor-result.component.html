@@ -1,0 +1,23 @@
+<div class="flex h-full w-full max-w-screen-lg gap-16">
+    <app-sidebar [openInNewPage]="true"></app-sidebar>
+    <div class="grow py-4">
+        <div class="flex h-full max-w-screen-lg flex-col justify-between"></div>
+    </div>
+</div>
+
+<ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">Common Name</span>
+        <span class="text-end font-semibold"
+            >{{ molecule.commonNames[0] }}</span
+        >
+    </div>
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">KEGG ID</span>
+        <span class="text-end font-semibold">{{ molecule.keggId }}</span>
+    </div>
+    <div *ngIf="showSmiles" class="mt-2 flex justify-between">
+        <span class="font-light">SMILES</span>
+        <span class="text-end font-semibold">{{ molecule.smiles }}</span>
+    </div>
+</ng-template>
