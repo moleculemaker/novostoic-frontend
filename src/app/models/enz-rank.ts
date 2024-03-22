@@ -39,7 +39,7 @@ export class EnzymeSelectionRequest {
 export class EnzymeSelectionResponse {
   primaryPrecursor: NovostoicMolecule;
   enzymeSequence: string;
-  activeScore: number;
+  activityScore: number;
 
   static example: EnzymeSelectionResponse = {
     primaryPrecursor: {
@@ -50,6 +50,6 @@ export class EnzymeSelectionResponse {
     },
     enzymeSequence:
       ">sp|P68871|HBB_HUMAN Hemoglobin subunit beta OS=Homo sapiens GN=HBB PE=1 SV=2MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHLKGTFLKGTF",
-    activeScore: 0.9,
+    activityScore: 0.9,
   };
 }

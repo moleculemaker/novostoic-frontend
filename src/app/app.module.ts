@@ -60,6 +60,8 @@ import { ApiModule, Configuration } from "@api/mmli-backend/v1";
 import { SafePipe } from "./pipes/safe.pipe";
 import { OverallStoichiometryResultComponent } from "./components/novostoic/overall-stoichiometry-result/overall-stoichiometry-result.component";
 import { LoadingComponent } from "./components/novostoic/loading/loading.component";
+import { EnzRankComponent } from './components/novostoic/enz-rank/enz-rank.component';
+import { EnzRankResultComponent } from './components/novostoic/enz-rank-result/enz-rank-result.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -77,6 +79,8 @@ const initAppFn = (envService: EnvironmentService) => {
     OverallStoichiometryResultComponent,
     LoadingComponent,
     MarvinjsInputComponent,
+    EnzRankComponent,
+    EnzRankResultComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,
