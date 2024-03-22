@@ -6,6 +6,7 @@ import { OverallStoichiometryComponent } from "./components/novostoic/overall-st
 import { AboutNovostoicComponent } from "./components/novostoic/about-novostoic/about-novostoic.component";
 import { OverallStoichiometryResultComponent } from "./components/novostoic/overall-stoichiometry-result/overall-stoichiometry-result.component";
 import { DgPredictorComponent } from "./components/novostoic/dg-predictor/dg-predictor.component";
+import { DgPredictorResultComponent } from "./components/novostoic/dg-predictor-result/dg-predictor-result.component";
 
 const routes: Routes = [
   { path: "about", component: AboutNovostoicComponent },
@@ -15,6 +16,10 @@ const routes: Routes = [
     component: OverallStoichiometryResultComponent,
   },
   { path: "thermodynamical-feasibility", component: DgPredictorComponent },
+  {
+    path: "thermodynamical-feasibility/result",
+    component: DgPredictorResultComponent,
+  },
   { path: "", component: LandingPageComponent },
 ];
 

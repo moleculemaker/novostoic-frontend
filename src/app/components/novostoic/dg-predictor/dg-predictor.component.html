@@ -36,11 +36,16 @@
                             ></p-radioButton>
                         </div>
                         <div class="flex gap-2">
-                            <button class="rounded-md border p-2">
+                            <button
+                                type="button"
+                                class="rounded-md border p-2"
+                                (click)="useExampleRequest()"
+                            >
                                 <i class="pi pi-box mx-2"></i>
                                 Example
                             </button>
                             <button
+                                type="button"
                                 class="rounded-md border p-2"
                                 (click)="request.clearAllReactions()"
                             >
@@ -67,7 +72,10 @@
                                     placeholder="Enter Reaction SMILES"
                                     formControlName="reactionSmiles"
                                 />
-                                <button (click)="request.removeReaction(i)">
+                                <button
+                                    type="button"
+                                    (click)="request.removeReaction(i)"
+                                >
                                     <i class="pi pi-times"></i>
                                 </button>
                             </div>
@@ -115,7 +123,10 @@
                                     />
                                 </div>
                                 <div>
-                                    <button (click)="request.removeReaction(i)">
+                                    <button
+                                        type="button"
+                                        (click)="request.removeReaction(i)"
+                                    >
                                         <i class="pi pi-times"></i>
                                     </button>
                                 </div>
@@ -125,6 +136,7 @@
 
                     <div class="m-2">
                         <button
+                            type="button"
                             class="rounded-md border bg-gray-50 p-2"
                             (click)="request.addReaction()"
                         >

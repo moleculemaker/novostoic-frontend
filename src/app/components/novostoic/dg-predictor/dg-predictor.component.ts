@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 import { ThermodynamicalFeasibilityRequest } from "~/app/models/dg-predictor";
 
@@ -17,5 +18,13 @@ export class DgPredictorComponent {
   reactionTypeInput$ =
     this.request.form.controls["reactionInputType"].valueChanges;
 
-  onSubmit(request: ThermodynamicalFeasibilityRequest) {}
+  constructor(private router: Router) {}
+
+  onSubmit(request: ThermodynamicalFeasibilityRequest) {
+    this.router.navigate(["/thermodynamical-feasibility/result"]);
+  }
+
+  useExampleRequest() {
+    this.request = new ThermodynamicalFeasibilityRequest().exampleRequest();
+  }
 }
