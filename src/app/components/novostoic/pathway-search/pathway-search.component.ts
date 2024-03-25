@@ -78,5 +78,9 @@ export class PathwaySearchComponent {
     this.router.navigate(["/pathway-search/result"]);
   }
 
+  useExample() {
+    this.request = PathwaySearchRequest.useExample();
+  }
+
   searchStructure() {}
 }

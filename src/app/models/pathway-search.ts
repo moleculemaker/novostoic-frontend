@@ -27,7 +27,7 @@ export class PathwaySearchRequest {
   private createMoleculeInputWithAmount() {
     return new FormGroup({
       name: new FormControl("", [Validators.required]),
-      amount: new FormControl(null, [Validators.required]),
+      amount: new FormControl<number | null>(null, [Validators.required]),
     });
   }
 
@@ -47,6 +47,58 @@ export class PathwaySearchRequest {
 
   removeCoProduct(index: number) {
     this.form.controls["coProducts"].removeAt(index);
+  }
+
+  resetStoichiometry() {
+    this.form.controls["primaryPrecursor"].reset();
+    this.form.controls["coReactants"].reset();
+    this.form.controls["coProducts"].reset();
+    this.form.controls["targetMolecule"].reset();
+  }
+
+  resetSetting() {
+    this.form.controls["maxSteps"].reset(3);
+    this.form.controls["maxPathways"].reset(3);
+    this.form.controls["isThermodynamicalFeasible"].reset(false);
+    this.form.controls["thermodynamicalFeasibleReactionsOnly"].reset(false);
+    this.form.controls["useEnzymeSelection"].reset(false);
+    this.form.controls["numEnzymeCandidates"].reset(0);
+  }
+
+  static useExample() {
+    const request = new PathwaySearchRequest();
+    // Create example request.
+    request.form.setValue({
+      primaryPrecursor: {
+        name: "mollit",
+        amount: 1,
+      },
+      targetMolecule: {
+        name: "minim fugiat pariatur deserunt Ut",
+        amount: 1,
+      },
+      coReactants: [
+        {
+          name: "CO2",
+          amount: 1,
+        },
+      ],
+      coProducts: [
+        {
+          name: "H2",
+          amount: 1,
+        },
+      ],
+      maxSteps: 3,
+      maxPathways: 3,
+      isThermodynamicalFeasible: false,
+      thermodynamicalFeasibleReactionsOnly: false,
+      useEnzymeSelection: false,
+      numEnzymeCandidates: 0,
+      agreeToSubscription: false, // Add agreeToSubscription property
+      subscriberEmail: null, // Add subscriberEmail property
+    });
+    return request;
   }
 
   toJobCreate(): JobCreate {
