@@ -65,11 +65,15 @@
                                                 >*</span
                                             >
                                         </div>
-                                        <div class="flex gap-2">
+                                        <div
+                                            class="flex gap-2"
+                                            formGroupName="primaryPrecursor"
+                                        >
                                             <input
                                                 pInputText
                                                 class="w-[48px]"
                                                 placeholder="0.0"
+                                                formControlName="amount"
                                             />
                                             <div
                                                 class="marvin-filter-container grow"
@@ -80,6 +84,7 @@
                                                         type="text"
                                                         class="border-0"
                                                         placeholder="Name, SMILES, InChI, Kegg ID"
+                                                        formControlName="name"
                                                     />
                                                     <button
                                                         type="button"
@@ -115,25 +120,38 @@
                                                     >Co-Reactants</span
                                                 >
                                             </div>
-                                            <button type="button">
+                                            <button
+                                                type="button"
+                                                (click)="request.addCoReactant()"
+                                            >
                                                 <i
                                                     class="pi pi-plus-circle px-1 pt-1"
                                                 ></i>
                                             </button>
                                         </div>
-                                        <div class="flex gap-2">
-                                            <input
-                                                pInputText
-                                                class="w-[48px]"
-                                                placeholder="0.0"
-                                            />
-                                            <input
-                                                pInputText
-                                                type="text"
-                                                class="grow"
-                                                placeholder="Name, SMILES, InChI, Kegg ID"
-                                            />
-                                        </div>
+                                        <ng-container
+                                            formArrayName="coReactants"
+                                        >
+                                            <div
+                                                class="flex gap-2"
+                                                *ngFor="let coreactant of request.form.controls['coReactants'].controls; let i = index"
+                                                [formGroupName]="i"
+                                            >
+                                                <input
+                                                    pInputText
+                                                    class="w-[48px]"
+                                                    placeholder="0.0"
+                                                    formControlName="amount"
+                                                />
+                                                <input
+                                                    pInputText
+                                                    type="text"
+                                                    class="grow"
+                                                    placeholder="Name, SMILES, InChI, Kegg ID"
+                                                    formControlName="name"
+                                                />
+                                            </div>
+                                        </ng-container>
                                     </div>
 
                                     <div class="py-2 text-center">
@@ -153,25 +171,38 @@
                                                     >Co-Products</span
                                                 >
                                             </div>
-                                            <button type="button">
+                                            <button
+                                                type="button"
+                                                (click)="request.addCoProduct()"
+                                            >
                                                 <i
                                                     class="pi pi-plus-circle px-1 pt-1"
                                                 ></i>
                                             </button>
                                         </div>
-                                        <div class="flex gap-2">
-                                            <input
-                                                pInputText
-                                                class="w-[48px]"
-                                                placeholder="0.0"
-                                            />
-                                            <input
-                                                pInputText
-                                                type="text"
-                                                class="grow"
-                                                placeholder="Name, SMILES, InChI, Kegg ID"
-                                            />
-                                        </div>
+                                        <ng-container
+                                            formArrayName="coProducts"
+                                        >
+                                            <div
+                                                class="flex gap-2"
+                                                *ngFor="let control of request.form.controls['coProducts'].controls; let i = index"
+                                                [formGroupName]="i"
+                                            >
+                                                <input
+                                                    pInputText
+                                                    class="w-[48px]"
+                                                    placeholder="0.0"
+                                                    formControlName="amount"
+                                                />
+                                                <input
+                                                    pInputText
+                                                    type="text"
+                                                    class="grow"
+                                                    placeholder="Name, SMILES, InChI, Kegg ID"
+                                                    formControlName="name"
+                                                />
+                                            </div>
+                                        </ng-container>
                                     </div>
 
                                     <!-- Target Molecule -->
@@ -192,11 +223,15 @@
                                                 >*</span
                                             >
                                         </div>
-                                        <div class="flex gap-2">
+                                        <div
+                                            class="flex gap-2"
+                                            formGroupName="targetMolecule"
+                                        >
                                             <input
                                                 pInputText
                                                 class="w-[48px]"
                                                 placeholder="0.0"
+                                                formControlName="amount"
                                             />
                                             <div
                                                 class="marvin-filter-container grow"
@@ -207,6 +242,7 @@
                                                         type="text"
                                                         class="border-0"
                                                         placeholder="Name, SMILES, InChI, Kegg ID"
+                                                        formControlName="name"
                                                     />
                                                     <button
                                                         type="button"
@@ -468,7 +504,7 @@
     </div>
 </div>
 
-<p-dialog
+<!-- <p-dialog
     *ngIf="showDialog$.value"
     class="marvin-editor-container"
     [visible]="showDialog$.value"
@@ -491,4 +527,4 @@
             styleClass="bg-[#224063]"
         ></p-button>
     </ng-template>
-</p-dialog>
+</p-dialog> -->

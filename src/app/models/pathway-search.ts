@@ -1,4 +1,4 @@
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormControl, Validators, FormArray } from "@angular/forms";
 import { JobCreate } from "../api/mmli-backend/v1";
 import {
   NovostoicMolecule,
@@ -7,10 +7,10 @@ import {
 
 export class PathwaySearchRequest {
   form = new FormGroup({
-    primaryPrecursor: new FormControl("", [Validators.required]),
-    targetMolecule: new FormControl("", [Validators.required]),
-    coReactants: new FormGroup({}),
-    coProducts: new FormGroup({}),
+    primaryPrecursor: this.createMoleculeInputWithAmount(),
+    targetMolecule: this.createMoleculeInputWithAmount(),
+    coReactants: new FormArray([this.createMoleculeInputWithAmount()]),
+    coProducts: new FormArray([this.createMoleculeInputWithAmount()]),
     maxSteps: new FormControl(3, [Validators.required]),
     maxPathways: new FormControl(3, [Validators.required]),
     isThermodynamicalFeasible: new FormControl(false),
@@ -19,6 +19,31 @@ export class PathwaySearchRequest {
     agreeToSubscription: new FormControl(false),
     subscriberEmail: new FormControl("", [Validators.email]),
   });
+
+  private createMoleculeInputWithAmount() {
+    return new FormGroup({
+      name: new FormControl("", [Validators.required]),
+      amount: new FormControl(null, [Validators.required]),
+    });
+  }
+
+  addCoReactant() {
+    this.form.controls["coReactants"].push(
+      this.createMoleculeInputWithAmount(),
+    );
+  }
+
+  addCoProduct() {
+    this.form.controls["coProducts"].push(this.createMoleculeInputWithAmount());
+  }
+
+  removeCoReactant(index: number) {
+    this.form.controls["coReactants"].removeAt(index);
+  }
+
+  removeCoProduct(index: number) {
+    this.form.controls["coProducts"].removeAt(index);
+  }
 
   toJobCreate(): JobCreate {
     return {
