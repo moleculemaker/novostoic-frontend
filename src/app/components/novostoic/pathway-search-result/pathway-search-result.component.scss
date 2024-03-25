@@ -1,0 +1,79 @@
+.strip_pattern {
+    background: repeating-linear-gradient(white, white 3.9px, black 4px, black 7.9px);;
+}
+
+.strip_pattern_to_right {
+    background: repeating-linear-gradient(to right, white, white 4px, black 4.1px, black 7.9px);;
+}
+
+.strip_pattern_border {
+    border-image: url("/assets/border.png") 2 round;
+}
+
+.primary_precursor_container {
+    &::after {
+        display: block;
+        position: absolute;
+        content: ' ';
+        top: 7%;
+        right: -2.17rem;
+        @apply w-6;
+        @apply h-[1px];
+        @apply z-[1];
+        @apply bg-white;
+        @apply border-t;
+        @apply border-r;
+        @apply border-solid;
+        @apply border-black;
+    }
+}
+
+.target_molecule_container {
+    &::before {
+        display: block;
+        position: absolute;
+        content: ' ';
+        top: 7%;
+        left: -2.17rem;
+        @apply w-8;
+        @apply h-16;
+        @apply z-[1];
+        @apply bg-white;
+        @apply border-t;
+        @apply border-l;
+        @apply border-solid;
+        @apply border-black;
+    }
+}
+
+.table_cell_img {
+    &::after {
+        display: block;
+        position: absolute;
+        content: ' ';
+        top: 45%;
+        z-index: 1;
+        @apply w-2;
+        @apply h-2;
+        @apply rounded;
+        @apply -right-2;
+        @apply scale-75;
+        background: black;
+    }
+
+    &::before {
+        display: block;
+        position: absolute;
+        content: ' ';
+        top: 44.5%;
+        z-index: 1;
+        @apply -left-2;
+        @apply border-solid;
+        @apply border-r-0;
+        @apply border-l-8;
+        @apply border-y-4;
+        @apply border-y-transparent;
+        @apply border-l-black;
+        @apply scale-75;
+    }
+}

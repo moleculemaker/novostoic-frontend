@@ -41,9 +41,9 @@
                                 class="flex max-w-[600px] items-center overflow-x-scroll pt-2"
                             >
                                 <app-stoichiometry-reaction
-                                    [primaryPrecursor]="primaryPrecursor$.value"
-                                    [targetMolecule]="targetMolecule$.value"
-                                    [stoichiometry]="stoichiometry$.value"
+                                    [primaryPrecursor]="(response$ | async)!.primaryPrecursor"
+                                    [targetMolecule]="(response$ | async)!.targetMolecule"
+                                    [stoichiometry]="(response$ | async)!.stoichiometry"
                                 ></app-stoichiometry-reaction>
                             </div>
                             <button
@@ -83,14 +83,178 @@
 
                     <div class="mt-2 flex grow">
                         <div
-                            class="border-green-primary w-[200px] border border-solid"
-                        ></div>
+                            class="border-green-primary relative flex w-[150px] flex-col gap-4 border border-solid"
+                        >
+                            <div
+                                class="border-green-primary border-b border-solid"
+                            >
+                                <img
+                                    [src]="(response$ | async)!.primaryPrecursor.structure"
+                                    class="h-[120px]"
+                                />
+                            </div>
+                            <ng-container
+                                *ngTemplateOutlet="moleculeInfo; context: { $implicit: (response$ | async)!.primaryPrecursor } "
+                            ></ng-container>
+                        </div>
                         <div
-                            class="grow border border-solid border-[--surface-d]"
-                        ></div>
+                            class="relative grow border border-solid border-[--surface-d]"
+                        >
+                            <div class="absolute h-full w-full overflow-scroll">
+                                <div
+                                    class="relative left-0 top-0 min-h-full min-w-full"
+                                    [style]="(tableStyle$ | async) || {}"
+                                >
+                                    <div
+                                        class="sticky top-10 z-0 h-[46px] w-[29.5px] border-r border-t border-solid border-black"
+                                    ></div>
+                                    <div
+                                        class="absolute right-0 top-0 z-0 h-full"
+                                    >
+                                        <div
+                                            class="strip_pattern_border sticky top-10 h-[46px] w-[30.5px] border-l border-t border-solid border-black"
+                                        ></div>
+                                    </div>
+                                    <table
+                                        class="absolute left-0 top-0 min-w-full table-fixed"
+                                    >
+                                        <tr>
+                                            <th
+                                                class="bg-bluegray-100 sticky left-0 top-0 z-20 w-[20px]"
+                                            >
+                                                P\S
+                                            </th>
+                                            <ng-container
+                                                *ngFor="let step of (maxPathwayStepsTemplateArray$ | async); let i = index"
+                                            >
+                                                <th
+                                                    class="sticky top-0 z-10 w-[60px] bg-[#eaeaea] p-1"
+                                                >
+                                                    Step {{ step }}
+                                                </th>
+                                                <th
+                                                    class="sticky top-0 z-10 bg-gray-50"
+                                                    [class.w-[30.5px]]="
+                                                            !(emptyPathwayHeadersArray$ | async)!.length
+                                                         && i === (maxPathwayStepsTemplateArray$ | async)!.length - 1"
+                                                    [class.w-[130px]]="
+                                                            (emptyPathwayHeadersArray$ | async)!.length
+                                                         || i !== (maxPathwayStepsTemplateArray$ | async)!.length - 1"
+                                                ></th>
+                                            </ng-container>
+                                            <ng-container
+                                                *ngFor="let header of (emptyPathwayHeadersArray$ | async); let i = index"
+                                            >
+                                                <th
+                                                    class="sticky top-0 z-10 w-[60px] bg-gray-50 p-1"
+                                                ></th>
+                                                <th
+                                                    class="sticky top-0 z-10 bg-gray-50"
+                                                    [class.w-[30.5px]]="i === (emptyPathwayHeadersArray$ | async)!.length - 1"
+                                                    [class.w-[130px]]="i !== (emptyPathwayHeadersArray$ | async)!.length - 1"
+                                                ></th>
+                                            </ng-container>
+                                        </tr>
+                                        <!-- Data in Table -->
+                                        <ng-container
+                                            *ngFor="let pathway of (response$ | async)!.pathways; let i = index"
+                                        >
+                                            <tr class="h-[120px]">
+                                                <td
+                                                    class="sticky left-0 z-10 bg-gray-50"
+                                                >
+                                                    <span
+                                                        class="absolute -left-7 top-14 -rotate-90 text-nowrap bg-[#eaeaea] p-1 text-[--text-color-secondary]"
+                                                        >Pathway {{ i +
+                                                        1}}</span
+                                                    >
+                                                </td>
+                                                <ng-container
+                                                    *ngFor="let reaction of pathway; let j = index"
+                                                >
+                                                    <ng-container
+                                                        *ngTemplateOutlet="tableCellReaction; context: {
+                                                            $implicit: reaction,
+                                                            label: 'R' + (i + 1) + '.' + (j + 1),
+                                                            pathwayIndex: i,
+                                                            showBottomHalf: (j === 0 || (j === pathway.length - 1
+                                                                    && !(emptyPathwayStepsArrays$ | async)![i].length)
+                                                                ) && i !== (response$ | async)!.pathways.length - 1,
+                                                            showTopHalf: (j === 0 || (j === pathway.length - 1
+                                                                    && !(emptyPathwayStepsArrays$ | async)![i].length)
+                                                                ) && i !== 0,
+                                                            inFirstColumn: j === 0,
+                                                            inLastColumn: j === pathway.length - 1
+                                                        } "
+                                                    ></ng-container>
+                                                    <ng-container
+                                                        *ngIf="j !== pathway.length - 1"
+                                                    >
+                                                        <ng-container
+                                                            *ngTemplateOutlet="tableCellImg; context: { $implicit: 'https://fakeimg.pl/640x360' } "
+                                                        ></ng-container>
+                                                    </ng-container>
+                                                </ng-container>
+                                                <ng-container
+                                                    *ngFor="let slot of (emptyPathwayStepsArrays$ | async)![i]; let j = index"
+                                                >
+                                                    <td
+                                                        class="relative align-middle"
+                                                    >
+                                                        <div
+                                                            class="h-[1px] w-full"
+                                                            [class.bg-black]="!pathway[pathway.length - 1].isPrediction"
+                                                            [class.strip_pattern_to_right]="pathway[pathway.length - 1].isPrediction"
+                                                        ></div>
+
+                                                        <!-- bottom half vertical line -->
+                                                        <div
+                                                            class="absolute right-0 top-1/2 h-1/2 w-[1px]"
+                                                            [class.bg-black]="
+                                                                i === (response$ | async)!.pathways.length - 1
+                                                                ? false
+                                                                : !(response$ | async)!.pathways[i + 1][(response$ | async)!.pathways[i + 1].length - 1].isPrediction"
+                                                            [class.strip_pattern]="
+                                                                i === (response$ | async)!.pathways.length - 1
+                                                                ? false
+                                                                : (response$ | async)!.pathways[i + 1][(response$ | async)!.pathways[i + 1].length - 1].isPrediction"
+                                                            [class.hidden]="
+                                                                j !== (emptyPathwayStepsArrays$ | async)![i].length - 1
+                                                             || i === (response$ | async)!.pathways.length - 1"
+                                                        ></div>
+
+                                                        <!-- top half vertical line -->
+                                                        <div
+                                                            class="absolute bottom-1/2 right-0 h-1/2 w-[1px]"
+                                                            [class.bg-black]="!pathway[pathway.length - 1].isPrediction"
+                                                            [class.strip_pattern]="pathway[pathway.length - 1].isPrediction"
+                                                            [class.hidden]="
+                                                                j !== (emptyPathwayStepsArrays$ | async)![i].length - 1
+                                                             || i === 0"
+                                                        ></div>
+                                                    </td>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-container>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                         <div
-                            class="border-blue-primary w-[200px] border border-solid"
-                        ></div>
+                            class="border-blue-primary relative flex w-[150px] flex-col gap-4 border border-solid"
+                        >
+                            <div
+                                class="border-blue-primary border-b border-solid"
+                            >
+                                <img
+                                    [src]="(response$ | async)!.targetMolecule.structure"
+                                    class="h-[120px]"
+                                />
+                            </div>
+                            <ng-container
+                                *ngTemplateOutlet="moleculeInfo; context: { $implicit: (response$ | async)!.targetMolecule } "
+                            ></ng-container>
+                        </div>
                     </div>
                 </div>
 
@@ -99,3 +263,154 @@
         </div>
     </div>
 </div>
+
+<ng-template #moleculeInfo let-molecule>
+    <div class="px-4">
+        <div class="font-light">Name</div>
+        <div class="font-semibold">{{ molecule.commonNames[0] }}</div>
+    </div>
+    <div class="px-4">
+        <div class="font-light">SMILES</div>
+        <div class="font-semibold">{{ molecule.smiles }}</div>
+    </div>
+    <div class="px-4">
+        <div class="font-light">KEGG ID</div>
+        <div class="font-semibold">{{ molecule.keggId }}</div>
+    </div>
+</ng-template>
+
+<ng-template
+    #tableCellReaction
+    let-reaction
+    let-pathwayIndex="pathwayIndex"
+    let-label="label"
+    let-inLastColumn="inLastColumn"
+    let-inFirstColumn="inFirstColumn"
+    let-showBottomHalf="showBottomHalf"
+    let-showTopHalf="showTopHalf"
+>
+    <td class="relative w-[60px] text-center align-middle">
+        <div
+            class="absolute left-0 right-0 top-0 flex h-full items-center"
+            [class.left-2]="inFirstColumn"
+            [class.left-0]="!inFirstColumn"
+        >
+            <span
+                class="z-0 h-[1px] w-full"
+                [class.strip_pattern_to_right]="reaction.isPrediction"
+                [class.bg-black]="!reaction.isPrediction"
+            ></span>
+            <span
+                data-description="bottom half vertical line"
+                class="absolute top-1/2 h-1/2 w-[1px]"
+                [class.strip_pattern]="reaction.isPrediction"
+                [class.bg-black]="!reaction.isPrediction"
+                [class.right-0]="inLastColumn"
+                [class.hidden]="!showBottomHalf"
+            ></span>
+            <span
+                data-description="top half vertical line"
+                class="absolute bottom-1/2 h-1/2 w-[1px]"
+                [class.strip_pattern]="reaction.isPrediction"
+                [class.bg-black]="!reaction.isPrediction"
+                [class.right-0]="inLastColumn"
+                [class.hidden]="!showTopHalf"
+            ></span>
+        </div>
+        <button
+            class="z-1 relative cursor-pointer rounded-md bg-[--surface-border] p-1 px-2"
+            (click)="reactionDetail.toggle($event)"
+        >
+            {{ label }}
+        </button>
+        <p-overlayPanel #reactionDetail>
+            <div class="flex flex-col rounded-lg bg-[#224063] p-4 text-white">
+                <div>
+                    <span class="font-semibold"
+                        >{{ reaction.primaryPrecursor.commonNames[0] }}</span
+                    >
+                    <span
+                        *ngFor="let reactant of reaction.reactants"
+                        class="text-white/50"
+                    >
+                        + {{ reactant.commonNames[0] }}
+                    </span>
+                    <i class="pi pi-arrow-right mx-2 text-sm"></i>
+                    <span
+                        *ngFor="let reactant of reaction.products"
+                        class="text-white/50"
+                    >
+                        {{ reactant.commonNames[0] }} +
+                    </span>
+                    <span class="font-semibold"
+                        >{{ reaction.targetMolecule.commonNames[0] }}</span
+                    >
+                    <button
+                        class="ml-2 inline-flex items-center rounded-md bg-white/20 p-1"
+                        (click)="visible$.next(true);selectedPathway$.next(pathwayIndex)"
+                    >
+                        <i class="pi pi-eye"></i>
+                    </button>
+                </div>
+                <hr class="my-2" />
+                <div class="flex justify-between gap-6">
+                    <div class="flex w-1/2 justify-between">
+                        <span class="font-light">∆G</span>
+                        <span class="font-semibold"
+                            >{{ reaction.deltaG }}kJ/mol</span
+                        >
+                    </div>
+                    <div class="flex w-1/2 justify-between">
+                        <span class="text-white/50">Reaction ID</span>
+                        <span class="text-white/50"
+                            >{{ reaction.reactionId }}</span
+                        >
+                    </div>
+                </div>
+                <div class="flex justify-between gap-6">
+                    <div class="flex w-1/2 justify-between">
+                        <span class="font-light">Enz</span>
+                        <span class="font-semibold"
+                            >{{ reaction.enzymes.length > 1 ? 'Multiple' :
+                            reaction.enzymes[0].name }}</span
+                        >
+                    </div>
+                    <div class="flex w-1/2 justify-between">
+                        <span class="text-white/50">Confidence Score</span>
+                        <span class="text-white/50"
+                            >{{ reaction.confidenceScore }}</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </p-overlayPanel>
+    </td>
+</ng-template>
+
+<ng-template #tableCellImg let-src>
+    <td class="w-[130px] align-middle">
+        <div
+            class="table_cell_img relative flex items-center justify-center rounded-md border border-solid border-[--surface-d] bg-white py-1"
+        >
+            <img [src]="src" class="w-[100px]" />
+        </div>
+    </td>
+</ng-template>
+
+<p-dialog
+    [visible]="visible$.value"
+    (visibleChange)="visible$.next($event)"
+    [style]="{ width: '60rem' }"
+    [modal]="true"
+>
+    <ng-template pTemplate="header">
+        <div
+            class="align-items-center justify-content-center inline-flex gap-2"
+        >
+            <span class="white-space-nowrap font-bold">Amy Elsner</span>
+        </div>
+    </ng-template>
+    <p class="m-0">
+        {{ (response$ | async)!.pathways[selectedPathway$.value] | json }}
+    </p>
+</p-dialog>
