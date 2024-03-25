@@ -75,33 +75,12 @@
                                                 placeholder="0.0"
                                                 formControlName="amount"
                                             />
-                                            <div
-                                                class="marvin-filter-container grow"
-                                            >
-                                                <div class="p-inputgroup">
-                                                    <input
-                                                        pInputText
-                                                        type="text"
-                                                        class="border-0"
-                                                        placeholder="Name, SMILES, InChI, Kegg ID"
-                                                        formControlName="name"
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        class="m-1 border border-gray-50 px-2"
-                                                    >
-                                                        <i
-                                                            class="pi pi-pencil mr-2"
-                                                        ></i>
-                                                        <span
-                                                            class="font-semibold"
-                                                            (click)="showDialog$.next(true);
-                                                                currentFormControl$.next('primaryPrecursor')"
-                                                            >Draw / Upload</span
-                                                        >
-                                                    </button>
-                                                </div>
-                                            </div>
+                                            <app-marvinjs-input
+                                                class="grow rounded-md bg-white"
+                                                placeholder="Name, SMILES, InChI, Kegg ID"
+                                                [smiles]="request.form.controls['primaryPrecursor'].controls['name'].value || ''"
+                                                (smilesChange)="request.form.controls['primaryPrecursor'].controls['name'].setValue($event)"
+                                            ></app-marvinjs-input>
                                         </div>
                                     </div>
                                     <div class="py-2 text-center">
@@ -233,33 +212,12 @@
                                                 placeholder="0.0"
                                                 formControlName="amount"
                                             />
-                                            <div
-                                                class="marvin-filter-container grow"
-                                            >
-                                                <div class="p-inputgroup">
-                                                    <input
-                                                        pInputText
-                                                        type="text"
-                                                        class="border-0"
-                                                        placeholder="Name, SMILES, InChI, Kegg ID"
-                                                        formControlName="name"
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        class="m-1 border border-gray-50 px-2"
-                                                    >
-                                                        <i
-                                                            class="pi pi-pencil mr-2"
-                                                        ></i>
-                                                        <span
-                                                            class="font-semibold"
-                                                            (click)="showDialog$.next(true);
-                                                                currentFormControl$.next('targetMolecule')"
-                                                            >Draw / Upload</span
-                                                        >
-                                                    </button>
-                                                </div>
-                                            </div>
+                                            <app-marvinjs-input
+                                                class="grow rounded-md bg-white"
+                                                placeholder="Name, SMILES, InChI, Kegg ID"
+                                                [smiles]="request.form.controls['targetMolecule'].controls['name'].value || ''"
+                                                (smilesChange)="request.form.controls['targetMolecule'].controls['name'].setValue($event)"
+                                            ></app-marvinjs-input>
                                         </div>
                                     </div>
                                 </div>
@@ -323,8 +281,16 @@
                                                 type="text"
                                                 pInputText
                                                 class="w-full"
+                                                formControlName="maxSteps"
+                                                [ngModel]="request.form.controls['maxSteps'].value"
                                             />
-                                            <p-slider class="w-full"></p-slider>
+                                            <p-slider
+                                                class="w-full"
+                                                [ngModel]="request.form.controls['maxSteps'].value"
+                                                formControlName="maxSteps"
+                                                [min]="0"
+                                                [max]="10"
+                                            ></p-slider>
                                             <span
                                                 class="my-2 flex items-center justify-between"
                                             >
@@ -347,8 +313,16 @@
                                                 type="text"
                                                 pInputText
                                                 class="w-full"
+                                                formControlName="maxPathways"
+                                                [ngModel]="request.form.controls['maxPathways'].value"
                                             />
-                                            <p-slider class="w-full"></p-slider>
+                                            <p-slider
+                                                class="w-full"
+                                                formControlName="maxPathways"
+                                                [ngModel]="request.form.controls['maxPathways'].value"
+                                                [min]="0"
+                                                [max]="10"
+                                            ></p-slider>
                                             <span
                                                 class="my-2 flex items-center justify-between"
                                             >
@@ -364,7 +338,10 @@
                                     <table class="mt-2">
                                         <tr>
                                             <td class="py-3">
-                                                <p-checkbox></p-checkbox>
+                                                <p-checkbox
+                                                    formControlName="thermodynamicalFeasibleReactionsOnly"
+                                                    [binary]="true"
+                                                ></p-checkbox>
                                             </td>
                                             <td class="flex px-4 py-1">
                                                 Check the box to filter out any
@@ -379,7 +356,10 @@
                                         </tr>
                                         <tr>
                                             <td class="py-3">
-                                                <p-checkbox></p-checkbox>
+                                                <p-checkbox
+                                                    [binary]="true"
+                                                    formControlName="isThermodynamicalFeasible"
+                                                ></p-checkbox>
                                             </td>
                                             <td class="flex px-4 py-1">
                                                 Check the box to filter out any
@@ -397,7 +377,13 @@
                                 <hr class="my-4" />
                                 <section>
                                     <div class="flex items-start gap-4">
-                                        <p-checkbox></p-checkbox>
+                                        <p-checkbox
+                                            formControlName="useEnzymeSelection"
+                                            (onChange)="$event.checked
+                                                ? request.form.controls['numEnzymeCandidates'].enable()
+                                                : request.form.controls['numEnzymeCandidates'].disable()"
+                                            [binary]="true"
+                                        ></p-checkbox>
                                         <div class="flex flex-col">
                                             <span class="font-semibold"
                                                 >Enzyme Selection
@@ -424,9 +410,15 @@
                                                         type="text"
                                                         class="w-full"
                                                         pInputText
+                                                        formControlName="numEnzymeCandidates"
+                                                        [ngModel]="request.form.controls['numEnzymeCandidates'].value"
                                                     />
                                                     <p-slider
+                                                        [ngModel]="request.form.controls['numEnzymeCandidates'].value"
+                                                        formControlName="numEnzymeCandidates"
                                                         class="w-full"
+                                                        [min]="0"
+                                                        [max]="10"
                                                     ></p-slider>
                                                     <span
                                                         class="my-2 flex items-center justify-between"

@@ -14,8 +14,12 @@ export class PathwaySearchRequest {
     maxSteps: new FormControl(3, [Validators.required]),
     maxPathways: new FormControl(3, [Validators.required]),
     isThermodynamicalFeasible: new FormControl(false),
+    thermodynamicalFeasibleReactionsOnly: new FormControl(false),
     useEnzymeSelection: new FormControl(false),
-    numEnzymeCandidates: new FormControl(0),
+    numEnzymeCandidates: new FormControl({
+      value: 0,
+      disabled: true,
+    }),
     agreeToSubscription: new FormControl(false),
     subscriberEmail: new FormControl("", [Validators.email]),
   });
@@ -56,6 +60,8 @@ export class PathwaySearchRequest {
         maxPathways: this.form.controls["maxPathways"].value,
         isThermodynamicalFeasible:
           this.form.controls["isThermodynamicalFeasible"].value,
+        thermodynamicalFeasibleReactionsOnly:
+          this.form.controls["thermodynamicalFeasibleReactionsOnly"].value,
         useEnzymeSelection: this.form.controls["useEnzymeSelection"].value,
         numEnzymeCandidates: this.form.controls["numEnzymeCandidates"].value,
       }),
