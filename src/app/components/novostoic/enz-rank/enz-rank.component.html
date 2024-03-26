@@ -33,28 +33,10 @@
                                 ></span
                             >
                         </div>
-                        <div class="marvin-filter-container">
-                            <div class="p-inputgroup">
-                                <input
-                                    pInputText
-                                    type="text"
-                                    class="border-0"
-                                    formControlName="primaryPrecursor"
-                                    placeholder="CC(=O)C(=O)O"
-                                />
-                                <button
-                                    pButton
-                                    type="button"
-                                    class="p-button-secondary p-button-link p-button-outlined"
-                                    icon="pi pi-pencil mr-2"
-                                    (click)="showDialog$.next(true)"
-                                >
-                                    <span class="font-semibold"
-                                        >Draw / Upload</span
-                                    >
-                                </button>
-                            </div>
-                        </div>
+                        <app-marvinjs-input placeholder="CC(=O)C(=O)O"
+                            [smiles]="request.form.controls['primaryPrecursor'].value || ''"
+                            (smilesChange)="request.form.controls['primaryPrecursor'].setValue($event)"
+                        ></app-marvinjs-input>
 
                         <!-- Enzyme Sequence Input -->
                         <div
@@ -162,28 +144,3 @@
         </form>
     </div>
 </div>
-
-<p-dialog
-    *ngIf="showDialog$.value"
-    class="marvin-editor-container"
-    [visible]="showDialog$.value"
-    (visibleChange)="showDialog$.next($event)"
-    [modal]="true"
-    [draggable]="false"
-    [resizable]="false"
->
-    <app-marvin-js-editor
-        class="marvin-editor"
-        [smiles]="request.form.controls['primaryPrecursor'].value || ''"
-        (smilesChange)="
-        request.form.controls['primaryPrecursor'].setValue($event)"
-    ></app-marvin-js-editor>
-    <ng-template pTemplate="footer">
-        <p-button
-            icon="pi pi-check"
-            (click)="showDialog$.next(false)"
-            label="Search Structure"
-            styleClass="bg-[#224063]"
-        ></p-button>
-    </ng-template>
-</p-dialog>

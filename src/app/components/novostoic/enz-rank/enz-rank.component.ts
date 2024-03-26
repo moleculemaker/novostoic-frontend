@@ -13,7 +13,6 @@ import { EnzymeSelectionRequest } from "~/app/models/enz-rank";
 })
 export class EnzRankComponent {
   request = new EnzymeSelectionRequest();
-  showDialog$ = new BehaviorSubject(false);
 
   constructor(private router: Router) {}
 
