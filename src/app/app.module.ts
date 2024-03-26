@@ -38,6 +38,7 @@ import { SidebarComponent } from "./components/novostoic/sidebar/sidebar.compone
 import { OverallStoichiometryComponent } from "./components/novostoic/overall-stoichiometry/overall-stoichiometry.component";
 import { AboutNovostoicComponent } from "./components/novostoic/about-novostoic/about-novostoic.component";
 import { MarvinJsModule } from "./components/novostoic/marvinjs/marvinjs.module";
+import { MarvinjsInputComponent } from "./components/novostoic/marvinjs-input/marvinjs-input.component";
 
 // import { ConfigurationComponent} from './components/chemscraper/configuration/configuration.component';
 // import { ResultsComponent } from './components/chemscraper/results/results.component';
@@ -81,6 +82,7 @@ const initAppFn = (envService: EnvironmentService) => {
     LoadingComponent,
     DgPredictorComponent,
     DgPredictorResultComponent,
+    MarvinjsInputComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,
