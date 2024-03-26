@@ -498,28 +498,3 @@
         </form>
     </div>
 </div>
-
-<!-- <p-dialog
-    *ngIf="showDialog$.value"
-    class="marvin-editor-container"
-    [visible]="showDialog$.value"
-    (visibleChange)="showDialog$.next($event)"
-    [modal]="true"
-    [draggable]="false"
-    [resizable]="false"
->
-    <app-marvin-js-editor
-        class="marvin-editor"
-        [smiles]="request.form.controls[currentFormControl$.value].value || ''"
-        (smilesChange)="
-        request.form.controls[currentFormControl$.value].setValue($event)"
-    ></app-marvin-js-editor>
-    <ng-template pTemplate="footer">
-        <p-button
-            icon="pi pi-check"
-            (click)="searchStructure()"
-            label="Search Structure"
-            styleClass="bg-[#224063]"
-        ></p-button>
-    </ng-template>
-</p-dialog> -->

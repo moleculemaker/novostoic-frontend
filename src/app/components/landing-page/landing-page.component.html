@@ -121,45 +121,47 @@
                         />
                     </svg>
                 </div>
-                <p-card
-                    [styleClass]="
-                        'rounded-none shadow-none border-2 border-solid border-bluegray-100 cursor-pointer '
-                        + (displayedResearchNeed$.value === NovostoicTools.PATHWAY_SEARCH ? 'bg-gray-50': '')
-                    "
-                    (mouseenter)="displayedResearchNeed$.next(NovostoicTools.PATHWAY_SEARCH)"
-                    (mouseleave)="displayedResearchNeed$.next(NovostoicTools.NA)"
-                >
-                    <ng-template pTemplate="header">
-                        <div class="flex items-center justify-center p-2 pb-0">
-                            <img
-                                src="assets/pathway_search.png"
-                                alt="pathway_search"
-                            />
-                        </div>
-                    </ng-template>
-                    <ng-template pTemplate="footer">
-                        <div class="flex">
-                            <button
-                                pButton
-                                @fadeIn
-                                class="-mx-2 -mb-2 mt-2 grow justify-center"
-                                *ngIf="displayedResearchNeed$.value === NovostoicTools.PATHWAY_SEARCH"
-                            >
-                                Start Using
-                            </button>
-                        </div>
-                    </ng-template>
+                <a href="/pathway-search">
+                    <p-card
+                        [styleClass]="
+                            'rounded-none shadow-none border-2 border-solid border-bluegray-100 cursor-pointer '
+                            + (displayedResearchNeed$.value === NovostoicTools.PATHWAY_SEARCH ? 'bg-gray-50': '')
+                        "
+                        (mouseenter)="displayedResearchNeed$.next(NovostoicTools.PATHWAY_SEARCH)"
+                        (mouseleave)="displayedResearchNeed$.next(NovostoicTools.NA)"
+                    >
+                        <ng-template pTemplate="header">
+                            <div class="flex items-center justify-center p-2 pb-0">
+                                <img
+                                    src="assets/pathway_search.png"
+                                    alt="pathway_search"
+                                />
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="flex">
+                                <button
+                                    pButton
+                                    @fadeIn
+                                    class="-mx-2 -mb-2 mt-2 grow justify-center"
+                                    *ngIf="displayedResearchNeed$.value === NovostoicTools.PATHWAY_SEARCH"
+                                >
+                                    Start Using
+                                </button>
+                            </div>
+                        </ng-template>
 
-                    <h3 class="-mt-6">Pathway Search</h3>
-                    <h6 class="mb-4 font-light">Novostoic 1.0</h6>
-                    <ul class="-mb-10 ml-6 list-disc">
-                        <li class="pl-2">You <i>have</i> the stoichiometry</li>
-                        <li class="pl-2 pt-2">
-                            You <i>get</i> the possible retrobiosynthesis
-                            pathways with novel steps
-                        </li>
-                    </ul>
-                </p-card>
+                        <h3 class="-mt-6">Pathway Search</h3>
+                        <h6 class="mb-4 font-light">Novostoic 1.0</h6>
+                        <ul class="-mb-10 ml-6 list-disc">
+                            <li class="pl-2">You <i>have</i> the stoichiometry</li>
+                            <li class="pl-2 pt-2">
+                                You <i>get</i> the possible retrobiosynthesis
+                                pathways with novel steps
+                            </li>
+                        </ul>
+                    </p-card>
+                </a>
 
                 <div class="flex items-center">
                     <svg
