@@ -17,8 +17,16 @@ export class PathwaySearchResultComponent implements OnInit {
   scrollingCounter$ = new BehaviorSubject(-1);
   showRightBoundaryLine$ = new BehaviorSubject(false);
   response$ = of(PathwaySearchResponse.example);
-  visible$ = new BehaviorSubject(false);
-  selectedPathway$ = new BehaviorSubject(-1);
+  visible$ = new BehaviorSubject(true);
+  selectedPathway$ = new BehaviorSubject(0);
+
+  pathwayDeltaGs$ = this.response$.pipe(
+    map((response) => response.pathways.map((pathway) => pathway.reduce((p, v) => p + v.deltaG, 0))),
+  );
+
+  pathwayPredictedReactions$ = this.response$.pipe(
+    map((response) => response.pathways.map((pathway) => pathway.filter((reaction) => reaction.isPrediction))),
+  );
 
   maxPathwayStepsTemplateArray$ = this.response$.pipe(
     map((response) => {

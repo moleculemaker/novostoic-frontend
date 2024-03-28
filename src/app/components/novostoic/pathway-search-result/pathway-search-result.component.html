@@ -164,7 +164,7 @@
                                                     class="sticky left-0 z-10 bg-gray-50"
                                                 >
                                                     <span
-                                                        class="absolute -left-7 top-14 -rotate-90 text-nowrap bg-[#eaeaea] p-1 text-[--text-color-secondary]"
+                                                        class="absolute -left-7 top-[3.4rem] -rotate-90 text-nowrap bg-[--bluegray-500] p-1 text-white"
                                                         >Pathway {{ i +
                                                         1}}</span
                                                     >
@@ -201,6 +201,7 @@
                                                     <td
                                                         class="relative align-middle"
                                                     >
+                                                        <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
                                                         <div
                                                             class="h-[1px] w-full"
                                                             [class.bg-black]="!pathway[pathway.length - 1].isPrediction"
@@ -290,6 +291,8 @@
     let-showTopHalf="showTopHalf"
 >
     <td class="relative w-[60px] text-center align-middle">
+        <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
+
         <div
             class="absolute left-0 right-0 top-0 flex h-full items-center"
             [class.left-2]="inFirstColumn"
@@ -318,7 +321,7 @@
             ></span>
         </div>
         <button
-            class="z-1 relative cursor-pointer rounded-md bg-[--surface-border] p-1 px-2"
+            class="z-1 relative cursor-pointer rounded-md bg-white p-1 px-2"
             (click)="reactionDetail.toggle($event)"
         >
             {{ label }}
@@ -347,6 +350,7 @@
                     >
                     <button
                         class="ml-2 inline-flex items-center rounded-md bg-white/20 p-1"
+                        (click)="visible$.next(true);selectedPathway$.next(pathwayIndex)"
                     >
                         <i class="pi pi-eye"></i>
                     </button>
@@ -387,7 +391,8 @@
 </ng-template>
 
 <ng-template #tableCellImg let-src>
-    <td class="w-[130px] align-middle">
+    <td class="w-[130px] align-middle relative">
+        <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
         <div
             class="table_cell_img relative flex items-center justify-center rounded-md border border-solid border-[--surface-d] bg-white py-1"
         >
@@ -396,20 +401,140 @@
     </td>
 </ng-template>
 
+<ng-template #tableCellBackground>
+    <div class="absolute top-0 left-0 h-full w-full flex items-center">
+        <div class="h-[60%] w-full bg-bluegray-100/50"></div>
+    </div>
+</ng-template>
+
 <p-dialog
     [visible]="visible$.value"
     (visibleChange)="visible$.next($event)"
-    [style]="{ width: '60rem' }"
+    [style]="{ width: '80rem' }"
     [modal]="true"
+    [resizable]="false"
+    [draggable]="false"
+    class="pathway_dialog"
 >
     <ng-template pTemplate="header">
         <div
-            class="align-items-center justify-content-center inline-flex gap-2"
+            class="flex flex-col bg-gray-50 mx-4"
         >
-            <span class="white-space-nowrap font-bold">Amy Elsner</span>
+            <ng-container *ngIf="(response$ | async)!.pathways[selectedPathway$.value] as pathway">
+                <div>Pathway {{ selectedPathway$.value + 1 }}:</div>
+                <div>
+                    <span class="font-semibold">{{ pathway[0].primaryPrecursor!.commonNames[0] }}</span>
+                    <span *ngFor="let reaction of pathway">
+                        <i class="pi pi-arrow-right mx-2"></i>
+                        <span class="font-semibold">{{ reaction.targetMolecule!.commonNames[0] }}</span>
+                    </span>
+                    <button type="button" title="download"><i class="pi pi-download mx-2"></i></button>
+                </div>
+            </ng-container>
         </div>
     </ng-template>
-    <p class="m-0">
-        {{ (response$ | async)!.pathways[selectedPathway$.value] | json }}
-    </p>
+    <ng-container *ngIf="(response$ | async)!.pathways[selectedPathway$.value] as pathway">
+        <div class="flex justify-between m-4">
+            <div class="flex gap-4">
+                <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
+                    <div class="text-lg font-semibold mb-2">{{ pathway.length }}</div>
+                    <div>Total Steps</div>
+                </div>
+                <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
+                    <div class="text-lg font-semibold mb-2">{{ (pathwayPredictedReactions$ | async)![selectedPathway$.value].length }}</div>
+                    <div>Predicted Steps</div>
+                </div>
+                <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
+                    <div class="text-lg font-semibold mb-2">{{ pathway.length - 1 }}</div>
+                    <div>Intermediates</div>
+                </div>
+                <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
+                    <div class="text-lg font-semibold mb-2">{{ (pathwayDeltaGs$ | async)![selectedPathway$.value] }}kJ/mol</div>
+                    <div>Delta G</div>
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <div class="font-semibold m-1">Legend:</div>
+                <table>
+                    <tr>
+                        <td class="py-1 align-middle"><div class="w-4 h-4 bg-green-primary text-[#495057] mx-1"></div></td>
+                        <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Primary Precursor</div></td>
+                        <td class="py-1 align-middle"><div class="w-4 h-4 bg-blue-primary text-[#495057] mx-1"></div></td>
+                        <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Target Molecule</div></td>
+                    </tr>
+                    <tr>
+                        <td class="py-1 align-middle"><div class="w-4 h-4 bg-[#FF4D00] text-[#495057] mx-1"></div></td>
+                        <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Intermediates</div></td>
+                        <td class="py-1 align-middle"><div class="w-4 h-4 bg-[--surface-d] text-[#495057] mx-1"></div></td>
+                        <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Co-factors</div></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="pt-12">
+            <div class="flex flex-col justify-center mx-4" *ngFor="let reaction of pathway; let i = index">
+                <div class="w-full rounded-md border-black border border-solid flex"
+                    [class.border-dashed]="reaction.isPrediction"
+                >
+                    <div class="w-1/5 bg-gray-50 flex flex-col gap-4 p-4 rounded-md">
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Reaction {{selectedPathway$.value + 1}}.{{ i + 1 }}</span>
+                            <button type="button" title="download"><i class="pi pi-copy"></i></button>
+                        </div>
+                        <div>
+                            <div class="mb-1">Delta G Calculation</div>
+                            <div class="font-semibold">{{reaction.deltaG}}kJ/mol</div>
+                        </div>
+                        <div>
+                            <div class="mb-1">Enzyme</div>
+                            <table class="w-full">
+                                <tr class="align-middle" *ngFor="let enzyme of reaction.enzymes">
+                                    <td class="font-semibold underline text-start">{{enzyme.name}}</td>
+                                    <td class="text-end" *ngIf="reaction.isPrediction">{{enzyme.amount}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div>
+                            <div class="mb-1">Reaction ID (Kegg):</div>
+                            <div class="font-semibold underline">{{reaction.reactionId}}</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-around gap-2 w-full py-8 px-4">
+                        <div class="flex items-center border border-solid rounded-md h-full p-2"
+                            [class.border-[#ff4d00]]="i !== 0"
+                            [class.border-green-primary]="i === 0"
+                        >
+                            <img [src]="reaction.primaryPrecursor!.structure" class="h-[120px]" />
+                        </div>
+
+                        <ng-container *ngFor="let reactant of reaction.reactants; let i = index">
+                            <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
+                                <span>{{ reactant.commonNames[0] }}</span>
+                            </div>
+                            <i class="pi pi-plus" *ngIf="i !== reaction.reactants.length - 1"></i>
+                        </ng-container>
+
+                        <i class="pi pi-arrow-right"></i>
+
+                        <ng-container *ngFor="let product of reaction.products; let i = index">
+                            <i *ngIf="i !== 0" class="pi pi-plus"></i>
+                            <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
+                                <span>{{ product.commonNames[0] }}</span>
+                            </div>
+                        </ng-container>
+                        
+                        <div class="flex items-center border border-solid rounded-md h-full p-2"
+                            [class.border-[#ff4d00]]="i !== pathway.length - 1"
+                            [class.border-blue-primary]="i === pathway.length - 1"
+                        >
+                            <img [src]="reaction.targetMolecule!.structure" class="h-[120px]" />
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center" *ngIf="i !== pathway.length - 1">
+                    <i class="pi pi-arrow-down text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </ng-container>
 </p-dialog>

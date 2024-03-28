@@ -77,3 +77,16 @@
         @apply scale-75;
     }
 }
+
+.pathway_dialog {
+    ::ng-deep .p-dialog-mask {
+        z-index: 9000 !important;
+    }
+
+    ::ng-deep .p-dialog {
+        
+        .p-dialog-header {
+            @apply bg-gray-50;
+        }
+    }
+}
