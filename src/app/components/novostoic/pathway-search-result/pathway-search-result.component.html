@@ -36,38 +36,12 @@
                             <span class="text-sm font-light"
                                 >Selected Stoichiometry</span
                             >
-                            <div
-                                #resultRow
-                                class="flex max-w-[600px] items-center overflow-x-scroll pt-2"
-                            >
-                                <app-stoichiometry-reaction
-                                    [primaryPrecursor]="(response$ | async)!.primaryPrecursor"
-                                    [targetMolecule]="(response$ | async)!.targetMolecule"
-                                    [stoichiometry]="(response$ | async)!.stoichiometry"
-                                ></app-stoichiometry-reaction>
-                            </div>
-                            <button
-                                [class.hidden]="!(resultRow.scrollWidth > resultRow.clientWidth
-                                    && resultRow.scrollLeft < (resultRow.scrollWidth - resultRow.clientWidth - 1))"
-                                class="absolute right-0 top-7"
-                                (mouseenter)="startScrolling(resultRow, 1)"
-                                (mouseleave)="endScrolling()"
-                            >
-                                <i
-                                    class="pi pi-arrow-right bg-[#d9d9d9] p-1"
-                                ></i>
-                            </button>
-                            <button
-                                [class.hidden]="!(resultRow.scrollWidth > resultRow.clientWidth
-                                    && resultRow.scrollLeft > 0)"
-                                class="absolute left-2 top-7"
-                                (mouseenter)="startScrolling(resultRow, -1)"
-                                (mouseleave)="endScrolling()"
-                            >
-                                <i
-                                    class="pi pi-arrow-right rotate-180 bg-[#d9d9d9] p-1"
-                                ></i>
-                            </button>
+                            <app-stoichiometry-reaction-with-scroller
+                                [primaryPrecursor]="(response$ | async)!.primaryPrecursor"
+                                [targetMolecule]="(response$ | async)!.targetMolecule"
+                                [stoichiometry]="(response$ | async)!.stoichiometry"
+                                maxWidth="600px"
+                            ></app-stoichiometry-reaction-with-scroller>
                         </div>
                         <div class="flex flex-col">
                             <span class="text-sm font-light"

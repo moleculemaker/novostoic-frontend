@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { AfterViewInit, Component, OnInit } from "@angular/core";
+import { Location } from "@angular/common";
 import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 import { PathwaySearchRequest } from "~/app/models/pathway-search";
@@ -11,7 +12,7 @@ import { PathwaySearchRequest } from "~/app/models/pathway-search";
     class: "grow",
   },
 })
-export class PathwaySearchComponent {
+export class PathwaySearchComponent implements OnInit {
   request = new PathwaySearchRequest();
   editing$ = new BehaviorSubject(true);
   showDialog$ = new BehaviorSubject(false);
@@ -72,7 +73,24 @@ export class PathwaySearchComponent {
     ],
   });
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private location: Location) {}
+
+  ngOnInit(): void {
+    const state: any = this.location.getState();
+    // check if the user comes from overall stoichiiometry page
+    if (Object.hasOwn(state, "primaryPrecursor")) {
+      this.primaryPrecursor$.next(state.primaryPrecursor);
+      this.targetMolecule$.next(state.targetMolecule);
+      this.stoichiometry$.next(state.stoichiometry);
+      this.editing$.next(false);
+
+      // this.location.replaceState("/pathway-search");
+
+      // console.log(this.location.getState());
+    }
+  }
 
   onSubmit(form: PathwaySearchRequest) {
     this.router.navigate(["/pathway-search/result"]);

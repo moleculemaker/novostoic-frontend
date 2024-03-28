@@ -14,7 +14,6 @@ export class PathwaySearchResultComponent implements OnInit {
   jobId = "exampleJobId";
   submissionTime = "example submission time";
   loading = false;
-  scrollingCounter$ = new BehaviorSubject(-1);
   showRightBoundaryLine$ = new BehaviorSubject(false);
   response$ = of(PathwaySearchResponse.example);
   visible$ = new BehaviorSubject(true);
@@ -89,18 +88,5 @@ export class PathwaySearchResultComponent implements OnInit {
     setTimeout(() => {
       this.loading = false;
     }, 3000);
-  }
-
-  startScrolling(container: HTMLElement, delta: number) {
-    const timeoutId = setTimeout(() => {
-      container.scrollLeft += delta;
-      this.startScrolling(container, delta);
-    }, 1);
-    this.scrollingCounter$.next(timeoutId as unknown as number);
-  }
-
-  endScrolling() {
-    clearTimeout(this.scrollingCounter$.value);
-    this.scrollingCounter$.next(-1);
   }
 }

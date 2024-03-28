@@ -46,14 +46,16 @@
                                 class="p-4"
                                 [class.bg-[#ebebeb]]="!editing$.value"
                             >
-                                <app-stoichiometry-reaction
-                                    *ngIf="!editing$.value"
-                                    [moleculeStyleClass]="'bg-[#ebebeb]'"
-                                    [primaryPrecursor]="primaryPrecursor$.value"
-                                    [targetMolecule]="targetMolecule$.value"
-                                    [stoichiometry]="stoichiometry$.value"
-                                ></app-stoichiometry-reaction>
-                                <div *ngIf="editing$">
+                                <div class="p-2" *ngIf="!editing$.value">
+                                    <app-stoichiometry-reaction-with-scroller
+                                        [primaryPrecursor]="primaryPrecursor$.value"
+                                        [targetMolecule]="targetMolecule$.value"
+                                        [stoichiometry]="stoichiometry$.value"
+                                        moleculeStyleClass="bg-[#ebebeb]"
+                                        maxWidth="920px"
+                                    ></app-stoichiometry-reaction-with-scroller>
+                                </div>
+                                <div *ngIf="editing$.value">
                                     <!-- Primary Precursor -->
                                     <div
                                         class="flex flex-col gap-2 rounded-md bg-green-50 p-2"

@@ -64,6 +64,7 @@ import { LoadingComponent } from "./components/novostoic/loading/loading.compone
 import { PathwaySearchComponent } from "./components/novostoic/pathway-search/pathway-search.component";
 import { StoichiometryReactionComponent } from "./components/novostoic/stoichiometry-reaction/stoichiometry-reaction.component";
 import { PathwaySearchResultComponent } from "./components/novostoic/pathway-search-result/pathway-search-result.component";
+import { StoichiometryReactionWithScrollerComponent } from './components/novostoic/stoichiometry-reaction-with-scroller/stoichiometry-reaction-with-scroller.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -84,6 +85,7 @@ const initAppFn = (envService: EnvironmentService) => {
     PathwaySearchComponent,
     StoichiometryReactionComponent,
     PathwaySearchResultComponent,
+    StoichiometryReactionWithScrollerComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,

@@ -170,38 +170,12 @@
                                 <ng-template pTemplate="body" let-product>
                                     <tr>
                                         <td class="relative">
-                                            <div
-                                                #resultRow
-                                                class="flex max-w-[440px] items-center overflow-x-scroll"
-                                            >
-                                                <app-stoichiometry-reaction
-                                                    [primaryPrecursor]="response.primaryPrecursor"
-                                                    [targetMolecule]="response.targetMolecule"
-                                                    [stoichiometry]="product.stoichiometry"
-                                                ></app-stoichiometry-reaction>
-                                            </div>
-                                            <button
-                                                [class.hidden]="!(resultRow.scrollWidth > resultRow.clientWidth
-                                                    && resultRow.scrollLeft < (resultRow.scrollWidth - resultRow.clientWidth - 1))"
-                                                class="absolute right-0 top-5"
-                                                (mouseenter)="startScrolling(resultRow, 1)"
-                                                (mouseleave)="endScrolling()"
-                                            >
-                                                <i
-                                                    class="pi pi-arrow-right bg-[#d9d9d9] p-1"
-                                                ></i>
-                                            </button>
-                                            <button
-                                                [class.hidden]="!(resultRow.scrollWidth > resultRow.clientWidth
-                                                    && resultRow.scrollLeft > 0)"
-                                                class="absolute left-2 top-5"
-                                                (mouseenter)="startScrolling(resultRow, -1)"
-                                                (mouseleave)="endScrolling()"
-                                            >
-                                                <i
-                                                    class="pi pi-arrow-right rotate-180 bg-[#d9d9d9] p-1"
-                                                ></i>
-                                            </button>
+                                            <app-stoichiometry-reaction-with-scroller
+                                                [primaryPrecursor]="response.primaryPrecursor"
+                                                [targetMolecule]="response.targetMolecule"
+                                                [stoichiometry]="product.stoichiometry"
+                                                maxWidth="440px"
+                                            ></app-stoichiometry-reaction-with-scroller>
                                         </td>
                                         <td>
                                             <span class="text-xl font-bold"
@@ -216,7 +190,7 @@
                                             ><span class="text-xs">kJ/mol</span>
                                         </td>
                                         <td>
-                                            <button>
+                                            <button (click)="enterPathwayDesignByClick(product.stoichiometry)">
                                                 <p-chip styleClass="p-1 px-3"
                                                     >Pathway Design
                                                     <i
