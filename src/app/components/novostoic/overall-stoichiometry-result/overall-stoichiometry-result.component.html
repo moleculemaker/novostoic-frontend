@@ -1,7 +1,7 @@
 <div class="flex h-full w-full max-w-screen-lg gap-16">
     <app-sidebar [openInNewPage]="true"></app-sidebar>
-    <div class="grow py-4">
-        <div class="flex h-full max-w-screen-lg flex-col justify-between">
+    <div class="grow py-4 max-w-content-lg">
+        <div class="flex h-full flex-col justify-between">
             <div>
                 <!-- TODO: use real data -->
                 <div class="flex justify-between">
@@ -169,12 +169,11 @@
                                 </ng-template>
                                 <ng-template pTemplate="body" let-product>
                                     <tr>
-                                        <td class="relative">
+                                        <td class="relative max-w-[440px]">
                                             <app-stoichiometry-reaction-with-scroller
                                                 [primaryPrecursor]="response.primaryPrecursor"
                                                 [targetMolecule]="response.targetMolecule"
                                                 [stoichiometry]="product.stoichiometry"
-                                                maxWidth="440px"
                                             ></app-stoichiometry-reaction-with-scroller>
                                         </td>
                                         <td>

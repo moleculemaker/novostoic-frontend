@@ -19,6 +19,7 @@ module.exports = {
       },
       spacing: {
         "screen-lg": "1180px",
+        "content-lg": "980px",
       },
       screens: {
         lg: "1180px",
