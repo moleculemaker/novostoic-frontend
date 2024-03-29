@@ -136,6 +136,9 @@
                                                     placeholder="Name, SMILES, InChI, Kegg ID"
                                                     formControlName="name"
                                                 />
+                                                <button *ngIf="i !== 0" type="button" title="remove coreactant" (click)="request.removeCoReactant(i)">
+                                                    <i class="pi pi-times-circle mx-1"></i>
+                                                </button>
                                             </div>
                                         </ng-container>
                                     </div>
@@ -159,6 +162,7 @@
                                             </div>
                                             <button
                                                 type="button"
+                                                title="add Co-product"
                                                 (click)="request.addCoProduct()"
                                             >
                                                 <i
@@ -187,6 +191,9 @@
                                                     placeholder="Name, SMILES, InChI, Kegg ID"
                                                     formControlName="name"
                                                 />
+                                                <button *ngIf="i !== 0" type="button" title="remove Co-product" (click)="request.removeCoProduct(i)">
+                                                    <i class="pi pi-times-circle mx-1"></i>
+                                                </button>
                                             </div>
                                         </ng-container>
                                     </div>
