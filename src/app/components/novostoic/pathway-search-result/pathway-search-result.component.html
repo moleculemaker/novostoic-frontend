@@ -7,7 +7,7 @@
                 <div class="flex justify-between">
                     <div>
                         <h2 class="mb-2">
-                            Job ID: {{ jobId }} <i class="pi pi-copy"></i>
+                            Job ID: {{ jobId }} <button type="button" title="copy job id"><i class="pi pi-copy"></i></button>
                         </h2>
                         <p class="leading-6">
                             Submission Time: {{ submissionTime }}
@@ -15,14 +15,16 @@
                     </div>
                     <div class="flex items-center">
                         <div class="flex items-center gap-2">
-                            <button class="rounded-md border p-2 py-3">
+                            <button class="rounded-md border p-2 py-3" *ngIf="loading">
                                 Cancel
                             </button>
 
-                            <button class="rounded-md border p-2 py-3">
-                                <i class="pi pi-plus mx-2"></i>
-                                Run a new Request
-                            </button>
+                            <a href="/pathway-search" target="_blank">
+                                <button class="rounded-md border p-2 py-3">
+                                    <i class="pi pi-plus mx-2"></i>
+                                    Run a new Request
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
