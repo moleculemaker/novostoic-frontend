@@ -16,7 +16,7 @@ export class PathwaySearchResultComponent implements OnInit {
   loading = false;
   showRightBoundaryLine$ = new BehaviorSubject(false);
   response$ = of(PathwaySearchResponse.example);
-  visible$ = new BehaviorSubject(true);
+  visible$ = new BehaviorSubject(false);
   selectedPathway$ = new BehaviorSubject(0);
 
   pathwayDeltaGs$ = this.response$.pipe(
