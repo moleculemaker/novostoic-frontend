@@ -26,7 +26,10 @@
                                     <button
                                         type="button"
                                         class="rounded-md border bg-white p-2"
-                                        (click)="useExample()"
+                                        (click)="editing$.value
+                                            ? useExampleCallback()
+                                            : confirmUsingExample()
+                                        "
                                     >
                                         <i class="pi pi-box mx-2"></i>
                                         Use an Example
@@ -34,10 +37,9 @@
                                     <button
                                         type="button"
                                         class="rounded-md border bg-white p-2"
-                                        (click)="
-                                            request.resetStoichiometry();
-                                            editing$.next(true)
-                                        "
+                                        (click)="editing$.value
+                                            ? clearAllCallback()
+                                            : confirmClearAll()"
                                     >
                                         Clear All
                                     </button>
@@ -49,7 +51,7 @@
                                 class="p-4"
                                 [class.bg-[#ebebeb]]="!editing$.value"
                             >
-                                <div class="p-2 cursor-pointer" *ngIf="!editing$.value" (click)="warningVisible$.next(true)">
+                                <div class="p-2 cursor-pointer" *ngIf="!editing$.value" (click)="confirmUsingExample()">
                                     <app-stoichiometry-reaction-with-scroller
                                         [primaryPrecursor]="primaryPrecursor$.value"
                                         [targetMolecule]="targetMolecule$.value"
@@ -522,22 +524,18 @@
         <h2>Warning</h2>
     </ng-template>
     <p class="m-0">
-        The current overall stoichiometry input comes from the previous step - Overall Stoichiometry - of NovoStoic. If you click clear all, you are starting a new request on “Pathway Search”. You can find previous steps results in the Job Management.
+        {{ warningMessage }}
     </p>
     <ng-template pTemplate="footer">
         <div class="mt-4 flex justify-end gap-2">
             <button type="button" class="rounded-md border border-[--bluegray-500] border-solid p-2 px-4" 
-                (click)="
-                    warningVisible$.next(false); 
-                    editing$.next(true);
-                    request.resetStoichiometry();
-                ">
+                (click)="confirmCallback()">
                 <i class="pi pi-pencil mr-2"></i>
-                Clear all and start a new request input
+                {{ acceptLabel }}
             </button>
             <button type="button" class="rounded-md border bg-[#3B82F6] text-white p-2 px-4" (click)="warningVisible$.next(false)">
                 <i class="pi pi-check mr-2"></i>
-                Stay on this page
+                {{ rejectLabel }}
             </button>
         </div>
     </ng-template>

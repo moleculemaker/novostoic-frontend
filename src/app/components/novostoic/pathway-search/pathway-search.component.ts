@@ -74,6 +74,12 @@ export class PathwaySearchComponent implements OnInit {
     this.editing$
   ]).pipe(map(([visible, editing]) => visible && !editing));
 
+  // TODO: move to ConfirmationService once update angular
+  warningMessage = "The current overall stoichiometry input comes from the previous step - Overall Stoichiometry - of NovoStoic. If you click clear all, you are starting a new request on “Pathway Search”. You can find previous steps results in the Job Management."
+  acceptLabel = "Clear all and start a new request input"
+  rejectLabel = "Stay on this page"
+  confirmCallback = this.clearAllCallback
+
   constructor(
     private router: Router,
     private location: Location) {}
@@ -98,10 +104,31 @@ export class PathwaySearchComponent implements OnInit {
     this.router.navigate(["/pathway-search/result"]);
   }
 
-  useExample() {
-    this.editing$.next(true);
-    this.request = PathwaySearchRequest.useExample();
+  confirmUsingExample() {
+    this.confirmCallback = this.useExampleCallback;
+    this.warningMessage = "The current overall stoichiometry input comes from the previous step - Overall Stoichiometry - of NovoStoic. If you click Use an Example, you are starting a new request on “Pathway Search”. You can find previous steps results in the Job Management.";
+    this.acceptLabel = "Clear all and use an example";
+    this.warningVisible$.next(true);
+  }
+
+  confirmClearAll() {
+    this.confirmCallback = this.clearAllCallback;
+    this.warningMessage = "The current overall stoichiometry input comes from the previous step - Overall Stoichiometry - of NovoStoic. If you click clear all, you are starting a new request on “Pathway Search”. You can find previous steps results in the Job Management.";
+    this.acceptLabel = "Clear all and start a new request input";
+    this.warningVisible$.next(true);
   }
 
   searchStructure() {}
+
+  clearAllCallback() {
+    this.warningVisible$.next(false);
+    this.editing$.next(true);
+    this.request.resetStoichiometry();
+  }
+
+  useExampleCallback() {
+    this.warningVisible$.next(false);
+    this.editing$.next(true);
+    this.request = PathwaySearchRequest.useExample();
+  }
 }
