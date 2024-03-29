@@ -12,7 +12,6 @@ export class StoichiometryReactionWithScrollerComponent {
   @Input() targetMolecule: NovostoicMolecule;
   @Input() stoichiometry: NovostoicStoichiometry;
   @Input() moleculeStyleClass: string;
-  @Input() maxWidth: string;
 
   scrollingCounter$ = new BehaviorSubject(-1);
 
