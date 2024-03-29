@@ -1,42 +1,24 @@
 ::ng-deep .p-panel {
     .p-panel-header,
     .p-panel-content {
-        padding: 0;
+        @apply p-0;
     }
 }
 
-::ng-deep .p-dialog {
-    .p-dialog-header,
+.warning_dialog {
+  ::ng-deep {
+    .p-dialog-header, 
+    .p-dialog-content,
     .p-dialog-footer {
-        @apply bg-gray-50;
-        @apply border-solid;
-        @apply border-[--surface-d];
+      @apply bg-[--orange-50];
+      @apply border-none;
     }
 
     .p-dialog-header {
-        @apply border-b;
-    }
-
-    .p-dialog-footer {
-        @apply border-t;
-    }
-}
-
-.marvin-filter-container{
-  border: #CED4DA;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 6px;
-  background: white;
-
-  .p-inputgroup{
-    input{
-      border-width: 0px;
-    }
-    button{
-      background-color: #F8F9FA;
-      border-color: #CED4DA;
-      border-radius: 6px;
+      @apply pt-2;
+      @apply border-t-[4px];
+      @apply border-solid;
+      @apply border-[#F59E0B];
     }
   }
 }

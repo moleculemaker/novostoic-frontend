@@ -1,6 +1,6 @@
-<div class="flex h-full max-w-screen-xl gap-16">
+<div class="flex h-full max-w-screen-lg gap-16">
     <app-sidebar [openInNewPage]="false"></app-sidebar>
-    <div class="grow pt-4">
+    <div class="grow pt-4 max-w-content-lg">
         <form
             class="flex h-full flex-col justify-between"
             [formGroup]="request.form"
@@ -34,7 +34,10 @@
                                     <button
                                         type="button"
                                         class="rounded-md border bg-white p-2"
-                                        (click)="request.resetStoichiometry()"
+                                        (click)="
+                                            request.resetStoichiometry();
+                                            editing$.next(true)
+                                        "
                                     >
                                         Clear All
                                     </button>
@@ -46,13 +49,13 @@
                                 class="p-4"
                                 [class.bg-[#ebebeb]]="!editing$.value"
                             >
-                                <div class="p-2" *ngIf="!editing$.value">
+                                <div class="p-2 cursor-pointer" *ngIf="!editing$.value" (click)="warningVisible$.next(true)">
                                     <app-stoichiometry-reaction-with-scroller
                                         [primaryPrecursor]="primaryPrecursor$.value"
                                         [targetMolecule]="targetMolecule$.value"
                                         [stoichiometry]="stoichiometry$.value"
                                         moleculeStyleClass="bg-[#ebebeb]"
-                                        maxWidth="920px"
+                                        maxWidth="800px"
                                     ></app-stoichiometry-reaction-with-scroller>
                                 </div>
                                 <div *ngIf="editing$.value">
@@ -230,14 +233,14 @@
                             <div
                                 class="flex justify-between rounded-b-md bg-gray-50 p-1 px-4"
                             >
-                                <div class="flex gap-2">
+                                <div class="flex gap-3">
                                     <span class="text-xs"
-                                        >0 Primary Precursor</span
+                                        >1 Primary Precursor</span
                                     >
-                                    <span class="text-xs">0 Co-Reactants</span>
-                                    <span class="text-xs">0 Co-Products</span>
+                                    <span class="text-xs">{{ request.form.controls['coReactants'].length }} Co-Reactants</span>
+                                    <span class="text-xs">{{ request.form.controls['coProducts'].length }} Co-Products</span>
                                     <span class="text-xs"
-                                        >0 Target Molecule</span
+                                        >1 Target Molecule</span
                                     >
                                 </div>
                                 <div class="text-xs">Overall Stoichiometry</div>
@@ -500,3 +503,36 @@
         </form>
     </div>
 </div>
+
+<p-dialog 
+    class="warning_dialog"
+    [visible]="(showWarning$ | async)" 
+    (visibleChange)="warningVisible$.next(false)" 
+    [modal]="true" 
+    [closable]="false"
+    [style]="{ width: '50rem' }">
+    <ng-template pTemplate="header">
+        <h2>Warning</h2>
+    </ng-template>
+    <p class="m-0">
+        The current overall stoichiometry input comes from the previous step - Overall Stoichiometry - of NovoStoic. If you click clear all, you are starting a new request on “Pathway Search”. You can find previous steps results in the Job Management.
+    </p>
+    <ng-template pTemplate="footer">
+        <div class="mt-4 flex justify-end gap-2">
+            <button type="button" class="rounded-md border border-[--bluegray-500] border-solid p-2 px-4" 
+                (click)="
+                    warningVisible$.next(false); 
+                    editing$.next(true);
+                    request.resetStoichiometry();
+                ">
+                <i class="pi pi-pencil mr-2"></i>
+                Clear all and start a new request input
+            </button>
+            <button type="button" class="rounded-md border bg-[#3B82F6] text-white p-2 px-4" (click)="warningVisible$.next(false)">
+                <i class="pi pi-check mr-2"></i>
+                Stay on this page
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>
+

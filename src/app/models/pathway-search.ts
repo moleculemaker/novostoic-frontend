@@ -31,6 +31,46 @@ export class PathwaySearchRequest {
     });
   }
 
+  addPrimaryPercursorFromMolecule(molecule: NovostoicMolecule) {
+    this.form.controls["primaryPrecursor"].setValue({
+      name: molecule.commonNames[0],
+      amount: 1,
+    });
+  }
+
+  addTargetMoleculeFromMolecule(molecule: NovostoicMolecule) {
+    this.form.controls["targetMolecule"].setValue({
+      name: molecule.commonNames[0],
+      amount: 1,
+    });
+  }
+
+  addFromStoichiometry(stoichiometry: NovostoicStoichiometry) {
+    this.form.controls["coReactants"].clear();
+    for (let i = 0; i < stoichiometry.reactants.length; i++) {
+      this.addCoReactant();
+    }
+    this.form.controls["coReactants"].setValue(
+      stoichiometry.reactants
+        .map((r) => ({
+          name: r.molecule.commonNames[0],
+          amount: r.amount,
+        })),
+    );
+
+    this.form.controls["coProducts"].clear();
+    for (let i = 0; i < stoichiometry.products.length; i++) {
+      this.addCoProduct();
+    }
+    this.form.controls["coProducts"].setValue(
+      stoichiometry.products
+        .map((r) => ({
+          name: r.molecule.commonNames[0],
+          amount: r.amount,
+        })),
+    );
+  }
+
   addCoReactant() {
     this.form.controls["coReactants"].push(
       this.createMoleculeInputWithAmount(),
@@ -51,9 +91,11 @@ export class PathwaySearchRequest {
 
   resetStoichiometry() {
     this.form.controls["primaryPrecursor"].reset();
-    this.form.controls["coReactants"].reset();
-    this.form.controls["coProducts"].reset();
     this.form.controls["targetMolecule"].reset();
+    this.form.controls["coReactants"].controls = [];
+    this.form.controls["coProducts"].controls = [];
+    this.addCoReactant();
+    this.addCoProduct();
   }
 
   resetSetting() {

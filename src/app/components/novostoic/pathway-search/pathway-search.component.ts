@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, combineLatest, map } from "rxjs";
 import { PathwaySearchRequest } from "~/app/models/pathway-search";
 
 @Component({
@@ -14,64 +14,65 @@ import { PathwaySearchRequest } from "~/app/models/pathway-search";
 })
 export class PathwaySearchComponent implements OnInit {
   request = new PathwaySearchRequest();
-  editing$ = new BehaviorSubject(true);
+  editing$ = new BehaviorSubject(false);
   showDialog$ = new BehaviorSubject(false);
+  warningVisible$ = new BehaviorSubject(false);
   currentFormControl$ = new BehaviorSubject<
     "primaryPrecursor" | "targetMolecule"
   >("primaryPrecursor");
 
+  // to maintain consistency when user goes from overall stoichiometry page
+  // those values are used to populate the initial form
   primaryPrecursor$ = new BehaviorSubject({
-    smiles: "ex consequat sit adipisicing commodo",
-    commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
-    keggId: "proident",
+    smiles: "N/A",
+    commonNames: ["N/A"],
+    keggId: "N/A",
     structure: "",
   });
   targetMolecule$ = new BehaviorSubject({
-    smiles: "sint fugiat Ut",
-    commonNames: [
-      "minim fugiat pariatur deserunt Ut",
-      "exercitation Ut",
-      "Duis est nostrud",
-    ],
-    keggId: "laborum dolor magna",
+    smiles: "N/A",
+    commonNames: ["N/A"],
+    keggId: "N/A",
+    structure: "",
   });
   stoichiometry$ = new BehaviorSubject({
     reactants: [
       {
         molecule: {
-          commonNames: [
-            "tempor in dolore aute sint",
-            "incididunt dolor qui in magna",
-            "anim incididunt officia",
-          ],
-          smiles: "proident aute sint",
-          keggId: "nostrud aute ipsum proident sit",
+          smiles: "N/A",
+          commonNames: ["N/A"],
+          keggId: "N/A",
           structure: "",
         },
-        amount: 10.312100871722501,
+        amount: -1,
       },
     ],
     products: [
       {
         molecule: {
-          commonNames: ["enim aute in mollit sit"],
-          smiles: "nulla non",
-          keggId: "Ut",
+          smiles: "N/A",
+          commonNames: ["N/A"],
+          keggId: "N/A",
           structure: "",
         },
-        amount: 9.369815488391442,
+        amount: -1,
       },
       {
         molecule: {
-          commonNames: ["reprehenderit nulla sint", "aute"],
-          smiles: "consectetur in",
-          keggId: "enim ut sunt in",
+          smiles: "N/A",
+          commonNames: ["N/A"],
+          keggId: "N/A",
           structure: "",
         },
-        amount: 17.727498396504284,
+        amount: -1,
       },
     ],
   });
+
+  showWarning$ = combineLatest([
+    this.warningVisible$,
+    this.editing$
+  ]).pipe(map(([visible, editing]) => visible && !editing));
 
   constructor(
     private router: Router,
@@ -84,11 +85,12 @@ export class PathwaySearchComponent implements OnInit {
       this.primaryPrecursor$.next(state.primaryPrecursor);
       this.targetMolecule$.next(state.targetMolecule);
       this.stoichiometry$.next(state.stoichiometry);
-      this.editing$.next(false);
 
-      // this.location.replaceState("/pathway-search");
-
-      // console.log(this.location.getState());
+      this.request.addPrimaryPercursorFromMolecule(state.primaryPrecursor);
+      this.request.addTargetMoleculeFromMolecule(state.targetMolecule);
+      this.request.addFromStoichiometry(state.stoichiometry);
+    } else {
+      this.editing$.next(true);
     }
   }
 
@@ -97,6 +99,7 @@ export class PathwaySearchComponent implements OnInit {
   }
 
   useExample() {
+    this.editing$.next(true);
     this.request = PathwaySearchRequest.useExample();
   }
 
