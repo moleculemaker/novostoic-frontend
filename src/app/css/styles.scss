@@ -52,21 +52,19 @@ example: document.documentElement.style.setProperty('--text-color', '#ff0000');
 	}
 }
 
-//****************
-
-@import 'core/reset';
+//**************** host ******************
 @import 'shared';
 
-//**************** host ******************
+* {
+	font: {
+		family: $font_family;
+		size: $font_size_default;
+	}
+}
 
 html, body {
 	color: css_var('text');
 	background: {
 		color: css_var('background');
-	}
-
-	font: {
-		family: $font_family;
-		size: $font_size_default;
 	}
 }

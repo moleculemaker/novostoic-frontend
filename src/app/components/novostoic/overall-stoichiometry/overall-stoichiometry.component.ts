@@ -7,9 +7,6 @@ import { OverallStoichiometryRequest } from "~/app/models/overall-stoichiometry"
   selector: "app-overall-stoichiometry",
   templateUrl: "./overall-stoichiometry.component.html",
   styleUrls: ["./overall-stoichiometry.component.scss"],
-  host: {
-    class: "grow",
-  },
 })
 export class OverallStoichiometryComponent {
   overallStoichiometryRequest = new OverallStoichiometryRequest();

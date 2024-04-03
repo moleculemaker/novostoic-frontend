@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FilterService } from "primeng/api";
 import { Table } from "primeng/table";
-import { BehaviorSubject, filter, map, tap } from "rxjs";
+import { BehaviorSubject, map } from "rxjs";
 import {
   NovostoicMolecule,
   OverallStoichiometryResponse,
@@ -11,9 +11,6 @@ import {
   selector: "app-overall-stoichiometry-result",
   templateUrl: "./overall-stoichiometry-result.component.html",
   styleUrls: ["./overall-stoichiometry-result.component.scss"],
-  host: {
-    class: "grow",
-  },
 })
 export class OverallStoichiometryResultComponent implements OnInit {
   @ViewChild("resultsTable") resultsTable: Table;
