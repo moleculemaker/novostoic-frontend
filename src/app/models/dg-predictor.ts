@@ -51,19 +51,26 @@ export class ThermodynamicalFeasibilityRequest {
 
   exampleRequest() {
     const request = new ThermodynamicalFeasibilityRequest();
-    const smilesExample = this.createReactionSmilesFormControl();
-    const keggIdExample = this.createReactionKeggIDFormControl();
-    smilesExample.controls["reactionSmiles"]?.setValue(
-      "CC(=O)C(=O)O.O=C=O>>CC(=O)C(=O)O~O=C(O)O",
-    );
-    keggIdExample.controls["moleculeNumber"]?.setValue("00001");
-    keggIdExample.controls["moleculeInchiOrSmiles"]?.setValue("O=C(O)CCOCCCl");
-    keggIdExample.controls["reactionKeggId"]?.setValue(
-      "CCO.CCOC(=O)CCOCCCl.[Li+]~[OH-]>>N00001",
-    );
+
     request.form.controls["reactions"].removeAt(0);
-    request.form.controls["reactions"].push(smilesExample);
-    request.form.controls["reactions"].push(keggIdExample);
+    request.form.controls["reactions"].push(this.createReactionKeggIDFormControl());
+
+    request.form.setValue({
+      ph: 7,
+      ionicStrength: 0.1,
+      reactions: [
+        {
+          type: "keggId",
+          moleculeNumber: "00001",
+          moleculeInchiOrSmiles: "InChI=1S/C14H12O/c15-14-8-4-7-13(11-14)10-9-12-5-2-1-3-6-12/h1-11,15H/b10-9+",
+          reactionKeggId: "C01745 + C00004 <=> N00001 + C00003 + C00001",
+        }
+      ],
+      agreeToSubscription: false,
+      subscriberEmail: "",
+      reactionInputType: "smiles",
+    });
+    
     return request;
   }
 
@@ -108,12 +115,8 @@ export class ThermodynamicalFeasibilityResponse {
 
   public static example = [
     {
-      reaction: "CCO.CCOC(=O)CCOCCCl.[Li+]~[OH-]>>O=C(O)CCOCCCl",
-      gibbsEnergy: 500,
-    },
-    {
-      reaction: "CC(=O)C(=O)O.O=C=O>>CC(=O)C(=O)O~O=C(O)O",
-      gibbsEnergy: 300,
+      reaction: "C01745 + C00004 <=> N00001 + C00003 + C00001",
+      gibbsEnergy: -121.74,
     },
   ];
 }
