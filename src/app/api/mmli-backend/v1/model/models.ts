@@ -10,4 +10,5 @@ export * from './jobType';
 export * from './jobUpdate';
 export * from './locationInner';
 export * from './molecule';
+export * from './optstoicRequestBody';
 export * from './validationError';

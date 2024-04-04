@@ -6,6 +6,7 @@ api/chemScraper.service.ts
 api/default.service.ts
 api/files.service.ts
 api/jobs.service.ts
+api/novostoic.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -23,6 +24,7 @@ model/jobUpdate.ts
 model/locationInner.ts
 model/models.ts
 model/molecule.ts
+model/optstoicRequestBody.ts
 model/validationError.ts
 param.ts
 variables.ts

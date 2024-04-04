@@ -11,15 +11,10 @@
  */
 
 
-/**
- * An enumeration.
- */
-export type JobType = 'clean' | 'chemscraper' | 'molli' | 'novostoic_optstoic';
-
-export const JobType = {
-    Clean: 'clean' as JobType,
-    Chemscraper: 'chemscraper' as JobType,
-    Molli: 'molli' as JobType,
-    NovostoicOptstoic: 'novostoic_optstoic' as JobType
-};
+export interface OptstoicRequestBody { 
+    jobId: string;
+    user_email: string;
+    primary_precursor: string;
+    target_molecule: string;
+}
 
