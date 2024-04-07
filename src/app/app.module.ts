@@ -30,6 +30,7 @@ import { ChipModule } from "primeng/chip";
 import { TabViewModule } from "primeng/tabview";
 import { ScrollPanelModule } from "primeng/scrollpanel";
 import { MultiSelectModule } from "primeng/multiselect";
+import { InputNumberModule } from "primeng/inputnumber";
 import { SliderModule } from "primeng/slider";
 
 import { LandingPageComponent } from "./components/landing-page/landing-page.component";
@@ -65,6 +66,8 @@ import { PathwaySearchComponent } from "./components/novostoic/pathway-search/pa
 import { StoichiometryReactionComponent } from "./components/novostoic/stoichiometry-reaction/stoichiometry-reaction.component";
 import { PathwaySearchResultComponent } from "./components/novostoic/pathway-search-result/pathway-search-result.component";
 import { StoichiometryReactionWithScrollerComponent } from './components/novostoic/stoichiometry-reaction-with-scroller/stoichiometry-reaction-with-scroller.component';
+import { DgPredictorComponent } from "./components/novostoic/dg-predictor/dg-predictor.component";
+import { DgPredictorResultComponent } from './components/novostoic/dg-predictor-result/dg-predictor-result.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -81,6 +84,8 @@ const initAppFn = (envService: EnvironmentService) => {
     AboutNovostoicComponent,
     OverallStoichiometryResultComponent,
     LoadingComponent,
+    DgPredictorComponent,
+    DgPredictorResultComponent,
     MarvinjsInputComponent,
     PathwaySearchComponent,
     StoichiometryReactionComponent,
@@ -104,11 +109,13 @@ const initAppFn = (envService: EnvironmentService) => {
     CardModule,
     ChipModule,
     InputTextareaModule,
+    InputNumberModule,
     PanelModule,
     ProgressBarModule,
     SelectButtonModule,
     SkeletonModule,
     ScrollPanelModule,
+    SliderModule,
     ProgressSpinnerModule,
     StepsModule,
     SliderModule,

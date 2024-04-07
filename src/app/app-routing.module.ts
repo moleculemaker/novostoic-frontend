@@ -7,6 +7,8 @@ import { AboutNovostoicComponent } from "./components/novostoic/about-novostoic/
 import { OverallStoichiometryResultComponent } from "./components/novostoic/overall-stoichiometry-result/overall-stoichiometry-result.component";
 import { PathwaySearchComponent } from "./components/novostoic/pathway-search/pathway-search.component";
 import { PathwaySearchResultComponent } from "./components/novostoic/pathway-search-result/pathway-search-result.component";
+import { DgPredictorComponent } from "./components/novostoic/dg-predictor/dg-predictor.component";
+import { DgPredictorResultComponent } from "./components/novostoic/dg-predictor-result/dg-predictor-result.component";
 
 const routes: Routes = [
   { path: "about", component: AboutNovostoicComponent },
@@ -17,6 +19,11 @@ const routes: Routes = [
   },
   { path: "pathway-search", component: PathwaySearchComponent },
   { path: "pathway-search/result", component: PathwaySearchResultComponent },
+  { path: "thermodynamical-feasibility", component: DgPredictorComponent },
+  {
+    path: "thermodynamical-feasibility/result",
+    component: DgPredictorResultComponent,
+  },
   { path: "", component: LandingPageComponent },
 ];
 

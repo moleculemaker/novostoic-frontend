@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { FilterService } from "primeng/api";
 import { Table } from "primeng/table";
-import { BehaviorSubject, filter, map, tap } from "rxjs";
+import { BehaviorSubject, map } from "rxjs";
 import {
   NovostoicMolecule,
   NovostoicStoichiometry,
