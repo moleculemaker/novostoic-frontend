@@ -1,7 +1,7 @@
 <form
     class="flex h-full flex-col justify-between"
-    [formGroup]="request.form"
-    (ngSubmit)="onSubmit(request)"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
 >
     <div>
         <h2 class="mb-2">Input your target molecule and precursor</h2>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div
-                    *ngIf="request.form.controls['primaryPrecursor'].value"
+                    *ngIf="form.controls['primaryPrecursor'].value"
                     class="border-green-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid"
                 >
                     <i
@@ -131,7 +131,7 @@
                     </div>
                 </div>
                 <div
-                    *ngIf="request.form.controls['targetMolecule'].value"
+                    *ngIf="form.controls['targetMolecule'].value"
                     class="border-blue-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid"
                 >
                     <i
@@ -164,15 +164,15 @@
                     type="email"
                     aria-describedby="subscriber-email-help"
                     [class]="'h-12 w-full'
-                    + ((request.form.controls['subscriberEmail'].invalid
-                        && request.form.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
+                    + ((form.controls['subscriberEmail'].invalid
+                        && form.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
                     pInputText
                     placeholder="Enter email here"
                     formControlName="subscriberEmail"
                 />
                 <small
-                    *ngIf="request.form.controls['subscriberEmail'].invalid
-                        && request.form.controls['subscriberEmail'].dirty"
+                    *ngIf="form.controls['subscriberEmail'].invalid
+                        && form.controls['subscriberEmail'].dirty"
                     id="subscriber-email-help"
                     class="p-error mt-2 block"
                     >Email is invalid.</small
@@ -184,7 +184,7 @@
                     styleClass="subscription-checkbox"
                     label="Agree to receive email notifications and updates about Novostoic."
                     [binary]="true"
-                    [formControl]="request.form.controls['agreeToSubscription']"
+                    [formControl]="form.controls['agreeToSubscription']"
                 ></p-checkbox>
             </div>
         </div>
@@ -192,7 +192,7 @@
             label="Get the Overall Stoichiometry"
             type="submit"
             styleClass="bg-[#224063]"
-            [disabled]="request.form.invalid"
+            [disabled]="form.invalid"
             iconPos="right"
             icon="pi pi-arrow-right"
         ></p-button>
@@ -210,9 +210,8 @@
 >
     <app-marvin-js-editor
         class="marvin-editor"
-        [smiles]="request.form.controls[currentFormControl$.value].value || ''"
-        (smilesChange)="
-        request.form.controls[currentFormControl$.value].setValue($event)"
+        [smiles]="form.controls[currentFormControl$.value].value || ''"
+        (smilesChange)="form.controls[currentFormControl$.value].setValue($event)"
     ></app-marvin-js-editor>
     <ng-template pTemplate="footer">
         <p-button

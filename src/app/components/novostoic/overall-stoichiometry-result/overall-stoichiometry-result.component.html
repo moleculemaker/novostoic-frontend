@@ -58,7 +58,7 @@
                                 >
                                     <img
                                         class="h-auto w-[100px]"
-                                        [src]="response.primaryPrecursor.structure"
+                                        [src]="(response$ | async)!.primaryPrecursor.structure"
                                     />
                                 </div>
                                 <div
@@ -66,7 +66,7 @@
                                 >
                                     <ng-container
                                         *ngTemplateOutlet="moleculeInfo; context: {
-                                        $implicit: response.primaryPrecursor,
+                                        $implicit: (response$ | async)!.primaryPrecursor,
                                         showSmiles: true
                                     }"
                                     ></ng-container>
@@ -90,7 +90,7 @@
                                 >
                                     <img
                                         class="h-auto w-[100px]"
-                                        [src]="response.targetMolecule.structure"
+                                        [src]="(response$ | async)!.targetMolecule.structure"
                                     />
                                 </div>
                                 <div
@@ -98,7 +98,7 @@
                                 >
                                     <ng-container
                                         *ngTemplateOutlet="moleculeInfo; context: {
-                                        $implicit: response.targetMolecule,
+                                        $implicit: (response$ | async)!.targetMolecule,
                                         showSmiles: true
                                     }"
                                     ></ng-container>
@@ -128,7 +128,7 @@
                 <ng-template pTemplate="content">
                     <p-table
                         #resultsTable
-                        [value]="response.results"
+                        [value]="(response$ | async)!.results"
                         [paginator]="true"
                         [rows]="10"
                         [showCurrentPageReport]="true"
@@ -168,8 +168,8 @@
                             <tr>
                                 <td class="relative max-w-[440px]">
                                     <app-stoichiometry-reaction-with-scroller
-                                        [primaryPrecursor]="response.primaryPrecursor"
-                                        [targetMolecule]="response.targetMolecule"
+                                        [primaryPrecursor]="(response$ | async)!.primaryPrecursor"
+                                        [targetMolecule]="(response$ | async)!.targetMolecule"
                                         [stoichiometry]="product.stoichiometry"
                                     ></app-stoichiometry-reaction-with-scroller>
                                 </td>
@@ -241,7 +241,7 @@
             placeholder="Select cofactors"
             styleClass="w-full"
             appendTo="body"
-            [options]="filterOptions"
+            [options]="(filterOptions$ | async) || []"
             [ngModel]="filters$.value"
             (ngModelChange)="filters$.next($event)"
         >

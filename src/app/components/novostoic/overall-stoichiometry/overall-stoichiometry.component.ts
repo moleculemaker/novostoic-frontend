@@ -1,8 +1,10 @@
 import { Component } from "@angular/core";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
-import { OverallStoichiometryRequest } from "~/app/models/overall-stoichiometry";
+import { JobCreate, JobsService, OptstoicRequestBody } from "~/app/api/mmli-backend/v1";
+import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
   selector: "app-overall-stoichiometry",
@@ -10,20 +12,42 @@ import { OverallStoichiometryRequest } from "~/app/models/overall-stoichiometry"
   styleUrls: ["./overall-stoichiometry.component.scss"],
 })
 export class OverallStoichiometryComponent {
-  request = new OverallStoichiometryRequest();
+  form = new FormGroup({
+    primaryPrecursor: new FormControl("", [Validators.required]),
+    targetMolecule: new FormControl("", [Validators.required]),
+    agreeToSubscription: new FormControl(false),
+    subscriberEmail: new FormControl("", [Validators.email]),
+  });
 
   currentFormControl$ = new BehaviorSubject<
     "primaryPrecursor" | "targetMolecule"
   >("primaryPrecursor");
   showDialog$ = new BehaviorSubject(false);
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private novostoicService: NovostoicService,
+    private jobService: JobsService
+  ) {}
 
   searchStructure() {
     this.showDialog$.next(false);
   }
 
-  onSubmit(form: OverallStoichiometryRequest) {
-    this.router.navigate([NovostoicTools.OVERALL_STOICHIOMETRY, "result"]);
+  onSubmit() {
+    if (!this.form.valid) {
+      return;
+    }
+
+    const data: OptstoicRequestBody = {
+      jobId: "",
+      user_email: this.form.controls['subscriberEmail'].value!,
+      primary_precursor: this.form.controls['primaryPrecursor'].value!,
+      target_molecule: this.form.controls['targetMolecule'].value!,
+    }
+
+    this.novostoicService.createJobAndRunOptstoic(data).subscribe((response) => {
+      this.router.navigate([NovostoicTools.OVERALL_STOICHIOMETRY, "result", response.jobId]);
+    });
   }
 }
