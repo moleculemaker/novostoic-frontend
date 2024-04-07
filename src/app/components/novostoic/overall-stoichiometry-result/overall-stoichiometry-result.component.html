@@ -1,19 +1,19 @@
 <div class="flex h-full flex-col justify-between">
-    <div>
+    <div *ngIf="(statusResponse$ | async) as status">
         <!-- TODO: use real data -->
         <div class="flex justify-between">
             <div>
                 <h2 class="mb-2">
-                    Job ID: {{ jobId }} <i class="pi pi-copy"></i>
+                    Job ID: {{ status.job_id || 'loading' }} <i class="pi pi-copy"></i>
                 </h2>
                 <p class="leading-6">
-                    Submission Time: {{ submissionTime }}
+                    Submission Time: {{ status.time_created | date: 'short' }}
                 </p>
             </div>
             <div class="flex items-center">
                 <div class="flex items-center gap-2">
                     <button
-                        *ngIf="loading"
+                        *ngIf="status.phase === JobStatus.Queued || status.phase === JobStatus.Processing"
                         class="rounded-md border p-2 py-3"
                     >
                         Cancel
@@ -30,7 +30,7 @@
         </div>
 
         <!-- Molecule Input -->
-        <div *ngIf="!loading" class="mt-8 flex flex-col gap-6">
+        <div *ngIf="(response$ | async) as response" class="mt-8 flex flex-col gap-6">
             <p-panel>
                 <ng-template pTemplate="header">
                     <div
@@ -58,7 +58,7 @@
                                 >
                                     <img
                                         class="h-auto w-[100px]"
-                                        [src]="(response$ | async)!.primaryPrecursor.structure"
+                                        [src]="response.primaryPrecursor.structure"
                                     />
                                 </div>
                                 <div
@@ -66,7 +66,7 @@
                                 >
                                     <ng-container
                                         *ngTemplateOutlet="moleculeInfo; context: {
-                                        $implicit: (response$ | async)!.primaryPrecursor,
+                                        $implicit: response.primaryPrecursor,
                                         showSmiles: true
                                     }"
                                     ></ng-container>
@@ -90,7 +90,7 @@
                                 >
                                     <img
                                         class="h-auto w-[100px]"
-                                        [src]="(response$ | async)!.targetMolecule.structure"
+                                        [src]="response.targetMolecule.structure"
                                     />
                                 </div>
                                 <div
@@ -98,7 +98,7 @@
                                 >
                                     <ng-container
                                         *ngTemplateOutlet="moleculeInfo; context: {
-                                        $implicit: (response$ | async)!.targetMolecule,
+                                        $implicit: response.targetMolecule,
                                         showSmiles: true
                                     }"
                                     ></ng-container>
@@ -128,7 +128,7 @@
                 <ng-template pTemplate="content">
                     <p-table
                         #resultsTable
-                        [value]="(response$ | async)!.results"
+                        [value]="response.results"
                         [paginator]="true"
                         [rows]="10"
                         [showCurrentPageReport]="true"
@@ -168,8 +168,8 @@
                             <tr>
                                 <td class="relative max-w-[440px]">
                                     <app-stoichiometry-reaction-with-scroller
-                                        [primaryPrecursor]="(response$ | async)!.primaryPrecursor"
-                                        [targetMolecule]="(response$ | async)!.targetMolecule"
+                                        [primaryPrecursor]="response.primaryPrecursor"
+                                        [targetMolecule]="response.targetMolecule"
                                         [stoichiometry]="product.stoichiometry"
                                     ></app-stoichiometry-reaction-with-scroller>
                                 </td>
@@ -202,7 +202,7 @@
             </p-panel>
         </div>
 
-        <app-loading *ngIf="loading"></app-loading>
+        <app-loading *ngIf="status.phase === JobStatus.Queued || status.phase === JobStatus.Processing"></app-loading>
     </div>
 </div>
 

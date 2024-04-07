@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FilterService } from "primeng/api";
 import { Table } from "primeng/table";
-import { BehaviorSubject, Observable, filter, map, of, shareReplay, switchMap, takeUntil, takeWhile, tap, timer } from "rxjs";
+import { BehaviorSubject, Observable, filter, map, of, shareReplay, skipUntil, switchMap, take, takeLast, takeUntil, takeWhile, tap, timer } from "rxjs";
 
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
-import { JobType } from "~/app/api/mmli-backend/v1";
+import { JobStatus, JobType, JobsService } from "~/app/api/mmli-backend/v1";
 import {
   NovostoicMolecule,
   NovostoicStoichiometry,
@@ -20,6 +20,8 @@ import { NovostoicService } from "~/app/services/novostoic.service";
 })
 export class OverallStoichiometryResultComponent implements OnInit {
   @ViewChild("resultsTable") resultsTable: Table;
+
+  readonly JobStatus = JobStatus;
 
   moleculeRepresentations: Array<{
     label: string;
@@ -40,30 +42,23 @@ export class OverallStoichiometryResultComponent implements OnInit {
   ];
 
   jobId: string;
-  submissionTime = "example submission time";
-  loading = false;
-
-  pollForResult$ = new BehaviorSubject(true);
 
   statusResponse$ = timer(0, 10000).pipe(
     switchMap(() => this.novostoicService.getResultStatus(
       JobType.NovostoicOptstoic,
       this.jobId,
     )),
-    takeUntil(this.pollForResult$.pipe(filter(poll => !poll))),
-    tap((jobStatus) => {
-      console.log(jobStatus);
-    })
+    takeWhile((data) => 
+      data.phase === JobStatus.Processing 
+      || data.phase === JobStatus.Queued
+    , true),
+    tap((data) => { console.log('job status: ', data) }),
   );
 
   response$ = this.statusResponse$.pipe(
-    filter(jobStatus => jobStatus.phase == "completed"),
-    switchMap(() => this.novostoicService.getResult(
-      JobType.NovostoicOptstoic,
-      this.jobId
-    )),
-    tap((data) => { console.log(data) }),
-    switchMap((data) => of(OverallStoichiometryResponse.example)),
+    skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
+    switchMap((data) => of(OverallStoichiometryResponse.example)), //TODO: replace with actual response
+    tap((data) => { console.log('result: ', data) }),
   );
 
   showResultsFilter$ = new BehaviorSubject(false);

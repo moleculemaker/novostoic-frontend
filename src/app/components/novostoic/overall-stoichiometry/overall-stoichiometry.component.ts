@@ -30,6 +30,15 @@ export class OverallStoichiometryComponent {
     private jobService: JobsService
   ) {}
 
+  useExample() {
+    this.form.setValue({
+      primaryPrecursor: "C00022",
+      targetMolecule: "C21389",
+      agreeToSubscription: false,
+      subscriberEmail: "",
+    });
+  }
+
   searchStructure() {
     this.showDialog$.next(false);
   }

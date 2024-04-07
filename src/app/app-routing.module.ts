@@ -26,7 +26,7 @@ const routes: Routes = [
         component: OverallStoichiometryComponent 
       },
       {
-        path: NovostoicTools.OVERALL_STOICHIOMETRY + "/result",
+        path: NovostoicTools.OVERALL_STOICHIOMETRY + "/result/:id",
         component: OverallStoichiometryResultComponent,
       },
       { 
