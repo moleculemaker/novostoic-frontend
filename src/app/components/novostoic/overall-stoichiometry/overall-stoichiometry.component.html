@@ -3,8 +3,8 @@
     <div class="grow pt-4">
         <form
             class="flex h-full flex-col justify-between"
-            [formGroup]="overallStoichiometryRequest.form"
-            (ngSubmit)="onSubmit(overallStoichiometryRequest)"
+            [formGroup]="request.form"
+            (ngSubmit)="onSubmit(request)"
         >
             <div>
                 <h2 class="mb-2">Input your target molecule and precursor</h2>
@@ -60,8 +60,8 @@
                             </div>
                         </div>
                         <div
-                            *ngIf="overallStoichiometryRequest.form.controls['primaryPrecursor'].value"
-                            class="relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid border-[#00A907]"
+                            *ngIf="request.form.controls['primaryPrecursor'].value"
+                            class="border-green-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid"
                         >
                             <i
                                 class="pi pi-check-circle absolute left-3 top-3"
@@ -134,8 +134,8 @@
                             </div>
                         </div>
                         <div
-                            *ngIf="overallStoichiometryRequest.form.controls['targetMolecule'].value"
-                            class="relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid border-[#3B82F6]"
+                            *ngIf="request.form.controls['targetMolecule'].value"
+                            class="border-blue-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid"
                         >
                             <i
                                 class="pi pi-check-circle absolute left-3 top-3"
@@ -167,15 +167,15 @@
                             type="email"
                             aria-describedby="subscriber-email-help"
                             [class]="'h-12 w-full'
-                            + ((overallStoichiometryRequest.form.controls['subscriberEmail'].invalid
-                                && overallStoichiometryRequest.form.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
+                            + ((request.form.controls['subscriberEmail'].invalid
+                                && request.form.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
                             pInputText
                             placeholder="Enter email here"
                             formControlName="subscriberEmail"
                         />
                         <small
-                            *ngIf="overallStoichiometryRequest.form.controls['subscriberEmail'].invalid
-                                && overallStoichiometryRequest.form.controls['subscriberEmail'].dirty"
+                            *ngIf="request.form.controls['subscriberEmail'].invalid
+                                && request.form.controls['subscriberEmail'].dirty"
                             id="subscriber-email-help"
                             class="p-error mt-2 block"
                             >Email is invalid.</small
@@ -187,7 +187,7 @@
                             styleClass="subscription-checkbox"
                             label="Agree to receive email notifications and updates about Novostoic."
                             [binary]="true"
-                            [formControl]="overallStoichiometryRequest.form.controls['agreeToSubscription']"
+                            [formControl]="request.form.controls['agreeToSubscription']"
                         ></p-checkbox>
                     </div>
                 </div>
@@ -195,7 +195,7 @@
                     label="Get the Overall Stoichiometry"
                     type="submit"
                     styleClass="bg-[#224063]"
-                    [disabled]="overallStoichiometryRequest.form.invalid"
+                    [disabled]="request.form.invalid"
                     iconPos="right"
                     icon="pi pi-arrow-right"
                 ></p-button>
@@ -215,9 +215,9 @@
 >
     <app-marvin-js-editor
         class="marvin-editor"
-        [smiles]="overallStoichiometryRequest.form.controls[currentFormControl$.value].value || ''"
+        [smiles]="request.form.controls[currentFormControl$.value].value || ''"
         (smilesChange)="
-        overallStoichiometryRequest.form.controls[currentFormControl$.value].setValue($event)"
+        request.form.controls[currentFormControl$.value].setValue($event)"
     ></app-marvin-js-editor>
     <ng-template pTemplate="footer">
         <p-button
