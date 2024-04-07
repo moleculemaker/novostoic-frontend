@@ -101,8 +101,6 @@ export class ThermodynamicalFeasibilityRequest {
         reactions: this.form.controls["reactions"].value,
       }),
       email: this.form.controls["subscriberEmail"].value || "",
-      job_id: undefined,
-      run_id: 0,
     };
   }
 }

@@ -160,8 +160,6 @@ export class PathwaySearchRequest {
         numEnzymeCandidates: this.form.controls["numEnzymeCandidates"].value,
       }),
       email: this.form.controls["subscriberEmail"].value || "",
-      job_id: undefined,
-      run_id: 0,
     };
   }
 }

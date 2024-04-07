@@ -30,8 +30,6 @@ export class EnzymeSelectionRequest {
         enzymeSequence: this.form.controls["enzymeSequence"].value,
       }),
       email: this.form.controls["subscriberEmail"].value || "",
-      job_id: undefined,
-      run_id: 0,
     };
   }
 }
