@@ -5,6 +5,8 @@ import { LandingPageComponent } from "./components/landing-page/landing-page.com
 import { OverallStoichiometryComponent } from "./components/novostoic/overall-stoichiometry/overall-stoichiometry.component";
 import { AboutNovostoicComponent } from "./components/novostoic/about-novostoic/about-novostoic.component";
 import { OverallStoichiometryResultComponent } from "./components/novostoic/overall-stoichiometry-result/overall-stoichiometry-result.component";
+import { PathwaySearchComponent } from "./components/novostoic/pathway-search/pathway-search.component";
+import { PathwaySearchResultComponent } from "./components/novostoic/pathway-search-result/pathway-search-result.component";
 
 const routes: Routes = [
   { path: "about", component: AboutNovostoicComponent },
@@ -13,6 +15,8 @@ const routes: Routes = [
     path: "overall-stoichiometry/result",
     component: OverallStoichiometryResultComponent,
   },
+  { path: "pathway-search", component: PathwaySearchComponent },
+  { path: "pathway-search/result", component: PathwaySearchResultComponent },
   { path: "", component: LandingPageComponent },
 ];
 

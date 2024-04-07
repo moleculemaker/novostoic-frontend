@@ -30,6 +30,7 @@ import { ChipModule } from "primeng/chip";
 import { TabViewModule } from "primeng/tabview";
 import { ScrollPanelModule } from "primeng/scrollpanel";
 import { MultiSelectModule } from "primeng/multiselect";
+import { SliderModule } from "primeng/slider";
 
 import { LandingPageComponent } from "./components/landing-page/landing-page.component";
 import { SidebarComponent } from "./components/novostoic/sidebar/sidebar.component";
@@ -60,6 +61,10 @@ import { ApiModule, Configuration } from "@api/mmli-backend/v1";
 import { SafePipe } from "./pipes/safe.pipe";
 import { OverallStoichiometryResultComponent } from "./components/novostoic/overall-stoichiometry-result/overall-stoichiometry-result.component";
 import { LoadingComponent } from "./components/novostoic/loading/loading.component";
+import { PathwaySearchComponent } from "./components/novostoic/pathway-search/pathway-search.component";
+import { StoichiometryReactionComponent } from "./components/novostoic/stoichiometry-reaction/stoichiometry-reaction.component";
+import { PathwaySearchResultComponent } from "./components/novostoic/pathway-search-result/pathway-search-result.component";
+import { StoichiometryReactionWithScrollerComponent } from './components/novostoic/stoichiometry-reaction-with-scroller/stoichiometry-reaction-with-scroller.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -77,6 +82,10 @@ const initAppFn = (envService: EnvironmentService) => {
     OverallStoichiometryResultComponent,
     LoadingComponent,
     MarvinjsInputComponent,
+    PathwaySearchComponent,
+    StoichiometryReactionComponent,
+    PathwaySearchResultComponent,
+    StoichiometryReactionWithScrollerComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,
@@ -102,6 +111,7 @@ const initAppFn = (envService: EnvironmentService) => {
     ScrollPanelModule,
     ProgressSpinnerModule,
     StepsModule,
+    SliderModule,
     DropdownModule,
     TableModule,
     TabViewModule,
