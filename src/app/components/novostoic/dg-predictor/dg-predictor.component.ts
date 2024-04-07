@@ -8,9 +8,6 @@ import { ThermodynamicalFeasibilityRequest } from "~/app/models/dg-predictor";
   selector: "app-dg-predictor",
   templateUrl: "./dg-predictor.component.html",
   styleUrls: ["./dg-predictor.component.scss"],
-  host: {
-    class: "grow",
-  },
 })
 export class DgPredictorComponent {
   request = new ThermodynamicalFeasibilityRequest();

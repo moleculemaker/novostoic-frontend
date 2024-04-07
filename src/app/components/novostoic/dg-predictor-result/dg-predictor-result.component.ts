@@ -6,9 +6,6 @@ import { ThermodynamicalFeasibilityResponse } from "~/app/models/dg-predictor";
   selector: "app-dg-predictor-result",
   templateUrl: "./dg-predictor-result.component.html",
   styleUrls: ["./dg-predictor-result.component.scss"],
-  host: {
-    class: "grow",
-  },
 })
 export class DgPredictorResultComponent {
   jobId = "exampleJobId";
