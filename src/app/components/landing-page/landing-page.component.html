@@ -229,63 +229,63 @@
                                     </button>
                                 </div>
                             </ng-template>
+                          <h3 class="-mt-6">Thermodynamical Feasibility</h3>
+                          <h6 class="mb-4 font-light">dgPredictor</h6>
+                          <ul class="-mb-10 ml-6 list-disc">
+                              <li class="pl-2">
+                                  You <i>have</i> pathways or reactions
+                              </li>
+                              <li class="pl-2 pt-2">
+                                  You <i>need</i> to calculate Gibbs Free Energy
+                              </li>
+                          </ul>
+                      </p-card>
+                    </a>
+                    <a href="/enzyme-selection">
+                        <p-card
+                            [styleClass]="
+                            'rounded-none shadow-none border-2 border-solid border-bluegray-100 cursor-pointer '
+                            + (displayedResearchNeed$.value === NovostoicTools.ENZYME_ACTIVITY ? 'bg-gray-50': '')
+                        "
+                            (mouseenter)="displayedResearchNeed$.next(NovostoicTools.ENZYME_ACTIVITY)"
+                            (mouseleave)="displayedResearchNeed$.next(NovostoicTools.NA)"
+                        >
+                            <ng-template pTemplate="header">
+                                <div
+                                    class="flex items-center justify-center p-2 pb-0"
+                                >
+                                    <img
+                                        src="assets/enzyme_activity.png"
+                                        alt="enzyme_activity"
+                                    />
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="footer">
+                                <div class="flex">
+                                    <button
+                                        pButton
+                                        @fadeIn
+                                        class="-mx-2 -mb-2 mt-2 grow justify-center"
+                                        *ngIf="displayedResearchNeed$.value === NovostoicTools.ENZYME_ACTIVITY"
+                                    >
+                                        Start Using
+                                    </button>
+                                </div>
+                            </ng-template>
 
-                            <h3 class="-mt-6">Thermodynamical Feasibility</h3>
-                            <h6 class="mb-4 font-light">dgPredictor</h6>
+                            <h3 class="-mt-6">Enzyme Activity</h3>
+                            <h6 class="mb-4 font-light">EnzRank</h6>
                             <ul class="-mb-10 ml-6 list-disc">
                                 <li class="pl-2">
                                     You <i>have</i> pathways or reactions
                                 </li>
                                 <li class="pl-2 pt-2">
-                                    You <i>need</i> to calculate Gibbs Free
-                                    Energy
+                                    You <i>need</i> best candidates to use as
+                                    enzyme for a new/novel reaction pathway
                                 </li>
                             </ul>
                         </p-card>
                     </a>
-                    <p-card
-                        [styleClass]="
-                            'rounded-none shadow-none border-2 border-solid border-bluegray-100 cursor-pointer '
-                            + (displayedResearchNeed$.value === NovostoicTools.ENZYME_ACTIVITY ? 'bg-gray-50': '')
-                        "
-                        (mouseenter)="displayedResearchNeed$.next(NovostoicTools.ENZYME_ACTIVITY)"
-                        (mouseleave)="displayedResearchNeed$.next(NovostoicTools.NA)"
-                    >
-                        <ng-template pTemplate="header">
-                            <div
-                                class="flex items-center justify-center p-2 pb-0"
-                            >
-                                <img
-                                    src="assets/enzyme_activity.png"
-                                    alt="enzyme_activity"
-                                />
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="footer">
-                            <div class="flex">
-                                <button
-                                    pButton
-                                    @fadeIn
-                                    class="-mx-2 -mb-2 mt-2 grow justify-center"
-                                    *ngIf="displayedResearchNeed$.value === NovostoicTools.ENZYME_ACTIVITY"
-                                >
-                                    Start Using
-                                </button>
-                            </div>
-                        </ng-template>
-
-                        <h3 class="-mt-6">Enzyme Activity</h3>
-                        <h6 class="mb-4 font-light">EnzRank</h6>
-                        <ul class="-mb-10 ml-6 list-disc">
-                            <li class="pl-2">
-                                You <i>have</i> pathways or reactions
-                            </li>
-                            <li class="pl-2 pt-2">
-                                You <i>need</i> best candidates to use as enzyme
-                                for a new/novel reaction pathway
-                            </li>
-                        </ul>
-                    </p-card>
                 </div>
             </div>
         </div>
