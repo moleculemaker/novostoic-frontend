@@ -18,11 +18,10 @@ module.exports = {
         },
       },
       spacing: {
-        "screen-lg": "1180px",
-        "content-lg": "980px",
+        "content-lg": "1180px",
       },
       screens: {
-        lg: "1180px",
+        lg: "1380px",
       },
     },
   },

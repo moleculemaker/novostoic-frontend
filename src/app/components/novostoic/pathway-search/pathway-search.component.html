@@ -1,517 +1,512 @@
-<div class="flex h-full max-w-screen-lg gap-16">
-    <app-sidebar [openInNewPage]="false"></app-sidebar>
-    <div class="grow pt-4 max-w-content-lg">
-        <form
-            class="flex h-full flex-col justify-between"
-            [formGroup]="request.form"
-            (ngSubmit)="onSubmit(request)"
-        >
-            <div>
-                <h2 class="mb-2">Input an Overall Stoichiometry</h2>
-                <p class="leading-6">
-                    Pathway design using optimal overall stoichiometry.
-                </p>
+<form
+    class="flex h-full flex-col justify-between"
+    [formGroup]="request.form"
+    (ngSubmit)="onSubmit(request)"
+>
+    <div>
+        <h2 class="mb-2">Input an Overall Stoichiometry</h2>
+        <p class="leading-6">
+            Pathway design using optimal overall stoichiometry.
+        </p>
 
-                <!-- Pathway Search -->
-                <div class="mt-8 flex flex-col gap-6">
-                    <p-panel>
-                        <ng-template pTemplate="header">
-                            <div
-                                class="flex w-full items-center justify-between p-2 px-4"
+        <!-- Pathway Search -->
+        <div class="mt-8 flex flex-col gap-6">
+            <p-panel>
+                <ng-template pTemplate="header">
+                    <div
+                        class="flex w-full items-center justify-between p-2 px-4"
+                    >
+                        <span class="text-lg"
+                            >Overall Stoichiometry</span
+                        >
+                        <div class="flex gap-2">
+                            <button
+                                type="button"
+                                class="rounded-md border bg-white p-2"
+                                (click)="editing$.value
+                                    ? useExampleCallback()
+                                    : confirmUsingExample()
+                                "
                             >
-                                <span class="text-lg"
-                                    >Overall Stoichiometry</span
+                                <i class="pi pi-box mx-2"></i>
+                                Use an Example
+                            </button>
+                            <button
+                                type="button"
+                                class="rounded-md border bg-white p-2"
+                                (click)="editing$.value
+                                    ? clearAllCallback()
+                                    : confirmClearAll()"
+                            >
+                                Clear All
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="content">
+                    <div
+                        class="p-4"
+                        [class.bg-[#ebebeb]]="!editing$.value"
+                    >
+                        <div class="p-2 cursor-pointer" *ngIf="!editing$.value" (click)="confirmUsingExample()">
+                            <app-stoichiometry-reaction-with-scroller
+                                [primaryPrecursor]="primaryPrecursor$.value"
+                                [targetMolecule]="targetMolecule$.value"
+                                [stoichiometry]="stoichiometry$.value"
+                                moleculeStyleClass="bg-[#ebebeb]"
+                                maxWidth="800px"
+                            ></app-stoichiometry-reaction-with-scroller>
+                        </div>
+                        <div *ngIf="editing$.value">
+                            <!-- Primary Precursor -->
+                            <div
+                                class="flex flex-col gap-2 rounded-md bg-green-50 p-2"
+                            >
+                                <div>
+                                    <div class="green-dot"></div>
+                                    <span class="ml-2 font-semibold"
+                                        >A Primary Precursor</span
+                                    >
+                                    <span class="ml-1 text-red-500"
+                                        >*</span
+                                    >
+                                </div>
+                                <div
+                                    class="flex gap-2"
+                                    formGroupName="primaryPrecursor"
                                 >
-                                <div class="flex gap-2">
+                                    <input
+                                        pInputText
+                                        class="w-[48px]"
+                                        placeholder="0.0"
+                                        formControlName="amount"
+                                    />
+                                    <app-marvinjs-input
+                                        class="grow rounded-md bg-white"
+                                        placeholder="Name, SMILES, InChI, Kegg ID"
+                                        [smiles]="request.form.controls['primaryPrecursor'].controls['name'].value || ''"
+                                        (smilesChange)="request.form.controls['primaryPrecursor'].controls['name'].setValue($event)"
+                                    ></app-marvinjs-input>
+                                </div>
+                            </div>
+                            <div class="py-2 text-center">
+                                <i
+                                    class="pi pi-plus text-sm font-extrabold"
+                                ></i>
+                            </div>
+                            <!-- Co-reactants -->
+                            <div
+                                class="flex flex-col gap-2 rounded-md bg-gray-100 p-2"
+                            >
+                                <div class="flex justify-between">
+                                    <div>
+                                        <div class="gray-dot"></div>
+                                        <span class="ml-2 font-semibold"
+                                            >Co-Reactants</span
+                                        >
+                                    </div>
                                     <button
                                         type="button"
-                                        class="rounded-md border bg-white p-2"
-                                        (click)="editing$.value
-                                            ? useExampleCallback()
-                                            : confirmUsingExample()
-                                        "
+                                        (click)="request.addCoReactant()"
                                     >
-                                        <i class="pi pi-box mx-2"></i>
-                                        Use an Example
+                                        <i
+                                            class="pi pi-plus-circle px-1 pt-1"
+                                        ></i>
                                     </button>
+                                </div>
+                                <ng-container
+                                    formArrayName="coReactants"
+                                >
+                                    <div
+                                        class="flex gap-2"
+                                        *ngFor="let coreactant of request.form.controls['coReactants'].controls; let i = index"
+                                        [formGroupName]="i"
+                                    >
+                                        <input
+                                            pInputText
+                                            class="w-[48px]"
+                                            placeholder="0.0"
+                                            formControlName="amount"
+                                        />
+                                        <input
+                                            pInputText
+                                            type="text"
+                                            class="grow"
+                                            placeholder="Name, SMILES, InChI, Kegg ID"
+                                            formControlName="name"
+                                        />
+                                        <button *ngIf="i !== 0" type="button" title="remove coreactant" (click)="request.removeCoReactant(i)">
+                                            <i class="pi pi-times-circle mx-1"></i>
+                                        </button>
+                                    </div>
+                                </ng-container>
+                            </div>
+
+                            <div class="py-2 text-center">
+                                <i
+                                    class="pi pi-angle-double-down text-lg font-extrabold"
+                                ></i>
+                            </div>
+
+                            <!-- Co-products -->
+                            <div
+                                class="flex flex-col gap-2 rounded-md bg-gray-100 p-2"
+                            >
+                                <div class="flex justify-between">
+                                    <div>
+                                        <div class="gray-dot"></div>
+                                        <span class="ml-2 font-semibold"
+                                            >Co-Products</span
+                                        >
+                                    </div>
                                     <button
                                         type="button"
-                                        class="rounded-md border bg-white p-2"
-                                        (click)="editing$.value
-                                            ? clearAllCallback()
-                                            : confirmClearAll()"
+                                        title="add Co-product"
+                                        (click)="request.addCoProduct()"
                                     >
-                                        Clear All
+                                        <i
+                                            class="pi pi-plus-circle px-1 pt-1"
+                                        ></i>
                                     </button>
                                 </div>
+                                <ng-container
+                                    formArrayName="coProducts"
+                                >
+                                    <div
+                                        class="flex gap-2"
+                                        *ngFor="let control of request.form.controls['coProducts'].controls; let i = index"
+                                        [formGroupName]="i"
+                                    >
+                                        <input
+                                            pInputText
+                                            class="w-[48px]"
+                                            placeholder="0.0"
+                                            formControlName="amount"
+                                        />
+                                        <input
+                                            pInputText
+                                            type="text"
+                                            class="grow"
+                                            placeholder="Name, SMILES, InChI, Kegg ID"
+                                            formControlName="name"
+                                        />
+                                        <button *ngIf="i !== 0" type="button" title="remove Co-product" (click)="request.removeCoProduct(i)">
+                                            <i class="pi pi-times-circle mx-1"></i>
+                                        </button>
+                                    </div>
+                                </ng-container>
                             </div>
-                        </ng-template>
-                        <ng-template pTemplate="content">
+
+                            <!-- Target Molecule -->
+                            <div class="py-2 text-center">
+                                <i
+                                    class="pi pi-plus text-sm font-extrabold"
+                                ></i>
+                            </div>
                             <div
-                                class="p-4"
-                                [class.bg-[#ebebeb]]="!editing$.value"
+                                class="flex flex-col gap-2 rounded-md bg-blue-50 p-2"
                             >
-                                <div class="p-2 cursor-pointer" *ngIf="!editing$.value" (click)="confirmUsingExample()">
-                                    <app-stoichiometry-reaction-with-scroller
-                                        [primaryPrecursor]="primaryPrecursor$.value"
-                                        [targetMolecule]="targetMolecule$.value"
-                                        [stoichiometry]="stoichiometry$.value"
-                                        moleculeStyleClass="bg-[#ebebeb]"
-                                        maxWidth="800px"
-                                    ></app-stoichiometry-reaction-with-scroller>
+                                <div>
+                                    <div class="blue-dot"></div>
+                                    <span class="ml-2 font-semibold"
+                                        >A Target Molecule</span
+                                    >
+                                    <span class="ml-1 text-red-500"
+                                        >*</span
+                                    >
                                 </div>
-                                <div *ngIf="editing$.value">
-                                    <!-- Primary Precursor -->
-                                    <div
-                                        class="flex flex-col gap-2 rounded-md bg-green-50 p-2"
-                                    >
-                                        <div>
-                                            <div class="green-dot"></div>
-                                            <span class="ml-2 font-semibold"
-                                                >A Primary Precursor</span
-                                            >
-                                            <span class="ml-1 text-red-500"
-                                                >*</span
-                                            >
-                                        </div>
-                                        <div
-                                            class="flex gap-2"
-                                            formGroupName="primaryPrecursor"
-                                        >
-                                            <input
-                                                pInputText
-                                                class="w-[48px]"
-                                                placeholder="0.0"
-                                                formControlName="amount"
-                                            />
-                                            <app-marvinjs-input
-                                                class="grow rounded-md bg-white"
-                                                placeholder="Name, SMILES, InChI, Kegg ID"
-                                                [smiles]="request.form.controls['primaryPrecursor'].controls['name'].value || ''"
-                                                (smilesChange)="request.form.controls['primaryPrecursor'].controls['name'].setValue($event)"
-                                            ></app-marvinjs-input>
-                                        </div>
-                                    </div>
-                                    <div class="py-2 text-center">
-                                        <i
-                                            class="pi pi-plus text-sm font-extrabold"
-                                        ></i>
-                                    </div>
-                                    <!-- Co-reactants -->
-                                    <div
-                                        class="flex flex-col gap-2 rounded-md bg-gray-100 p-2"
-                                    >
-                                        <div class="flex justify-between">
-                                            <div>
-                                                <div class="gray-dot"></div>
-                                                <span class="ml-2 font-semibold"
-                                                    >Co-Reactants</span
-                                                >
-                                            </div>
-                                            <button
-                                                type="button"
-                                                (click)="request.addCoReactant()"
-                                            >
-                                                <i
-                                                    class="pi pi-plus-circle px-1 pt-1"
-                                                ></i>
-                                            </button>
-                                        </div>
-                                        <ng-container
-                                            formArrayName="coReactants"
-                                        >
-                                            <div
-                                                class="flex gap-2"
-                                                *ngFor="let coreactant of request.form.controls['coReactants'].controls; let i = index"
-                                                [formGroupName]="i"
-                                            >
-                                                <input
-                                                    pInputText
-                                                    class="w-[48px]"
-                                                    placeholder="0.0"
-                                                    formControlName="amount"
-                                                />
-                                                <input
-                                                    pInputText
-                                                    type="text"
-                                                    class="grow"
-                                                    placeholder="Name, SMILES, InChI, Kegg ID"
-                                                    formControlName="name"
-                                                />
-                                                <button *ngIf="i !== 0" type="button" title="remove coreactant" (click)="request.removeCoReactant(i)">
-                                                    <i class="pi pi-times-circle mx-1"></i>
-                                                </button>
-                                            </div>
-                                        </ng-container>
-                                    </div>
-
-                                    <div class="py-2 text-center">
-                                        <i
-                                            class="pi pi-angle-double-down text-lg font-extrabold"
-                                        ></i>
-                                    </div>
-
-                                    <!-- Co-products -->
-                                    <div
-                                        class="flex flex-col gap-2 rounded-md bg-gray-100 p-2"
-                                    >
-                                        <div class="flex justify-between">
-                                            <div>
-                                                <div class="gray-dot"></div>
-                                                <span class="ml-2 font-semibold"
-                                                    >Co-Products</span
-                                                >
-                                            </div>
-                                            <button
-                                                type="button"
-                                                title="add Co-product"
-                                                (click)="request.addCoProduct()"
-                                            >
-                                                <i
-                                                    class="pi pi-plus-circle px-1 pt-1"
-                                                ></i>
-                                            </button>
-                                        </div>
-                                        <ng-container
-                                            formArrayName="coProducts"
-                                        >
-                                            <div
-                                                class="flex gap-2"
-                                                *ngFor="let control of request.form.controls['coProducts'].controls; let i = index"
-                                                [formGroupName]="i"
-                                            >
-                                                <input
-                                                    pInputText
-                                                    class="w-[48px]"
-                                                    placeholder="0.0"
-                                                    formControlName="amount"
-                                                />
-                                                <input
-                                                    pInputText
-                                                    type="text"
-                                                    class="grow"
-                                                    placeholder="Name, SMILES, InChI, Kegg ID"
-                                                    formControlName="name"
-                                                />
-                                                <button *ngIf="i !== 0" type="button" title="remove Co-product" (click)="request.removeCoProduct(i)">
-                                                    <i class="pi pi-times-circle mx-1"></i>
-                                                </button>
-                                            </div>
-                                        </ng-container>
-                                    </div>
-
-                                    <!-- Target Molecule -->
-                                    <div class="py-2 text-center">
-                                        <i
-                                            class="pi pi-plus text-sm font-extrabold"
-                                        ></i>
-                                    </div>
-                                    <div
-                                        class="flex flex-col gap-2 rounded-md bg-blue-50 p-2"
-                                    >
-                                        <div>
-                                            <div class="blue-dot"></div>
-                                            <span class="ml-2 font-semibold"
-                                                >A Target Molecule</span
-                                            >
-                                            <span class="ml-1 text-red-500"
-                                                >*</span
-                                            >
-                                        </div>
-                                        <div
-                                            class="flex gap-2"
-                                            formGroupName="targetMolecule"
-                                        >
-                                            <input
-                                                pInputText
-                                                class="w-[48px]"
-                                                placeholder="0.0"
-                                                formControlName="amount"
-                                            />
-                                            <app-marvinjs-input
-                                                class="grow rounded-md bg-white"
-                                                placeholder="Name, SMILES, InChI, Kegg ID"
-                                                [smiles]="request.form.controls['targetMolecule'].controls['name'].value || ''"
-                                                (smilesChange)="request.form.controls['targetMolecule'].controls['name'].setValue($event)"
-                                            ></app-marvinjs-input>
-                                        </div>
-                                    </div>
+                                <div
+                                    class="flex gap-2"
+                                    formGroupName="targetMolecule"
+                                >
+                                    <input
+                                        pInputText
+                                        class="w-[48px]"
+                                        placeholder="0.0"
+                                        formControlName="amount"
+                                    />
+                                    <app-marvinjs-input
+                                        class="grow rounded-md bg-white"
+                                        placeholder="Name, SMILES, InChI, Kegg ID"
+                                        [smiles]="request.form.controls['targetMolecule'].controls['name'].value || ''"
+                                        (smilesChange)="request.form.controls['targetMolecule'].controls['name'].setValue($event)"
+                                    ></app-marvinjs-input>
                                 </div>
                             </div>
-                            <hr />
+                        </div>
+                    </div>
+                    <hr />
+                    <div
+                        class="flex justify-between rounded-b-md bg-gray-50 p-1 px-4"
+                    >
+                        <div class="flex gap-3">
+                            <span class="text-xs"
+                                >1 Primary Precursor</span
+                            >
+                            <span class="text-xs">{{ request.form.controls['coReactants'].length }} Co-Reactants</span>
+                            <span class="text-xs">{{ request.form.controls['coProducts'].length }} Co-Products</span>
+                            <span class="text-xs"
+                                >1 Target Molecule</span
+                            >
+                        </div>
+                        <div class="text-xs">Overall Stoichiometry</div>
+                    </div>
+                </ng-template>
+            </p-panel>
+
+            <p-panel class="my-6">
+                <ng-template pTemplate="header">
+                    <div
+                        class="flex w-full items-center justify-between p-2 px-4"
+                    >
+                        <span class="text-lg">Setting</span>
+                        <div class="flex gap-2">
+                            <button
+                                type="button"
+                                class="rounded-md border bg-white p-2"
+                                (click)="request.resetSetting()"
+                            >
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="content">
+                    <div class="p-4 px-6">
+                        <section>
+                            <h3>Pathway Search setting</h3>
+                            <p class="py-1 text-sm italic">
+                                Tip: The more you choose, the longer it
+                                takes.
+                            </p>
                             <div
-                                class="flex justify-between rounded-b-md bg-gray-50 p-1 px-4"
+                                class="mt-4 flex w-1/2 justify-between"
                             >
-                                <div class="flex gap-3">
-                                    <span class="text-xs"
-                                        >1 Primary Precursor</span
+                                <div>
+                                    <span
+                                        class="my-2 flex items-center justify-between"
                                     >
-                                    <span class="text-xs">{{ request.form.controls['coReactants'].length }} Co-Reactants</span>
-                                    <span class="text-xs">{{ request.form.controls['coProducts'].length }} Co-Products</span>
-                                    <span class="text-xs"
-                                        >1 Target Molecule</span
+                                        <span>Max number of Steps</span>
+                                        <i
+                                            class="pi pi-info-circle"
+                                        ></i>
+                                    </span>
+                                    <input
+                                        type="text"
+                                        pInputText
+                                        class="w-full"
+                                        formControlName="maxSteps"
+                                        [ngModel]="request.form.controls['maxSteps'].value"
+                                    />
+                                    <p-slider
+                                        class="w-full"
+                                        [ngModel]="request.form.controls['maxSteps'].value"
+                                        formControlName="maxSteps"
+                                        [min]="0"
+                                        [max]="10"
+                                    ></p-slider>
+                                    <span
+                                        class="my-2 flex items-center justify-between"
                                     >
+                                        <span class="text-sm">0</span>
+                                        <span class="text-sm">10</span>
+                                    </span>
                                 </div>
-                                <div class="text-xs">Overall Stoichiometry</div>
-                            </div>
-                        </ng-template>
-                    </p-panel>
-
-                    <p-panel class="my-6">
-                        <ng-template pTemplate="header">
-                            <div
-                                class="flex w-full items-center justify-between p-2 px-4"
-                            >
-                                <span class="text-lg">Setting</span>
-                                <div class="flex gap-2">
-                                    <button
-                                        type="button"
-                                        class="rounded-md border bg-white p-2"
-                                        (click)="request.resetSetting()"
+                                <div>
+                                    <span
+                                        class="my-2 flex items-center justify-between"
                                     >
-                                        Reset
-                                    </button>
+                                        <span
+                                            >Max number of pathway</span
+                                        >
+                                        <i
+                                            class="pi pi-info-circle"
+                                        ></i>
+                                    </span>
+                                    <input
+                                        type="text"
+                                        pInputText
+                                        class="w-full"
+                                        formControlName="maxPathways"
+                                        [ngModel]="request.form.controls['maxPathways'].value"
+                                    />
+                                    <p-slider
+                                        class="w-full"
+                                        formControlName="maxPathways"
+                                        [ngModel]="request.form.controls['maxPathways'].value"
+                                        [min]="0"
+                                        [max]="10"
+                                    ></p-slider>
+                                    <span
+                                        class="my-2 flex items-center justify-between"
+                                    >
+                                        <span class="text-sm">0</span>
+                                        <span class="text-sm">10</span>
+                                    </span>
                                 </div>
                             </div>
-                        </ng-template>
-                        <ng-template pTemplate="content">
-                            <div class="p-4 px-6">
-                                <section>
-                                    <h3>Pathway Search setting</h3>
-                                    <p class="py-1 text-sm italic">
-                                        Tip: The more you choose, the longer it
-                                        takes.
-                                    </p>
-                                    <div
-                                        class="mt-4 flex w-1/2 justify-between"
-                                    >
-                                        <div>
-                                            <span
-                                                class="my-2 flex items-center justify-between"
-                                            >
-                                                <span>Max number of Steps</span>
-                                                <i
-                                                    class="pi pi-info-circle"
-                                                ></i>
-                                            </span>
-                                            <input
-                                                type="text"
-                                                pInputText
-                                                class="w-full"
-                                                formControlName="maxSteps"
-                                                [ngModel]="request.form.controls['maxSteps'].value"
-                                            />
-                                            <p-slider
-                                                class="w-full"
-                                                [ngModel]="request.form.controls['maxSteps'].value"
-                                                formControlName="maxSteps"
-                                                [min]="0"
-                                                [max]="10"
-                                            ></p-slider>
-                                            <span
-                                                class="my-2 flex items-center justify-between"
-                                            >
-                                                <span class="text-sm">0</span>
-                                                <span class="text-sm">10</span>
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span
-                                                class="my-2 flex items-center justify-between"
-                                            >
-                                                <span
-                                                    >Max number of pathway</span
-                                                >
-                                                <i
-                                                    class="pi pi-info-circle"
-                                                ></i>
-                                            </span>
-                                            <input
-                                                type="text"
-                                                pInputText
-                                                class="w-full"
-                                                formControlName="maxPathways"
-                                                [ngModel]="request.form.controls['maxPathways'].value"
-                                            />
-                                            <p-slider
-                                                class="w-full"
-                                                formControlName="maxPathways"
-                                                [ngModel]="request.form.controls['maxPathways'].value"
-                                                [min]="0"
-                                                [max]="10"
-                                            ></p-slider>
-                                            <span
-                                                class="my-2 flex items-center justify-between"
-                                            >
-                                                <span class="text-sm">0</span>
-                                                <span class="text-sm">10</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </section>
-                                <hr class="my-4" />
-                                <section>
-                                    <h3>Thermodynamic Feasibility</h3>
-                                    <table class="mt-2">
-                                        <tr>
-                                            <td class="py-3">
-                                                <p-checkbox
-                                                    formControlName="thermodynamicalFeasibleReactionsOnly"
-                                                    [binary]="true"
-                                                ></p-checkbox>
-                                            </td>
-                                            <td class="flex px-4 py-1">
-                                                Check the box to filter out any
-                                                pathways that have thermodynamic
-                                                infeasible Reactions.
-                                            </td>
-                                            <td class="py-3">
-                                                <i
-                                                    class="pi pi-info-circle"
-                                                ></i>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-3">
-                                                <p-checkbox
-                                                    [binary]="true"
-                                                    formControlName="isThermodynamicalFeasible"
-                                                ></p-checkbox>
-                                            </td>
-                                            <td class="flex px-4 py-1">
-                                                Check the box to filter out any
-                                                thermodynamic infeasible
-                                                Pathways in the results
-                                            </td>
-                                            <td class="py-3">
-                                                <i
-                                                    class="pi pi-info-circle"
-                                                ></i>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </section>
-                                <hr class="my-4" />
-                                <section>
-                                    <div class="flex items-start gap-4">
+                        </section>
+                        <hr class="my-4" />
+                        <section>
+                            <h3>Thermodynamic Feasibility</h3>
+                            <table class="mt-2">
+                                <tr>
+                                    <td class="py-3">
                                         <p-checkbox
-                                            formControlName="useEnzymeSelection"
-                                            (onChange)="$event.checked
-                                                ? request.form.controls['numEnzymeCandidates'].enable()
-                                                : request.form.controls['numEnzymeCandidates'].disable()"
+                                            formControlName="thermodynamicalFeasibleReactionsOnly"
                                             [binary]="true"
                                         ></p-checkbox>
-                                        <div class="flex flex-col">
-                                            <span class="font-semibold"
-                                                >Enzyme Selection
-                                                <i
-                                                    class="pi pi-info-circle ml-2"
-                                                ></i
-                                            ></span>
-                                            <span class="text-sm font-light"
-                                                >Check the box to get the top
-                                                enzyme candidate for
-                                                reactions</span
+                                    </td>
+                                    <td class="flex px-4 py-1">
+                                        Check the box to filter out any
+                                        pathways that have thermodynamic
+                                        infeasible Reactions.
+                                    </td>
+                                    <td class="py-3">
+                                        <i
+                                            class="pi pi-info-circle"
+                                        ></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3">
+                                        <p-checkbox
+                                            [binary]="true"
+                                            formControlName="isThermodynamicalFeasible"
+                                        ></p-checkbox>
+                                    </td>
+                                    <td class="flex px-4 py-1">
+                                        Check the box to filter out any
+                                        thermodynamic infeasible
+                                        Pathways in the results
+                                    </td>
+                                    <td class="py-3">
+                                        <i
+                                            class="pi pi-info-circle"
+                                        ></i>
+                                    </td>
+                                </tr>
+                            </table>
+                        </section>
+                        <hr class="my-4" />
+                        <section>
+                            <div class="flex items-start gap-4">
+                                <p-checkbox
+                                    formControlName="useEnzymeSelection"
+                                    (onChange)="$event.checked
+                                        ? request.form.controls['numEnzymeCandidates'].enable()
+                                        : request.form.controls['numEnzymeCandidates'].disable()"
+                                    [binary]="true"
+                                ></p-checkbox>
+                                <div class="flex flex-col">
+                                    <span class="font-semibold"
+                                        >Enzyme Selection
+                                        <i
+                                            class="pi pi-info-circle ml-2"
+                                        ></i
+                                    ></span>
+                                    <span class="text-sm font-light"
+                                        >Check the box to get the top
+                                        enzyme candidate for
+                                        reactions</span
+                                    >
+                                    <div class="mt-3 flex">
+                                        <div class="shrink">
+                                            <span
+                                                class="my-2 flex items-center justify-between pr-2"
                                             >
-                                            <div class="mt-3 flex">
-                                                <div class="shrink">
-                                                    <span
-                                                        class="my-2 flex items-center justify-between pr-2"
-                                                    >
-                                                        <span
-                                                            >Number of Enzyme
-                                                            candidates</span
-                                                        >
-                                                    </span>
-                                                    <input
-                                                        type="text"
-                                                        class="w-full"
-                                                        pInputText
-                                                        formControlName="numEnzymeCandidates"
-                                                        [ngModel]="request.form.controls['numEnzymeCandidates'].value"
-                                                    />
-                                                    <p-slider
-                                                        [ngModel]="request.form.controls['numEnzymeCandidates'].value"
-                                                        formControlName="numEnzymeCandidates"
-                                                        class="w-full"
-                                                        [min]="0"
-                                                        [max]="10"
-                                                    ></p-slider>
-                                                    <span
-                                                        class="my-2 flex items-center justify-between"
-                                                    >
-                                                        <span class="text-sm"
-                                                            >0</span
-                                                        >
-                                                        <span class="text-sm"
-                                                            >10</span
-                                                        >
-                                                    </span>
-                                                </div>
-                                            </div>
+                                                <span
+                                                    >Number of Enzyme
+                                                    candidates</span
+                                                >
+                                            </span>
+                                            <input
+                                                type="text"
+                                                class="w-full"
+                                                pInputText
+                                                formControlName="numEnzymeCandidates"
+                                                [ngModel]="request.form.controls['numEnzymeCandidates'].value"
+                                            />
+                                            <p-slider
+                                                [ngModel]="request.form.controls['numEnzymeCandidates'].value"
+                                                formControlName="numEnzymeCandidates"
+                                                class="w-full"
+                                                [min]="0"
+                                                [max]="10"
+                                            ></p-slider>
+                                            <span
+                                                class="my-2 flex items-center justify-between"
+                                            >
+                                                <span class="text-sm"
+                                                    >0</span
+                                                >
+                                                <span class="text-sm"
+                                                    >10</span
+                                                >
+                                            </span>
                                         </div>
                                     </div>
-                                </section>
+                                </div>
                             </div>
-                        </ng-template>
-                    </p-panel>
-                </div>
-            </div>
-
-            <!-- Subscription Email Input -->
-            <div
-                class="flex justify-between rounded-t-md bg-[#F3F5FB] px-10 pt-8"
-            >
-                <div class="flex flex-col">
-                    <div class="mb-2 flex items-end justify-center">
-                        <span class="mb-1 pr-12">
-                            <h2 class="m-0 mr-2 inline">Email</h2>
-                            Leave an email to get an notification when your
-                            results are ready.
-                        </span>
+                        </section>
                     </div>
-                    <div class="w-full">
-                        <input
-                            id="subscriber-email"
-                            type="email"
-                            aria-describedby="subscriber-email-help"
-                            [class]="'h-12 w-full'
-                            + ((request.form.controls['subscriberEmail'].invalid
-                                && request.form.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
-                            pInputText
-                            placeholder="Enter email here"
-                            formControlName="subscriberEmail"
-                        />
-                        <small
-                            *ngIf="request.form.controls['subscriberEmail'].invalid
-                                && request.form.controls['subscriberEmail'].dirty"
-                            id="subscriber-email-help"
-                            class="p-error mt-2 block"
-                            >Email is invalid.</small
-                        >
-                    </div>
-                    <div class="py-4">
-                        <p-checkbox
-                            name="subscription"
-                            styleClass="subscription-checkbox"
-                            label="Agree to receive email notifications and updates about Novostoic."
-                            [binary]="true"
-                            [formControl]="request.form.controls['agreeToSubscription']"
-                        ></p-checkbox>
-                    </div>
-                </div>
-                <p-button
-                    label="Pathway Search"
-                    type="submit"
-                    styleClass="bg-[#224063]"
-                    [disabled]="request.form.invalid"
-                    iconPos="right"
-                    icon="pi pi-arrow-right"
-                ></p-button>
-            </div>
-        </form>
+                </ng-template>
+            </p-panel>
+        </div>
     </div>
-</div>
+
+    <!-- Subscription Email Input -->
+    <div
+        class="flex justify-between rounded-t-md bg-[#F3F5FB] px-10 pt-8"
+    >
+        <div class="flex flex-col">
+            <div class="mb-2 flex items-end justify-center">
+                <span class="mb-1 pr-12">
+                    <h2 class="m-0 mr-2 inline">Email</h2>
+                    Leave an email to get an notification when your
+                    results are ready.
+                </span>
+            </div>
+            <div class="w-full">
+                <input
+                    id="subscriber-email"
+                    type="email"
+                    aria-describedby="subscriber-email-help"
+                    [class]="'h-12 w-full'
+                    + ((request.form.controls['subscriberEmail'].invalid
+                        && request.form.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
+                    pInputText
+                    placeholder="Enter email here"
+                    formControlName="subscriberEmail"
+                />
+                <small
+                    *ngIf="request.form.controls['subscriberEmail'].invalid
+                        && request.form.controls['subscriberEmail'].dirty"
+                    id="subscriber-email-help"
+                    class="p-error mt-2 block"
+                    >Email is invalid.</small
+                >
+            </div>
+            <div class="py-4">
+                <p-checkbox
+                    name="subscription"
+                    styleClass="subscription-checkbox"
+                    label="Agree to receive email notifications and updates about Novostoic."
+                    [binary]="true"
+                    [formControl]="request.form.controls['agreeToSubscription']"
+                ></p-checkbox>
+            </div>
+        </div>
+        <p-button
+            label="Pathway Search"
+            type="submit"
+            styleClass="bg-[#224063]"
+            [disabled]="request.form.invalid"
+            iconPos="right"
+            icon="pi pi-arrow-right"
+        ></p-button>
+    </div>
+</form>
 
 <p-dialog 
     class="warning_dialog"

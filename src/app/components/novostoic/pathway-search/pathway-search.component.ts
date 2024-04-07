@@ -9,9 +9,6 @@ import { NovostoicTools } from "~/app/enums/novostoic-tools";
   selector: "app-pathway-search",
   templateUrl: "./pathway-search.component.html",
   styleUrls: ["./pathway-search.component.scss"],
-  host: {
-    class: "grow",
-  },
 })
 export class PathwaySearchComponent implements OnInit {
   request = new PathwaySearchRequest();
