@@ -12,24 +12,50 @@ import { PathwaySearchResultComponent } from "./components/novostoic/pathway-sea
 import { DgPredictorComponent } from "./components/novostoic/dg-predictor/dg-predictor.component";
 import { DgPredictorResultComponent } from "./components/novostoic/dg-predictor-result/dg-predictor-result.component";
 import { NovostoicTools } from "./enums/novostoic-tools";
+import { MainLayoutComponent } from "./components/novostoic/main-layout/main-layout.component";
 
 const routes: Routes = [
   { path: "about", component: AboutNovostoicComponent },
-  { path: NovostoicTools.OVERALL_STOICHIOMETRY, component: OverallStoichiometryComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
-    path: NovostoicTools.OVERALL_STOICHIOMETRY + "/result",
-    component: OverallStoichiometryResultComponent,
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { 
+        path: NovostoicTools.OVERALL_STOICHIOMETRY, 
+        component: OverallStoichiometryComponent 
+      },
+      {
+        path: NovostoicTools.OVERALL_STOICHIOMETRY + "/result",
+        component: OverallStoichiometryResultComponent,
+      },
+      { 
+        path: NovostoicTools.ENZYME_ACTIVITY, 
+        component: EnzRankComponent 
+      },
+      { 
+        path: NovostoicTools.ENZYME_ACTIVITY + "/result", 
+        component: EnzRankResultComponent 
+      },
+      { 
+        path: NovostoicTools.PATHWAY_SEARCH, 
+        component: PathwaySearchComponent 
+      },
+      { 
+        path: NovostoicTools.PATHWAY_SEARCH + "/result", 
+        component: PathwaySearchResultComponent 
+      },
+      { 
+        path: NovostoicTools.THERMODYNAMICAL_FEASIBILITY, 
+        component: DgPredictorComponent 
+      },
+      {
+        path: NovostoicTools.THERMODYNAMICAL_FEASIBILITY + "/result",
+        component: DgPredictorResultComponent,
+      },
+    ]
   },
-  { path: NovostoicTools.ENZYME_ACTIVITY, component: EnzRankComponent },
-  { path: NovostoicTools.ENZYME_ACTIVITY + "/result", component: EnzRankResultComponent },
-  { path: NovostoicTools.PATHWAY_SEARCH, component: PathwaySearchComponent },
-  { path: NovostoicTools.PATHWAY_SEARCH + "/result", component: PathwaySearchResultComponent },
-  { path: NovostoicTools.THERMODYNAMICAL_FEASIBILITY, component: DgPredictorComponent },
-  {
-    path: NovostoicTools.THERMODYNAMICAL_FEASIBILITY + "/result",
-    component: DgPredictorResultComponent,
-  },
-  { path: "", component: LandingPageComponent },
+  { path: "home", component: LandingPageComponent },
 ];
 
 @NgModule({

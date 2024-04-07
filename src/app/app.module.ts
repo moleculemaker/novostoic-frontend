@@ -70,6 +70,7 @@ import { PathwaySearchResultComponent } from "./components/novostoic/pathway-sea
 import { StoichiometryReactionWithScrollerComponent } from './components/novostoic/stoichiometry-reaction-with-scroller/stoichiometry-reaction-with-scroller.component';
 import { DgPredictorComponent } from "./components/novostoic/dg-predictor/dg-predictor.component";
 import { DgPredictorResultComponent } from './components/novostoic/dg-predictor-result/dg-predictor-result.component';
+import { MainLayoutComponent } from './components/novostoic/main-layout/main-layout.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -95,6 +96,7 @@ const initAppFn = (envService: EnvironmentService) => {
     StoichiometryReactionComponent,
     PathwaySearchResultComponent,
     StoichiometryReactionWithScrollerComponent,
+    MainLayoutComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,
