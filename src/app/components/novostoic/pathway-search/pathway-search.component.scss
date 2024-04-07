@@ -1,0 +1,24 @@
+::ng-deep .p-panel {
+    .p-panel-header,
+    .p-panel-content {
+        @apply p-0;
+    }
+}
+
+.warning_dialog {
+  ::ng-deep {
+    .p-dialog-header, 
+    .p-dialog-content,
+    .p-dialog-footer {
+      @apply bg-[--orange-50];
+      @apply border-none;
+    }
+
+    .p-dialog-header {
+      @apply pt-2;
+      @apply border-t-[4px];
+      @apply border-solid;
+      @apply border-[#F59E0B];
+    }
+  }
+}

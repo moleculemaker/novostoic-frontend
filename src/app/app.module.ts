@@ -64,6 +64,10 @@ import { OverallStoichiometryResultComponent } from "./components/novostoic/over
 import { LoadingComponent } from "./components/novostoic/loading/loading.component";
 import { DgPredictorComponent } from "./components/novostoic/dg-predictor/dg-predictor.component";
 import { DgPredictorResultComponent } from './components/novostoic/dg-predictor-result/dg-predictor-result.component';
+import { PathwaySearchComponent } from "./components/novostoic/pathway-search/pathway-search.component";
+import { StoichiometryReactionComponent } from "./components/novostoic/stoichiometry-reaction/stoichiometry-reaction.component";
+import { PathwaySearchResultComponent } from "./components/novostoic/pathway-search-result/pathway-search-result.component";
+import { StoichiometryReactionWithScrollerComponent } from './components/novostoic/stoichiometry-reaction-with-scroller/stoichiometry-reaction-with-scroller.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -83,6 +87,10 @@ const initAppFn = (envService: EnvironmentService) => {
     DgPredictorComponent,
     DgPredictorResultComponent,
     MarvinjsInputComponent,
+    PathwaySearchComponent,
+    StoichiometryReactionComponent,
+    PathwaySearchResultComponent,
+    StoichiometryReactionWithScrollerComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,
@@ -110,6 +118,7 @@ const initAppFn = (envService: EnvironmentService) => {
     SliderModule,
     ProgressSpinnerModule,
     StepsModule,
+    SliderModule,
     DropdownModule,
     TableModule,
     TabViewModule,

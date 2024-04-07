@@ -10,9 +10,16 @@ module.exports = {
         bluegray: {
           100: "#dadee3",
         },
+        green: {
+          primary: "#00A907",
+        },
+        blue: {
+          primary: "#3B82F6",
+        },
       },
       spacing: {
         "screen-lg": "1180px",
+        "content-lg": "980px",
       },
       screens: {
         lg: "1180px",

@@ -18,7 +18,7 @@
 }
 
 .marvin-editor-container {
-  z-index: get_index(modal) !important;
+  z-index: 9000 !important;
 
   ::ng-deep .p-dialog {
     $editor_min_width: 617.5px;

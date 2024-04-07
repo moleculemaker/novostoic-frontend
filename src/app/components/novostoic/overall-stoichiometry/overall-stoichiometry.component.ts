@@ -12,7 +12,7 @@ import { OverallStoichiometryRequest } from "~/app/models/overall-stoichiometry"
   },
 })
 export class OverallStoichiometryComponent {
-  overallStoichiometryRequest = new OverallStoichiometryRequest();
+  request = new OverallStoichiometryRequest();
 
   currentFormControl$ = new BehaviorSubject<
     "primaryPrecursor" | "targetMolecule"
