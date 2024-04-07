@@ -8,9 +8,6 @@ import { EnzymeSelectionRequest } from "~/app/models/enz-rank";
   selector: "app-enz-rank",
   templateUrl: "./enz-rank.component.html",
   styleUrls: ["./enz-rank.component.scss"],
-  host: {
-    class: "grow",
-  },
 })
 export class EnzRankComponent {
   request = new EnzymeSelectionRequest();
