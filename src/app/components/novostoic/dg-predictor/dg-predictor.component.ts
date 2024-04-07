@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
+import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { ThermodynamicalFeasibilityRequest } from "~/app/models/dg-predictor";
 
 @Component({
@@ -21,7 +22,7 @@ export class DgPredictorComponent {
   constructor(private router: Router) {}
 
   onSubmit(request: ThermodynamicalFeasibilityRequest) {
-    this.router.navigate(["/thermodynamical-feasibility/result"]);
+    this.router.navigate([NovostoicTools.THERMODYNAMICAL_FEASIBILITY, "result"]);
   }
 
   useExampleRequest() {

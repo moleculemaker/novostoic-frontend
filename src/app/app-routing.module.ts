@@ -11,21 +11,22 @@ import { PathwaySearchComponent } from "./components/novostoic/pathway-search/pa
 import { PathwaySearchResultComponent } from "./components/novostoic/pathway-search-result/pathway-search-result.component";
 import { DgPredictorComponent } from "./components/novostoic/dg-predictor/dg-predictor.component";
 import { DgPredictorResultComponent } from "./components/novostoic/dg-predictor-result/dg-predictor-result.component";
+import { NovostoicTools } from "./enums/novostoic-tools";
 
 const routes: Routes = [
   { path: "about", component: AboutNovostoicComponent },
-  { path: "overall-stoichiometry", component: OverallStoichiometryComponent },
+  { path: NovostoicTools.OVERALL_STOICHIOMETRY, component: OverallStoichiometryComponent },
   {
-    path: "overall-stoichiometry/result",
+    path: NovostoicTools.OVERALL_STOICHIOMETRY + "/result",
     component: OverallStoichiometryResultComponent,
   },
-  { path: "enzyme-selection", component: EnzRankComponent },
-  { path: "enzyme-selection/result", component: EnzRankResultComponent },
-  { path: "pathway-search", component: PathwaySearchComponent },
-  { path: "pathway-search/result", component: PathwaySearchResultComponent },
-  { path: "thermodynamical-feasibility", component: DgPredictorComponent },
+  { path: NovostoicTools.ENZYME_ACTIVITY, component: EnzRankComponent },
+  { path: NovostoicTools.ENZYME_ACTIVITY + "/result", component: EnzRankResultComponent },
+  { path: NovostoicTools.PATHWAY_SEARCH, component: PathwaySearchComponent },
+  { path: NovostoicTools.PATHWAY_SEARCH + "/result", component: PathwaySearchResultComponent },
+  { path: NovostoicTools.THERMODYNAMICAL_FEASIBILITY, component: DgPredictorComponent },
   {
-    path: "thermodynamical-feasibility/result",
+    path: NovostoicTools.THERMODYNAMICAL_FEASIBILITY + "/result",
     component: DgPredictorResultComponent,
   },
   { path: "", component: LandingPageComponent },

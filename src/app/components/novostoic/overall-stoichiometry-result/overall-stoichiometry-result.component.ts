@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { FilterService } from "primeng/api";
 import { Table } from "primeng/table";
 import { BehaviorSubject, map } from "rxjs";
+import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import {
   NovostoicMolecule,
   NovostoicStoichiometry,
@@ -97,7 +98,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
       targetMolecule: this.response.targetMolecule,
       stoichiometry,
     };
-    this.router.navigate(["/pathway-search"], { state });
+    this.router.navigate([NovostoicTools.PATHWAY_SEARCH], { state });
   }
 
   applyFilters() {

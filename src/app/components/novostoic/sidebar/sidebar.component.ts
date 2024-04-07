@@ -24,16 +24,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     const url = this.router.url;
-    if (url.includes("overall-stoichiometry")) {
-      this.selectedTool$.next(NovostoicTools.OVERALL_STOICHIOMETRY);
-    } else if (url.includes("pathway-search")) {
-      this.selectedTool$.next(NovostoicTools.PATHWAY_SEARCH);
-    } else if (url.includes("thermodynamical-feasibility")) {
-      this.selectedTool$.next(NovostoicTools.THERMODYNAMICAL_FEASIBILITY);
-    } else if (url.includes("enzyme-activity")) {
-      this.selectedTool$.next(NovostoicTools.ENZYME_ACTIVITY);
-    } else {
-      this.selectedTool$.next(NovostoicTools.NA);
-    }
+    const tool = url.split("/")[1];
+    this.selectedTool$.next(tool as NovostoicTools);
   }
 }

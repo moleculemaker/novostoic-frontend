@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
+import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { OverallStoichiometryRequest } from "~/app/models/overall-stoichiometry";
 
 @Component({
@@ -26,6 +27,6 @@ export class OverallStoichiometryComponent {
   }
 
   onSubmit(form: OverallStoichiometryRequest) {
-    this.router.navigate(["/overall-stoichiometry/result"]);
+    this.router.navigate([NovostoicTools.OVERALL_STOICHIOMETRY, "result"]);
   }
 }

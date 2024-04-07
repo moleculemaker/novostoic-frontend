@@ -3,6 +3,7 @@ import { Location } from "@angular/common";
 import { Router } from "@angular/router";
 import { BehaviorSubject, combineLatest, map } from "rxjs";
 import { PathwaySearchRequest } from "~/app/models/pathway-search";
+import { NovostoicTools } from "~/app/enums/novostoic-tools";
 
 @Component({
   selector: "app-pathway-search",
@@ -101,7 +102,7 @@ export class PathwaySearchComponent implements OnInit {
   }
 
   onSubmit(form: PathwaySearchRequest) {
-    this.router.navigate(["/pathway-search/result"]);
+    this.router.navigate([NovostoicTools.PATHWAY_SEARCH, "result"]);
   }
 
   confirmUsingExample() {
