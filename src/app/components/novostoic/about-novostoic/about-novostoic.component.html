@@ -1,180 +1,178 @@
-<div class="-mb-4 flex h-full flex-col">
-    <div class="mt-6 flex h-full flex-col items-center">
-        <div class="lg:w-screen-lg flex w-full p-4">
-            <a class="font-bold" href="/">
-                <h6>
-                    <i class="pi pi-chevron-left text-xs"></i>
-                    <span class="ml-4">Back to Home page</span>
-                </h6>
-            </a>
-        </div>
-        <div class="lg:w-screen-lg flex w-full grow p-4 pb-0">
-            <nav class="flex max-w-[300px] flex-col">
-                <button
-                    class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
-                    [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.ABOUT"
-                    (click)="activePanel$.next(ActiveAboutPanel.ABOUT)"
-                >
-                    <i class="pi pi-info-circle"></i
-                    ><a class="ml-2 font-bold">About</a>
-                </button>
-                <button
-                    class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
-                    [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.GITHUB"
-                    (click)="activePanel$.next(ActiveAboutPanel.GITHUB)"
-                >
-                    <i class="pi pi-github"></i
-                    ><a class="ml-2 font-bold">Github</a>
-                </button>
-                <button
-                    class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
-                    [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.PUBLICATIONS"
-                    (click)="activePanel$.next(ActiveAboutPanel.PUBLICATIONS)"
-                >
-                    <i class="pi pi-book"></i
-                    ><a class="ml-2 font-bold">Publication</a>
-                </button>
-                <button
-                    class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
-                    [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.GET_INVOLVED"
-                    (click)="activePanel$.next(ActiveAboutPanel.GET_INVOLVED)"
-                >
-                    <i class="pi pi-comment"></i
-                    ><a class="ml-2 font-bold">Get Involved</a>
-                </button>
-            </nav>
-
-            <!-- About -->
-            <main
-                *ngIf="activePanel$.value === ActiveAboutPanel.ABOUT"
-                class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16"
+<div class="mt-6 flex h-full flex-col items-center max-w-content-lg">
+    <div class="lg:w-screen-lg flex w-full p-4">
+        <a class="font-bold" href="/">
+            <h6>
+                <i class="pi pi-chevron-left text-xs"></i>
+                <span class="ml-4">Back to Home page</span>
+            </h6>
+        </a>
+    </div>
+    <div class="lg:w-screen-lg flex w-full grow p-4 pb-0">
+        <nav class="flex max-w-[300px] flex-col">
+            <button
+                class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
+                [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.ABOUT"
+                (click)="activePanel$.next(ActiveAboutPanel.ABOUT)"
             >
-                <h1 class="mb-4 font-bold">About</h1>
-                <p class="max-w-screen-md leading-6">
-                    Lorem ipsum dolor sit amet consectetur. Diam lacus neque
-                    orci porttitor consectetur sed. Fringilla sed sed rhoncus
-                    viverra arcu pellentesque. Sem tortor platea fringilla
-                    velit. Egestas risus placerat facilisi sed enim interdum.
-                    Lorem ipsum dolor sit amet consectetur. Diam lacus neque
-                    orci porttitor consectetur sed. Fringilla sed sed rhoncus
-                    viverra arcu pellentesque. Sem tortor platea fringilla
-                    velit. Egestas risus placerat facilisi sed enim interdum.
-                    Lorem ipsum dolor sit amet consectetur. Diam lacus neque
-                    orci porttitor consectetur sed.
-                </p>
-
-                <h2 class="mt-16">Overall Stoichiometry</h2>
-                <h6 class="mb-2 font-light">Optstoic</h6>
-                <p class="max-w-screen-md leading-6">
-                    Lorem ipsum dolor sit amet consectetur. Diam lacus neque
-                    orci porttitor consectetur sed. Fringilla sed sed rhoncus
-                    viverra arcu pellentesque. Sem tortor platea fringilla
-                    velit. Egestas risus placerat facilisi sed enim interdum.
-                    Lorem ipsum dolor sit amet consectetur.
-                </p>
-
-                <h2 class="mt-16">Pathway Design</h2>
-                <h6 class="mb-2 font-light">Novostic</h6>
-                <p class="max-w-screen-md leading-6">
-                    Lorem ipsum dolor sit amet consectetur. Diam lacus neque
-                    orci porttitor consectetur sed. Fringilla sed sed rhoncus
-                    viverra arcu pellentesque. Sem tortor platea fringilla
-                    velit. Egestas risus placerat facilisi sed enim interdum.
-                    Lorem ipsum dolor sit amet consectetur.
-                </p>
-
-                <h2 class="mt-16">Thremodynamical Feasibility</h2>
-                <h6 class="mb-2 font-light">dgPredictor</h6>
-                <p class="max-w-screen-md leading-6">
-                    Lorem ipsum dolor sit amet consectetur. Diam lacus neque
-                    orci porttitor consectetur sed. Fringilla sed sed rhoncus
-                    viverra arcu pellentesque. Sem tortor platea fringilla
-                    velit. Egestas risus placerat facilisi sed enim interdum.
-                    Lorem ipsum dolor sit amet consectetur.
-                </p>
-
-                <h2 class="mt-16">Enzyme Activity</h2>
-                <h6 class="mb-2 font-light">EnzRank</h6>
-                <p class="max-w-screen-md leading-6">
-                    Lorem ipsum dolor sit amet consectetur. Diam lacus neque
-                    orci porttitor consectetur sed. Fringilla sed sed rhoncus
-                    viverra arcu pellentesque. Sem tortor platea fringilla
-                    velit. Egestas risus placerat facilisi sed enim interdum.
-                    Lorem ipsum dolor sit amet consectetur.
-                </p>
-            </main>
-
-            <!-- Github -->
-            <main
-                *ngIf="activePanel$.value === ActiveAboutPanel.GITHUB"
-                class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16"
+                <i class="pi pi-info-circle"></i
+                ><a class="ml-2 font-bold">About</a>
+            </button>
+            <button
+                class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
+                [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.GITHUB"
+                (click)="activePanel$.next(ActiveAboutPanel.GITHUB)"
             >
-                <h1 class="mb-4 font-bold">Github</h1>
-                <p class="max-w-screen-md leading-6">
-                    Lorem ipsum dolor sit amet consectetur. Diam lacus neque
-                    orci porttitor consectetur sed. Fringilla sed sed rhoncus
-                    viverra arcu pellentesque. Sem tortor platea fringilla
-                    velit. Egestas risus placerat facilisi sed enim interdum.
-                    Lorem ipsum dolor sit amet consectetur. Diam lacus neque
-                    orci porttitor consectetur sed. Fringilla sed sed rhoncus
-                    viverra arcu pellentesque. Sem tortor platea fringilla
-                    velit. Egestas risus placerat facilisi sed enim interdum.
-                    Lorem ipsum dolor sit amet consectetur. Diam lacus neque
-                    orci porttitor consectetur sed.
-                </p>
-            </main>
-
-            <!-- Publications -->
-            <main
-                *ngIf="activePanel$.value === ActiveAboutPanel.PUBLICATIONS"
-                class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16"
+                <i class="pi pi-github"></i
+                ><a class="ml-2 font-bold">Github</a>
+            </button>
+            <button
+                class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
+                [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.PUBLICATIONS"
+                (click)="activePanel$.next(ActiveAboutPanel.PUBLICATIONS)"
             >
-                <h1 class="mb-4 font-bold">Publications</h1>
-                <p class="max-w-screen-md leading-6">
-                    Learn more about the research process behind the design and
-                    construction of Novostoic.
-                </p>
-
-                <ul class="mt-8">
-                    <li class="mt-4 flex items-center">
-                        <span class="font-semibold leading-6">OptStoic:</span>
-                        <a><i class="pi pi-external-link mx-2"></i>DOI: TBD</a>
-                    </li>
-                    <li class="mt-4 flex items-center">
-                        <span class="font-semibold leading-6"
-                            >Novostoic 1.0:</span
-                        >
-                        <a><i class="pi pi-external-link mx-2"></i>DOI: TBD</a>
-                    </li>
-                    <li class="mt-4 flex items-center">
-                        <span class="font-semibold leading-6"
-                            >dgPredictor:</span
-                        >
-                        <a><i class="pi pi-external-link mx-2"></i>DOI: TBD</a>
-                    </li>
-                    <li class="mt-4 flex items-center">
-                        <span class="font-semibold leading-6">EnzRank:</span>
-                        <a><i class="pi pi-external-link mx-2"></i>DOI: TBD</a>
-                    </li>
-                </ul>
-            </main>
-
-            <!-- Get Involved -->
-            <main
-                *ngIf="activePanel$.value === ActiveAboutPanel.GET_INVOLVED"
-                class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16"
+                <i class="pi pi-book"></i
+                ><a class="ml-2 font-bold">Publication</a>
+            </button>
+            <button
+                class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
+                [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.GET_INVOLVED"
+                (click)="activePanel$.next(ActiveAboutPanel.GET_INVOLVED)"
             >
-                <h1 class="mb-4 font-bold">Get involved</h1>
-                <p class="max-w-screen-md leading-6">
-                    We welcome you questions, suggestions, and feedback! Get in
-                    touch with us via
-                    <a
-                        class="font-semibold text-[#0080FF] underline"
-                        href="mailto:novostoic-feedback@moleculemaker.org"
-                        >email: novostoic-feedback@moleculemaker.org</a
+                <i class="pi pi-comment"></i
+                ><a class="ml-2 font-bold">Get Involved</a>
+            </button>
+        </nav>
+
+        <!-- About -->
+        <main
+            *ngIf="activePanel$.value === ActiveAboutPanel.ABOUT"
+            class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16 grow"
+        >
+            <h1 class="mb-4 font-bold">About</h1>
+            <p class="max-w-screen-md leading-6">
+                Lorem ipsum dolor sit amet consectetur. Diam lacus neque
+                orci porttitor consectetur sed. Fringilla sed sed rhoncus
+                viverra arcu pellentesque. Sem tortor platea fringilla
+                velit. Egestas risus placerat facilisi sed enim interdum.
+                Lorem ipsum dolor sit amet consectetur. Diam lacus neque
+                orci porttitor consectetur sed. Fringilla sed sed rhoncus
+                viverra arcu pellentesque. Sem tortor platea fringilla
+                velit. Egestas risus placerat facilisi sed enim interdum.
+                Lorem ipsum dolor sit amet consectetur. Diam lacus neque
+                orci porttitor consectetur sed.
+            </p>
+
+            <h2 class="mt-16">Overall Stoichiometry</h2>
+            <h6 class="mb-2 font-light">Optstoic</h6>
+            <p class="max-w-screen-md leading-6">
+                Lorem ipsum dolor sit amet consectetur. Diam lacus neque
+                orci porttitor consectetur sed. Fringilla sed sed rhoncus
+                viverra arcu pellentesque. Sem tortor platea fringilla
+                velit. Egestas risus placerat facilisi sed enim interdum.
+                Lorem ipsum dolor sit amet consectetur.
+            </p>
+
+            <h2 class="mt-16">Pathway Design</h2>
+            <h6 class="mb-2 font-light">Novostic</h6>
+            <p class="max-w-screen-md leading-6">
+                Lorem ipsum dolor sit amet consectetur. Diam lacus neque
+                orci porttitor consectetur sed. Fringilla sed sed rhoncus
+                viverra arcu pellentesque. Sem tortor platea fringilla
+                velit. Egestas risus placerat facilisi sed enim interdum.
+                Lorem ipsum dolor sit amet consectetur.
+            </p>
+
+            <h2 class="mt-16">Thremodynamical Feasibility</h2>
+            <h6 class="mb-2 font-light">dgPredictor</h6>
+            <p class="max-w-screen-md leading-6">
+                Lorem ipsum dolor sit amet consectetur. Diam lacus neque
+                orci porttitor consectetur sed. Fringilla sed sed rhoncus
+                viverra arcu pellentesque. Sem tortor platea fringilla
+                velit. Egestas risus placerat facilisi sed enim interdum.
+                Lorem ipsum dolor sit amet consectetur.
+            </p>
+
+            <h2 class="mt-16">Enzyme Activity</h2>
+            <h6 class="mb-2 font-light">EnzRank</h6>
+            <p class="max-w-screen-md leading-6">
+                Lorem ipsum dolor sit amet consectetur. Diam lacus neque
+                orci porttitor consectetur sed. Fringilla sed sed rhoncus
+                viverra arcu pellentesque. Sem tortor platea fringilla
+                velit. Egestas risus placerat facilisi sed enim interdum.
+                Lorem ipsum dolor sit amet consectetur.
+            </p>
+        </main>
+
+        <!-- Github -->
+        <main
+            *ngIf="activePanel$.value === ActiveAboutPanel.GITHUB"
+            class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16 grow"
+        >
+            <h1 class="mb-4 font-bold">Github</h1>
+            <p class="max-w-screen-md leading-6">
+                Lorem ipsum dolor sit amet consectetur. Diam lacus neque
+                orci porttitor consectetur sed. Fringilla sed sed rhoncus
+                viverra arcu pellentesque. Sem tortor platea fringilla
+                velit. Egestas risus placerat facilisi sed enim interdum.
+                Lorem ipsum dolor sit amet consectetur. Diam lacus neque
+                orci porttitor consectetur sed. Fringilla sed sed rhoncus
+                viverra arcu pellentesque. Sem tortor platea fringilla
+                velit. Egestas risus placerat facilisi sed enim interdum.
+                Lorem ipsum dolor sit amet consectetur. Diam lacus neque
+                orci porttitor consectetur sed.
+            </p>
+        </main>
+
+        <!-- Publications -->
+        <main
+            *ngIf="activePanel$.value === ActiveAboutPanel.PUBLICATIONS"
+            class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16 grow"
+        >
+            <h1 class="mb-4 font-bold">Publications</h1>
+            <p class="max-w-screen-md leading-6">
+                Learn more about the research process behind the design and
+                construction of Novostoic.
+            </p>
+
+            <ul class="mt-8">
+                <li class="mt-4 flex items-center">
+                    <span class="font-semibold leading-6">OptStoic:</span>
+                    <a><i class="pi pi-external-link mx-2"></i>DOI: TBD</a>
+                </li>
+                <li class="mt-4 flex items-center">
+                    <span class="font-semibold leading-6"
+                        >Novostoic 1.0:</span
                     >
-                </p>
-            </main>
-        </div>
+                    <a><i class="pi pi-external-link mx-2"></i>DOI: TBD</a>
+                </li>
+                <li class="mt-4 flex items-center">
+                    <span class="font-semibold leading-6"
+                        >dgPredictor:</span
+                    >
+                    <a><i class="pi pi-external-link mx-2"></i>DOI: TBD</a>
+                </li>
+                <li class="mt-4 flex items-center">
+                    <span class="font-semibold leading-6">EnzRank:</span>
+                    <a><i class="pi pi-external-link mx-2"></i>DOI: TBD</a>
+                </li>
+            </ul>
+        </main>
+
+        <!-- Get Involved -->
+        <main
+            *ngIf="activePanel$.value === ActiveAboutPanel.GET_INVOLVED"
+            class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16 grow"
+        >
+            <h1 class="mb-4 font-bold">Get involved</h1>
+            <p class="max-w-screen-md leading-6">
+                We welcome you questions, suggestions, and feedback! Get in
+                touch with us via
+                <a
+                    class="font-semibold text-[#0080FF] underline"
+                    href="mailto:novostoic-feedback@moleculemaker.org"
+                    >email: novostoic-feedback@moleculemaker.org</a
+                >
+            </p>
+        </main>
     </div>
 </div>

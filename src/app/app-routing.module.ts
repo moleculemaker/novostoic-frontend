@@ -13,9 +13,9 @@ import { DgPredictorComponent } from "./components/novostoic/dg-predictor/dg-pre
 import { DgPredictorResultComponent } from "./components/novostoic/dg-predictor-result/dg-predictor-result.component";
 import { NovostoicTools } from "./enums/novostoic-tools";
 import { MainLayoutComponent } from "./components/novostoic/main-layout/main-layout.component";
+import { CenterLayoutComponent } from "./components/novostoic/center-layout/center-layout.component";
 
 const routes: Routes = [
-  { path: "about", component: AboutNovostoicComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
     path: '',
@@ -55,7 +55,20 @@ const routes: Routes = [
       },
     ]
   },
-  { path: "home", component: LandingPageComponent },
+  { 
+    path: '', 
+    component: CenterLayoutComponent,
+    children: [
+      {
+        path: "home",
+        component: LandingPageComponent,
+      },
+      {
+        path: 'about',
+        component: AboutNovostoicComponent,
+      }
+    ]
+  },
 ];
 
 @NgModule({
