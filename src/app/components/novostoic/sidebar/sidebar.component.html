@@ -18,7 +18,7 @@
     <ul>
         <li
             [pTooltip]="collapsed$.value ? 'Overall Stoichiometry' : ''"
-            [class]="'p-2 text-lg'
+            [class]="'p-2 text-[14px]'
             + (collapsed$.value ? ' px-4': ' pl-8')
             + (NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.OVERALL_STOICHIOMETRY] !== ToolStatus.DISABLED ? ' hover:bg-gray-100' : '')
             + (selectedTool$.value === NovostoicTools.OVERALL_STOICHIOMETRY ? ' font-semibold bg-white' : '')
@@ -71,7 +71,7 @@
         </li>
         <li
             [pTooltip]="collapsed$.value ? 'Auxiliary functions' : ''"
-            [class]="'p-2 text-lg'
+            [class]="'p-2 text-[14px]'
             + (collapsed$.value ? ' px-4': ' pl-8')
             + (NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.PATHWAY_SEARCH] !== ToolStatus.DISABLED ? ' hover:bg-gray-100' : '')
             + (selectedTool$.value === NovostoicTools.PATHWAY_SEARCH ? ' font-semibold bg-white' : '')
@@ -111,7 +111,7 @@
     <ul>
         <li
             [pTooltip]="collapsed$.value ? 'Thermodynamical Feasibility' : ''"
-            [class]="'p-2 text-lg'
+            [class]="'p-2 text-[14px]'
             + (collapsed$.value ? ' px-4': ' pl-8')
             + (NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.THERMODYNAMICAL_FEASIBILITY] !== ToolStatus.DISABLED ? ' hover:bg-gray-100' : '')
             + (selectedTool$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY ? ' font-semibold bg-white' : '')
@@ -159,7 +159,7 @@
         </li>
         <li
             [pTooltip]="collapsed$.value ? 'Enzyme Selection' : ''"
-            [class]="'p-2 text-lg'
+            [class]="'p-2 text-[14px]'
             + (collapsed$.value ? ' px-4': ' pl-8')
             + (NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.ENZYME_ACTIVITY] !== ToolStatus.DISABLED ? ' hover:bg-gray-100' : '')
             + (selectedTool$.value === NovostoicTools.ENZYME_ACTIVITY ? ' font-semibold bg-white' : '')
