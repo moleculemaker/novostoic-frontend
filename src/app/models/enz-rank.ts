@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { JobCreate } from "../api/mmli-backend/v1";
+import { EnzRankRequestBody, JobCreate } from "../api/mmli-backend/v1";
 import { NovostoicMolecule } from "./overall-stoichiometry";
 
 export class EnzymeSelectionRequest {
@@ -23,13 +23,12 @@ export class EnzymeSelectionRequest {
     Object.values(this.form.controls).forEach((control) => control.reset());
   }
 
-  toJobCreate(): JobCreate {
+  toRequestBody(): EnzRankRequestBody {
     return {
-      job_info: JSON.stringify({
-        primaryPrecursor: this.form.controls["primaryPrecursor"].value,
-        enzymeSequence: this.form.controls["enzymeSequence"].value,
-      }),
-      email: this.form.controls["subscriberEmail"].value || "",
+      jobId: '',
+      primary_precursor: this.form.controls["primaryPrecursor"].value || '',
+      enzyme_sequence: this.form.controls["enzymeSequence"].value || '',
+      user_email: this.form.controls["subscriberEmail"].value || "",
     };
   }
 }

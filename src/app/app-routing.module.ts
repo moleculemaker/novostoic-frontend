@@ -34,7 +34,7 @@ const routes: Routes = [
         component: EnzRankComponent 
       },
       { 
-        path: NovostoicTools.ENZYME_ACTIVITY + "/result", 
+        path: NovostoicTools.ENZYME_ACTIVITY + "/result/:id", 
         component: EnzRankResultComponent 
       },
       { 

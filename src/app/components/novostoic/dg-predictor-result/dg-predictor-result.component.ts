@@ -3,7 +3,6 @@ import { ActivatedRoute } from "@angular/router";
 import { filter, map, of, skipUntil, switchMap, takeWhile, tap, timer } from "rxjs";
 import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
 import { ThermodynamicalFeasibilityResponse } from "~/app/models/dg-predictor";
-import { OverallStoichiometryResponse } from "~/app/models/overall-stoichiometry";
 import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
