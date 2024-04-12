@@ -1,5 +1,5 @@
 import { FormGroup, FormControl, Validators, FormArray } from "@angular/forms";
-import { JobCreate } from "../api/mmli-backend/v1";
+import { JobCreate, MoleculeWithAmount, NovostoicRequestBody } from "../api/mmli-backend/v1";
 import {
   NovostoicMolecule,
   NovostoicStoichiometry,
@@ -26,21 +26,21 @@ export class PathwaySearchRequest {
 
   private createMoleculeInputWithAmount() {
     return new FormGroup({
-      name: new FormControl("", [Validators.required]),
-      amount: new FormControl<number | null>(null, [Validators.required]),
+      molecule: new FormControl<string>("", [Validators.required]),
+      amount: new FormControl<number>(0, [Validators.required]),
     });
   }
 
   addPrimaryPercursorFromMolecule(molecule: NovostoicMolecule) {
     this.form.controls["primaryPrecursor"].setValue({
-      name: molecule.commonNames[0],
+      molecule: molecule.commonNames[0],
       amount: 1,
     });
   }
 
   addTargetMoleculeFromMolecule(molecule: NovostoicMolecule) {
     this.form.controls["targetMolecule"].setValue({
-      name: molecule.commonNames[0],
+      molecule: molecule.commonNames[0],
       amount: 1,
     });
   }
@@ -53,7 +53,7 @@ export class PathwaySearchRequest {
     this.form.controls["coReactants"].setValue(
       stoichiometry.reactants
         .map((r) => ({
-          name: r.molecule.commonNames[0],
+          molecule: r.molecule.commonNames[0],
           amount: r.amount,
         })),
     );
@@ -65,7 +65,7 @@ export class PathwaySearchRequest {
     this.form.controls["coProducts"].setValue(
       stoichiometry.products
         .map((r) => ({
-          name: r.molecule.commonNames[0],
+          molecule: r.molecule.commonNames[0],
           amount: r.amount,
         })),
     );
@@ -112,22 +112,22 @@ export class PathwaySearchRequest {
     // Create example request.
     request.form.setValue({
       primaryPrecursor: {
-        name: "mollit",
+        molecule: "mollit",
         amount: 1,
       },
       targetMolecule: {
-        name: "minim fugiat pariatur deserunt Ut",
+        molecule: "minim fugiat pariatur deserunt Ut",
         amount: 1,
       },
       coReactants: [
         {
-          name: "CO2",
+          molecule: "CO2",
           amount: 1,
         },
       ],
       coProducts: [
         {
-          name: "H2",
+          molecule: "H2",
           amount: 1,
         },
       ],
@@ -143,23 +143,22 @@ export class PathwaySearchRequest {
     return request;
   }
 
-  toJobCreate(): JobCreate {
+  toRequestBody(): NovostoicRequestBody {
     return {
-      job_info: JSON.stringify({
-        primaryPrecursor: this.form.controls["primaryPrecursor"].value,
-        targetMolecule: this.form.controls["targetMolecule"].value,
-        coReactants: this.form.controls["coReactants"].value,
-        coProducts: this.form.controls["coProducts"].value,
-        maxSteps: this.form.controls["maxSteps"].value,
-        maxPathways: this.form.controls["maxPathways"].value,
-        isThermodynamicalFeasible:
-          this.form.controls["isThermodynamicalFeasible"].value,
-        thermodynamicalFeasibleReactionsOnly:
-          this.form.controls["thermodynamicalFeasibleReactionsOnly"].value,
-        useEnzymeSelection: this.form.controls["useEnzymeSelection"].value,
-        numEnzymeCandidates: this.form.controls["numEnzymeCandidates"].value,
-      }),
-      email: this.form.controls["subscriberEmail"].value || "",
+      jobId: '',
+      primary_precursor: this.form.controls["primaryPrecursor"].value as MoleculeWithAmount,
+      target_molecule: this.form.controls["targetMolecule"].value as MoleculeWithAmount,
+      co_reactants: this.form.controls["coReactants"].value as Array<MoleculeWithAmount>,
+      co_products: this.form.controls["coProducts"].value as Array<MoleculeWithAmount>,
+      max_steps: this.form.controls["maxSteps"].value || 3,
+      max_pathways: this.form.controls["maxPathways"].value || 10,
+      is_thermodynamic_feasible:
+        this.form.controls["isThermodynamicalFeasible"].value || false,
+      thermodynamical_feasible_reaction_only:
+        this.form.controls["thermodynamicalFeasibleReactionsOnly"].value || false,
+      use_enzyme_selection: this.form.controls["useEnzymeSelection"].value || false,
+      num_enzyme_candidates: this.form.controls["numEnzymeCandidates"].value || 0,
+      user_email: this.form.controls["subscriberEmail"].value || "",
     };
   }
 }

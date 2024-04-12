@@ -13,7 +13,7 @@
             <div class="flex items-center">
                 <div class="flex items-center gap-2">
                     <button
-                        *ngIf="status.phase === JobStatus.Queued || status.phase === JobStatus.Processing"
+                        *ngIf="isLoading$ | async"
                         class="rounded-md border p-2 py-3"
                     >
                         Cancel
@@ -202,7 +202,7 @@
             </p-panel>
         </div>
 
-        <app-loading *ngIf="status.phase === JobStatus.Queued || status.phase === JobStatus.Processing"></app-loading>
+        <app-loading *ngIf="isLoading$ | async"></app-loading>
     </div>
 </div>
 

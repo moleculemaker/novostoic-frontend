@@ -1,6 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { BehaviorSubject, combineLatest, map, of, tap } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
+import { BehaviorSubject, combineLatest, filter, first, last, map, of, skipUntil, switchMap, take, takeWhile, tap, throttleTime, timer } from "rxjs";
+import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
 import { PathwaySearchResponse } from "~/app/models/pathway-search";
+import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
   selector: "app-pathway-search-result",
@@ -11,11 +14,36 @@ import { PathwaySearchResponse } from "~/app/models/pathway-search";
   },
 })
 export class PathwaySearchResultComponent implements OnInit {
-  jobId = "exampleJobId";
-  submissionTime = "example submission time";
   loading = false;
   showRightBoundaryLine$ = new BehaviorSubject(false);
-  response$ = of(PathwaySearchResponse.example);
+
+  jobId: string = this.route.snapshot.paramMap.get("id") || "";
+
+  statusResponse$ = timer(0, 10000).pipe(
+    switchMap(() => this.novostoicService.getResultStatus(
+      JobType.NovostoicNovostoic,
+      this.jobId,
+    )),
+    takeWhile((data) => 
+      data.phase === JobStatus.Processing 
+      || data.phase === JobStatus.Queued
+    , true),
+    tap((data) => { console.log('job status: ', data) }),
+  );
+
+  isLoading$ = this.statusResponse$.pipe(
+    map((job) => job.phase === JobStatus.Processing || job.phase === JobStatus.Queued),
+  );
+
+  response$ = this.statusResponse$.pipe(
+    skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
+    switchMap(() => this.novostoicService.getResult(JobType.NovostoicNovostoic, this.jobId)),
+    tap((data) => { console.log('result: ', data) }),
+    switchMap((data) => of(PathwaySearchResponse.example)), //TODO: replace with actual response
+    tap((data) => console.log('response', data))
+  );
+
+
   visible$ = new BehaviorSubject(false);
   selectedPathway$ = new BehaviorSubject(0);
 
@@ -83,6 +111,11 @@ export class PathwaySearchResultComponent implements OnInit {
       };
     }),
   );
+
+  constructor(
+    private novostoicService: NovostoicService,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
     setTimeout(() => {

@@ -42,7 +42,7 @@ const routes: Routes = [
         component: PathwaySearchComponent 
       },
       { 
-        path: NovostoicTools.PATHWAY_SEARCH + "/result", 
+        path: NovostoicTools.PATHWAY_SEARCH + "/result/:id", 
         component: PathwaySearchResultComponent 
       },
       { 

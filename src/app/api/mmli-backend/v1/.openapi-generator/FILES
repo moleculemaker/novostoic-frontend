@@ -12,6 +12,8 @@ encoder.ts
 git_push.sh
 index.ts
 model/analyzeRequestBody.ts
+model/dgPredictorRequestBody.ts
+model/enzRankRequestBody.ts
 model/exportRequestBody.ts
 model/flaggedMolecule.ts
 model/flaggedMoleculeDelete.ts
@@ -23,8 +25,12 @@ model/jobType.ts
 model/jobUpdate.ts
 model/locationInner.ts
 model/models.ts
-model/molecule.ts
+model/moleculeWithAmount.ts
+model/novostoicRequestBody.ts
 model/optstoicRequestBody.ts
+model/reactionKeggId.ts
+model/reactionSmiles.ts
+model/reactionsInner.ts
 model/validationError.ts
 param.ts
 variables.ts

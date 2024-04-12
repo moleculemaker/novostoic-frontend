@@ -19,7 +19,13 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
+import { DgPredictorRequestBody } from '../model/dgPredictorRequestBody';
+// @ts-ignore
+import { EnzRankRequestBody } from '../model/enzRankRequestBody';
+// @ts-ignore
 import { HTTPValidationError } from '../model/hTTPValidationError';
+// @ts-ignore
+import { NovostoicRequestBody } from '../model/novostoicRequestBody';
 // @ts-ignore
 import { OptstoicRequestBody } from '../model/optstoicRequestBody';
 
@@ -95,13 +101,17 @@ export class NovostoicService {
 
     /**
      * Start Dgpredictor
+     * @param dgPredictorRequestBody 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public startDgpredictorNovostoicDgpredictorRunPost(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public startDgpredictorNovostoicDgpredictorRunPost(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public startDgpredictorNovostoicDgpredictorRunPost(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public startDgpredictorNovostoicDgpredictorRunPost(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public startDgpredictorNovostoicDgpredictorRunPost(dgPredictorRequestBody: DgPredictorRequestBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
+    public startDgpredictorNovostoicDgpredictorRunPost(dgPredictorRequestBody: DgPredictorRequestBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
+    public startDgpredictorNovostoicDgpredictorRunPost(dgPredictorRequestBody: DgPredictorRequestBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public startDgpredictorNovostoicDgpredictorRunPost(dgPredictorRequestBody: DgPredictorRequestBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        if (dgPredictorRequestBody === null || dgPredictorRequestBody === undefined) {
+            throw new Error('Required parameter dgPredictorRequestBody was null or undefined when calling startDgpredictorNovostoicDgpredictorRunPost.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -123,6 +133,15 @@ export class NovostoicService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -134,10 +153,11 @@ export class NovostoicService {
             }
         }
 
-        let localVarPath = `/novostoic_dgpredictor/run`;
+        let localVarPath = `/novostoic-dgpredictor/run`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: dgPredictorRequestBody,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -149,13 +169,17 @@ export class NovostoicService {
 
     /**
      * Start Enzrank
+     * @param enzRankRequestBody 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public startEnzrankNovostoicEnzrankRunPost(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public startEnzrankNovostoicEnzrankRunPost(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public startEnzrankNovostoicEnzrankRunPost(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public startEnzrankNovostoicEnzrankRunPost(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public startEnzrankNovostoicEnzrankRunPost(enzRankRequestBody: EnzRankRequestBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
+    public startEnzrankNovostoicEnzrankRunPost(enzRankRequestBody: EnzRankRequestBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
+    public startEnzrankNovostoicEnzrankRunPost(enzRankRequestBody: EnzRankRequestBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public startEnzrankNovostoicEnzrankRunPost(enzRankRequestBody: EnzRankRequestBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        if (enzRankRequestBody === null || enzRankRequestBody === undefined) {
+            throw new Error('Required parameter enzRankRequestBody was null or undefined when calling startEnzrankNovostoicEnzrankRunPost.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -177,6 +201,15 @@ export class NovostoicService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -188,10 +221,11 @@ export class NovostoicService {
             }
         }
 
-        let localVarPath = `/novostoic_enzrank/run`;
+        let localVarPath = `/novostoic-enzrank/run`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: enzRankRequestBody,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -203,13 +237,17 @@ export class NovostoicService {
 
     /**
      * Start Novostoic
+     * @param novostoicRequestBody 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public startNovostoicNovostoicNovostoicRunPost(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public startNovostoicNovostoicNovostoicRunPost(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public startNovostoicNovostoicNovostoicRunPost(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public startNovostoicNovostoicNovostoicRunPost(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public startNovostoicNovostoicNovostoicRunPost(novostoicRequestBody: NovostoicRequestBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
+    public startNovostoicNovostoicNovostoicRunPost(novostoicRequestBody: NovostoicRequestBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
+    public startNovostoicNovostoicNovostoicRunPost(novostoicRequestBody: NovostoicRequestBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public startNovostoicNovostoicNovostoicRunPost(novostoicRequestBody: NovostoicRequestBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        if (novostoicRequestBody === null || novostoicRequestBody === undefined) {
+            throw new Error('Required parameter novostoicRequestBody was null or undefined when calling startNovostoicNovostoicNovostoicRunPost.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -231,6 +269,15 @@ export class NovostoicService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -242,10 +289,11 @@ export class NovostoicService {
             }
         }
 
-        let localVarPath = `/novostoic_novostoic/run`;
+        let localVarPath = `/novostoic-novostoic/run`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: novostoicRequestBody,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -309,7 +357,7 @@ export class NovostoicService {
             }
         }
 
-        let localVarPath = `/novostoic_optstoic/run`;
+        let localVarPath = `/novostoic-optstoic/run`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

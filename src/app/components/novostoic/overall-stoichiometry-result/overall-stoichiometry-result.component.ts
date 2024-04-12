@@ -21,8 +21,6 @@ import { NovostoicService } from "~/app/services/novostoic.service";
 export class OverallStoichiometryResultComponent implements OnInit {
   @ViewChild("resultsTable") resultsTable: Table;
 
-  readonly JobStatus = JobStatus;
-
   moleculeRepresentations: Array<{
     label: string;
     value: "smiles" | "commonNames" | "keggId";
@@ -41,7 +39,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
     },
   ];
 
-  jobId: string;
+  jobId: string = this.route.snapshot.paramMap.get("id") || "";
 
   statusResponse$ = timer(0, 10000).pipe(
     switchMap(() => this.novostoicService.getResultStatus(
@@ -55,10 +53,15 @@ export class OverallStoichiometryResultComponent implements OnInit {
     tap((data) => { console.log('job status: ', data) }),
   );
 
+  isLoading$ = this.statusResponse$.pipe(
+    map((job) => job.phase === JobStatus.Processing || job.phase === JobStatus.Queued),
+  );
+
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
-    switchMap((data) => of(OverallStoichiometryResponse.example)), //TODO: replace with actual response
+    switchMap(() => this.novostoicService.getResult(JobType.NovostoicOptstoic, this.jobId)),
     tap((data) => { console.log('result: ', data) }),
+    switchMap((data) => of(OverallStoichiometryResponse.example)), //TODO: replace with actual response
   );
 
   showResultsFilter$ = new BehaviorSubject(false);
@@ -82,7 +85,6 @@ export class OverallStoichiometryResultComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.jobId = this.route.snapshot.paramMap.get("id")!;
     this.filterService.register(
       "containsMolecule",
       (

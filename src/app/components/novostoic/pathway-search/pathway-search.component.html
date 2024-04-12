@@ -1,7 +1,7 @@
 <form
     class="flex h-full flex-col justify-between"
     [formGroup]="request.form"
-    (ngSubmit)="onSubmit(request)"
+    (ngSubmit)="onSubmit()"
 >
     <div>
         <h2 class="mb-2">Input an Overall Stoichiometry</h2>
@@ -84,8 +84,8 @@
                                     <app-marvinjs-input
                                         class="grow rounded-md bg-white"
                                         placeholder="Name, SMILES, InChI, Kegg ID"
-                                        [smiles]="request.form.controls['primaryPrecursor'].controls['name'].value || ''"
-                                        (smilesChange)="request.form.controls['primaryPrecursor'].controls['name'].setValue($event)"
+                                        [smiles]="request.form.controls['primaryPrecursor'].controls['molecule'].value || ''"
+                                        (smilesChange)="request.form.controls['primaryPrecursor'].controls['molecule'].setValue($event)"
                                     ></app-marvinjs-input>
                                 </div>
                             </div>
@@ -133,7 +133,7 @@
                                             type="text"
                                             class="grow"
                                             placeholder="Name, SMILES, InChI, Kegg ID"
-                                            formControlName="name"
+                                            formControlName="molecule"
                                         />
                                         <button *ngIf="i !== 0" type="button" title="remove coreactant" (click)="request.removeCoReactant(i)">
                                             <i class="pi pi-times-circle mx-1"></i>
@@ -188,7 +188,7 @@
                                             type="text"
                                             class="grow"
                                             placeholder="Name, SMILES, InChI, Kegg ID"
-                                            formControlName="name"
+                                            formControlName="molecule"
                                         />
                                         <button *ngIf="i !== 0" type="button" title="remove Co-product" (click)="request.removeCoProduct(i)">
                                             <i class="pi pi-times-circle mx-1"></i>
@@ -228,8 +228,8 @@
                                     <app-marvinjs-input
                                         class="grow rounded-md bg-white"
                                         placeholder="Name, SMILES, InChI, Kegg ID"
-                                        [smiles]="request.form.controls['targetMolecule'].controls['name'].value || ''"
-                                        (smilesChange)="request.form.controls['targetMolecule'].controls['name'].setValue($event)"
+                                        [smiles]="request.form.controls['targetMolecule'].controls['molecule'].value || ''"
+                                        (smilesChange)="request.form.controls['targetMolecule'].controls['molecule'].setValue($event)"
                                     ></app-marvinjs-input>
                                 </div>
                             </div>
