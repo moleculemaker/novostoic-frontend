@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { ThermodynamicalFeasibilityRequest } from "~/app/models/dg-predictor";
+import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
   selector: "app-dg-predictor",
@@ -16,10 +17,21 @@ export class DgPredictorComponent {
   reactionTypeInput$ =
     this.request.form.controls["reactionInputType"].valueChanges;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router, 
+    private novostoicService: NovostoicService
+  ) {}
 
-  onSubmit(request: ThermodynamicalFeasibilityRequest) {
-    this.router.navigate([NovostoicTools.THERMODYNAMICAL_FEASIBILITY, "result"]);
+  onSubmit() {
+    if (!this.request.form.valid) {
+      return;
+    }
+
+    this.novostoicService.createJobAndRunDgpredictor(
+      this.request.toRequestBody()
+    ).subscribe((response) => {
+      this.router.navigate([NovostoicTools.THERMODYNAMICAL_FEASIBILITY, "result", response.jobId]);
+    });
   }
 
   useExampleRequest() {

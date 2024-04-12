@@ -15,6 +15,7 @@ import { ReactionsInner } from './reactionsInner';
 export interface DgPredictorRequestBody { 
     jobId: string;
     user_email: string;
+    ph: number;
     ionic_strength: number;
     reactions: Array<ReactionsInner>;
 }

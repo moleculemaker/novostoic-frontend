@@ -1,18 +1,18 @@
 <div class="flex h-full flex-col">
-    <div class="flex justify-between">
-        <div>
+    <div *ngIf="statusResponse$ | async as status" class="flex justify-between">
+        <div *ngIf="(response$ | async) as response">
             <h2 class="mb-2">
-                Job ID: {{ jobId }} <i class="pi pi-copy"></i>
+                Job ID: {{ status.job_id }} <i class="pi pi-copy"></i>
             </h2>
             <p class="leading-6">
                 <span class="pr-4"
                     >Valid No. of Sequences: {{ response.length }}
                     Sequences</span
                 >
-                <span>Submission Time: {{ submissionTime }}</span>
+                <span>Submission Time: {{ status.time_created }}</span>
             </p>
         </div>
-        <div class="flex items-center">
+        <div *ngIf="isLoading$ | async as loading" class="flex items-center">
             <div class="flex items-center gap-2">
                 <button
                     *ngIf="loading"
@@ -50,7 +50,7 @@
         <p-table
             #resultsTable
             [columns]="columnsForExport"
-            [value]="response"
+            [value]="(response$ | async) || []"
             [paginator]="true"
             [rows]="10"
             [showCurrentPageReport]="true"

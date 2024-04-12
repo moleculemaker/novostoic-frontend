@@ -12,7 +12,9 @@ import {
   OptstoicRequestBody,
   JobCreate,
   JobType,
-  NovostoicRequestBody
+  NovostoicRequestBody,
+  DgPredictorRequestBody,
+  EnzRankRequestBody
 } from "../api/mmli-backend/v1";
 
 @Injectable({
@@ -47,11 +49,11 @@ export class NovostoicService {
     return this.createJobAndRun(requestBody, JobType.NovostoicNovostoic);
   }
 
-  createJobAndRunDgpredictor(requestBody: NovostoicRequestBody): Observable<PostResponse> {
+  createJobAndRunDgpredictor(requestBody: DgPredictorRequestBody): Observable<PostResponse> {
     return this.createJobAndRun(requestBody, JobType.NovostoicDgpredictor);
   }
 
-  createJobAndRunEnzrank(requestBody: NovostoicRequestBody): Observable<PostResponse> {
+  createJobAndRunEnzrank(requestBody: EnzRankRequestBody): Observable<PostResponse> {
     return this.createJobAndRun(requestBody, JobType.NovostoicEnzrank);
   }
 

@@ -1,13 +1,12 @@
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
-import { JobCreate } from "../api/mmli-backend/v1";
-import { NovostoicMolecule } from "./overall-stoichiometry";
+import { DgPredictorRequestBody, JobCreate, ReactionsInner } from "../api/mmli-backend/v1";
 
 interface ReactionFormControl {
-  type: FormControl<string | null>;
-  reactionSmiles?: FormControl<string | null>;
-  moleculeNumber?: FormControl<string | null>;
-  moleculeInchiOrSmiles?: FormControl<string | null>;
-  reactionKeggId?: FormControl<string | null>;
+  type: FormControl<ReactionsInner['type'] | null>;
+  reactionSmiles?: FormControl<ReactionsInner['smiles'] | null>;
+  moleculeNumber?: FormControl<ReactionsInner['molecule_number'] | null>;
+  moleculeInchiOrSmiles?: FormControl<ReactionsInner['molecule_inchi_or_smiles'] | null>;
+  reactionKeggId?: FormControl<ReactionsInner['reaction_keggid'] | null>;
 }
 
 export class ThermodynamicalFeasibilityRequest {
@@ -93,14 +92,19 @@ export class ThermodynamicalFeasibilityRequest {
     this.clearAllInputHelper(this.form.controls["reactions"]);
   }
 
-  toJobCreate(): JobCreate {
+  toRequestBody(): DgPredictorRequestBody {
     return {
-      job_info: JSON.stringify({
-        ph: this.form.controls["ph"].value,
-        ionicStrength: this.form.controls["ionicStrength"].value,
-        reactions: this.form.controls["reactions"].value,
-      }),
-      email: this.form.controls["subscriberEmail"].value || "",
+      jobId: "",
+      ph: this.form.controls["ph"].value || 7,
+      ionic_strength: this.form.controls["ionicStrength"].value || 0.3,
+      reactions: this.form.controls["reactions"].value.map((reaction) => ({
+        type: reaction.type as ReactionsInner["type"],
+        smiles: reaction.reactionSmiles as ReactionsInner["smiles"],
+        molecule_number: reaction.moleculeNumber as ReactionsInner["molecule_number"],
+        molecule_inchi_or_smiles: reaction.moleculeInchiOrSmiles as ReactionsInner["molecule_inchi_or_smiles"],
+        reaction_keggid: reaction.reactionKeggId as ReactionsInner["reaction_keggid"],
+      })),
+      user_email: this.form.controls["subscriberEmail"].value || "",
     };
   }
 }

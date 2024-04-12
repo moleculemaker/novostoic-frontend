@@ -50,7 +50,7 @@ const routes: Routes = [
         component: DgPredictorComponent 
       },
       {
-        path: NovostoicTools.THERMODYNAMICAL_FEASIBILITY + "/result",
+        path: NovostoicTools.THERMODYNAMICAL_FEASIBILITY + "/result/:id",
         component: DgPredictorResultComponent,
       },
     ]
