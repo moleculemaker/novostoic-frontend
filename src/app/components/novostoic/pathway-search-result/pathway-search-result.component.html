@@ -426,7 +426,9 @@
                         <div>Total Steps</div>
                     </div>
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
-                        <div class="text-lg font-semibold mb-2">{{ (pathwayPredictedReactions$ | async)![selectedPathway$.value].length }}</div>
+                        <div class="text-lg font-semibold mb-2" *ngIf="(pathwayPredictedReactions$ | async) as reactions">{{ 
+                            reactions![selectedPathway$.value].length
+                        }}</div>
                         <div>Predicted Steps</div>
                     </div>
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
@@ -434,7 +436,9 @@
                         <div>Intermediates</div>
                     </div>
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
-                        <div class="text-lg font-semibold mb-2">{{ (pathwayDeltaGs$ | async)![selectedPathway$.value] }}kJ/mol</div>
+                        <div class="text-lg font-semibold mb-2" *ngIf="(pathwayDeltaGs$ | async) as deltaGs">{{ 
+                            deltaGs![selectedPathway$.value] 
+                        }}kJ/mol</div>
                         <div>Delta G</div>
                     </div>
                 </div>

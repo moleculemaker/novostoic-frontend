@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FilterService } from "primeng/api";
 import { Table } from "primeng/table";
-import { BehaviorSubject, Observable, filter, map, of, shareReplay, skipUntil, switchMap, take, takeLast, takeUntil, takeWhile, tap, timer } from "rxjs";
+import { BehaviorSubject, Observable, Subscription, filter, map, of, shareReplay, skipUntil, switchMap, take, takeLast, takeUntil, takeWhile, tap, timer } from "rxjs";
 
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { JobStatus, JobType, JobsService } from "~/app/api/mmli-backend/v1";
@@ -78,8 +78,11 @@ export class OverallStoichiometryResultComponent implements OnInit {
     map((filters) => filters.map((filter) => filter.commonNames[0]).join(",")),
   );
 
+  subscriptions: Subscription[] = [];
+
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private filterService: FilterService,
     private novostoicService: NovostoicService,
   ) {}
@@ -107,13 +110,21 @@ export class OverallStoichiometryResultComponent implements OnInit {
     );
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
   enterPathwayDesignByClick(stoichiometry: NovostoicStoichiometry) {
-    // const state = {
-    //   primaryPrecursor: this.response.primaryPrecursor,
-    //   targetMolecule: this.response.targetMolecule,
-    //   stoichiometry,
-    // };
-    // this.router.navigate([NovostoicTools.PATHWAY_SEARCH], { state });
+    this.subscriptions.push(
+      this.response$.pipe(take(1)).subscribe((response) => {
+        const state = {
+          primaryPrecursor: response.primaryPrecursor,
+          targetMolecule: response.targetMolecule,
+          stoichiometry,
+        };
+        this.router.navigate([NovostoicTools.PATHWAY_SEARCH], { state });
+      })
+    );
   }
 
   applyFilters() {

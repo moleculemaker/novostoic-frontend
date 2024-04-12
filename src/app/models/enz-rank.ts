@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { EnzRankRequestBody, JobCreate } from "../api/mmli-backend/v1";
+import { EnzRankRequestBody } from "../api/mmli-backend/v1";
 import { NovostoicMolecule } from "./overall-stoichiometry";
 
 export class EnzymeSelectionRequest {
