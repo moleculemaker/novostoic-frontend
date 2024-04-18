@@ -1,0 +1,39 @@
+<div class="relative flex items-center">
+    <div
+        #resultRow
+        class="flex items-center overflow-x-scroll"
+    >
+        <app-stoichiometry-reaction
+            [primaryPrecursor]="primaryPrecursor"
+            [targetMolecule]="targetMolecule"
+            [stoichiometry]="stoichiometry"
+            [moleculeStyleClass]="moleculeStyleClass"
+        ></app-stoichiometry-reaction>
+    </div>
+    <button
+        type="button"
+        title="scroll right"
+        [class.hidden]="!(resultRow.scrollWidth > resultRow.clientWidth
+            && resultRow.scrollLeft < (resultRow.scrollWidth - resultRow.clientWidth - 1))"
+        class="absolute right-0"
+        (mouseenter)="startScrolling(resultRow, 1)"
+        (mouseleave)="endScrolling()"
+    >
+        <i
+            class="pi pi-arrow-right bg-[#d9d9d9] p-1"
+        ></i>
+    </button>
+    <button
+        type="button"
+        title="scroll left"
+        [class.hidden]="!(resultRow.scrollWidth > resultRow.clientWidth
+            && resultRow.scrollLeft > 0)"
+        class="absolute left-2"
+        (mouseenter)="startScrolling(resultRow, -1)"
+        (mouseleave)="endScrolling()"
+    >
+        <i
+            class="pi pi-arrow-right rotate-180 bg-[#d9d9d9] p-1"
+        ></i>
+    </button>
+</div>

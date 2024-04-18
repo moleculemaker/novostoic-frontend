@@ -1,7 +1,7 @@
 export enum NovostoicTools {
-  OVERALL_STOICHIOMETRY,
-  PATHWAY_SEARCH,
-  THERMODYNAMICAL_FEASIBILITY,
-  ENZYME_ACTIVITY,
-  NA,
+  OVERALL_STOICHIOMETRY = "overall-stoichiometry",
+  PATHWAY_SEARCH = "pathway-search",
+  THERMODYNAMICAL_FEASIBILITY = "thermodynamical-feasibility",
+  ENZYME_ACTIVITY = "enzyme-selection",
+  NA = "na",
 }

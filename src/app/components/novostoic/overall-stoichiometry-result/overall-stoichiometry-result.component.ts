@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
 import { FilterService } from "primeng/api";
 import { Table } from "primeng/table";
-import { BehaviorSubject, filter, map, tap } from "rxjs";
+import { BehaviorSubject, map } from "rxjs";
+import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import {
   NovostoicMolecule,
+  NovostoicStoichiometry,
   OverallStoichiometryResponse,
 } from "~/app/models/overall-stoichiometry";
 
@@ -11,9 +14,6 @@ import {
   selector: "app-overall-stoichiometry-result",
   templateUrl: "./overall-stoichiometry-result.component.html",
   styleUrls: ["./overall-stoichiometry-result.component.scss"],
-  host: {
-    class: "grow",
-  },
 })
 export class OverallStoichiometryResultComponent implements OnInit {
   @ViewChild("resultsTable") resultsTable: Table;
@@ -38,7 +38,6 @@ export class OverallStoichiometryResultComponent implements OnInit {
 
   response = OverallStoichiometryResponse.example;
 
-  scrollingCounter$ = new BehaviorSubject(-1);
   showResultsFilter$ = new BehaviorSubject(false);
   selectedMoleculeRepresentation$ = new BehaviorSubject(
     this.moleculeRepresentations[0].value,
@@ -58,14 +57,16 @@ export class OverallStoichiometryResultComponent implements OnInit {
   // example job info
   jobId = "exampleJobId";
   submissionTime = "example submission time";
-  loading = true;
+  loading = false;
 
-  constructor(private filterService: FilterService) {}
+  constructor(
+    private filterService: FilterService,
+    private router: Router) {}
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.loading = false;
-    }, 3000);
+    // setTimeout(() => {
+    //   this.loading = false;
+    // }, 3000);
     this.filterService.register(
       "containsMolecule",
       (
@@ -88,17 +89,13 @@ export class OverallStoichiometryResultComponent implements OnInit {
     );
   }
 
-  startScrolling(container: HTMLElement, delta: number) {
-    const timeoutId = setTimeout(() => {
-      container.scrollLeft += delta;
-      this.startScrolling(container, delta);
-    }, 1);
-    this.scrollingCounter$.next(timeoutId as unknown as number);
-  }
-
-  endScrolling() {
-    clearTimeout(this.scrollingCounter$.value);
-    this.scrollingCounter$.next(-1);
+  enterPathwayDesignByClick(stoichiometry: NovostoicStoichiometry) {
+    const state = {
+      primaryPrecursor: this.response.primaryPrecursor,
+      targetMolecule: this.response.targetMolecule,
+      stoichiometry,
+    };
+    this.router.navigate([NovostoicTools.PATHWAY_SEARCH], { state });
   }
 
   applyFilters() {

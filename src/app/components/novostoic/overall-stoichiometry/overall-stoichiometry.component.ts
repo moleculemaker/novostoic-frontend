@@ -1,18 +1,16 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
+import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { OverallStoichiometryRequest } from "~/app/models/overall-stoichiometry";
 
 @Component({
   selector: "app-overall-stoichiometry",
   templateUrl: "./overall-stoichiometry.component.html",
   styleUrls: ["./overall-stoichiometry.component.scss"],
-  host: {
-    class: "grow",
-  },
 })
 export class OverallStoichiometryComponent {
-  overallStoichiometryRequest = new OverallStoichiometryRequest();
+  request = new OverallStoichiometryRequest();
 
   currentFormControl$ = new BehaviorSubject<
     "primaryPrecursor" | "targetMolecule"
@@ -26,6 +24,6 @@ export class OverallStoichiometryComponent {
   }
 
   onSubmit(form: OverallStoichiometryRequest) {
-    this.router.navigate(["/overall-stoichiometry/result"]);
+    this.router.navigate([NovostoicTools.OVERALL_STOICHIOMETRY, "result"]);
   }
 }

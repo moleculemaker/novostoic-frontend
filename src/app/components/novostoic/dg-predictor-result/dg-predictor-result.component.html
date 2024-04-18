@@ -1,0 +1,111 @@
+<div class="flex h-full flex-col">
+    <div class="flex justify-between">
+        <div>
+            <h2 class="mb-2">
+                Job ID: {{ jobId }} <i class="pi pi-copy"></i>
+            </h2>
+            <p class="leading-6">
+                <span class="pr-4"
+                    >Valid No. of Sequences: {{ response.length }}
+                    Sequences</span
+                >
+                <span>Submission Time: {{ submissionTime }}</span>
+            </p>
+        </div>
+        <div class="flex items-center">
+            <div class="flex items-center gap-2">
+                <button
+                    *ngIf="loading"
+                    class="rounded-md border p-2 py-3"
+                >
+                    Cancel
+                </button>
+
+                <p-button
+                    *ngIf="!loading"
+                    label="Export"
+                    type="submit"
+                    styleClass="bg-[#224063]"
+                    iconPos="left"
+                    icon="pi pi-download"
+                    (onClick)="resultsTable.exportCSV()"
+                >
+                </p-button>
+
+                <a href="/thermodynamical-feasibility" target="_blank">
+                    <button class="rounded-md border p-2 py-3">
+                        <i class="pi pi-plus mx-2"></i>
+                        Run a new Request
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div
+            class="border-y border-solid border-[--surface-d] bg-gray-50 px-4 py-2 text-lg font-semibold"
+        >
+            Results
+        </div>
+        <p-table
+            #resultsTable
+            [columns]="columnsForExport"
+            [value]="response"
+            [paginator]="true"
+            [rows]="10"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [rowsPerPageOptions]="[10, 25, 50]"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th><span class="px-4"></span>Reactions</th>
+                    <th pSortableColumn="gibbsEnergy">
+                        Gibbs Free Energy<p-sortIcon
+                            field="gibbsEnergy"
+                        ></p-sortIcon>
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+                <tr>
+                    <td>
+                        <span class="px-4"></span>{{ row.reaction }}
+                    </td>
+                    <td>{{ row.gibbsEnergy }}kJ/mol</td>
+                    <td>
+                        <div class="item-center flex gap-4">
+                            <button><i class="pi pi-eye"></i></button>
+                            <button>
+                                <p-chip styleClass="p-1 px-3"
+                                    >Enzyme selection
+                                    <i
+                                        class="pi pi-arrow-right ml-2"
+                                    ></i
+                                ></p-chip>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">Common Name</span>
+        <span class="text-end font-semibold"
+            >{{ molecule.commonNames[0] }}</span
+        >
+    </div>
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">KEGG ID</span>
+        <span class="text-end font-semibold">{{ molecule.keggId }}</span>
+    </div>
+    <div *ngIf="showSmiles" class="mt-2 flex justify-between">
+        <span class="font-light">SMILES</span>
+        <span class="text-end font-semibold">{{ molecule.smiles }}</span>
+    </div>
+</ng-template>

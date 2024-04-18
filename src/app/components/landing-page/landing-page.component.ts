@@ -1,15 +1,8 @@
 import { transition, style, animate, trigger } from "@angular/animations";
 import { Component } from "@angular/core";
-import { RouterModule, Routes, Router } from "@angular/router";
-import { BehaviorSubject, combineLatest, map, switchMap } from "rxjs";
-
-enum NovostoicTools {
-  OVERALL_STOICHIOMETRY,
-  PATHWAY_SEARCH,
-  THERMODYNAMICAL_FEASIBILITY,
-  ENZYME_ACTIVITY,
-  NA,
-}
+import {  Router } from "@angular/router";
+import { BehaviorSubject } from "rxjs";
+import { NovostoicTools } from "~/app/enums/novostoic-tools";
 
 const showTransition = transition(":enter", [
   style({ opacity: 0 }),

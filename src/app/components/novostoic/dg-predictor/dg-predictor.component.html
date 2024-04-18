@@ -1,0 +1,252 @@
+<form
+    class="flex h-full flex-col justify-between"
+    [formGroup]="request.form"
+    (ngSubmit)="onSubmit(request)"
+>
+    <div>
+        <h2 class="mb-2">Input Reactions</h2>
+        <p class="leading-6">
+            You will get Gibbs energy and to ensure thermodynamic
+            feasibility of reactions.
+        </p>
+
+        <!-- Reaction Input -->
+        <div
+            class="mb-4 flex flex-col rounded-md border border-solid border-[--surface-d]"
+        >
+            <div
+                class="flex w-full items-center justify-between rounded-t-md bg-gray-50 p-4"
+            >
+                <div class="flex items-center gap-2">
+                    <span class="font-semibold">Reactions</span>
+                    <p-radioButton
+                        label="SMILES"
+                        value="smiles"
+                        name="reactionInputType"
+                        formControlName="reactionInputType"
+                    ></p-radioButton>
+                    <p-radioButton
+                        label="Kegg ID"
+                        value="keggId"
+                        name="reactionInputType"
+                        formControlName="reactionInputType"
+                    ></p-radioButton>
+                </div>
+                <div class="flex gap-2">
+                    <button
+                        type="button"
+                        class="rounded-md border p-2"
+                        (click)="useExampleRequest()"
+                    >
+                        <i class="pi pi-box mx-2"></i>
+                        Example
+                    </button>
+                    <button
+                        type="button"
+                        class="rounded-md border p-2"
+                        (click)="request.clearAllReactions()"
+                    >
+                        Clear All
+                    </button>
+                </div>
+            </div>
+
+            <hr />
+
+            <ng-container formArrayName="reactions">
+                <div
+                    class="p-2"
+                    *ngFor="let subform of request.form.controls['reactions'].controls; let i = index"
+                    [formGroupName]="i"
+                >
+                    <div
+                        class="flex gap-2 pr-2"
+                        *ngIf="subform.controls['type'].value === 'smiles'"
+                    >
+                        <input
+                            pInputText
+                            class="w-full"
+                            placeholder="Enter Reaction SMILES"
+                            formControlName="reactionSmiles"
+                        />
+                        <button
+                            type="button"
+                            (click)="request.removeReaction(i)"
+                        >
+                            <i class="pi pi-times"></i>
+                        </button>
+                    </div>
+                    <div
+                        *ngIf="subform.controls['type'].value === 'keggId'"
+                        class="flex rounded-md border border-dotted bg-gray-50 p-4"
+                    >
+                        <div class="grow">
+                            <div class="mb-2 font-semibold">
+                                Assign a number to the new molecule that
+                                does not have a Kegg ID
+                            </div>
+                            <div class="p-inputgroup mb-4">
+                                <span class="p-inputgroup-addon">
+                                    N
+                                </span>
+                                <input
+                                    pInputText
+                                    placeholder="000001"
+                                    class="max-w-24"
+                                    formControlName="moleculeNumber"
+                                />
+                            </div>
+
+                            <div class="mb-2 font-semibold">
+                                Enter the new molecule’s SMILES or InChl
+                            </div>
+                            <input
+                                pInputText
+                                placeholder="SMILES or Inchi"
+                                class="mb-4 w-full"
+                                formControlName="moleculeInchiOrSmiles"
+                            />
+
+                            <div class="mb-2 font-semibold">
+                                Enter Reactions with Kegg ID and/or the
+                                unique number you assign to the new
+                                molecule
+                            </div>
+                            <input
+                                pInputText
+                                placeholder="Kegg ID"
+                                class="w-full"
+                                formControlName="reactionKeggId"
+                            />
+                        </div>
+                        <div>
+                            <button
+                                type="button"
+                                (click)="request.removeReaction(i)"
+                            >
+                                <i class="pi pi-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <div class="m-2">
+                <button
+                    type="button"
+                    class="rounded-md border bg-gray-50 p-2"
+                    (click)="request.addReaction()"
+                >
+                    <i class="pi pi-plus mx-2"></i>
+                    Add more reactions
+                </button>
+            </div>
+        </div>
+
+        <div
+            class="mb-4 flex flex-col rounded-md border border-solid border-[--surface-d]"
+        >
+            <div
+                class="flex w-full items-center justify-between rounded-t-md bg-gray-50 p-4"
+            >
+                <div class="flex items-center gap-2">
+                    <span class="font-semibold">Setting</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="p-2 px-4">
+                <div class="mb-4 flex w-1/4 flex-col">
+                    <div class="my-2 flex justify-between">
+                        <span>pH</span>
+                        <i class="pi pi-info-circle"></i>
+                    </div>
+                    <input
+                        pInputText
+                        styleClass="w-full"
+                        formControlName="ph"
+                        [ngModel]="request.form.controls['ph'].value"
+                    />
+                    <p-slider
+                        formControlName="ph"
+                        [ngModel]="request.form.controls['ph'].value"
+                        [min]="0"
+                        [max]="14"
+                    ></p-slider>
+                </div>
+                <div class="mb-4 flex w-1/4 flex-col">
+                    <div class="my-2 flex justify-between">
+                        <span>Ionic Strength</span>
+                        <i class="pi pi-info-circle"></i>
+                    </div>
+                    <input
+                        pInputText
+                        styleClass="w-full"
+                        formControlName="ionicStrength"
+                        [ngModel]="request.form.controls['ionicStrength'].value"
+                    />
+                    <p-slider
+                        formControlName="ionicStrength"
+                        [ngModel]="request.form.controls['ionicStrength'].value"
+                        [min]="0"
+                        [max]="0.5"
+                        [step]="0.01"
+                    ></p-slider>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscription Email Input -->
+    <div
+        class="flex justify-between rounded-t-md bg-[#F3F5FB] px-10 pt-8"
+    >
+        <div class="flex flex-col">
+            <div class="mb-2 flex items-end justify-center">
+                <span class="mb-1 pr-12">
+                    <h2 class="m-0 mr-2 inline">Email</h2>
+                    Leave an email to get an notification when your
+                    results are ready.
+                </span>
+            </div>
+            <div class="w-full">
+                <input
+                    id="subscriber-email"
+                    type="email"
+                    aria-describedby="subscriber-email-help"
+                    [class]="'h-12 w-full'
+                    + ((request.form.controls['subscriberEmail'].invalid
+                        && request.form.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
+                    pInputText
+                    placeholder="Enter email here"
+                    formControlName="subscriberEmail"
+                />
+                <small
+                    *ngIf="request.form.controls['subscriberEmail'].invalid
+                        && request.form.controls['subscriberEmail'].dirty"
+                    id="subscriber-email-help"
+                    class="p-error mt-2 block"
+                    >Email is invalid.</small
+                >
+            </div>
+            <div class="py-4">
+                <p-checkbox
+                    name="subscription"
+                    styleClass="subscription-checkbox"
+                    label="Agree to receive email notifications and updates about Novostoic."
+                    [binary]="true"
+                    [formControl]="request.form.controls['agreeToSubscription']"
+                ></p-checkbox>
+            </div>
+        </div>
+        <p-button
+            label="Calculate Gibbs Free energy"
+            type="submit"
+            styleClass="bg-[#224063]"
+            [disabled]="request.form.invalid"
+            iconPos="right"
+            icon="pi pi-arrow-right"
+        ></p-button>
+    </div>
+</form>

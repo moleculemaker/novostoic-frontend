@@ -29,6 +29,11 @@ export interface NovostoicMolecule {
   structure?: string; // svg or data url to display molecule structure
 }
 
+export interface NovostoicStoichiometry {
+  reactants: Array<{ molecule: NovostoicMolecule; amount: number }>;
+  products: Array<{ molecule: NovostoicMolecule; amount: number }>;
+}
+
 export class OverallStoichiometryResponse {
   /** The following are included in jobs service
    * status: "LOADING" | "FINISHED" | "CANCELLED";
@@ -45,10 +50,7 @@ export class OverallStoichiometryResponse {
 
   // return all results at once, having pagination will increase burden
   results: Array<{
-    stoichiometry: {
-      reactants: Array<{ molecule: NovostoicMolecule; amount: number }>;
-      products: Array<{ molecule: NovostoicMolecule; amount: number }>;
-    };
+    stoichiometry: NovostoicStoichiometry;
     yield: number;
     deltaG: number;
   }>;
