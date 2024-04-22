@@ -9,6 +9,9 @@ import { NovostoicService } from "~/app/services/novostoic.service";
   selector: "app-enz-rank",
   templateUrl: "./enz-rank.component.html",
   styleUrls: ["./enz-rank.component.scss"],
+  host: {
+    class: 'grow'
+  }
 })
 export class EnzRankComponent {
   request = new EnzymeSelectionRequest();

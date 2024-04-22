@@ -10,6 +10,9 @@ import { NovostoicService } from "~/app/services/novostoic.service";
   selector: "app-overall-stoichiometry",
   templateUrl: "./overall-stoichiometry.component.html",
   styleUrls: ["./overall-stoichiometry.component.scss"],
+  host: {
+    class: 'grow'
+  }
 })
 export class OverallStoichiometryComponent {
   form = new FormGroup({

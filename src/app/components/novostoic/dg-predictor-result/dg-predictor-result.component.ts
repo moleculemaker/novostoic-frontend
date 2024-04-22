@@ -9,6 +9,9 @@ import { NovostoicService } from "~/app/services/novostoic.service";
   selector: "app-dg-predictor-result",
   templateUrl: "./dg-predictor-result.component.html",
   styleUrls: ["./dg-predictor-result.component.scss"],
+  host: {
+    class: 'grow'
+  }
 })
 export class DgPredictorResultComponent {
   columnsForExport = [

@@ -9,6 +9,9 @@ import { NovostoicService } from "~/app/services/novostoic.service";
   selector: "app-enz-rank-result",
   templateUrl: "./enz-rank-result.component.html",
   styleUrls: ["./enz-rank-result.component.scss"],
+  host: {
+    class: 'grow'
+  }
 })
 export class EnzRankResultComponent {
   jobId: string = this.route.snapshot.paramMap.get("id") || "";
