@@ -33,7 +33,7 @@
     <span class="text-nowrap" *ngFor="let reactant of stoichiometry.reactants">
         <span class="mx-1">+</span>
         <span
-            class="p-1"
+            class="p-1 inline-block max-w-[130px] overflow-clip text-ellipsis"
             [class]="moleculeStyleClass"
             (mouseenter)="coreactantOverlay.show($event)"
             (mouseleave)="coreactantOverlay.hide()"
@@ -78,7 +78,9 @@
         (mouseenter)="coproductOverlay.show($event)"
         (mouseleave)="coproductOverlay.hide()"
     >
-        <span class="p-1" [class]="moleculeStyleClass"
+        <span 
+            class="p-1 inline-block max-w-[130px] overflow-clip text-ellipsis"
+            [class]="moleculeStyleClass"
             >{{ reactant.amount | number: '1.1-2' }} {{
             reactant.molecule.commonNames[0] }}
             <p-overlayPanel #coproductOverlay>
