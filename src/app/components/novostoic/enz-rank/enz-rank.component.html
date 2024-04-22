@@ -19,13 +19,16 @@
                     </div>
                     <span class="pr-1"
                         >Example:
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="request.form.controls['primaryPrecursor'].setValue('Pyruvate')"
                             >Pyruvate</span
                         >,
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="request.form.controls['primaryPrecursor'].setValue('C00022')"
                             >C00022</span
                         >,
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="request.form.controls['primaryPrecursor'].setValue('CC(=O)C(=O)O')"
                             >CC(=O)C(=O)O</span
                         ></span
                     >
