@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 
-import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse, ExportRequestBody, Job } from '../models';
+import { PostResponse, Job } from '../models';
 import {
   DefaultService,
   //Molecule,
