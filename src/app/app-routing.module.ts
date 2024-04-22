@@ -26,7 +26,7 @@ const routes: Routes = [
         component: OverallStoichiometryComponent 
       },
       {
-        path: NovostoicTools.OVERALL_STOICHIOMETRY + "/result",
+        path: NovostoicTools.OVERALL_STOICHIOMETRY + "/result/:id",
         component: OverallStoichiometryResultComponent,
       },
       { 
@@ -34,7 +34,7 @@ const routes: Routes = [
         component: EnzRankComponent 
       },
       { 
-        path: NovostoicTools.ENZYME_ACTIVITY + "/result", 
+        path: NovostoicTools.ENZYME_ACTIVITY + "/result/:id", 
         component: EnzRankResultComponent 
       },
       { 
@@ -42,7 +42,7 @@ const routes: Routes = [
         component: PathwaySearchComponent 
       },
       { 
-        path: NovostoicTools.PATHWAY_SEARCH + "/result", 
+        path: NovostoicTools.PATHWAY_SEARCH + "/result/:id", 
         component: PathwaySearchResultComponent 
       },
       { 
@@ -50,7 +50,7 @@ const routes: Routes = [
         component: DgPredictorComponent 
       },
       {
-        path: NovostoicTools.THERMODYNAMICAL_FEASIBILITY + "/result",
+        path: NovostoicTools.THERMODYNAMICAL_FEASIBILITY + "/result/:id",
         component: DgPredictorResultComponent,
       },
     ]

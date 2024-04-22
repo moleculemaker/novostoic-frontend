@@ -1,14 +1,17 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FilterService } from "primeng/api";
 import { Table } from "primeng/table";
-import { BehaviorSubject, map } from "rxjs";
+import { BehaviorSubject, Observable, Subscription, filter, map, of, shareReplay, skipUntil, switchMap, take, takeLast, takeUntil, takeWhile, tap, timer } from "rxjs";
+
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
+import { JobStatus, JobType, JobsService } from "~/app/api/mmli-backend/v1";
 import {
   NovostoicMolecule,
   NovostoicStoichiometry,
   OverallStoichiometryResponse,
 } from "~/app/models/overall-stoichiometry";
+import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
   selector: "app-overall-stoichiometry-result",
@@ -36,7 +39,30 @@ export class OverallStoichiometryResultComponent implements OnInit {
     },
   ];
 
-  response = OverallStoichiometryResponse.example;
+  jobId: string = this.route.snapshot.paramMap.get("id") || "";
+
+  statusResponse$ = timer(0, 10000).pipe(
+    switchMap(() => this.novostoicService.getResultStatus(
+      JobType.NovostoicOptstoic,
+      this.jobId,
+    )),
+    takeWhile((data) => 
+      data.phase === JobStatus.Processing 
+      || data.phase === JobStatus.Queued
+    , true),
+    tap((data) => { console.log('job status: ', data) }),
+  );
+
+  isLoading$ = this.statusResponse$.pipe(
+    map((job) => job.phase === JobStatus.Processing || job.phase === JobStatus.Queued),
+  );
+
+  response$ = this.statusResponse$.pipe(
+    skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
+    switchMap(() => this.novostoicService.getResult(JobType.NovostoicOptstoic, this.jobId)),
+    tap((data) => { console.log('result: ', data) }),
+    switchMap((data) => of(OverallStoichiometryResponse.example)), //TODO: replace with actual response
+  );
 
   showResultsFilter$ = new BehaviorSubject(false);
   selectedMoleculeRepresentation$ = new BehaviorSubject(
@@ -44,29 +70,24 @@ export class OverallStoichiometryResultComponent implements OnInit {
   );
 
   filters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
-  filterOptions = this.response.results
-    .map((result) => [
-      ...result.stoichiometry.reactants.map((reactant) => reactant.molecule),
-      ...result.stoichiometry.products.map((product) => product.molecule),
-    ])
-    .flat();
+  filterOptions$ = this.response$.pipe(map(({ results }) => results.map((result) => [
+    ...result.stoichiometry.reactants.map((reactant) => reactant.molecule),
+    ...result.stoichiometry.products.map((product) => product.molecule),
+  ]).flat()))
   filterValueStr$ = this.filters$.pipe(
     map((filters) => filters.map((filter) => filter.commonNames[0]).join(",")),
   );
 
-  // example job info
-  jobId = "exampleJobId";
-  submissionTime = "example submission time";
-  loading = false;
+  subscriptions: Subscription[] = [];
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private filterService: FilterService,
-    private router: Router) {}
+    private novostoicService: NovostoicService,
+  ) {}
 
   ngOnInit(): void {
-    // setTimeout(() => {
-    //   this.loading = false;
-    // }, 3000);
     this.filterService.register(
       "containsMolecule",
       (
@@ -89,13 +110,21 @@ export class OverallStoichiometryResultComponent implements OnInit {
     );
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
   enterPathwayDesignByClick(stoichiometry: NovostoicStoichiometry) {
-    const state = {
-      primaryPrecursor: this.response.primaryPrecursor,
-      targetMolecule: this.response.targetMolecule,
-      stoichiometry,
-    };
-    this.router.navigate([NovostoicTools.PATHWAY_SEARCH], { state });
+    this.subscriptions.push(
+      this.response$.pipe(take(1)).subscribe((response) => {
+        const state = {
+          primaryPrecursor: response.primaryPrecursor,
+          targetMolecule: response.targetMolecule,
+          stoichiometry,
+        };
+        this.router.navigate([NovostoicTools.PATHWAY_SEARCH], { state });
+      })
+    );
   }
 
   applyFilters() {
