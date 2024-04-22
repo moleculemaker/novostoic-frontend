@@ -10,8 +10,8 @@ import { NovostoicService } from "~/app/services/novostoic.service";
   templateUrl: "./pathway-search-result.component.html",
   styleUrls: ["./pathway-search-result.component.scss"],
   host: {
-    class: "grow",
-  },
+    class: 'grow px-4 xl:w-content-xl xl:mr-64 xl:pr-6'
+  }
 })
 export class PathwaySearchResultComponent implements OnInit {
   loading = false;

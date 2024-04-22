@@ -11,7 +11,7 @@ import { NovostoicService } from "~/app/services/novostoic.service";
   templateUrl: "./pathway-search.component.html",
   styleUrls: ["./pathway-search.component.scss"],
   host: {
-    class: 'grow'
+    class: 'grow px-4 xl:w-content-xl xl:mr-64 xl:pr-6'
   }
 })
 export class PathwaySearchComponent implements OnInit {

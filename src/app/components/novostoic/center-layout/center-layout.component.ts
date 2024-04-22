@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './center-layout.component.html',
   styleUrls: ['./center-layout.component.scss'],
   host: {
-    class: 'flex h-full justify-center w-full grow'
+    class: 'grow flex flex-col justify-center'
   }
 })
 export class CenterLayoutComponent {
