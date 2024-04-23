@@ -112,7 +112,7 @@
     </span>
 
     <!-- Target Molecule -->
-    <span>
+    <span *ngIf="showTargetMolecule">
         <span
             class="blue-dot mt-1"
             (mouseenter)="targetMoleculeOverlay.show($event)"

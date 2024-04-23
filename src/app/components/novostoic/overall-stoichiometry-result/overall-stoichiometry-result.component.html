@@ -166,12 +166,42 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-product>
                             <tr>
-                                <td class="relative max-w-[440px]">
-                                    <app-stoichiometry-reaction-with-scroller
-                                        [primaryPrecursor]="response.primaryPrecursor"
-                                        [targetMolecule]="response.targetMolecule"
-                                        [stoichiometry]="product.stoichiometry"
-                                    ></app-stoichiometry-reaction-with-scroller>
+                                <td class="relative">
+                                    <span class="inline-block max-w-[710px]">
+                                        <app-stoichiometry-reaction-with-scroller
+                                            [primaryPrecursor]="response.primaryPrecursor"
+                                            [targetMolecule]="response.targetMolecule"
+                                            [stoichiometry]="product.stoichiometry"
+                                            [showTargetMolecule]="false"
+                                        ></app-stoichiometry-reaction-with-scroller>
+                                    </span>
+                                    <!-- <span class="blue-dot ml-1 mb-0.5"></span> -->
+                                    <span
+                                        class="blue-dot mt-1"
+                                        (mouseenter)="targetMoleculeOverlay.show($event)"
+                                        (mouseleave)="targetMoleculeOverlay.hide()"
+                                    >
+                                        <p-overlayPanel #targetMoleculeOverlay>
+                                            <div class="w-[300px] p-4">
+                                                <div
+                                                    class="border-blue-primary mb-2 flex justify-center rounded-md border border-solid p-2"
+                                                >
+                                                    <img
+                                                        class="h-[180px] w-auto"
+                                                        [src]="response.targetMolecule.structure"
+                                                    />
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <ng-container
+                                                        *ngTemplateOutlet="moleculeInfo; context: {
+                                                            $implicit: response.targetMolecule,
+                                                            showSmiles: true
+                                                        }"
+                                                    ></ng-container>
+                                                </div>
+                                            </div>
+                                        </p-overlayPanel>
+                                    </span>
                                 </td>
                                 <td>
                                     <span class="text-xl font-bold"
@@ -268,3 +298,20 @@
         </div>
     </ng-template>
 </p-dialog>
+
+<ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">Common Name</span>
+        <span class="text-end font-semibold"
+            >{{ molecule.commonNames[0] }}</span
+        >
+    </div>
+    <div class="mt-2 flex justify-between">
+        <span class="font-light">KEGG ID</span>
+        <span class="text-end font-semibold">{{ molecule.keggId }}</span>
+    </div>
+    <div *ngIf="showSmiles" class="mt-2 flex justify-between">
+        <span class="font-light">SMILES</span>
+        <span class="text-end font-semibold">{{ molecule.smiles }}</span>
+    </div>
+</ng-template>
