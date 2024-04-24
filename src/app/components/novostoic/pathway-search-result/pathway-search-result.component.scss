@@ -5,8 +5,12 @@ $indicator_color: var(--surface-500);
     background: repeating-linear-gradient(white, white 3.9px, black 4px, black 7.9px);;
 }
 
-.strip_pattern_to_right {
-    background: repeating-linear-gradient(to right, white, white 3px, $predicted_color 3.1px, $predicted_color 6.1px);;
+.strip_pattern_to_right_thermo_infeasible {
+    background: repeating-linear-gradient(to right, white, white 3px, $predicted_color 3.1px, $predicted_color 6.1px);
+}
+
+.strip_pattern_to_right_thermo_feasible {
+    background: repeating-linear-gradient(to right, white, white 3px, $indicator_color 3.1px, $indicator_color 6.1px);
 }
 
 .strip_pattern_border {
@@ -97,11 +101,11 @@ $indicator_color: var(--surface-500);
     }
 }
 
-.predicted::before {
+.thermo_infeasible::before {
     border-left-color: $predicted_color !important;
 }
 
-.next_predicted::after {
+.next_thermo_infeasible::after {
     background: $predicted_color !important;
 }
 

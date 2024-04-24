@@ -124,11 +124,14 @@
                                                         ></th>
                                                     </ng-container>
                                                 </tr>
+
                                                 <!-- Data in Table -->
                                                 <ng-container
-                                                    *ngFor="let pathway of response.pathways; let i = index"
+                                                    *ngFor="let pathway of (filteredPathways$ | async); let i = index"
                                                 >
-                                                    <tr class="h-[120px]">
+                                                    <tr class="h-[120px]"
+                                                        [class.opacity-30]="!pathway.match"
+                                                    >
                                                         <td
                                                             class="sticky left-0 z-10 bg-[--surface-b]"
                                                         >
@@ -139,7 +142,7 @@
                                                             >
                                                         </td>
                                                         <ng-container
-                                                            *ngFor="let reaction of pathway; let j = index"
+                                                            *ngFor="let reaction of pathway.reactions; let j = index"
                                                         >
                                                             <ng-container
                                                                 *ngTemplateOutlet="tableCellReaction; context: {
@@ -147,17 +150,17 @@
                                                                     label: 'R' + (i + 1) + '.' + (j + 1),
                                                                     pathwayIndex: i,
                                                                     inFirstColumn: j === 0,
-                                                                    inLastColumn: j === pathway.length - 1
+                                                                    inLastColumn: j === pathway.reactions.length - 1
                                                                 } "
                                                             ></ng-container>
                                                             <ng-container
-                                                                *ngIf="j !== pathway.length - 1"
+                                                                *ngIf="j !== pathway.reactions.length - 1"
                                                             >
                                                                 <ng-container
                                                                     *ngTemplateOutlet="tableCellImg; context: { 
                                                                         $implicit: 'https://fakeimg.pl/640x360',
-                                                                        predicted: reaction.isPrediction,
-                                                                        nextPredicted: j === pathway.length - 1 ? false : pathway[j + 1].isPrediction
+                                                                        thermoInfeasible: reaction.deltaG > 20,
+                                                                        nextThermoInfeasible: j === pathway.reactions.length - 1 ? false : pathway.reactions[j + 1].deltaG > 20,
                                                                     }"
                                                                 ></ng-container>
                                                             </ng-container>
@@ -170,8 +173,10 @@
                                                             >
                                                                 <div
                                                                     class="h-[.1rem] w-full relative z-10"
-                                                                    [class.bg-[--surface-500]]="!pathway[pathway.length - 1].isPrediction"
-                                                                    [class.strip_pattern_to_right]="pathway[pathway.length - 1].isPrediction"
+                                                                    [class.bg-[--surface-500]]="!pathway.reactions[pathway.reactions.length - 1].isThermodynamicalInfeasible && !pathway.reactions[pathway.reactions.length - 1].isPrediction"
+                                                                    [class.bg-[#C79807]]="pathway.reactions[pathway.reactions.length - 1].isThermodynamicalInfeasible && !pathway.reactions[pathway.reactions.length - 1].isPrediction"
+                                                                    [class.strip_pattern_to_right_thermo_infeasible]="pathway.reactions[pathway.reactions.length - 1].isPrediction && pathway.reactions[pathway.reactions.length - 1].isThermodynamicalInfeasible"
+                                                                    [class.strip_pattern_to_right_thermo_feasible]="pathway.reactions[pathway.reactions.length - 1].isPrediction && !pathway.reactions[pathway.reactions.length - 1].isThermodynamicalInfeasible"
                                                                 ></div>
                                                                 <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
                                                             </td>
@@ -236,26 +241,31 @@
         <div
             class="absolute left-0 right-0 top-0 flex h-full items-center"
             [class.with-start-point]="inFirstColumn"
+            [class.next_thermo_infeasible]="reaction.isThermodynamicalInfeasible"
             [class.left-2]="inFirstColumn"
             [class.left-0]="!inFirstColumn"
         >
             <span
                 class="z-0 h-[.1rem] w-full"
-                [class.strip_pattern_to_right]="reaction.isPrediction"
-                [class.bg-[--surface-500]]="!reaction.isPrediction"
+                [class.strip_pattern_to_right_thermo_feasible]="reaction.isPrediction && !reaction.isThermodynamicalInfeasible"
+                [class.strip_pattern_to_right_thermo_infeasible]="reaction.isPrediction && reaction.isThermodynamicalInfeasible"
+                [class.bg-[--surface-500]]="!reaction.isPrediction && !reaction.isThermodynamicalInfeasible"
+                [class.bg-[#C79807]]="!reaction.isPrediction && reaction.isThermodynamicalInfeasible"
             ></span>
         </div>
         <button
             class="z-1 relative cursor-pointer rounded-full border bg-white p-1 px-2"
             [class.border-solid]="!reaction.isPrediction"
-            [class.border-[--surface-500]]="!reaction.isPrediction"
-            [class.bg-[#FEFBF3]]="reaction.isPrediction"
             [class.border-dashed]="reaction.isPrediction"
-            [class.border-[#C79807]]="reaction.isPrediction"
+
+            [class.border-[--surface-500]]="!reaction.isThermodynamicalInfeasible"
+            [class.border-[#C79807]]="reaction.isThermodynamicalInfeasible"
+            [class.bg-[#FEFBF3]]="reaction.isThermodynamicalInfeasible"
+
             (click)="reactionDetail.toggle($event)"
         >
-            <span class="absolute -top-4 left-0 text-xs text-[--surface-500] flex items-center" [class.text-[#C79807]]="reaction.isPrediction">{{ label }} <i *ngIf="reaction.isPrediction" class="pi pi-exclamation-triangle text-xs mx-1"></i></span>
-            <span class="font-semibold text-black">-{{ reaction.deltaG }}</span>
+            <span class="absolute -top-4 left-0 text-xs text-[--surface-500] flex items-center" [class.text-[#C79807]]="reaction.isThermodynamicalInfeasible">{{ label }} <i *ngIf="reaction.isThermodynamicalInfeasible" class="pi pi-exclamation-triangle text-xs mx-1"></i></span>
+            <span class="font-semibold text-black">{{ (reaction.deltaG > 0 ? '+' : '') + reaction.deltaG }}</span>
             <span class="font-light text-xs ml-1 text-[#212121]/50">kJ/mol</span>
         </button>
         <p-overlayPanel #reactionDetail>
@@ -322,13 +332,13 @@
     </td>
 </ng-template>
 
-<ng-template #tableCellImg let-src let-nextPredicted="nextPredicted" let-predicted="predicted">
+<ng-template #tableCellImg let-src let-nextThermoInfeasible="nextThermoInfeasible" let-thermoInfeasible="thermoInfeasible">
     <td class="w-[180px] align-middle relative">
         <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
         <div
             class="table_cell_img relative flex items-center justify-center rounded-md border border-solid border-[--surface-500] bg-white py-1"
-            [class.next_predicted]="nextPredicted"
-            [class.predicted]="predicted"
+            [class.next_thermo_infeasible]="nextThermoInfeasible"
+            [class.thermo_infeasible]="thermoInfeasible"
         >
             <img [src]="src" class="w-[160px]" />
         </div>
@@ -358,8 +368,8 @@
                 <ng-container *ngIf="response.pathways[selectedPathway$.value] as pathway">
                     <div>Pathway {{ selectedPathway$.value + 1 }}:</div>
                     <div>
-                        <span class="font-semibold">{{ pathway[0].primaryPrecursor!.commonNames[0] }}</span>
-                        <span *ngFor="let reaction of pathway">
+                        <span class="font-semibold">{{ pathway.reactions[0].primaryPrecursor!.commonNames[0] }}</span>
+                        <span *ngFor="let reaction of pathway.reactions">
                             <i class="pi pi-arrow-right mx-2"></i>
                             <span class="font-semibold">{{ reaction.targetMolecule!.commonNames[0] }}</span>
                         </span>
@@ -374,7 +384,7 @@
             <div class="flex justify-between m-4">
                 <div class="flex gap-4">
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
-                        <div class="text-lg font-semibold mb-2">{{ pathway.length }}</div>
+                        <div class="text-lg font-semibold mb-2">{{ pathway.reactions.length }}</div>
                         <div>Total Steps</div>
                     </div>
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
@@ -384,7 +394,7 @@
                         <div>Predicted Steps</div>
                     </div>
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
-                        <div class="text-lg font-semibold mb-2">{{ pathway.length - 1 }}</div>
+                        <div class="text-lg font-semibold mb-2">{{ pathway.reactions.length - 1 }}</div>
                         <div>Intermediates</div>
                     </div>
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
@@ -413,7 +423,7 @@
                 </div>
             </div>
             <div class="pt-12">
-                <div class="flex flex-col justify-center mx-4" *ngFor="let reaction of pathway; let i = index">
+                <div class="flex flex-col justify-center mx-4" *ngFor="let reaction of pathway.reactions; let i = index">
                     <div class="w-full rounded-md border-black border border-solid flex"
                         [class.border-dashed]="reaction.isPrediction"
                     >
@@ -465,14 +475,14 @@
                             </ng-container>
                             
                             <div class="flex items-center border border-solid rounded-md h-full p-2"
-                                [class.border-[#ff4d00]]="i !== pathway.length - 1"
-                                [class.border-blue-primary]="i === pathway.length - 1"
+                                [class.border-[#ff4d00]]="i !== pathway.reactions.length - 1"
+                                [class.border-blue-primary]="i === pathway.reactions.length - 1"
                             >
                                 <img [src]="reaction.targetMolecule!.structure" class="h-[120px]" />
                             </div>
                         </div>
                     </div>
-                    <div class="flex justify-center" *ngIf="i !== pathway.length - 1">
+                    <div class="flex justify-center" *ngIf="i !== pathway.reactions.length - 1">
                         <i class="pi pi-arrow-down text-xl"></i>
                     </div>
                 </div>

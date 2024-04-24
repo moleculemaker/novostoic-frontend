@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { BehaviorSubject, combineLatest, filter, first, last, map, of, skipUntil, switchMap, take, takeWhile, tap, throttleTime, timer } from "rxjs";
+import { BehaviorSubject, combineLatest, filter, first, last, map, of, shareReplay, skipUntil, switchMap, take, takeWhile, tap, throttleTime, timer } from "rxjs";
 import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
 import { NovostoicMolecule } from "~/app/models/overall-stoichiometry";
 import { NovostoicReaction, PathwaySearchResponse } from "~/app/models/pathway-search";
@@ -41,6 +41,17 @@ export class PathwaySearchResultComponent implements OnInit {
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicNovostoic, this.jobId)),
     tap((data) => { console.log('result: ', data) }),
     switchMap((data) => of(PathwaySearchResponse.example)), //TODO: replace with actual response
+    map((response) => ({
+      ...response,
+      pathways: response.pathways.map((pathway) => ({
+        id: Math.random().toString(36).substring(7),
+        reactions: pathway.map((reaction) => ({
+          ...reaction,
+          isThermodynamicalInfeasible: reaction.deltaG > 20,
+        }))
+      })),
+    })),
+    shareReplay(1),
     tap((data) => console.log('response', data))
   );
 
@@ -48,7 +59,7 @@ export class PathwaySearchResultComponent implements OnInit {
   selectedPathway$ = new BehaviorSubject(0);
 
   pathwayDeltaGs$ = this.response$.pipe(
-    map((response) => response.pathways.map((pathway) => pathway.reduce((p, v) => p + v.deltaG, 0))),
+    map((response) => response.pathways.map((pathway) => pathway.reactions.reduce((p, v) => p + v.deltaG, 0))),
   );
 
   /* -------------------------------------------------------------------------- */
@@ -60,8 +71,8 @@ export class PathwaySearchResultComponent implements OnInit {
     map((response) => {
       const intermediates = new Set<string>();
       const returnVal: NovostoicMolecule[] = [];
-      response.pathways.forEach((pathway: NovostoicReaction[]) => {
-        pathway.slice(0, pathway.length - 1).forEach((reaction: NovostoicReaction) => {
+      response.pathways.forEach((pathway) => {
+        pathway.reactions.slice(0, pathway.reactions.length - 1).forEach((reaction: NovostoicReaction) => {
           if (reaction.targetMolecule && !intermediates.has(reaction.targetMolecule.commonNames[0])) {
             intermediates.add(reaction.targetMolecule.commonNames[0]);
             returnVal.push(reaction.targetMolecule);
@@ -80,8 +91,8 @@ export class PathwaySearchResultComponent implements OnInit {
     map((response) => {
       const cofactors = new Set<string>();
       const returnVal: NovostoicMolecule[] = [];
-      response.pathways.forEach((pathway: NovostoicReaction[]) => {
-        pathway.forEach((reaction: NovostoicReaction) => {
+      response.pathways.forEach((pathway) => {
+        pathway.reactions.forEach((reaction: NovostoicReaction) => {
           reaction.reactants.forEach((reactant) => {
             if (!cofactors.has(reactant.commonNames[0])) {
               cofactors.add(reactant.commonNames[0]);
@@ -119,16 +130,72 @@ export class PathwaySearchResultComponent implements OnInit {
     map(([min, max]) => [min, max]),
   );
 
+  filteredPathways$ = combineLatest([
+    this.response$,
+    this.intermediatesFilters$,
+    this.coFactorsFilters$,
+    this.selectedThermoFeasibleMode$,
+    this.feasibleRange$,
+  ]).pipe(
+    map(([response, intermediates, cofactors, mode, range]) => {
+      const intermediatesSet = new Set(intermediates.map((intermediate) => intermediate.commonNames[0]));
+      const cofactorsSet = new Set(cofactors.map((cofactor) => cofactor.commonNames[0]));
+      return response.pathways.map((pathway) => {
+        let intermediatesMatch = true;
+        let cofactorsMatch = true;
+        let thermodynamicalMatch = true;
+        let thermodynamicalRangeMatch = true;
+        pathway.reactions.forEach((reaction) => {
+          if (intermediatesSet.size && intermediatesMatch && reaction.targetMolecule) {
+            intermediatesMatch = intermediatesSet.has(reaction.targetMolecule.commonNames[0]);
+          }
+          if (cofactorsSet.size && cofactorsMatch) {
+            reaction.reactants.forEach((reactant) => {
+              if (cofactorsMatch && cofactorsSet.has(reactant.commonNames[0])) {
+                cofactorsMatch = true;
+              }
+            });
+            reaction.products.forEach((product) => {
+              if (cofactorsMatch && cofactorsSet.has(product.commonNames[0])) {
+                cofactorsMatch = true;
+              }
+            });
+          }
+          if (mode && thermodynamicalMatch) {
+            thermodynamicalMatch = mode === 'any' 
+              ? thermodynamicalMatch && !reaction.isThermodynamicalInfeasible
+              : thermodynamicalMatch && reaction.isThermodynamicalInfeasible;
+          }
+          if (thermodynamicalRangeMatch) {
+            thermodynamicalRangeMatch = reaction.deltaG >= range[0] && reaction.deltaG <= range[1];
+          }
+        });
+        return {
+          ...pathway,
+          match: intermediatesMatch && cofactorsMatch && thermodynamicalMatch && thermodynamicalRangeMatch,
+        }
+      }).sort((a, b) => {
+        if (a.match && !b.match) {
+          return -1;
+        }
+        if (!a.match && b.match) {
+          return 1;
+        }
+        return 0;
+      });
+    }),
+  );
+
   /* -------------------------------------------------------------------------- */
 
   pathwayPredictedReactions$ = this.response$.pipe(
-    map((response) => response.pathways.map((pathway) => pathway.filter((reaction) => reaction.isPrediction))),
+    map((response) => response.pathways.map((pathway) => pathway.reactions.filter((reaction) => reaction.isPrediction))),
   );
 
-  maxPathwayStepsTemplateArray$ = this.response$.pipe(
-    map((response) => {
-      const maxPathwaySteps = response.pathways.reduce(
-        (p, v) => Math.max(p, v.length),
+  maxPathwayStepsTemplateArray$ = this.filteredPathways$.pipe(
+    map((pathways) => {
+      const maxPathwaySteps = pathways.reduce(
+        (p, v) => Math.max(p, v.reactions.length),
         0,
       );
       const array = [];
@@ -149,13 +216,13 @@ export class PathwaySearchResultComponent implements OnInit {
 
   emptyPathwayStepsArrays$ = combineLatest([
     this.maxPathwayStepsTemplateArray$.pipe(map((x) => x.length)),
-    this.response$,
+    this.filteredPathways$,
   ]).pipe(
-    map(([maxArrayLength, response]) => {
+    map(([maxArrayLength, pathways]) => {
       let returnVal: Array<Array<number>> = [];
       let maxLength = Math.max(maxArrayLength, 4);
-      response.pathways.forEach((pathway) => {
-        const numSlotsNeeded = maxLength - pathway.length;
+      pathways.forEach((pathway) => {
+        const numSlotsNeeded = maxLength - pathway.reactions.length;
         const slots = new Array(numSlotsNeeded * 2).fill(0);
         returnVal.push(slots);
       });
@@ -165,16 +232,16 @@ export class PathwaySearchResultComponent implements OnInit {
 
   tableStyle$ = combineLatest([
     this.maxPathwayStepsTemplateArray$.pipe(map((x) => x.length)),
-    this.response$,
+    this.filteredPathways$,
   ]).pipe(
-    tap(([maxArrayLength, response]) => {
-      if (maxArrayLength && response.pathways.length) {
+    tap(([maxArrayLength, pathways]) => {
+      if (maxArrayLength && pathways.length) {
         this.showRightBoundaryLine$.next(true);
       }
     }),
-    map(([maxArrayLength, response]) => {
+    map(([maxArrayLength, pathways]) => {
       return {
-        height: `${response.pathways.length * 120}px`,
+        height: `${pathways.length * 120}px`,
         width: `${Math.max(maxArrayLength, 4) * 190 - 79.5}px`,
         background:
           "repeat center/1.5rem url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23efefef' opacity='0.5' d='m13.06 12l4.42-4.42a.75.75 0 1 0-1.06-1.06L12 10.94L7.58 6.52a.75.75 0 0 0-1.06 1.06L10.94 12l-4.42 4.42a.75.75 0 0 0 0 1.06a.75.75 0 0 0 1.06 0L12 13.06l4.42 4.42a.75.75 0 0 0 1.06 0a.75.75 0 0 0 0-1.06Z'/%3E%3C/svg%3E\")",
