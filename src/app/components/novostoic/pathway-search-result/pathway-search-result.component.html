@@ -78,12 +78,11 @@
                     <div
                         class="relative grow border border-solid border-[--surface-d]"
                     >
-                        <div class="absolute h-full w-full overflow-scroll">
+                        <div class="absolute h-full w-full overflow-scroll no-scrollbar">
                             <div
                                 class="relative left-0 top-0 min-h-full min-w-full"
                                 [style]="(tableStyle$ | async) || {}"
                             >
-                                <button class="absolute bottom-4 left-4 px-2 py-1 border-solid bg-white border border-black" (click)="legendOverlay.toggle($event)">Legend</button>
                                 <ng-container *ngIf="(maxPathwayStepsTemplateArray$ | async) as stepsArray">
                                     <ng-container *ngIf="(emptyPathwayHeadersArray$ | async) as emptyHeaderArray">
                                         <ng-container *ngIf="(emptyPathwayStepsArrays$ | async) as emptyStepsArray">
@@ -188,6 +187,11 @@
                                         </ng-container>
                                     </ng-container>
                                 </ng-container>
+
+                                <div class="absolute w-full bottom-0 p-4">
+                                    <button class="sticky left-4 px-2 py-1 border-solid bg-white border border-black" 
+                                    (click)="legendOverlay.toggle($event)">Legend</button>
+                                </div>
                             </div>
                         </div>
                     </div>
