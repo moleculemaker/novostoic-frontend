@@ -43,6 +43,7 @@
                             [primaryPrecursor]="response.primaryPrecursor"
                             [targetMolecule]="response.targetMolecule"
                             [stoichiometry]="response.stoichiometry"
+                            [moleculeStyleClass]="'bg-[#f5f5f5]'"
                             maxWidth="600px"
                         ></app-stoichiometry-reaction-with-scroller>
                     </div>
@@ -82,16 +83,6 @@
                                 class="relative left-0 top-0 min-h-full min-w-full"
                                 [style]="(tableStyle$ | async) || {}"
                             >
-                                <div
-                                    class="sticky top-10 z-0 h-[46px] w-[29.5px] border-r border-t border-solid border-black"
-                                ></div>
-                                <div
-                                    class="absolute right-0 top-0 z-0 h-full"
-                                >
-                                    <div
-                                        class="strip_pattern_border sticky top-10 h-[46px] w-[30.5px] border-l border-t border-solid border-black"
-                                    ></div>
-                                </div>
                                 <ng-container *ngIf="(maxPathwayStepsTemplateArray$ | async) as stepsArray">
                                     <ng-container *ngIf="(emptyPathwayHeadersArray$ | async) as emptyHeaderArray">
                                         <ng-container *ngIf="(emptyPathwayStepsArrays$ | async) as emptyStepsArray">
@@ -100,7 +91,7 @@
                                             >
                                                 <tr>
                                                     <th
-                                                        class="bg-bluegray-100 sticky left-0 top-0 z-20 w-[20px]"
+                                                        class="bg-[--surface-b] sticky left-0 top-0 z-20 w-[20px] font-semibold text-[--text-color-secondary]"
                                                     >
                                                         P\S
                                                     </th>
@@ -108,15 +99,13 @@
                                                         *ngFor="let step of stepsArray; let i = index"
                                                     >
                                                         <th
-                                                            class="sticky top-0 z-10 w-[60px] bg-[#eaeaea] p-1"
+                                                            class="sticky top-0 z-10 w-[60px] bg-[--surface-b] p-1 text-[--text-color-secondary]"
                                                         >
-                                                            Step {{ step }}
+                                                            STEP {{ step }}
                                                         </th>
                                                         <th
+                                                            *ngIf="i !== stepsArray.length - 1"
                                                             class="sticky top-0 z-10 bg-gray-50"
-                                                            [class.w-[30.5px]]="
-                                                                    !emptyHeaderArray.length
-                                                                    && i === stepsArray!.length - 1"
                                                             [class.w-[130px]]="
                                                                     emptyHeaderArray.length
                                                                     || i !== stepsArray!.length - 1"
@@ -129,8 +118,8 @@
                                                             class="sticky top-0 z-10 w-[60px] bg-gray-50 p-1"
                                                         ></th>
                                                         <th
+                                                            *ngIf="i !== stepsArray.length - 1"
                                                             class="sticky top-0 z-10 bg-gray-50"
-                                                            [class.w-[30.5px]]="i === emptyHeaderArray.length - 1"
                                                             [class.w-[130px]]="i !== emptyHeaderArray.length - 1"
                                                         ></th>
                                                     </ng-container>
@@ -141,11 +130,11 @@
                                                 >
                                                     <tr class="h-[120px]">
                                                         <td
-                                                            class="sticky left-0 z-10 bg-gray-50"
+                                                            class="sticky left-0 z-10 bg-[--surface-b]"
                                                         >
                                                             <span
-                                                                class="absolute -left-7 top-[3.4rem] -rotate-90 text-nowrap bg-[--bluegray-500] p-1 text-white"
-                                                                >Pathway {{ i +
+                                                                class="absolute -left-8 top-[3.4rem] -rotate-90 text-nowrap bg-[--surface-b] p-1 text-[--surface-600]"
+                                                                >PATHWAY {{ i +
                                                                 1}}</span
                                                             >
                                                         </td>
@@ -157,12 +146,6 @@
                                                                     $implicit: reaction,
                                                                     label: 'R' + (i + 1) + '.' + (j + 1),
                                                                     pathwayIndex: i,
-                                                                    showBottomHalf: (j === 0 || (j === pathway.length - 1
-                                                                            && !emptyStepsArray[i].length)
-                                                                        ) && i !== response.pathways.length - 1,
-                                                                    showTopHalf: (j === 0 || (j === pathway.length - 1
-                                                                            && !emptyStepsArray[i].length)
-                                                                        ) && i !== 0,
                                                                     inFirstColumn: j === 0,
                                                                     inLastColumn: j === pathway.length - 1
                                                                 } "
@@ -171,7 +154,11 @@
                                                                 *ngIf="j !== pathway.length - 1"
                                                             >
                                                                 <ng-container
-                                                                    *ngTemplateOutlet="tableCellImg; context: { $implicit: 'https://fakeimg.pl/640x360' } "
+                                                                    *ngTemplateOutlet="tableCellImg; context: { 
+                                                                        $implicit: 'https://fakeimg.pl/640x360',
+                                                                        predicted: reaction.isPrediction,
+                                                                        nextPredicted: j === pathway.length - 1 ? false : pathway[j + 1].isPrediction
+                                                                    }"
                                                                 ></ng-container>
                                                             </ng-container>
                                                         </ng-container>
@@ -181,38 +168,12 @@
                                                             <td
                                                                 class="relative align-middle"
                                                             >
-                                                                <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
                                                                 <div
-                                                                    class="h-[1px] w-full"
-                                                                    [class.bg-black]="!pathway[pathway.length - 1].isPrediction"
+                                                                    class="h-[.1rem] w-full relative z-10"
+                                                                    [class.bg-[--surface-500]]="!pathway[pathway.length - 1].isPrediction"
                                                                     [class.strip_pattern_to_right]="pathway[pathway.length - 1].isPrediction"
                                                                 ></div>
-
-                                                                <!-- bottom half vertical line -->
-                                                                <div
-                                                                    class="absolute right-0 top-1/2 h-1/2 w-[1px]"
-                                                                    [class.bg-black]="
-                                                                        i === response.pathways.length - 1
-                                                                        ? false
-                                                                        : !response.pathways[i + 1][response.pathways[i + 1].length - 1].isPrediction"
-                                                                    [class.strip_pattern]="
-                                                                        i === response.pathways.length - 1
-                                                                        ? false
-                                                                        : response.pathways[i + 1][response.pathways[i + 1].length - 1].isPrediction"
-                                                                    [class.hidden]="
-                                                                        j !== emptyStepsArray[i].length - 1
-                                                                        || i === response.pathways.length - 1"
-                                                                ></div>
-
-                                                                <!-- top half vertical line -->
-                                                                <div
-                                                                    class="absolute bottom-1/2 right-0 h-1/2 w-[1px]"
-                                                                    [class.bg-black]="!pathway[pathway.length - 1].isPrediction"
-                                                                    [class.strip_pattern]="pathway[pathway.length - 1].isPrediction"
-                                                                    [class.hidden]="
-                                                                        j !== emptyStepsArray[i].length - 1
-                                                                        || i === 0"
-                                                                ></div>
+                                                                <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
                                                             </td>
                                                         </ng-container>
                                                     </tr>
@@ -269,44 +230,33 @@
     let-label="label"
     let-inLastColumn="inLastColumn"
     let-inFirstColumn="inFirstColumn"
-    let-showBottomHalf="showBottomHalf"
-    let-showTopHalf="showTopHalf"
 >
-    <td class="relative w-[60px] text-center align-middle">
+    <td class="relative w-[120px] text-center align-middle">
         <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
-
         <div
             class="absolute left-0 right-0 top-0 flex h-full items-center"
+            [class.with-start-point]="inFirstColumn"
             [class.left-2]="inFirstColumn"
             [class.left-0]="!inFirstColumn"
         >
             <span
-                class="z-0 h-[1px] w-full"
+                class="z-0 h-[.1rem] w-full"
                 [class.strip_pattern_to_right]="reaction.isPrediction"
-                [class.bg-black]="!reaction.isPrediction"
-            ></span>
-            <span
-                data-description="bottom half vertical line"
-                class="absolute top-1/2 h-1/2 w-[1px]"
-                [class.strip_pattern]="reaction.isPrediction"
-                [class.bg-black]="!reaction.isPrediction"
-                [class.right-0]="inLastColumn"
-                [class.hidden]="!showBottomHalf"
-            ></span>
-            <span
-                data-description="top half vertical line"
-                class="absolute bottom-1/2 h-1/2 w-[1px]"
-                [class.strip_pattern]="reaction.isPrediction"
-                [class.bg-black]="!reaction.isPrediction"
-                [class.right-0]="inLastColumn"
-                [class.hidden]="!showTopHalf"
+                [class.bg-[--surface-500]]="!reaction.isPrediction"
             ></span>
         </div>
         <button
-            class="z-1 relative cursor-pointer rounded-md bg-white p-1 px-2"
+            class="z-1 relative cursor-pointer rounded-full border bg-white p-1 px-2"
+            [class.border-solid]="!reaction.isPrediction"
+            [class.border-[--surface-500]]="!reaction.isPrediction"
+            [class.bg-[#FEFBF3]]="reaction.isPrediction"
+            [class.border-dashed]="reaction.isPrediction"
+            [class.border-[#C79807]]="reaction.isPrediction"
             (click)="reactionDetail.toggle($event)"
         >
-            {{ label }}
+            <span class="absolute -top-4 left-0 text-xs text-[--surface-500] flex items-center" [class.text-[#C79807]]="reaction.isPrediction">{{ label }} <i *ngIf="reaction.isPrediction" class="pi pi-exclamation-triangle text-xs mx-1"></i></span>
+            <span class="font-semibold text-black">-{{ reaction.deltaG }}</span>
+            <span class="font-light text-xs ml-1 text-[#212121]/50">kJ/mol</span>
         </button>
         <p-overlayPanel #reactionDetail>
             <div class="flex flex-col rounded-lg bg-[#224063] p-4 text-white">
@@ -372,20 +322,22 @@
     </td>
 </ng-template>
 
-<ng-template #tableCellImg let-src>
-    <td class="w-[130px] align-middle relative">
+<ng-template #tableCellImg let-src let-nextPredicted="nextPredicted" let-predicted="predicted">
+    <td class="w-[180px] align-middle relative">
         <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
         <div
-            class="table_cell_img relative flex items-center justify-center rounded-md border border-solid border-[--surface-d] bg-white py-1"
+            class="table_cell_img relative flex items-center justify-center rounded-md border border-solid border-[--surface-500] bg-white py-1"
+            [class.next_predicted]="nextPredicted"
+            [class.predicted]="predicted"
         >
-            <img [src]="src" class="w-[100px]" />
+            <img [src]="src" class="w-[160px]" />
         </div>
     </td>
 </ng-template>
 
 <ng-template #tableCellBackground>
-    <div class="absolute top-0 left-0 h-full w-full flex items-center">
-        <div class="h-[60%] w-full bg-bluegray-100/50"></div>
+    <div class="absolute top-0 left-0 h-full w-full flex items-center z-0">
+        <div class="h-[70%] w-full bg-[#F8F9FA]"></div>
     </div>
 </ng-template>
 
