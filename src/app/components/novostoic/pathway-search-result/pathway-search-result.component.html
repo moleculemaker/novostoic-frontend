@@ -3,7 +3,14 @@
         <!-- TODO: use real data -->
         <div class="flex justify-between">
             <div>
-                <h2 class="mb-2">
+                <h2 class="flex items-center mb-2 gap-2">
+                    <span>
+                        <button
+                            class="inline-flex items-center rounded-lg p-1 border bg-[#F8F9FA]"
+                        >
+                            <i class="pi pi-chevron-left text-sm"></i>
+                        </button>
+                    </span>
                     Job ID: {{ status.job_id || 'loading' }} <button type="button" title="copy job id"><i class="pi pi-copy"></i></button>
                 </h2>
                 <p class="leading-6">
@@ -19,10 +26,15 @@
                         Cancel
                     </button>
 
+                    <!-- <button class="rounded-md border border-primary p-3 px-4 bg-white text-primary font-semibold" disabled>
+                        <i class="pi pi-replay mr-2"></i>
+                        Reconfig
+                    </button> -->
+
                     <a href="/pathway-search" target="_blank">
-                        <button class="rounded-md border p-2 py-3">
+                        <button class="rounded-md border p-2 py-3 bg-primary text-white font-semibold">
                             <i class="pi pi-plus mx-2"></i>
-                            Run a new Request
+                            Start a new Request
                         </button>
                     </a>
                 </div>
@@ -415,14 +427,24 @@
                         <tr>
                             <td class="py-1 align-middle"><div class="w-4 h-4 bg-green-primary text-[#495057] mx-1"></div></td>
                             <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Primary Precursor</div></td>
-                            <td class="py-1 align-middle"><div class="w-4 h-4 bg-blue-primary text-[#495057] mx-1"></div></td>
-                            <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Target Molecule</div></td>
+                            <td class="py-1 align-middle"><div class="w-4 h-4 bg-[#A855F7] text-[#495057] mx-1"></div></td>
+                            <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Intermediates</div></td>
+                            <td class="py-1 align-middle"><svg width="35" height="18" viewBox="0 0 35 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="1" y="1" width="33" height="16" rx="2" stroke="#6C757D" stroke-width="2"/>
+                                </svg>
+                            </td>
+                            <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Known Reactions</div></td>
                         </tr>
                         <tr>
-                            <td class="py-1 align-middle"><div class="w-4 h-4 bg-[#FF4D00] text-[#495057] mx-1"></div></td>
-                            <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Intermediates</div></td>
+                            <td class="py-1 align-middle"><div class="w-4 h-4 bg-blue-primary text-[#495057] mx-1"></div></td>
+                            <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Target Molecule</div></td>
                             <td class="py-1 align-middle"><div class="w-4 h-4 bg-[--surface-d] text-[#495057] mx-1"></div></td>
                             <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Co-factors</div></td>
+                            <td class="py-1 align-middle"><svg width="35" height="18" viewBox="0 0 35 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="1" y="1" width="33" height="16" rx="2" stroke="#6C757D" stroke-width="2" stroke-linejoin="round" stroke-dasharray="5 5"/>
+                                </svg>
+                            </td>
+                            <td class="py-1 align-middle"><div class="text-[#495057] mx-1">Predicted Reactions</div></td>
                         </tr>
                     </table>
                 </div>
@@ -457,7 +479,7 @@
                         </div>
                         <div class="flex items-center justify-around gap-2 w-full py-8 px-4">
                             <div class="flex items-center border border-solid rounded-md h-full p-2"
-                                [class.border-[#ff4d00]]="i !== 0"
+                                [class.border-[#A855F7]]="i !== 0"
                                 [class.border-green-primary]="i === 0"
                             >
                                 <img [src]="reaction.primaryPrecursor!.structure" class="h-[120px]" />
@@ -480,7 +502,7 @@
                             </ng-container>
                             
                             <div class="flex items-center border border-solid rounded-md h-full p-2"
-                                [class.border-[#ff4d00]]="i !== pathway.reactions.length - 1"
+                                [class.border-[#A855F7]]="i !== pathway.reactions.length - 1"
                                 [class.border-blue-primary]="i === pathway.reactions.length - 1"
                             >
                                 <img [src]="reaction.targetMolecule!.structure" class="h-[120px]" />
