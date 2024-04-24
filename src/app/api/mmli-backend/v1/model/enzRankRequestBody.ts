@@ -11,10 +11,10 @@
  */
 
 
-export interface JobCreate { 
-    job_info?: string;
-    email?: string;
-    job_id?: string;
-    run_id?: string;
+export interface EnzRankRequestBody { 
+    jobId: string;
+    user_email: string;
+    primary_precursor: string;
+    enzyme_sequence: string;
 }
 

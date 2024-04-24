@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { JobCreate } from "../api/mmli-backend/v1";
+// import { JobCreate } from "../api/mmli-backend/v1";
 
 export class OverallStoichiometryRequest {
   form = new FormGroup({
@@ -8,18 +8,6 @@ export class OverallStoichiometryRequest {
     agreeToSubscription: new FormControl(false),
     subscriberEmail: new FormControl("", [Validators.email]),
   });
-
-  toJobCreate(): JobCreate {
-    return {
-      job_info: JSON.stringify({
-        primaryPrecursor: this.form.controls["primaryPrecursor"].value,
-        targetMolecule: this.form.controls["targetMolecule"].value,
-      }),
-      email: this.form.controls["subscriberEmail"].value || "",
-      job_id: undefined,
-      run_id: 0,
-    };
-  }
 }
 
 export interface NovostoicMolecule {

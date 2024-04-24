@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
 import { BehaviorSubject, combineLatest, map } from "rxjs";
 import { PathwaySearchRequest } from "~/app/models/pathway-search";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
+import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
   selector: "app-pathway-search",
@@ -80,7 +81,8 @@ export class PathwaySearchComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private location: Location) {}
+    private location: Location,
+    private novostoicService: NovostoicService) {}
 
   ngOnInit(): void {
     const state: any = this.location.getState();
@@ -98,8 +100,16 @@ export class PathwaySearchComponent implements OnInit {
     }
   }
 
-  onSubmit(form: PathwaySearchRequest) {
-    this.router.navigate([NovostoicTools.PATHWAY_SEARCH, "result"]);
+  onSubmit() {
+    if (!this.request.form.valid) {
+      return;
+    }
+
+    this.novostoicService.createJobAndRunPathwaySearch(
+      this.request.toRequestBody()
+    ).subscribe((response) => {
+      this.router.navigate([NovostoicTools.PATHWAY_SEARCH, 'result', response.jobId]);
+    });
   }
 
   confirmUsingExample() {

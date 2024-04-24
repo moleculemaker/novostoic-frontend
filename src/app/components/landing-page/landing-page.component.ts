@@ -15,6 +15,9 @@ const fadeIn = trigger("fadeIn", [showTransition]);
   templateUrl: "./landing-page.component.html",
   styleUrls: ["./landing-page.component.scss"],
   animations: [fadeIn],
+  host: {
+    class: "flex justify-center"
+  }
 })
 export class LandingPageComponent {
   researchNeeds = [

@@ -1,28 +1,29 @@
 <div class="flex h-full flex-col">
-    <div class="flex justify-between">
+    <div *ngIf="statusResponse$ | async as status" class="flex justify-between">
         <div>
             <h2 class="mb-2">
-                Job ID: {{ jobId }} <i class="pi pi-copy"></i>
+                Job ID: {{ status.job_id }} <i class="pi pi-copy"></i>
             </h2>
             <p class="leading-6">
                 <span class="pr-4"
+                    *ngIf="response$ | async as response"
                     >Valid No. of Sequences: {{ response.length }}
-                    Sequences</span
+                    Sequence{{ response.length > 1 ? 's' : ''}}</span
                 >
-                <span>Submission Time: {{ submissionTime }}</span>
+                <span>Submission Time: {{ status.time_created | date: 'short' }}</span>
             </p>
         </div>
         <div class="flex items-center">
             <div class="flex items-center gap-2">
                 <button
-                    *ngIf="loading"
+                    *ngIf="isLoading$ | async"
                     class="rounded-md border p-2 py-3"
                 >
                     Cancel
                 </button>
 
                 <p-button
-                    *ngIf="!loading"
+                    *ngIf="!(isLoading$ | async)"
                     label="Export"
                     type="submit"
                     styleClass="bg-[#224063]"
@@ -41,7 +42,10 @@
             </div>
         </div>
     </div>
-    <div>
+
+    <app-loading *ngIf="(isLoading$ | async)"></app-loading>
+
+    <div [class.hidden]="isLoading$ | async">
         <div
             class="border-y border-solid border-[--surface-d] bg-gray-50 px-4 py-2 text-lg font-semibold"
         >
@@ -50,7 +54,7 @@
         <p-table
             #resultsTable
             [columns]="columnsForExport"
-            [value]="response"
+            [value]="(response$ | async) || []"
             [paginator]="true"
             [rows]="10"
             [showCurrentPageReport]="true"

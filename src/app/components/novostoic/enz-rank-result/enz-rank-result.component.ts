@@ -1,5 +1,9 @@
 import { Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { timer, switchMap, takeWhile, tap, map, skipUntil, filter, of } from "rxjs";
+import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
 import { EnzymeSelectionResponse } from "~/app/models/enz-rank";
+import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
   selector: "app-enz-rank-result",
@@ -7,10 +11,36 @@ import { EnzymeSelectionResponse } from "~/app/models/enz-rank";
   styleUrls: ["./enz-rank-result.component.scss"],
 })
 export class EnzRankResultComponent {
-  response = EnzymeSelectionResponse.example;
-  loading = false;
-  jobId = "exampleJobId";
-  submissionTime = "example submission time";
+  jobId: string = this.route.snapshot.paramMap.get("id") || "";
 
-  exportCSV() {}
+  statusResponse$ = timer(0, 10000).pipe(
+    switchMap(() => this.novostoicService.getResultStatus(
+      JobType.NovostoicOptstoic,
+      this.jobId,
+    )),
+    takeWhile((data) => 
+      data.phase === JobStatus.Processing 
+      || data.phase === JobStatus.Queued
+    , true),
+    tap((data) => { console.log('job status: ', data) }),
+  );
+
+  isLoading$ = this.statusResponse$.pipe(
+    map((job) => job.phase === JobStatus.Processing || job.phase === JobStatus.Queued),
+  );
+
+  response$ = this.statusResponse$.pipe(
+    skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
+    switchMap(() => this.novostoicService.getResult(JobType.NovostoicEnzrank, this.jobId)),
+    tap((data) => { console.log('result: ', data) }),
+    switchMap((data) => of(EnzymeSelectionResponse.example)), //TODO: replace with actual response
+  );
+
+  constructor(
+    private route: ActivatedRoute,
+    private novostoicService: NovostoicService,
+  ) {}
+
+  exportCSV() {
+  }
 }

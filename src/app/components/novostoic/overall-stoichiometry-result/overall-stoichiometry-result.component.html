@@ -1,19 +1,19 @@
 <div class="flex h-full flex-col justify-between">
-    <div>
+    <div *ngIf="(statusResponse$ | async) as status">
         <!-- TODO: use real data -->
         <div class="flex justify-between">
             <div>
                 <h2 class="mb-2">
-                    Job ID: {{ jobId }} <i class="pi pi-copy"></i>
+                    Job ID: {{ status.job_id || 'loading' }} <i class="pi pi-copy"></i>
                 </h2>
                 <p class="leading-6">
-                    Submission Time: {{ submissionTime }}
+                    Submission Time: {{ status.time_created | date: 'short' }}
                 </p>
             </div>
             <div class="flex items-center">
                 <div class="flex items-center gap-2">
                     <button
-                        *ngIf="loading"
+                        *ngIf="isLoading$ | async"
                         class="rounded-md border p-2 py-3"
                     >
                         Cancel
@@ -30,7 +30,7 @@
         </div>
 
         <!-- Molecule Input -->
-        <div *ngIf="!loading" class="mt-8 flex flex-col gap-6">
+        <div *ngIf="(response$ | async) as response" class="mt-8 flex flex-col gap-6">
             <p-panel>
                 <ng-template pTemplate="header">
                     <div
@@ -202,7 +202,7 @@
             </p-panel>
         </div>
 
-        <app-loading *ngIf="loading"></app-loading>
+        <app-loading *ngIf="isLoading$ | async"></app-loading>
     </div>
 </div>
 
@@ -241,7 +241,7 @@
             placeholder="Select cofactors"
             styleClass="w-full"
             appendTo="body"
-            [options]="filterOptions"
+            [options]="(filterOptions$ | async) || []"
             [ngModel]="filters$.value"
             (ngModelChange)="filters$.next($event)"
         >

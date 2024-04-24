@@ -11,10 +11,10 @@
  */
 
 
-export interface JobCreate { 
-    job_info?: string;
-    email?: string;
-    job_id?: string;
-    run_id?: string;
+export interface OptstoicRequestBody { 
+    jobId: string;
+    user_email: string;
+    primary_precursor: string;
+    target_molecule: string;
 }
 
