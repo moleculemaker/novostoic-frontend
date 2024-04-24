@@ -117,3 +117,27 @@ $indicator_color: var(--surface-500);
         }
     }
 }
+
+::ng-deep .p-panel {
+    .p-panel-header,
+    .p-panel-content {
+        padding: 0;
+    }
+}
+
+::ng-deep .p-dialog {
+    .p-dialog-header,
+    .p-dialog-footer {
+        @apply bg-gray-50;
+        @apply border-solid;
+        @apply border-[--surface-d];
+    }
+
+    .p-dialog-header {
+        @apply border-b;
+    }
+
+    .p-dialog-footer {
+        @apply border-t;
+    }
+}

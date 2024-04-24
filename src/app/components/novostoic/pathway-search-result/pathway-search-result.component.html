@@ -34,7 +34,7 @@
         <!-- Molecule Input -->
         <ng-container *ngIf="!(isLoading$ | async)">
             <div *ngIf="(response$ | async) as response" class="mt-8 flex grow flex-col gap-6">
-                <div class="flex justify-between gap-4">
+                <div class="flex justify-between items-center gap-4">
                     <div class="relative flex flex-col max-w-screen-md">
                         <span class="text-sm font-light"
                             >Selected Stoichiometry</span
@@ -48,14 +48,14 @@
                         ></app-stoichiometry-reaction-with-scroller>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-sm font-light"
-                            >Auxiliary functions</span
+                        <button
+                            class="flex items-center gap-2 rounded-lg border p-2 bg-[#F8F9FA]"
+                            (click)="showResultsFilter$.next(true)"
                         >
-                        <div class="mt-2 flex items-center">
-                            <span class="mr-4">Delta G (kJ/mol)</span>
-                            <p-checkbox class="mr-2"></p-checkbox> Enzyme
-                            selection
-                        </div>
+                            <i class="pi pi-filter"></i>
+                            Filter
+                            <p-chip>{{ filtersLength$ | async }}</p-chip>
+                        </button>
                     </div>
                 </div>
 
@@ -479,4 +479,108 @@
             </div>
         </ng-container>
     </ng-container>
+</p-dialog>
+
+<p-dialog
+    [visible]="showResultsFilter$.value"
+    (visibleChange)="showResultsFilter$.next($event)"
+    styleClass="w-[400px]"
+>
+    <ng-template pTemplate="header">
+        <div>
+            <i class="pi pi-filter px-2"></i>
+            Filter
+        </div>
+    </ng-template>
+    <div class="mx-2">
+        <div class="mb-2">
+            <p class="mb-4 mt-8 font-semibold">Intermediates</p>
+            <p-multiSelect
+                placeholder="Select intermediates"
+                styleClass="w-full"
+                appendTo="body"
+                [options]="(filterIntermediatesOptions$ | async) || []"
+                [ngModel]="intermediatesFilters$.value"
+                (ngModelChange)="intermediatesFilters$.next($event)"
+            >
+                <ng-template pTemplate="item" let-item>
+                    {{ item.commonNames[0] }}
+                </ng-template>
+                <ng-template pTemplate="selectedItems">
+                    {{ (filterIntermediatesStr$ | async) || 'Select intermediates' }}
+                </ng-template>
+            </p-multiSelect>
+        </div>
+        <hr class="-mx-8 my-6"/>
+        <div class="mb-2">
+            <p class="mb-4 mt-8 font-semibold">Co-Reactants & Co-Products</p>
+            <p-multiSelect
+                placeholder="Select Co-Reactants & Co-Products"
+                styleClass="w-full"
+                appendTo="body"
+                [options]="(filterCoFactorsOptions$ | async) || []"
+                [ngModel]="coFactorsFilters$.value"
+                (ngModelChange)="coFactorsFilters$.next($event)"
+            >
+                <ng-template pTemplate="item" let-item>
+                    {{ item.commonNames[0] }}
+                </ng-template>
+                <ng-template pTemplate="selectedItems">
+                    {{ (filterCoFactorsStr$ | async) || 'Select Co-Reactants & Co-Products' }}
+                </ng-template>
+            </p-multiSelect>
+        </div>
+        <hr class="-mx-8 my-6"/>
+        <div class="mb-2">
+            <p class="mb-4 mt-8 font-semibold">Gibbs Energy Change</p>
+            <div class="my-8 flex gap-2 items-center leading-6">
+                <p-radioButton value="all" name="allThermoFeasibleReactions"
+                    [ngModel]="selectedThermoFeasibleMode$.value"
+                    (ngModelChange)="selectedThermoFeasibleMode$.next($event)"
+                ></p-radioButton>
+                <label for="allThermoFeasibleReactions">Filter out pathways where <span class="font-semibold">all reactions are thermodynamically infeasible</span></label>
+            </div>
+
+            <div class="my-8 flex gap-2 items-center mt-4 leading-6">
+                <p-radioButton value="any" name="anyThermoFeasibleReactions" 
+                    [ngModel]="selectedThermoFeasibleMode$.value"
+                    (ngModelChange)="selectedThermoFeasibleMode$.next($event)"
+                ></p-radioButton>
+                <label for="anyThermoFeasibleReactions">Filter out pathways with <span class="font-semibold">any thermodynamically infeasible reactions</span></label>
+            </div>
+
+            <div class="mt-4 p-2">
+                <div class="mb-6 -mx-2">Set thermodynamic feasible change</div>
+                <div class="flex gap-2 mb-2">
+                    <input title="feasible range min" pInputText class="w-1/2" [ngModel]="feasibleRangeMin$.value" (ngModelChange)="feasibleRangeMin$.next($event)"/>
+                    <input title="feasible range max" pInputText class="w-1/2" [ngModel]="feasibleRangeMax$.value" (ngModelChange)="feasibleRangeMax$.next($event)"/>
+                </div>
+                <p-slider [min]="-80" [max]="50" [range]="true" [ngModel]="feasibleRange$ | async" (ngModelChange)="
+                    feasibleRangeMin$.next($event[0]);
+                    feasibleRangeMax$.next($event[1])"
+                ></p-slider>
+                <div class="w-full flex justify-between mt-2">
+                    <span class="text-xs">-80</span>
+                    <span class="text-xs">+50</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="flex items-center justify-between pt-4">
+            <button class="rounded-md border p-2" (click)="
+                intermediatesFilters$.next([]);
+                coFactorsFilters$.next([]);
+            ">
+                Clear all filters
+            </button>
+            <button
+                pButton
+                class="rounded-md border p-2"
+                (click)="applyFilters()"
+            >
+                Apply Filters
+            </button>
+        </div>
+    </ng-template>
 </p-dialog>

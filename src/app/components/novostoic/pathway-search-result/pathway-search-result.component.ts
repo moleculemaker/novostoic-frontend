@@ -2,7 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { BehaviorSubject, combineLatest, filter, first, last, map, of, skipUntil, switchMap, take, takeWhile, tap, throttleTime, timer } from "rxjs";
 import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
-import { PathwaySearchResponse } from "~/app/models/pathway-search";
+import { NovostoicMolecule } from "~/app/models/overall-stoichiometry";
+import { NovostoicReaction, PathwaySearchResponse } from "~/app/models/pathway-search";
 import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
@@ -43,13 +44,82 @@ export class PathwaySearchResultComponent implements OnInit {
     tap((data) => console.log('response', data))
   );
 
-
   visible$ = new BehaviorSubject(false);
   selectedPathway$ = new BehaviorSubject(0);
 
   pathwayDeltaGs$ = this.response$.pipe(
     map((response) => response.pathways.map((pathway) => pathway.reduce((p, v) => p + v.deltaG, 0))),
   );
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Filters                                  */
+  /* -------------------------------------------------------------------------- */
+  showResultsFilter$ = new BehaviorSubject(false);
+
+  filterIntermediatesOptions$ = this.response$.pipe(
+    map((response) => {
+      const intermediates = new Set<string>();
+      const returnVal: NovostoicMolecule[] = [];
+      response.pathways.forEach((pathway: NovostoicReaction[]) => {
+        pathway.slice(0, pathway.length - 1).forEach((reaction: NovostoicReaction) => {
+          if (reaction.targetMolecule && !intermediates.has(reaction.targetMolecule.commonNames[0])) {
+            intermediates.add(reaction.targetMolecule.commonNames[0]);
+            returnVal.push(reaction.targetMolecule);
+          }
+        });
+      });
+      return returnVal;
+    }),
+  );
+  intermediatesFilters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
+  filterIntermediatesStr$ = this.intermediatesFilters$.pipe(
+    map((filters) => filters.map((filter) => filter.commonNames[0]).join(",")),
+  );
+
+  filterCoFactorsOptions$ = this.response$.pipe(
+    map((response) => {
+      const cofactors = new Set<string>();
+      const returnVal: NovostoicMolecule[] = [];
+      response.pathways.forEach((pathway: NovostoicReaction[]) => {
+        pathway.forEach((reaction: NovostoicReaction) => {
+          reaction.reactants.forEach((reactant) => {
+            if (!cofactors.has(reactant.commonNames[0])) {
+              cofactors.add(reactant.commonNames[0]);
+              returnVal.push(reactant);
+            }
+          });
+          reaction.products.forEach((product) => {
+            if (!cofactors.has(product.commonNames[0])) {
+              cofactors.add(product.commonNames[0]);
+              returnVal.push(product);
+            }
+          });
+        });
+      });
+      return returnVal;
+    }),
+  );
+  coFactorsFilters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
+  filterCoFactorsStr$ = this.coFactorsFilters$.pipe(
+    map((filters) => filters.map((filter) => filter.commonNames[0]).join(",")),
+  );
+
+  filtersLength$ = combineLatest([
+    this.intermediatesFilters$,
+    this.coFactorsFilters$,
+  ]).pipe(map(([intermediates, cofactors]) => intermediates.length + cofactors.length));
+
+  selectedThermoFeasibleMode$ = new BehaviorSubject<'all' | 'any' | null>(null);
+  feasibleRangeMin$ = new BehaviorSubject<number>(-80);
+  feasibleRangeMax$ = new BehaviorSubject<number>(20);
+  feasibleRange$ = combineLatest([
+    this.feasibleRangeMin$,
+    this.feasibleRangeMax$,
+  ]).pipe(
+    map(([min, max]) => [min, max]),
+  );
+
+  /* -------------------------------------------------------------------------- */
 
   pathwayPredictedReactions$ = this.response$.pipe(
     map((response) => response.pathways.map((pathway) => pathway.filter((reaction) => reaction.isPrediction))),
@@ -121,5 +191,13 @@ export class PathwaySearchResultComponent implements OnInit {
     setTimeout(() => {
       this.loading = false;
     }, 3000);
+  }
+
+  applyFilters() {
+    // this.resultsTable.filter(
+    //   this.filters$.value,
+    //   "stoichiometry",
+    //   "containsMolecule",
+    // );
   }
 }
