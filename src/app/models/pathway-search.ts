@@ -271,7 +271,7 @@ export class PathwaySearchResponse {
           deltaG: -10,
           enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
           reactionId: "ReactionID",
-          isPrediction: false,
+          isPrediction: true,
         },
         {
           primaryPrecursor: {

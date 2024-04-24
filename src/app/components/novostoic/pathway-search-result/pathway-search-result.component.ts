@@ -170,6 +170,11 @@ export class PathwaySearchResultComponent implements OnInit {
             thermodynamicalRangeMatch = reaction.deltaG >= range[0] && reaction.deltaG <= range[1];
           }
         });
+
+        if (mode === 'all') {
+          thermodynamicalMatch = !thermodynamicalMatch;
+        }
+
         return {
           ...pathway,
           match: intermediatesMatch && cofactorsMatch && thermodynamicalMatch && thermodynamicalRangeMatch,
@@ -260,11 +265,15 @@ export class PathwaySearchResultComponent implements OnInit {
     }, 3000);
   }
 
+  resetFilters() {
+    this.intermediatesFilters$.next([]);
+    this.coFactorsFilters$.next([]);
+    this.feasibleRangeMax$.next(20);
+    this.feasibleRangeMin$.next(-80);
+    this.selectedThermoFeasibleMode$.next(null);
+  }
+
   applyFilters() {
-    // this.resultsTable.filter(
-    //   this.filters$.value,
-    //   "stoichiometry",
-    //   "containsMolecule",
-    // );
+    this.showResultsFilter$.next(false);
   }
 }
