@@ -82,16 +82,8 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
   validate(control: AbstractControl<any, any>): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
       return control.valueChanges.pipe(
         debounceTime(500),
-        switchMap((v) => this.novostoicService.getChemicalAutoComplete(v)),
-        map((chemicals) => {
-          const chemical = chemicals.find((chemical) => 
-            chemical.name === control.value
-            || chemical.inchi === control.value
-            || chemical.inchi_key === control.value
-            || chemical.smiles === control.value
-            || chemical.metanetx_id === control.value
-            || chemical.kegg_id === control.value
-          );
+        switchMap((v) => this.novostoicService.validateChemical(v)),
+        map((chemical) => {
           if (chemical) {
             this.smiles = chemical.smiles;
             return null;

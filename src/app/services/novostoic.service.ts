@@ -74,6 +74,10 @@ export class NovostoicService {
     return this.novostoicService.getChemicalAutoCompleteChemicalAutoCompleteGet(searchString);
   }
 
+  validateChemical(searchString: string): Observable<ChemicalAutoCompleteResponse | null> {
+    return this.novostoicService.validateChemicalChemicalValidateGet(searchString);
+  }
+
   private createJobAndRun(requestBody: any, jobType: JobType): Observable<PostResponse>{
     const jobCreate: JobCreate = {
       job_info: JSON.stringify(requestBody),
