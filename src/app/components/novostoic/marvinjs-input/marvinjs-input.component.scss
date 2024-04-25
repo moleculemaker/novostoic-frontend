@@ -1,9 +1,13 @@
-.marvin-filter-container{
+.marvin-filter-container {
   padding: 5px;
   border: #CED4DA;
   border-style: solid;
   border-width: 1px;
   border-radius: 6px;
+
+  &.invalid {
+    border-color: var(--status-error-color);
+  }
 
   .p-inputgroup{
     input{

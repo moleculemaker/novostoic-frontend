@@ -1,6 +1,6 @@
 <form
     class="flex h-full flex-col justify-between"
-    [formGroup]="form"
+    [formGroup]="request.form"
     (ngSubmit)="onSubmit()"
 >
     <div>
@@ -36,42 +36,28 @@
                     </div>
                     <span class="pr-1"
                         >Example:
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="useExampleValue('primaryPrecursor', 'Pyruvate')"
                             >Pyruvate</span
                         >,
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="useExampleValue('primaryPrecursor', 'C00022')"
                             >C00022</span
                         >,
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="useExampleValue('primaryPrecursor', 'CC(=O)C(=O)O')"
                             >CC(=O)C(=O)O</span
                         ></span
                     >
                 </div>
-                <div class="marvin-filter-container">
-                    <div class="p-inputgroup">
-                        <input
-                            pInputText
-                            type="text"
-                            class="border-0"
-                            formControlName="primaryPrecursor"
-                            placeholder="CC(=O)C(=O)O"
-                        />
-                        <button
-                            pButton
-                            type="button"
-                            class="p-button-secondary p-button-link p-button-outlined"
-                            icon="pi pi-pencil mr-2"
-                            (click)="showDialog$.next(true);
-                                currentFormControl$.next('primaryPrecursor')"
-                        >
-                            <span class="font-semibold"
-                                >Draw / Upload</span
-                            >
-                        </button>
-                    </div>
-                </div>
+                <app-marvinjs-input
+                    formControlName="primaryPrecursor"
+                    placeholder="Name, SMILES, InChi, Kegg ID"
+                    [errors]="request.form.controls['primaryPrecursor'].errors"
+                    [dirty]="request.form.controls['primaryPrecursor'].dirty"
+                ></app-marvinjs-input>
                 <div
-                    *ngIf="form.controls['primaryPrecursor'].value"
+                    *ngIf="request.form.controls['primaryPrecursor'].value"
                     class="border-green-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid"
                 >
                     <i
@@ -111,41 +97,28 @@
                     </div>
                     <span class="pr-1"
                         >Example:
-                        <span class="font-semibold underline">3HP</span
-                        >,
-                        <span class="font-semibold underline"
+                        <!-- <span class="font-semibold underline cursor-pointer"
+                            (click)="useExampleValue('targetMolecule', '3HP')"
+                        >3HP</span
+                        >, -->
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="useExampleValue('targetMolecule', 'C01013')"
                             >C01013</span
                         >,
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="useExampleValue('targetMolecule', 'O=C(CCO)O')"
                             >O=C(CCO)O</span
                         ></span
                     >
                 </div>
-                <div class="marvin-filter-container">
-                    <div class="p-inputgroup">
-                        <input
-                            pInputText
-                            type="text"
-                            class="border-0"
-                            formControlName="targetMolecule"
-                            placeholder="Name, SMILES, InChi, Kegg ID"
-                        />
-                        <button
-                            pButton
-                            type="button"
-                            class="p-button-secondary p-button-link p-button-outlined"
-                            icon="pi pi-pencil mr-2"
-                            (click)="showDialog$.next(true);
-                                currentFormControl$.next('targetMolecule')"
-                        >
-                            <span class="font-semibold"
-                                >Draw / Upload</span
-                            >
-                        </button>
-                    </div>
-                </div>
+                <app-marvinjs-input
+                    formControlName="targetMolecule"
+                    placeholder="Name, SMILES, InChi, Kegg ID"
+                    [errors]="request.form.controls['targetMolecule'].errors"
+                    [dirty]="request.form.controls['targetMolecule'].dirty"
+                ></app-marvinjs-input>
                 <div
-                    *ngIf="form.controls['targetMolecule'].value"
+                    *ngIf="request.form.controls['targetMolecule'].value"
                     class="border-blue-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid"
                 >
                     <i
@@ -178,15 +151,15 @@
                     type="email"
                     aria-describedby="subscriber-email-help"
                     [class]="'h-12 w-full'
-                    + ((form.controls['subscriberEmail'].invalid
-                        && form.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
+                    + ((request.form.controls['subscriberEmail'].invalid
+                        && request.form.controls['subscriberEmail'].dirty) ? ' ng-invalid ng-dirty' : '')"
                     pInputText
                     placeholder="Enter email here"
                     formControlName="subscriberEmail"
                 />
                 <small
-                    *ngIf="form.controls['subscriberEmail'].invalid
-                        && form.controls['subscriberEmail'].dirty"
+                    *ngIf="request.form.controls['subscriberEmail'].invalid
+                        && request.form.controls['subscriberEmail'].dirty"
                     id="subscriber-email-help"
                     class="p-error mt-2 block"
                     >Email is invalid.</small
@@ -198,7 +171,7 @@
                     styleClass="subscription-checkbox"
                     label="Agree to receive email notifications and updates about Novostoic."
                     [binary]="true"
-                    [formControl]="form.controls['agreeToSubscription']"
+                    [formControl]="request.form.controls['agreeToSubscription']"
                 ></p-checkbox>
             </div>
         </div>
@@ -206,33 +179,9 @@
             label="Get the Overall Stoichiometry"
             type="submit"
             styleClass="bg-[#224063]"
-            [disabled]="form.invalid"
+            [disabled]="request.form.invalid"
             iconPos="right"
             icon="pi pi-arrow-right"
         ></p-button>
     </div>
 </form>
-
-<p-dialog
-    *ngIf="showDialog$.value"
-    class="marvin-editor-container"
-    [visible]="showDialog$.value"
-    (visibleChange)="showDialog$.next($event)"
-    [modal]="true"
-    [draggable]="false"
-    [resizable]="false"
->
-    <app-marvin-js-editor
-        class="marvin-editor"
-        [smiles]="form.controls[currentFormControl$.value].value || ''"
-        (smilesChange)="form.controls[currentFormControl$.value].setValue($event)"
-    ></app-marvin-js-editor>
-    <ng-template pTemplate="footer">
-        <p-button
-            icon="pi pi-check"
-            (click)="searchStructure()"
-            label="Search Structure"
-            styleClass="bg-[#224063]"
-        ></p-button>
-    </ng-template>
-</p-dialog>

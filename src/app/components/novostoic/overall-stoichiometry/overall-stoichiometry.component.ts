@@ -1,10 +1,9 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
-import { JobCreate, JobsService, OptstoicRequestBody } from "~/app/api/mmli-backend/v1";
 import { NovostoicService } from "~/app/services/novostoic.service";
+import { OverallStoichiometryRequest } from "~/app/models/overall-stoichiometry";
 
 @Component({
   selector: "app-overall-stoichiometry",
@@ -12,12 +11,7 @@ import { NovostoicService } from "~/app/services/novostoic.service";
   styleUrls: ["./overall-stoichiometry.component.scss"],
 })
 export class OverallStoichiometryComponent {
-  form = new FormGroup({
-    primaryPrecursor: new FormControl("", [Validators.required]),
-    targetMolecule: new FormControl("", [Validators.required]),
-    agreeToSubscription: new FormControl(false),
-    subscriberEmail: new FormControl("", [Validators.email]),
-  });
+  request = new OverallStoichiometryRequest(this.novostoicService);
 
   currentFormControl$ = new BehaviorSubject<
     "primaryPrecursor" | "targetMolecule"
@@ -27,16 +21,14 @@ export class OverallStoichiometryComponent {
   constructor(
     private router: Router,
     private novostoicService: NovostoicService,
-    private jobService: JobsService
   ) {}
 
   useExample() {
-    this.form.setValue({
-      primaryPrecursor: "C00022",
-      targetMolecule: "C21389",
-      agreeToSubscription: false,
-      subscriberEmail: "",
-    });
+    this.request = OverallStoichiometryRequest.useExample(this.novostoicService);
+  }
+
+  useExampleValue(control: string, value: string) {
+    this.request.form.get(control)!.setValue(value);
   }
 
   searchStructure() {
@@ -44,18 +36,11 @@ export class OverallStoichiometryComponent {
   }
 
   onSubmit() {
-    if (!this.form.valid) {
+    if (!this.request.form.valid) {
       return;
     }
 
-    const data: OptstoicRequestBody = {
-      jobId: "",
-      user_email: this.form.controls['subscriberEmail'].value!,
-      primary_precursor: this.form.controls['primaryPrecursor'].value!,
-      target_molecule: this.form.controls['targetMolecule'].value!,
-    }
-
-    this.novostoicService.createJobAndRunOptstoic(data).subscribe((response) => {
+    this.novostoicService.createJobAndRunOptstoic(this.request.toRequestBody()).subscribe((response) => {
       this.router.navigate([NovostoicTools.OVERALL_STOICHIOMETRY, "result", response.jobId]);
     });
   }

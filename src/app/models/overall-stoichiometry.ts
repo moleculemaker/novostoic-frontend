@@ -1,5 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-// import { JobCreate } from "../api/mmli-backend/v1";
+import { NovostoicService } from "../services/novostoic.service";
+import { OptstoicRequestBody } from "../api/mmli-backend/v1";
 
 export class OverallStoichiometryRequest {
   form = new FormGroup({
@@ -8,6 +9,40 @@ export class OverallStoichiometryRequest {
     agreeToSubscription: new FormControl(false),
     subscriberEmail: new FormControl("", [Validators.email]),
   });
+
+  constructor(private novostoicService: NovostoicService) {}
+
+  static useExample(service: NovostoicService): OverallStoichiometryRequest {
+    const request = new OverallStoichiometryRequest(service);
+    request.form.setValue({
+      primaryPrecursor: "C00022",
+      targetMolecule: "C21389",
+      agreeToSubscription: false,
+      subscriberEmail: "",
+    });
+    return request;
+  }
+
+  static createMoleculeFormGroup(): FormGroup {
+    return new FormGroup({
+      name: new FormControl(""),
+      smiles: new FormControl(""),
+      kegg_id: new FormControl(""),
+      structure: new FormControl(""),
+      metanetx_id: new FormControl(""),
+      inchi: new FormControl(""),
+      inchi_key: new FormControl(""),
+    });
+  }
+
+  toRequestBody(): OptstoicRequestBody {
+    return {
+      jobId: "",
+      user_email: this.form.controls['subscriberEmail'].value!,
+      primary_precursor: this.form.controls['primaryPrecursor'].value!,
+      target_molecule: this.form.controls['targetMolecule'].value!,
+    }
+  }
 }
 
 export interface NovostoicMolecule {
