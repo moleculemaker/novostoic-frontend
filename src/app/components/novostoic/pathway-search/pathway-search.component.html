@@ -82,6 +82,7 @@
                                         formControlName="amount"
                                     />
                                     <app-marvinjs-input
+                                        class="grow"
                                         formControlName="molecule"
                                         placeholder="Name, SMILES, InChi, Kegg ID"
                                         [errors]="request.form.controls['primaryPrecursor'].controls['molecule'].errors"
@@ -226,6 +227,7 @@
                                         formControlName="amount"
                                     />
                                     <app-marvinjs-input
+                                        class="grow"
                                         formControlName="molecule"
                                         placeholder="Name, SMILES, InChi, Kegg ID"
                                         [errors]="request.form.controls['targetMolecule'].controls['molecule'].errors"
