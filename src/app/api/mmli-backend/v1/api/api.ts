@@ -8,4 +8,6 @@ export * from './jobs.service';
 import { JobsService } from './jobs.service';
 export * from './novostoic.service';
 import { NovostoicService } from './novostoic.service';
-export const APIS = [ChemScraperService, DefaultService, FilesService, JobsService, NovostoicService];
+export * from './somn.service';
+import { SomnService } from './somn.service';
+export const APIS = [ChemScraperService, DefaultService, FilesService, JobsService, NovostoicService, SomnService];

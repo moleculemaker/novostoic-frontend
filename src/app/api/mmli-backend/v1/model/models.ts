@@ -1,4 +1,5 @@
 export * from './analyzeRequestBody';
+export * from './chemicalAutoCompleteResponse';
 export * from './dgPredictorRequestBody';
 export * from './enzRankRequestBody';
 export * from './exportRequestBody';
@@ -17,4 +18,5 @@ export * from './optstoicRequestBody';
 export * from './reactionKeggId';
 export * from './reactionSmiles';
 export * from './reactionsInner';
+export * from './somnRequestBody';
 export * from './validationError';
