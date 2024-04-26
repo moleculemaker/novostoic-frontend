@@ -282,7 +282,12 @@
 
             (click)="reactionDetail.toggle($event)"
         >
-            <span class="absolute -top-4 left-0 text-xs text-[--surface-500] flex items-center" [class.text-[#C79807]]="reaction.isThermodynamicalInfeasible">{{ label }} <i *ngIf="reaction.isThermodynamicalInfeasible" class="pi pi-exclamation-triangle text-xs mx-1"></i></span>
+            <span class="absolute -top-4 left-0 text-xs flex items-center" 
+                [class.text-[--surface-500]]="!reaction.isThermodynamicalInfeasible"
+                [class.text-[#C79807]]="reaction.isThermodynamicalInfeasible">
+                {{ label }}
+                <i *ngIf="reaction.isThermodynamicalInfeasible" class="pi pi-exclamation-triangle text-xs mx-1"></i>
+            </span>
             <span class="font-semibold text-black">{{ (reaction.deltaG > 0 ? '+' : '') + reaction.deltaG }}</span>
             <span class="font-light text-xs ml-1 text-[#212121]/50">kJ/mol</span>
         </button>
@@ -468,7 +473,11 @@
                                 <div class="mb-1">Enzyme</div>
                                 <table class="w-full">
                                     <tr class="align-middle" *ngFor="let enzyme of reaction.enzymes">
-                                        <td class="font-semibold underline text-start">{{enzyme.name}}</td>
+                                        <td class="font-semibold underline text-start">
+                                            <a [href]="'https://brenda-enzymes.org/enzyme.php?ecno=' + enzyme.name.substr(2)" target="_blank">
+                                                {{enzyme.name}}
+                                            </a>
+                                        </td>
                                         <td class="text-end" *ngIf="reaction.isPrediction">{{enzyme.amount}}</td>
                                     </tr>
                                 </table>
