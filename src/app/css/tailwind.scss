@@ -1,0 +1,159 @@
+//**************** shared across the entire project and components ******************
+
+//**************** webfont and primary body tags ******************
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;700&display=swap');
+
+//use for base app and primeNG components
+body,
+body .p-component {
+  font: {
+    family: $font_family;
+  }
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+//**************** css ******************
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    margin: 0px;
+    margin: {
+        top: $padding;
+    }
+
+    font: {
+        family: $font_family_header;
+    }
+
+    @apply text-text-primary;
+}
+
+h1 {
+    @apply text-4xl;
+    @apply font-bold;
+
+    & + h3 {
+        margin: {
+            top: $padding * .2;
+        }
+    }
+}
+
+h2 {
+    @apply text-xl;
+    @apply font-bold;
+
+    & + h4 {
+        margin: {
+            top: $padding * .2;
+        }
+    }
+}
+
+h3 {
+    @apply text-lg;
+    @apply font-bold;
+    text-transform: none;
+
+    & + h5 {
+        margin: {
+            top: $padding * .2;
+        }
+    }
+}
+
+h4 {
+    @apply text-lg;
+    @apply font-bold;
+    text-transform: none;
+}
+
+h5 {
+    @apply text-sm;
+    @apply font-normal;
+    @apply mt-0;
+    text-transform: none;
+}
+
+p {
+    @apply text-lg;
+    line-height: 26.3px;
+}
+
+button {
+    @apply text-xl;
+    @apply font-bold;
+}
+
+button.outlined-sm {
+    @apply rounded-md;
+    @apply border;
+    @apply border-solid;
+    @apply border-[#dee2e6];
+    @apply bg-white;
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+    @apply gap-2;
+    @apply py-[8.5px];
+    @apply px-[7.5px];
+    @apply text-base;
+    @apply font-normal;
+}
+
+button.outlined {
+    @apply rounded-md;
+    @apply border;
+    @apply border-solid;
+    @apply border-[#224063];
+    @apply bg-transparent;
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+    @apply gap-[14px];
+    @apply py-[12px];
+    @apply px-[19px];
+    @apply text-base;
+    @apply font-normal;
+    @apply text-[#203A5A];
+}
+
+.padded {
+    margin: {
+        top: $padding;
+    }
+}
+
+.p-button-xs {
+    @include p-button-xs();
+}
+
+.page_container {
+    display: flex;
+    justify-content: center;
+
+    .container {
+        max: {
+            width: $page_width;
+        }
+        width: 100%;
+
+        padding: $padding;
+    }
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.p-overlaypanel-content{
+  padding: 0 !important;
+}
