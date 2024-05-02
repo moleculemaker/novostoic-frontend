@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from "@angular/core";
 import { AbstractControl, AsyncValidator, ControlValueAccessor, NG_ASYNC_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from "@angular/forms";
-import { BehaviorSubject, Observable, debounce, debounceTime, filter, map, switchMap, take } from "rxjs";
+import { BehaviorSubject, Observable, debounce, debounceTime, filter, map, switchMap, take, tap } from "rxjs";
+import { ChemicalAutoCompleteResponse } from "~/app/api/mmli-backend/v1";
 import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
@@ -24,6 +25,7 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
   @Input() placeholder: string = "";
   @Input() errors: ValidationErrors | null;
   @Input() dirty: boolean = false;
+  @Output() onChemicalValidated = new EventEmitter<ChemicalAutoCompleteResponse | null>();
 
   _value = "";
   get value() {
@@ -81,8 +83,9 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
 
   validate(control: AbstractControl<any, any>): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
       return control.valueChanges.pipe(
-        debounceTime(500),
+        debounceTime(1000),
         switchMap((v) => this.novostoicService.validateChemical(v)),
+        tap((chemical) => this.onChemicalValidated.emit(chemical)),
         map((chemical) => {
           if (chemical) {
             this.smiles = chemical.smiles;

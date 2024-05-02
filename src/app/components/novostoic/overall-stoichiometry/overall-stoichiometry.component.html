@@ -55,19 +55,16 @@
                     placeholder="Name, SMILES, InChi, Kegg ID"
                     [errors]="request.form.controls['primaryPrecursor'].errors"
                     [dirty]="request.form.controls['primaryPrecursor'].dirty"
+                    (onChemicalValidated)="validatedPrimaryPrecursor$.next($event)"
                 ></app-marvinjs-input>
-                <div
-                    *ngIf="request.form.controls['primaryPrecursor'].value"
-                    class="border-green-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid"
-                >
-                    <i
-                        class="pi pi-check-circle absolute left-3 top-3"
-                    ></i>
-                    <img
-                        class="h-[180px] w-auto"
-                        src="https://www.genome.jp/Fig/compound/C00022.gif"
-                    />
-                </div>
+                <ng-container *ngIf="request.form.controls['primaryPrecursor'].value">
+                    <ng-container *ngTemplateOutlet="moleculeImg; context: {
+                            status: request.form.controls['primaryPrecursor'].status,
+                            molecule: (trustedPrimaryPrecursor$ | async),
+                            styleClass: 'border-green-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid'
+                        }"
+                    ></ng-container>
+                </ng-container>
             </div>
             <div class="mt-10 flex items-start">
                 <svg
@@ -116,19 +113,16 @@
                     placeholder="Name, SMILES, InChi, Kegg ID"
                     [errors]="request.form.controls['targetMolecule'].errors"
                     [dirty]="request.form.controls['targetMolecule'].dirty"
+                    (onChemicalValidated)="validatedTargetMolecule$.next($event)"
                 ></app-marvinjs-input>
-                <div
-                    *ngIf="request.form.controls['targetMolecule'].value"
-                    class="border-blue-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid"
-                >
-                    <i
-                        class="pi pi-check-circle absolute left-3 top-3"
-                    ></i>
-                    <img
-                        class="h-[180px] w-auto"
-                        src="https://www.genome.jp/Fig/compound/C21389.gif"
-                    />
-                </div>
+                <ng-container *ngIf="request.form.controls['targetMolecule'].value">
+                    <ng-container *ngTemplateOutlet="moleculeImg; context: {
+                            status: request.form.controls['targetMolecule'].status,
+                            molecule: (trustedTargetMolecule$ | async),
+                            styleClass: 'border-blue-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid'
+                        }"
+                    ></ng-container>
+                </ng-container>
             </div>
         </div>
     </div>
@@ -185,3 +179,22 @@
         ></p-button>
     </div>
 </form>
+
+
+<ng-template #moleculeImg let-status="status" let-molecule="molecule" let-styleClass="styleClass">
+    <div [class]="styleClass" *ngIf="status !== 'INVALID'">
+        <i
+            *ngIf="status === 'VALID'"
+            class="pi pi-check-circle absolute left-3 top-3"
+        ></i>
+        <p-progressSpinner 
+            *ngIf="status === 'PENDING'"
+            class="absolute top-0 left-0 scale-[0.2] -translate-x-8 -translate-y-8"
+            strokeWidth="4"
+            ariaLabel="loading">
+        </p-progressSpinner>
+        <div *ngIf="status === 'VALID' && molecule"
+            [innerHTML]="molecule"
+        ></div>
+    </div>
+</ng-template>
