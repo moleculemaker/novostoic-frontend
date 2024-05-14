@@ -45,60 +45,40 @@
         <!-- Molecule Input -->
         <div *ngIf="!(isLoading$ | async)" class="flex flex-col gap-6 mt-8">
             <ng-container *ngIf="(response$ | async) as response">
-                <div
-                    class="flex flex-col rounded-md border border-solid border-[--surface-d]"
-                >
+                <p-panel header="Input">
                     <div
-                        class="flex items-center justify-between w-full p-4 rounded-t-md bg-gray-50"
+                        class="flex flex-col justify-between w-full p-4"
                     >
-                        <span class="font-semibold">Input</span>
-                    </div>
-                    <hr />
-                    <div class="flex w-full">
+                        <div class="flex items-center mb-2">
+                            <span class="mx-2 green-dot"></span>
+                            <h6 class="font-semibold opacity-100 leading-xl">Primary Precursor</h6>
+                        </div>
                         <div
-                            class="flex flex-col justify-between w-full p-4"
+                            class="flex items-stretch justify-between gap-4 px-2"
                         >
-                            <div class="flex items-center mb-2">
-                                <span class="mx-2 green-dot"></span>
-                                <span class="text-base"
-                                    >Primary Precursor</span
-                                >
+                            <div
+                                class="rounded-md border border-solid border-[--surface-d] p-2"
+                            >
+                                <img
+                                    class="h-auto w-[100px]"
+                                    [src]="response.primaryPrecursor.structure"
+                                />
                             </div>
                             <div
-                                class="flex items-stretch justify-between gap-4 px-2"
+                                class="flex flex-col justify-between grow"
                             >
-                                <div
-                                    class="rounded-md border border-solid border-[--surface-d] p-2"
-                                >
-                                    <img
-                                        class="h-auto w-[100px]"
-                                        [src]="response.primaryPrecursor.structure"
-                                    />
-                                </div>
-                                <div
-                                    class="flex flex-col justify-between grow"
-                                >
-                                    <ng-container
-                                        *ngTemplateOutlet="moleculeInfo; context: {
-                                        $implicit: response.primaryPrecursor,
-                                        showSmiles: true
-                                    }"
-                                    ></ng-container>
-                                </div>
+                                <ng-container
+                                    *ngTemplateOutlet="moleculeInfo; context: {
+                                    $implicit: response.primaryPrecursor,
+                                    showSmiles: true
+                                }"
+                                ></ng-container>
                             </div>
                         </div>
                     </div>
-                </div>
+                </p-panel>
 
-                <div
-                    class="flex flex-col rounded-md border border-solid border-[--surface-d]"
-                >
-                    <div
-                        class="flex items-center justify-between w-full p-4 rounded-t-md bg-gray-50"
-                    >
-                        <span class="font-semibold">Results</span>
-                    </div>
-                    <hr />
+                <p-panel header="Results">
                     <div
                         class="flex items-center w-full gap-4 p-4 rounded-t-md bg-gray-50"
                     >
@@ -118,7 +98,7 @@
                             {{ response.activityScore | number: '1.0-2'}}
                         </div>
                     </div>
-                </div>
+                </p-panel>
             </ng-container>
         </div>
 
@@ -127,18 +107,18 @@
 </div>
 
 <ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
-    <div class="flex justify-between mb-2">
-        <span class="font-light">Common Name</span>
+    <div class="flex justify-between mt-2">
+        <span class="leading-base opacity-60">Common Name</span>
         <span class="font-semibold text-end"
             >{{ molecule.commonNames[0] }}</span
         >
     </div>
-    <div class="flex justify-between mb-2">
-        <span class="font-light">KEGG ID</span>
-        <span class="font-semibold text-end">{{ molecule.keggId }}</span>
-    </div>
-    <div *ngIf="showSmiles" class="flex justify-between">
-        <span class="font-light">SMILES</span>
+    <div *ngIf="showSmiles" class="flex justify-between mt-2">
+        <span class="leading-base opacity-60">SMILES</span>
         <span class="font-semibold text-end">{{ molecule.smiles }}</span>
+    </div>
+    <div class="flex justify-between mt-2">
+        <span class="leading-base opacity-60">KEGG ID</span>
+        <span class="font-semibold text-end">{{ molecule.keggId }}</span>
     </div>
 </ng-template>

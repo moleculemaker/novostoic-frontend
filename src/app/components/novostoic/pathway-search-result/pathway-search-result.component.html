@@ -31,15 +31,14 @@
             </div>
         </div>
 
-        <hr />
-
         <!-- Molecule Input -->
         <ng-container *ngIf="!(isLoading$ | async)">
             <div *ngIf="(response$ | async) as response" class="flex flex-col gap-6 mt-8 grow">
+                <hr>
                 <div class="flex items-center justify-between gap-4">
                     <div class="relative flex flex-col max-w-screen-md">
-                        <span class="text-sm font-light"
-                            >Selected Stoichiometry</span
+                        <h6 class="mb-2 font-semibold opacity-100 leading-lg"
+                            >Selected Stoichiometry</h6
                         >
                         <app-stoichiometry-reaction-with-scroller
                             [primaryPrecursor]="response.primaryPrecursor"
@@ -51,7 +50,7 @@
                     </div>
                     <div class="flex flex-col">
                         <button
-                            class="flex items-center gap-2 rounded-lg border border-[#495057] p-2 bg-[#F8F9FA]"
+                            class="btn-outline bg-[#f8f9fa] border-[--surface-d]"
                             (click)="showResultsFilter$.next(true)"
                         >
                             <i class="pi pi-filter"></i>
@@ -220,18 +219,20 @@
     </div>
 </div>
 
-<ng-template #moleculeInfo let-molecule>
-    <div class="px-4">
-        <div class="font-light">Name</div>
-        <div class="font-semibold">{{ molecule.commonNames[0] }}</div>
+<ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
+    <div class="flex justify-between mt-2">
+        <span class="leading-base opacity-60">Common Name</span>
+        <span class="font-semibold text-end"
+            >{{ molecule.commonNames[0] }}</span
+        >
     </div>
-    <div class="px-4">
-        <div class="font-light">SMILES</div>
-        <div class="font-semibold">{{ molecule.smiles }}</div>
+    <div *ngIf="showSmiles" class="flex justify-between mt-2">
+        <span class="leading-base opacity-60">SMILES</span>
+        <span class="font-semibold text-end">{{ molecule.smiles }}</span>
     </div>
-    <div class="px-4">
-        <div class="font-light">KEGG ID</div>
-        <div class="font-semibold">{{ molecule.keggId }}</div>
+    <div class="flex justify-between mt-2">
+        <span class="leading-base opacity-60">KEGG ID</span>
+        <span class="font-semibold text-end">{{ molecule.keggId }}</span>
     </div>
 </ng-template>
 

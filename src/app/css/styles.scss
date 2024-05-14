@@ -126,11 +126,29 @@ html, body {
 	}
 }
 
+.p-datatable .p-paginator-bottom {
+	@apply border-0;
+	@apply bg-transparent;
+}
+
+
 .btn-outline {
 	@apply border;
 	@apply border-solid;
 	@apply border-[--surface-d];
 	@apply bg-transparent;
+	@apply text-text-primary;
+	@apply rounded-md;
+	@apply p-2;
+	@apply text-base;
+	@apply leading-lg;
+}
+
+.btn-outline {
+	@apply border;
+	@apply border-solid;
+	@apply border-[--surface-d];
+	@apply bg-[--surface-b];
 	@apply text-text-primary;
 	@apply rounded-md;
 	@apply p-2;
