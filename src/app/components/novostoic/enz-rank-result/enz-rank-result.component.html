@@ -1,20 +1,23 @@
-<div class="flex h-full flex-col justify-between">
+<div class="flex flex-col justify-between h-full">
     <div>
         <!-- TODO: use real data -->
         <div *ngIf="(statusResponse$ | async) as status" class="flex justify-between">
             <div>
-                <h2 class="mb-2">
-                    Job ID: {{ status.job_id }} <i class="pi pi-copy"></i>
-                </h2>
-                <p class="leading-6">
-                    Submission Time: {{ status.time_created | date: 'short'}}
-                </p>
+                <h5 class="flex items-center gap-2 mb-2 font-bold opacity-100 leading-xl">
+                    Job ID: {{ status.job_id || 'loading' }} 
+                    <button type="button" title="copy job id" class="border-none cursor-pointer">
+                        <i class="pi pi-copy"></i>
+                    </button>
+                </h5>
+                <h6 class="text-text-secondary leading-lg">
+                    Submission Time: {{ ((status.time_created || 0) * 1000) | date: 'short' }}
+                </h6>
             </div>
             <div class="flex items-center">
                 <div class="flex items-center gap-2">
                     <button
                         *ngIf="(isLoading$ | async)"
-                        class="rounded-md border p-2 py-3"
+                        class="p-2 py-3 border rounded-md"
                     >
                         Cancel
                     </button>
@@ -31,8 +34,8 @@
                     </p-button>
 
                     <a href="/enzyme-selection" target="_blank">
-                        <button class="rounded-md border p-2 py-3">
-                            <i class="pi pi-plus mx-2"></i>
+                        <button class="p-2 py-3 border rounded-md">
+                            <i class="mx-2 pi pi-plus"></i>
                             Run a new Request
                         </button>
                     </a>
@@ -41,23 +44,23 @@
         </div>
 
         <!-- Molecule Input -->
-        <div *ngIf="!(isLoading$ | async)" class="mt-8 flex flex-col gap-6">
+        <div *ngIf="!(isLoading$ | async)" class="flex flex-col gap-6 mt-8">
             <ng-container *ngIf="(response$ | async) as response">
                 <div
                     class="flex flex-col rounded-md border border-solid border-[--surface-d]"
                 >
                     <div
-                        class="flex w-full items-center justify-between rounded-t-md bg-gray-50 p-4"
+                        class="flex items-center justify-between w-full p-4 rounded-t-md bg-gray-50"
                     >
                         <span class="font-semibold">Input</span>
                     </div>
                     <hr />
                     <div class="flex w-full">
                         <div
-                            class="flex w-full flex-col justify-between p-4"
+                            class="flex flex-col justify-between w-full p-4"
                         >
-                            <div class="mb-2 flex items-center">
-                                <span class="green-dot mx-2"></span>
+                            <div class="flex items-center mb-2">
+                                <span class="mx-2 green-dot"></span>
                                 <span class="text-base"
                                     >Primary Precursor</span
                                 >
@@ -74,7 +77,7 @@
                                     />
                                 </div>
                                 <div
-                                    class="flex grow flex-col justify-between"
+                                    class="flex flex-col justify-between grow"
                                 >
                                     <ng-container
                                         *ngTemplateOutlet="moleculeInfo; context: {
@@ -92,13 +95,13 @@
                     class="flex flex-col rounded-md border border-solid border-[--surface-d]"
                 >
                     <div
-                        class="flex w-full items-center justify-between rounded-t-md bg-gray-50 p-4"
+                        class="flex items-center justify-between w-full p-4 rounded-t-md bg-gray-50"
                     >
                         <span class="font-semibold">Results</span>
                     </div>
                     <hr />
                     <div
-                        class="flex w-full items-center gap-4 rounded-t-md bg-gray-50 p-4"
+                        class="flex items-center w-full gap-4 p-4 rounded-t-md bg-gray-50"
                     >
                         <span class="w-2/3 max-w-xl font-semibold"
                             >Enzyme Input</span
@@ -108,8 +111,8 @@
                         >
                     </div>
                     <hr />
-                    <div class="flex w-full gap-4 rounded-t-md p-4">
-                        <div class="w-2/3 max-w-xl text-wrap break-words">
+                    <div class="flex w-full gap-4 p-4 rounded-t-md">
+                        <div class="w-2/3 max-w-xl break-words text-wrap">
                             {{ response.enzymeSequence }}
                         </div>
                         <div class="w-1/3">
@@ -125,18 +128,18 @@
 </div>
 
 <ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
-    <div class="mb-2 flex justify-between">
+    <div class="flex justify-between mb-2">
         <span class="font-light">Common Name</span>
-        <span class="text-end font-semibold"
+        <span class="font-semibold text-end"
             >{{ molecule.commonNames[0] }}</span
         >
     </div>
-    <div class="mb-2 flex justify-between">
+    <div class="flex justify-between mb-2">
         <span class="font-light">KEGG ID</span>
-        <span class="text-end font-semibold">{{ molecule.keggId }}</span>
+        <span class="font-semibold text-end">{{ molecule.keggId }}</span>
     </div>
     <div *ngIf="showSmiles" class="flex justify-between">
         <span class="font-light">SMILES</span>
-        <span class="text-end font-semibold">{{ molecule.smiles }}</span>
+        <span class="font-semibold text-end">{{ molecule.smiles }}</span>
     </div>
 </ng-template>

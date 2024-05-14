@@ -1,40 +1,35 @@
-<div class="flex h-full max-w-screen-xl flex-col justify-between">
-    <div class="flex grow flex-col" *ngIf="(statusResponse$ | async) as status">
+<div class="flex flex-col justify-between h-full max-w-screen-xl">
+    <div class="flex flex-col grow" *ngIf="(statusResponse$ | async) as status">
         <!-- TODO: use real data -->
         <div class="flex justify-between">
             <div>
-                <h2 class="flex items-center mb-2 gap-2">
-                    <!-- TODO: add return button -->
-                    <!-- <span>
-                        <button
-                            class="inline-flex items-center rounded-lg p-1 border bg-[#F8F9FA]"
-                        >
-                            <i class="pi pi-chevron-left text-sm"></i>
-                        </button>
-                    </span> -->
-                    Job ID: {{ status.job_id || 'loading' }} <button type="button" title="copy job id"><i class="pi pi-copy"></i></button>
-                </h2>
-                <p class="leading-6">
-                    Submission Time: {{ status.time_created | date: 'short' }}
-                </p>
+                <h5 class="flex items-center gap-2 mb-2 font-bold opacity-100 leading-xl">
+                    Job ID: {{ status.job_id || 'loading' }} 
+                    <button type="button" title="copy job id" class="border-none cursor-pointer">
+                        <i class="pi pi-copy"></i>
+                    </button>
+                </h5>
+                <h6 class="text-text-secondary leading-lg">
+                    Submission Time: {{ ((status.time_created || 0) * 1000) | date: 'short' }}
+                </h6>
             </div>
             <div class="flex items-center">
                 <div class="flex items-center gap-2">
                     <button 
                         *ngIf="isLoading$ | async"
-                        class="rounded-md border p-2 py-3"
+                        class="p-2 py-3 border rounded-md"
                     >
                         Cancel
                     </button>
 
-                    <!-- <button class="rounded-md border border-primary p-3 px-4 bg-white text-primary font-semibold" disabled>
-                        <i class="pi pi-replay mr-2"></i>
+                    <!-- <button class="p-3 px-4 font-semibold bg-white border rounded-md border-primary text-primary" disabled>
+                        <i class="mr-2 pi pi-replay"></i>
                         Reconfig
                     </button> -->
 
                     <a href="/pathway-search" target="_blank">
-                        <button class="rounded-md border p-2 py-3 bg-primary text-white font-semibold">
-                            <i class="pi pi-plus mx-2"></i>
+                        <button class="p-2 py-3 font-semibold text-white border rounded-md bg-primary">
+                            <i class="mx-2 pi pi-plus"></i>
                             Start a new Request
                         </button>
                     </a>
@@ -46,8 +41,8 @@
 
         <!-- Molecule Input -->
         <ng-container *ngIf="!(isLoading$ | async)">
-            <div *ngIf="(response$ | async) as response" class="mt-8 flex grow flex-col gap-6">
-                <div class="flex justify-between items-center gap-4">
+            <div *ngIf="(response$ | async) as response" class="flex flex-col gap-6 mt-8 grow">
+                <div class="flex items-center justify-between gap-4">
                     <div class="relative flex flex-col max-w-screen-md">
                         <span class="text-sm font-light"
                             >Selected Stoichiometry</span
@@ -72,12 +67,12 @@
                     </div>
                 </div>
 
-                <div class="mt-2 flex grow">
+                <div class="flex mt-2 grow">
                     <div
                         class="border-green-primary relative flex w-[150px] flex-col gap-4 border border-solid"
                     >
                         <div
-                            class="border-green-primary border-b border-solid"
+                            class="border-b border-solid border-green-primary"
                         >
                             <img
                                 [src]="response.primaryPrecursor.structure"
@@ -91,16 +86,16 @@
                     <div
                         class="relative grow border border-solid border-[--surface-d]"
                     >
-                        <div class="absolute h-full w-full overflow-scroll no-scrollbar">
+                        <div class="absolute w-full h-full overflow-scroll no-scrollbar">
                             <div
-                                class="relative left-0 top-0 min-h-full min-w-full"
+                                class="relative top-0 left-0 min-w-full min-h-full"
                                 [style]="(tableStyle$ | async) || {}"
                             >
                                 <ng-container *ngIf="(maxPathwayStepsTemplateArray$ | async) as stepsArray">
                                     <ng-container *ngIf="(emptyPathwayHeadersArray$ | async) as emptyHeaderArray">
                                         <ng-container *ngIf="(emptyPathwayStepsArrays$ | async) as emptyStepsArray">
                                             <table
-                                                class="absolute left-0 top-0 min-w-full table-fixed"
+                                                class="absolute top-0 left-0 min-w-full table-fixed"
                                             >
                                                 <tr>
                                                     <th
@@ -201,8 +196,8 @@
                                     </ng-container>
                                 </ng-container>
 
-                                <div class="absolute w-full bottom-0 p-4">
-                                    <button class="sticky left-4 px-2 py-1 border-solid bg-white border border-black" 
+                                <div class="absolute bottom-0 w-full p-4">
+                                    <button class="sticky px-2 py-1 bg-white border border-black border-solid left-4" 
                                     (click)="legendOverlay.toggle($event)">Legend</button>
                                 </div>
                             </div>
@@ -212,7 +207,7 @@
                         class="border-blue-primary relative flex w-[150px] flex-col gap-4 border border-solid"
                     >
                         <div
-                            class="border-blue-primary border-b border-solid"
+                            class="border-b border-solid border-blue-primary"
                         >
                             <img
                                 [src]="response.targetMolecule.structure"
@@ -257,7 +252,7 @@
     <td class="relative w-[120px] text-center align-middle">
         <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
         <div
-            class="absolute left-0 right-0 top-0 flex h-full items-center"
+            class="absolute top-0 left-0 right-0 flex items-center h-full"
             [class.with-start-point]="inFirstColumn"
             [class.next_thermo_infeasible]="reaction.isThermodynamicalInfeasible"
             [class.left-2]="inFirstColumn"
@@ -272,7 +267,7 @@
             ></span>
         </div>
         <button
-            class="z-1 relative cursor-pointer rounded-full border bg-white p-1 px-2"
+            class="relative p-1 px-2 bg-white border rounded-full cursor-pointer z-1"
             [class.border-solid]="!reaction.isPrediction"
             [class.border-dashed]="reaction.isPrediction"
 
@@ -282,11 +277,11 @@
 
             (click)="reactionDetail.toggle($event)"
         >
-            <span class="absolute -top-4 left-0 text-xs flex items-center" 
+            <span class="absolute left-0 flex items-center text-xs -top-4" 
                 [class.text-[--surface-500]]="!reaction.isThermodynamicalInfeasible"
                 [class.text-[#C79807]]="reaction.isThermodynamicalInfeasible">
                 {{ label }}
-                <i *ngIf="reaction.isThermodynamicalInfeasible" class="pi pi-exclamation-triangle text-xs mx-1"></i>
+                <i *ngIf="reaction.isThermodynamicalInfeasible" class="mx-1 text-xs pi pi-exclamation-triangle"></i>
             </span>
             <span class="font-semibold text-black">{{ (reaction.deltaG > 0 ? '+' : '') + reaction.deltaG }}</span>
             <span class="font-light text-xs ml-1 text-[#212121]/50">kJ/mol</span>
@@ -303,7 +298,7 @@
                     >
                         + {{ reactant.commonNames[0] }}
                     </span>
-                    <i class="pi pi-arrow-right mx-2 text-sm"></i>
+                    <i class="mx-2 text-sm pi pi-arrow-right"></i>
                     <span
                         *ngFor="let reactant of reaction.products"
                         class="text-white/50"
@@ -314,7 +309,7 @@
                         >{{ reaction.targetMolecule.commonNames[0] }}</span
                     >
                     <button
-                        class="ml-2 inline-flex items-center rounded-md bg-white/20 p-1"
+                        class="inline-flex items-center p-1 ml-2 rounded-md bg-white/20"
                         (click)="visible$.next(true);selectedPathway$.next(pathwayIndex)"
                     >
                         <i class="pi pi-eye"></i>
@@ -322,13 +317,13 @@
                 </div>
                 <hr class="my-2" />
                 <div class="flex justify-between gap-6">
-                    <div class="flex w-1/2 justify-between">
+                    <div class="flex justify-between w-1/2">
                         <span class="font-light">∆G</span>
                         <span class="font-semibold"
                             >{{ reaction.deltaG }}kJ/mol</span
                         >
                     </div>
-                    <div class="flex w-1/2 justify-between">
+                    <div class="flex justify-between w-1/2">
                         <span class="text-white/50">Reaction ID</span>
                         <span class="text-white/50"
                             >{{ reaction.reactionId }}</span
@@ -336,14 +331,14 @@
                     </div>
                 </div>
                 <div class="flex justify-between gap-6">
-                    <div class="flex w-1/2 justify-between">
+                    <div class="flex justify-between w-1/2">
                         <span class="font-light">Enz</span>
                         <span class="font-semibold"
                             >{{ reaction.enzymes.length > 1 ? 'Multiple' :
                             reaction.enzymes[0].name }}</span
                         >
                     </div>
-                    <div class="flex w-1/2 justify-between">
+                    <div class="flex justify-between w-1/2">
                         <span class="text-white/50">Confidence Score</span>
                         <span class="text-white/50"
                             >{{ reaction.confidenceScore }}</span
@@ -369,7 +364,7 @@
 </ng-template>
 
 <ng-template #tableCellBackground>
-    <div class="absolute top-0 left-0 h-full w-full flex items-center z-0">
+    <div class="absolute top-0 left-0 z-0 flex items-center w-full h-full">
         <div class="h-[70%] w-full bg-[#F8F9FA]"></div>
     </div>
 </ng-template>
@@ -385,7 +380,7 @@
 >
     <ng-template pTemplate="header">
         <div
-            class="flex flex-col bg-gray-50 mx-4"
+            class="flex flex-col mx-4 bg-gray-50"
         >
             <ng-container *ngIf="(response$ | async) as response">
                 <ng-container *ngIf="response.pathways[selectedPathway$.value] as pathway">
@@ -393,10 +388,10 @@
                     <div>
                         <span class="font-semibold">{{ pathway.reactions[0].primaryPrecursor!.commonNames[0] }}</span>
                         <span *ngFor="let reaction of pathway.reactions">
-                            <i class="pi pi-arrow-right mx-2"></i>
+                            <i class="mx-2 pi pi-arrow-right"></i>
                             <span class="font-semibold">{{ reaction.targetMolecule!.commonNames[0] }}</span>
                         </span>
-                        <button type="button" title="download"><i class="pi pi-download mx-2"></i></button>
+                        <button type="button" title="download"><i class="mx-2 pi pi-download"></i></button>
                     </div>
                 </ng-container>
             </ng-container>
@@ -407,28 +402,28 @@
             <div class="flex justify-between m-4">
                 <div class="flex gap-4">
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
-                        <div class="text-lg font-semibold mb-2">{{ pathway.reactions.length }}</div>
+                        <div class="mb-2 text-lg font-semibold">{{ pathway.reactions.length }}</div>
                         <div>Total Steps</div>
                     </div>
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
-                        <div class="text-lg font-semibold mb-2" *ngIf="(pathwayPredictedReactions$ | async) as reactions">{{ 
+                        <div class="mb-2 text-lg font-semibold" *ngIf="(pathwayPredictedReactions$ | async) as reactions">{{ 
                             reactions![selectedPathway$.value].length
                         }}</div>
                         <div>Predicted Steps</div>
                     </div>
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
-                        <div class="text-lg font-semibold mb-2">{{ pathway.reactions.length - 1 }}</div>
+                        <div class="mb-2 text-lg font-semibold">{{ pathway.reactions.length - 1 }}</div>
                         <div>Intermediates</div>
                     </div>
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
-                        <div class="text-lg font-semibold mb-2" *ngIf="(pathwayDeltaGs$ | async) as deltaGs">{{ 
+                        <div class="mb-2 text-lg font-semibold" *ngIf="(pathwayDeltaGs$ | async) as deltaGs">{{ 
                             deltaGs![selectedPathway$.value] 
                         }}kJ/mol</div>
                         <div>Delta G</div>
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    <div class="font-semibold m-1">Legend:</div>
+                    <div class="m-1 font-semibold">Legend:</div>
                     <table>
                         <tr>
                             <td class="py-1 align-middle"><div class="w-4 h-4 bg-green-primary text-[#495057] mx-1"></div></td>
@@ -457,10 +452,10 @@
             </div>
             <div class="pt-12">
                 <div class="flex flex-col justify-center mx-4" *ngFor="let reaction of pathway.reactions; let i = index">
-                    <div class="w-full rounded-md border-black border border-solid flex"
+                    <div class="flex w-full border border-black border-solid rounded-md"
                         [class.border-dashed]="reaction.isPrediction"
                     >
-                        <div class="w-1/5 bg-gray-50 flex flex-col gap-4 p-4 rounded-md">
+                        <div class="flex flex-col w-1/5 gap-4 p-4 rounded-md bg-gray-50">
                             <div class="flex justify-between">
                                 <span class="font-semibold">Reaction {{selectedPathway$.value + 1}}.{{ i + 1 }}</span>
                                 <button type="button" title="download"><i class="pi pi-copy"></i></button>
@@ -487,8 +482,8 @@
                                 <div class="font-semibold underline">{{reaction.reactionId}}</div>
                             </div>
                         </div>
-                        <div class="flex items-center justify-around gap-2 w-full py-8 px-4">
-                            <div class="flex items-center border border-solid rounded-md h-full p-2"
+                        <div class="flex items-center justify-around w-full gap-2 px-4 py-8">
+                            <div class="flex items-center h-full p-2 border border-solid rounded-md"
                                 [class.border-[#A855F7]]="i !== 0"
                                 [class.border-green-primary]="i === 0"
                             >
@@ -511,7 +506,7 @@
                                 </div>
                             </ng-container>
                             
-                            <div class="flex items-center border border-solid rounded-md h-full p-2"
+                            <div class="flex items-center h-full p-2 border border-solid rounded-md"
                                 [class.border-[#A855F7]]="i !== pathway.reactions.length - 1"
                                 [class.border-blue-primary]="i === pathway.reactions.length - 1"
                             >
@@ -520,7 +515,7 @@
                         </div>
                     </div>
                     <div class="flex justify-center" *ngIf="i !== pathway.reactions.length - 1">
-                        <i class="pi pi-arrow-down text-xl"></i>
+                        <i class="text-xl pi pi-arrow-down"></i>
                     </div>
                 </div>
             </div>
@@ -535,13 +530,13 @@
 >
     <ng-template pTemplate="header">
         <div>
-            <i class="pi pi-filter px-2"></i>
+            <i class="px-2 pi pi-filter"></i>
             Filter
         </div>
     </ng-template>
     <div class="mx-2">
         <div class="mb-2">
-            <p class="mb-4 mt-8 font-semibold">Intermediates</p>
+            <p class="mt-8 mb-4 font-semibold">Intermediates</p>
             <p-multiSelect
                 placeholder="Select intermediates"
                 styleClass="w-full"
@@ -558,9 +553,9 @@
                 </ng-template>
             </p-multiSelect>
         </div>
-        <hr class="-mx-8 my-6"/>
+        <hr class="my-6 -mx-8"/>
         <div class="mb-2">
-            <p class="mb-4 mt-8 font-semibold">Co-Reactants & Co-Products</p>
+            <p class="mt-8 mb-4 font-semibold">Co-Reactants & Co-Products</p>
             <p-multiSelect
                 placeholder="Select Co-Reactants & Co-Products"
                 styleClass="w-full"
@@ -577,10 +572,10 @@
                 </ng-template>
             </p-multiSelect>
         </div>
-        <hr class="-mx-8 my-6"/>
+        <hr class="my-6 -mx-8"/>
         <div class="mb-2">
-            <p class="mb-4 mt-8 font-semibold">Gibbs Energy Change</p>
-            <div class="my-8 flex gap-2 items-center leading-6">
+            <p class="mt-8 mb-4 font-semibold">Gibbs Energy Change</p>
+            <div class="flex items-center gap-2 my-8 leading-6">
                 <p-radioButton value="all" name="allThermoFeasibleReactions"
                     [ngModel]="selectedThermoFeasibleMode$.value"
                     (ngModelChange)="selectedThermoFeasibleMode$.next($event)"
@@ -588,7 +583,7 @@
                 <label for="allThermoFeasibleReactions">Filter out pathways where <span class="font-semibold">all reactions are thermodynamically infeasible</span></label>
             </div>
 
-            <div class="my-8 flex gap-2 items-center mt-4 leading-6">
+            <div class="flex items-center gap-2 my-8 mt-4 leading-6">
                 <p-radioButton value="any" name="anyThermoFeasibleReactions" 
                     [ngModel]="selectedThermoFeasibleMode$.value"
                     (ngModelChange)="selectedThermoFeasibleMode$.next($event)"
@@ -596,7 +591,7 @@
                 <label for="anyThermoFeasibleReactions">Filter out pathways with <span class="font-semibold">any thermodynamically infeasible reactions</span></label>
             </div>
 
-            <div class="mt-4 p-2">
+            <div class="p-2 mt-4">
                 <div class="mb-6 -mx-2">Set thermodynamic feasible change</div>
                 <div class="flex gap-2 mb-2">
                     <input title="feasible range min" pInputText class="w-1/2" [ngModel]="feasibleRangeMin$.value" (ngModelChange)="feasibleRangeMin$.next($event)"/>
@@ -606,7 +601,7 @@
                     feasibleRangeMin$.next($event[0]);
                     feasibleRangeMax$.next($event[1])"
                 ></p-slider>
-                <div class="w-full flex justify-between mt-2">
+                <div class="flex justify-between w-full mt-2">
                     <span class="text-xs">-80</span>
                     <span class="text-xs">+50</span>
                 </div>
@@ -615,12 +610,12 @@
     </div>
     <ng-template pTemplate="footer">
         <div class="flex items-center justify-between pt-4">
-            <button class="rounded-md border p-2" (click)="resetFilters()">
+            <button class="p-2 border rounded-md" (click)="resetFilters()">
                 Clear all filters
             </button>
             <button
                 pButton
-                class="rounded-md border p-2"
+                class="p-2 border rounded-md"
                 (click)="applyFilters()"
             >
                 Apply Filters

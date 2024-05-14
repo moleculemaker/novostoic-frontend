@@ -1,27 +1,30 @@
-<div class="flex h-full flex-col justify-between">
+<div class="flex flex-col justify-between h-full">
     <div *ngIf="(statusResponse$ | async) as status">
         <!-- TODO: use real data -->
         <div class="flex justify-between">
             <div>
-                <h2 class="mb-2">
-                    Job ID: {{ status.job_id || 'loading' }} <i class="pi pi-copy"></i>
-                </h2>
-                <p class="leading-6">
-                    Submission Time: {{ status.time_created | date: 'short' }}
-                </p>
+                <h5 class="flex items-center gap-2 mb-2 font-bold opacity-100 leading-xl">
+                    Job ID: {{ status.job_id || 'loading' }} 
+                    <button type="button" title="copy job id" class="border-none cursor-pointer">
+                        <i class="pi pi-copy"></i>
+                    </button>
+                </h5>
+                <h6 class="text-text-secondary leading-lg">
+                    Submission Time: {{ ((status.time_created || 0) * 1000) | date: 'short' }}
+                </h6>
             </div>
             <div class="flex items-center">
                 <div class="flex items-center gap-2">
                     <button
                         *ngIf="isLoading$ | async"
-                        class="rounded-md border p-2 py-3"
+                        class="p-2 py-3 border rounded-md"
                     >
                         Cancel
                     </button>
 
                     <a href="/overall-stoichiometry" target="_blank">
-                        <button class="rounded-md border p-2 py-3">
-                            <i class="pi pi-plus mx-2"></i>
+                        <button class="p-2 py-3 border rounded-md">
+                            <i class="mx-2 pi pi-plus"></i>
                             Run a new Request
                         </button>
                     </a>
@@ -30,11 +33,11 @@
         </div>
 
         <!-- Molecule Input -->
-        <div *ngIf="(response$ | async) as response" class="mt-8 flex flex-col gap-6">
+        <div *ngIf="(response$ | async) as response" class="flex flex-col gap-6 mt-8">
             <p-panel>
                 <ng-template pTemplate="header">
                     <div
-                        class="flex w-full items-center justify-between p-2 px-4"
+                        class="flex items-center justify-between w-full p-2 px-4"
                     >
                         <span class="text-lg">Input</span>
                     </div>
@@ -42,10 +45,10 @@
                 <ng-template pTemplate="content">
                     <div class="flex w-full">
                         <div
-                            class="flex w-1/2 flex-col justify-between p-4"
+                            class="flex flex-col justify-between w-1/2 p-4"
                         >
-                            <div class="mb-2 flex items-center">
-                                <span class="green-dot mx-2"></span>
+                            <div class="flex items-center mb-2">
+                                <span class="mx-2 green-dot"></span>
                                 <span class="text-base"
                                     >Primary Precursor</span
                                 >
@@ -62,7 +65,7 @@
                                     />
                                 </div>
                                 <div
-                                    class="flex grow flex-col justify-between"
+                                    class="flex flex-col justify-between grow"
                                 >
                                     <ng-container
                                         *ngTemplateOutlet="moleculeInfo; context: {
@@ -77,7 +80,7 @@
                             class="flex w-1/2 flex-col justify-between border-l border-solid border-[--surface-d] p-4"
                         >
                             <div class="flex items-center">
-                                <span class="blue-dot mx-2"></span>
+                                <span class="mx-2 blue-dot"></span>
                                 <span class="text-base font-semibold"
                                     >Target Molecule</span
                                 >
@@ -94,7 +97,7 @@
                                     />
                                 </div>
                                 <div
-                                    class="flex grow flex-col justify-between"
+                                    class="flex flex-col justify-between grow"
                                 >
                                     <ng-container
                                         *ngTemplateOutlet="moleculeInfo; context: {
@@ -112,11 +115,11 @@
             <p-panel>
                 <ng-template pTemplate="header">
                     <div
-                        class="flex w-full items-center justify-between p-2 px-4"
+                        class="flex items-center justify-between w-full p-2 px-4"
                     >
                         <span class="text-l">Results</span>
                         <button
-                            class="flex items-center gap-2 rounded-lg border p-2"
+                            class="flex items-center gap-2 p-2 border rounded-lg"
                             (click)="showResultsFilter$.next(true)"
                         >
                             <i class="pi pi-filter"></i>
@@ -184,7 +187,7 @@
                                         <p-overlayPanel #targetMoleculeOverlay>
                                             <div class="w-[300px] p-4">
                                                 <div
-                                                    class="border-blue-primary mb-2 flex justify-center rounded-md border border-solid p-2"
+                                                    class="flex justify-center p-2 mb-2 border border-solid rounded-md border-blue-primary"
                                                 >
                                                     <img
                                                         class="h-[180px] w-auto"
@@ -220,7 +223,7 @@
                                         <p-chip styleClass="p-1 px-3"
                                             >Pathway Design
                                             <i
-                                                class="pi pi-arrow-right ml-2"
+                                                class="ml-2 pi pi-arrow-right"
                                             ></i
                                         ></p-chip>
                                     </button>
@@ -237,19 +240,19 @@
 </div>
 
 <ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
-    <div class="mt-2 flex justify-between">
+    <div class="flex justify-between mt-2">
         <span class="font-light">Common Name</span>
-        <span class="text-end font-semibold"
+        <span class="font-semibold text-end"
             >{{ molecule.commonNames[0] }}</span
         >
     </div>
-    <div class="mt-2 flex justify-between">
+    <div class="flex justify-between mt-2">
         <span class="font-light">KEGG ID</span>
-        <span class="text-end font-semibold">{{ molecule.keggId }}</span>
+        <span class="font-semibold text-end">{{ molecule.keggId }}</span>
     </div>
-    <div *ngIf="showSmiles" class="mt-2 flex justify-between">
+    <div *ngIf="showSmiles" class="flex justify-between mt-2">
         <span class="font-light">SMILES</span>
-        <span class="text-end font-semibold">{{ molecule.smiles }}</span>
+        <span class="font-semibold text-end">{{ molecule.smiles }}</span>
     </div>
 </ng-template>
 
@@ -260,12 +263,12 @@
 >
     <ng-template pTemplate="header">
         <div>
-            <i class="pi pi-filter px-2"></i>
+            <i class="px-2 pi pi-filter"></i>
             Filter
         </div>
     </ng-template>
     <div class="mb-2">
-        <p class="mb-4 mt-8 font-semibold">Molecules</p>
+        <p class="mt-8 mb-4 font-semibold">Molecules</p>
         <p class="mb-2">Co-Reactants & Co-Products</p>
         <p-multiSelect
             placeholder="Select cofactors"
@@ -285,12 +288,12 @@
     </div>
     <ng-template pTemplate="footer">
         <div class="flex items-center justify-between pt-4">
-            <button class="rounded-md border p-2" (click)="filters$.next([])">
+            <button class="p-2 border rounded-md" (click)="filters$.next([])">
                 Clear all filters
             </button>
             <button
                 pButton
-                class="rounded-md border p-2"
+                class="p-2 border rounded-md"
                 (click)="applyFilters()"
             >
                 Apply Filters
@@ -300,18 +303,18 @@
 </p-dialog>
 
 <ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
-    <div class="mt-2 flex justify-between">
+    <div class="flex justify-between mt-2">
         <span class="font-light">Common Name</span>
-        <span class="text-end font-semibold"
+        <span class="font-semibold text-end"
             >{{ molecule.commonNames[0] }}</span
         >
     </div>
-    <div class="mt-2 flex justify-between">
+    <div class="flex justify-between mt-2">
         <span class="font-light">KEGG ID</span>
-        <span class="text-end font-semibold">{{ molecule.keggId }}</span>
+        <span class="font-semibold text-end">{{ molecule.keggId }}</span>
     </div>
-    <div *ngIf="showSmiles" class="mt-2 flex justify-between">
+    <div *ngIf="showSmiles" class="flex justify-between mt-2">
         <span class="font-light">SMILES</span>
-        <span class="text-end font-semibold">{{ molecule.smiles }}</span>
+        <span class="font-semibold text-end">{{ molecule.smiles }}</span>
     </div>
 </ng-template>

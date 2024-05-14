@@ -1,23 +1,21 @@
-<div class="flex h-full flex-col">
+<div class="flex flex-col h-full">
     <div *ngIf="statusResponse$ | async as status" class="flex justify-between">
         <div>
-            <h2 class="mb-2">
-                Job ID: {{ status.job_id }} <i class="pi pi-copy"></i>
-            </h2>
-            <p class="leading-6">
-                <span class="pr-4"
-                    *ngIf="response$ | async as response"
-                    >Valid No. of Sequences: {{ response.length }}
-                    Sequence{{ response.length > 1 ? 's' : ''}}</span
-                >
-                <span>Submission Time: {{ status.time_created | date: 'short' }}</span>
-            </p>
+            <h5 class="flex items-center gap-2 mb-2 font-bold opacity-100 leading-xl">
+                Job ID: {{ status.job_id || 'loading' }} 
+                <button type="button" title="copy job id" class="border-none cursor-pointer">
+                    <i class="pi pi-copy"></i>
+                </button>
+            </h5>
+            <h6 class="text-text-secondary leading-lg">
+                Submission Time: {{ ((status.time_created || 0) * 1000) | date: 'short' }}
+            </h6>
         </div>
         <div class="flex items-center">
             <div class="flex items-center gap-2">
                 <button
                     *ngIf="isLoading$ | async"
-                    class="rounded-md border p-2 py-3"
+                    class="p-2 py-3 border rounded-md"
                 >
                     Cancel
                 </button>
@@ -34,8 +32,8 @@
                 </p-button>
 
                 <a href="/thermodynamical-feasibility" target="_blank">
-                    <button class="rounded-md border p-2 py-3">
-                        <i class="pi pi-plus mx-2"></i>
+                    <button class="p-2 py-3 border rounded-md">
+                        <i class="mx-2 pi pi-plus"></i>
                         Run a new Request
                     </button>
                 </a>
@@ -79,13 +77,13 @@
                     </td>
                     <td>{{ row.gibbsEnergy }}kJ/mol</td>
                     <td>
-                        <div class="item-center flex gap-4">
+                        <div class="flex gap-4 item-center">
                             <button><i class="pi pi-eye"></i></button>
                             <button>
                                 <p-chip styleClass="p-1 px-3"
                                     >Enzyme selection
                                     <i
-                                        class="pi pi-arrow-right ml-2"
+                                        class="ml-2 pi pi-arrow-right"
                                     ></i
                                 ></p-chip>
                             </button>
@@ -98,18 +96,18 @@
 </div>
 
 <ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
-    <div class="mt-2 flex justify-between">
+    <div class="flex justify-between mt-2">
         <span class="font-light">Common Name</span>
-        <span class="text-end font-semibold"
+        <span class="font-semibold text-end"
             >{{ molecule.commonNames[0] }}</span
         >
     </div>
-    <div class="mt-2 flex justify-between">
+    <div class="flex justify-between mt-2">
         <span class="font-light">KEGG ID</span>
-        <span class="text-end font-semibold">{{ molecule.keggId }}</span>
+        <span class="font-semibold text-end">{{ molecule.keggId }}</span>
     </div>
-    <div *ngIf="showSmiles" class="mt-2 flex justify-between">
+    <div *ngIf="showSmiles" class="flex justify-between mt-2">
         <span class="font-light">SMILES</span>
-        <span class="text-end font-semibold">{{ molecule.smiles }}</span>
+        <span class="font-semibold text-end">{{ molecule.smiles }}</span>
     </div>
 </ng-template>
