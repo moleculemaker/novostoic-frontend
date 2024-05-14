@@ -13,24 +13,24 @@
                 <div class="flex items-center justify-between pb-2">
                     <div class="flex items-center">
                         <span class="mx-2 green-dot"></span>
-                        <span class="text-base font-semibold"
-                            >Primary Precursor</span
+                        <h6 class="font-semibold opacity-100 leading-xl"
+                            >Primary Precursor</h6
                         >
                     </div>
-                    <span class="pr-1"
+                    <small class="pr-1 leading-[140%]"
                         >Example:
-                        <span class="font-semibold underline cursor-pointer"
+                        <small class="font-semibold underline cursor-pointer"
                             (click)="request.form.controls['primaryPrecursor'].setValue('Pyruvate')"
-                            >Pyruvate</span
+                            >Pyruvate</small
                         >,
-                        <span class="font-semibold underline cursor-pointer"
+                        <small class="font-semibold underline cursor-pointer"
                             (click)="request.form.controls['primaryPrecursor'].setValue('C00022')"
-                            >C00022</span
+                            >C00022</small
                         >,
-                        <span class="font-semibold underline cursor-pointer"
+                        <small class="font-semibold underline cursor-pointer"
                             (click)="request.form.controls['primaryPrecursor'].setValue('CC(=O)C(=O)O')"
-                            >CC(=O)C(=O)O</span
-                        ></span
+                            >CC(=O)C(=O)O</small
+                        ></small
                     >
                 </div>
                 <app-marvinjs-input
