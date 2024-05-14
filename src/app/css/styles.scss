@@ -112,7 +112,10 @@ html, body {
 }
 
 .p-button {
-	&.regular {
+	&.btn-submit-request {
+		@apply bg-primary;
+		@apply gap-4;
+		@apply px-8;
 		.p-button-label {
 			font-weight: 400;
 		}
@@ -123,6 +126,18 @@ html, body {
 		@apply bg-text-secondary;
 		@apply border-text-secondary;
 	}
+}
+
+.btn-outline {
+	@apply border;
+	@apply border-solid;
+	@apply border-[--surface-d];
+	@apply bg-transparent;
+	@apply text-text-primary;
+	@apply rounded-md;
+	@apply p-2;
+	@apply text-base;
+	@apply leading-lg;
 }
 
 .pi {
@@ -186,17 +201,5 @@ hr {
 	@apply border-solid;
 	@apply border-[--surface-d];
 	@apply m-0;
-}
-
-.btn-outline {
-	@apply border;
-	@apply border-solid;
-	@apply border-[--surface-d];
-	@apply bg-transparent;
-	@apply text-text-primary;
-	@apply rounded-md;
-	@apply p-2;
-	@apply text-base;
-	@apply leading-lg;
 }
 /**************************** MMLI Customized END **************************/
