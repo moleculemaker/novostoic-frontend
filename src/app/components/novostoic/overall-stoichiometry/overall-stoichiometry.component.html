@@ -4,16 +4,12 @@
     (ngSubmit)="onSubmit()"
 >
     <div>
-        <div class="flex justify-between">
-            <div>
-                <h5 class="font-bold opacity-100 leading-lg">Input your target molecule and precursor</h5>
-                <h6 class="mt-1 leading-lg">
-                    You’ll get the overall stoichiometry and theoretical yield.
-                    Input format: KEGG ID, Common name, SMILES.
-                </h6>
-            </div>
-        </div>
-
+        <h5 class="font-bold opacity-100 leading-lg">Input your target molecule and precursor</h5>
+        <h6 class="mt-1 leading-lg">
+            You’ll get the overall stoichiometry and theoretical yield.
+            Input format: KEGG ID, Common name, SMILES.
+        </h6>
+        
         <!-- Molecule Input -->
         <div class="flex gap-6 mt-8">
             <div class="flex flex-col grow">
@@ -168,9 +164,9 @@
             </div>
         </div>
         <p-button
-            label="Get the Overall Stoichiometry"
+            label="Get Overall Stoichiometry"
             type="submit"
-            styleClass="bg-primary regular"
+            styleClass="btn-submit-request"
             [disabled]="!request.form.valid"
             iconPos="right"
             icon="pi pi-arrow-right"
