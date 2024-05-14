@@ -1,5 +1,5 @@
 <form
-    class="flex h-full flex-col justify-between"
+    class="flex flex-col justify-between h-full"
     [formGroup]="request.form"
     (ngSubmit)="onSubmit()"
 >
@@ -15,21 +15,21 @@
             <div class="flex items-end">
                 <button
                     type="button"
-                    class="rounded-md border p-2"
+                    class="p-2 border rounded-md"
                     (click)="useExample()"
                 >
-                    <i class="pi pi-box mx-2"></i>
+                    <i class="mx-2 pi pi-box"></i>
                     Use an Example
                 </button>
             </div>
         </div>
 
         <!-- Molecule Input -->
-        <div class="mt-8 flex gap-6">
-            <div class="flex grow flex-col">
+        <div class="flex gap-6 mt-8">
+            <div class="flex flex-col grow">
                 <div class="flex items-center justify-between pb-2">
                     <div class="flex items-center">
-                        <span class="green-dot mx-2"></span>
+                        <span class="mx-2 green-dot"></span>
                         <span class="text-base font-semibold"
                             >Primary Precursor</span
                         >
@@ -66,7 +66,7 @@
                     ></ng-container>
                 </ng-container>
             </div>
-            <div class="mt-10 flex items-start">
+            <div class="flex items-start mt-10">
                 <svg
                     width="37"
                     height="37"
@@ -84,10 +84,10 @@
                     />
                 </svg>
             </div>
-            <div class="flex grow flex-col">
+            <div class="flex flex-col grow">
                 <div class="flex items-center justify-between pb-2">
                     <div class="flex items-center">
-                        <span class="blue-dot mx-2"></span>
+                        <span class="mx-2 blue-dot"></span>
                         <span class="text-base font-semibold"
                             >Target Molecule</span
                         >
@@ -129,12 +129,12 @@
 
     <!-- Subscription Email Input -->
     <div
-        class="flex justify-between rounded-t-md bg-[#F3F5FB] px-10 pt-8"
+        class="sticky bottom-0 flex justify-between rounded-t-md bg-[#F3F5FB] px-10 pt-8"
     >
         <div class="flex flex-col">
-            <div class="mb-2 flex items-end justify-center">
-                <span class="mb-1 pr-12">
-                    <h2 class="m-0 mr-2 inline">Email</h2>
+            <div class="flex items-end justify-center mb-2">
+                <span class="pr-12 mb-1">
+                    <h2 class="inline m-0 mr-2">Email</h2>
                     Leave an email to get an notification when your
                     results are ready.
                 </span>
@@ -155,7 +155,7 @@
                     *ngIf="request.form.controls['subscriberEmail'].invalid
                         && request.form.controls['subscriberEmail'].dirty"
                     id="subscriber-email-help"
-                    class="p-error mt-2 block"
+                    class="block mt-2 p-error"
                     >Email is invalid.</small
                 >
             </div>
@@ -185,7 +185,7 @@
     <div [class]="styleClass" *ngIf="status !== 'INVALID'">
         <i
             *ngIf="status === 'VALID'"
-            class="pi pi-check-circle absolute left-3 top-3"
+            class="absolute pi pi-check-circle left-3 top-3"
         ></i>
         <p-progressSpinner 
             *ngIf="status === 'PENDING'"
