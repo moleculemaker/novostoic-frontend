@@ -33,9 +33,11 @@
                         ></span
                     >
                 </div>
-                <app-marvinjs-input placeholder="CC(=O)C(=O)O"
-                    [smiles]="request.form.controls['primaryPrecursor'].value || ''"
-                    (smilesChange)="request.form.controls['primaryPrecursor'].setValue($event)"
+                <app-marvinjs-input
+                    formControlName="primaryPrecursor"
+                    placeholder="CC(=O)C(=O)O"
+                    [errors]="request.form.controls['primaryPrecursor'].errors"
+                    [dirty]="request.form.controls['primaryPrecursor'].dirty"
                 ></app-marvinjs-input>
 
                 <!-- Enzyme Sequence Input -->

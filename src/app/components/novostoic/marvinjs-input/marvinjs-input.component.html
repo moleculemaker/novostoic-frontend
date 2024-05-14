@@ -1,12 +1,15 @@
-<div class="marvin-filter-container">
+<div class="marvin-filter-container"
+    [class.invalid]="errors && dirty"
+>
     <div class="p-inputgroup">
         <input
+            title="Input your molecule"
             pInputText
             type="text"
             class="border-0"
             [placeholder]="placeholder"
-            [ngModel]="smiles"
-            (ngModelChange)="smilesChange.emit($event)"
+            [(ngModel)]="value"
+            (blur)="onTouched()"
         />
         <button
             pButton
@@ -20,6 +23,11 @@
     </div>
 </div>
 
+<div class="text-[--status-error-color] text-xs my-1" *ngIf="errors && dirty">
+    <div *ngIf="errors['required']">This field is required</div>
+    <div *ngIf="errors['chemicalNotSupported']">Chemical not supported</div>
+</div>
+
 <p-dialog
     *ngIf="showDialog$.value"
     class="marvin-editor-container"
@@ -31,8 +39,7 @@
 >
     <app-marvin-js-editor
         class="marvin-editor"
-        [smiles]="smiles"
-        (smilesChange)="smilesChange.emit($event)"
+        [(smiles)]="smiles"
     ></app-marvin-js-editor>
     <ng-template pTemplate="footer">
         <p-button

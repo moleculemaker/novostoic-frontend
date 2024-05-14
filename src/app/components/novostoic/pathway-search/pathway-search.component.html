@@ -82,10 +82,11 @@
                                         formControlName="amount"
                                     />
                                     <app-marvinjs-input
-                                        class="grow rounded-md bg-white"
-                                        placeholder="Name, SMILES, InChI, Kegg ID"
-                                        [smiles]="request.form.controls['primaryPrecursor'].controls['molecule'].value || ''"
-                                        (smilesChange)="request.form.controls['primaryPrecursor'].controls['molecule'].setValue($event)"
+                                        class="grow"
+                                        formControlName="molecule"
+                                        placeholder="Name, SMILES, InChi, Kegg ID"
+                                        [errors]="request.form.controls['primaryPrecursor'].controls['molecule'].errors"
+                                        [dirty]="request.form.controls['primaryPrecursor'].controls['molecule'].dirty"
                                     ></app-marvinjs-input>
                                 </div>
                             </div>
@@ -226,10 +227,11 @@
                                         formControlName="amount"
                                     />
                                     <app-marvinjs-input
-                                        class="grow rounded-md bg-white"
-                                        placeholder="Name, SMILES, InChI, Kegg ID"
-                                        [smiles]="request.form.controls['targetMolecule'].controls['molecule'].value || ''"
-                                        (smilesChange)="request.form.controls['targetMolecule'].controls['molecule'].setValue($event)"
+                                        class="grow"
+                                        formControlName="molecule"
+                                        placeholder="Name, SMILES, InChi, Kegg ID"
+                                        [errors]="request.form.controls['targetMolecule'].controls['molecule'].errors"
+                                        [dirty]="request.form.controls['targetMolecule'].controls['molecule'].dirty"
                                     ></app-marvinjs-input>
                                 </div>
                             </div>

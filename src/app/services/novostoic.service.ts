@@ -14,7 +14,8 @@ import {
   JobType,
   NovostoicRequestBody,
   DgPredictorRequestBody,
-  EnzRankRequestBody
+  EnzRankRequestBody,
+  ChemicalAutoCompleteResponse
 } from "../api/mmli-backend/v1";
 
 @Injectable({
@@ -67,6 +68,14 @@ export class NovostoicService {
 
   getError(jobType: JobType, jobID: string): Observable<string>{
     return this.filesService.getErrorsBucketNameErrorsJobIdGet(jobType, jobID);
+  }
+
+  getChemicalAutoComplete(searchString: string): Observable<ChemicalAutoCompleteResponse[]>{
+    return this.novostoicService.getChemicalAutoCompleteChemicalAutoCompleteGet(searchString);
+  }
+
+  validateChemical(searchString: string): Observable<ChemicalAutoCompleteResponse | null> {
+    return this.novostoicService.validateChemicalChemicalValidateGet(searchString);
   }
 
   private createJobAndRun(requestBody: any, jobType: JobType): Observable<PostResponse>{
