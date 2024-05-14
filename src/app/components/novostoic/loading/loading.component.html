@@ -1,13 +1,12 @@
-<div class="mt-6 flex flex-col">
+<div class="flex flex-col mt-6">
     <p-progressBar
         class="w-full"
-        [showValue]="false"
-        [value]="loadingValue$ | async"
+        mode="indeterminate"
         [style]="{height: '10px'}"
     ></p-progressBar>
-    <div class="mt-2 text-end text-[--text-color-secondary]">
+    <!-- <div class="mt-2 text-end text-[--text-color-secondary]">
         Estimated remaining processing time: 30 minutes
-    </div>
+    </div> -->
 </div>
 <div
     class="my-8 flex max-h-[540px] grow items-center gap-12 rounded-md bg-[--surface-b] px-12 pb-12"

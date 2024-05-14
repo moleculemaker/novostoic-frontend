@@ -34,8 +34,8 @@
                     >
                 </div>
                 <app-marvinjs-input
-                    formControlName="primaryPrecursor"
                     placeholder="CC(=O)C(=O)O"
+                    [formControl]="request.form.controls['primaryPrecursor']"
                     [errors]="request.form.controls['primaryPrecursor'].errors"
                     [dirty]="request.form.controls['primaryPrecursor'].dirty"
                 ></app-marvinjs-input>

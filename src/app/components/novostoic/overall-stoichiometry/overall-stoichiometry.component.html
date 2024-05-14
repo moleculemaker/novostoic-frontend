@@ -37,8 +37,8 @@
                     >
                 </div>
                 <app-marvinjs-input
-                    formControlName="primaryPrecursor"
                     placeholder="Name, SMILES, InChi, Kegg ID"
+                    [formControl]="request.form.controls['primaryPrecursor']"
                     [errors]="request.form.controls['primaryPrecursor'].errors"
                     [dirty]="request.form.controls['primaryPrecursor'].dirty"
                 ></app-marvinjs-input>
@@ -98,8 +98,8 @@
                     >
                 </div>
                 <app-marvinjs-input
-                    formControlName="targetMolecule"
                     placeholder="Name, SMILES, InChi, Kegg ID"
+                    [formControl]="request.form.controls['targetMolecule']"
                     [errors]="request.form.controls['targetMolecule'].errors"
                     [dirty]="request.form.controls['targetMolecule'].dirty"
                 ></app-marvinjs-input>

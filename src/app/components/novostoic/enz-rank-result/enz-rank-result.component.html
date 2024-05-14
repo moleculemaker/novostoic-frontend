@@ -15,12 +15,11 @@
             </div>
             <div class="flex items-center">
                 <div class="flex items-center gap-2">
-                    <button
-                        *ngIf="(isLoading$ | async)"
-                        class="p-2 py-3 border rounded-md"
-                    >
+                    <p-button 
+                        *ngIf="isLoading$ | async" 
+                        styleClass="p-button-outlined">
                         Cancel
-                    </button>
+                    </p-button>
 
                     <p-button
                         *ngIf="!(isLoading$ | async)"
@@ -34,10 +33,10 @@
                     </p-button>
 
                     <a href="/enzyme-selection" target="_blank">
-                        <button class="p-2 py-3 border rounded-md">
+                        <p-button styleClass="p-button-outlined">
                             <i class="mx-2 pi pi-plus"></i>
                             Run a new Request
-                        </button>
+                        </p-button>
                     </a>
                 </div>
             </div>

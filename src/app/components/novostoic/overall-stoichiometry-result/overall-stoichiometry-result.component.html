@@ -13,20 +13,19 @@
                     Submission Time: {{ ((status.time_created || 0) * 1000) | date: 'short' }}
                 </h6>
             </div>
-            <div class="flex items-center">
+            <div class="flex items-center mt-2">
                 <div class="flex items-center gap-2">
-                    <button
-                        *ngIf="isLoading$ | async"
-                        class="p-2 py-3 border rounded-md"
-                    >
+                    <p-button 
+                        *ngIf="isLoading$ | async" 
+                        styleClass="p-button-outlined">
                         Cancel
-                    </button>
+                    </p-button>
 
                     <a href="/overall-stoichiometry" target="_blank">
-                        <button class="p-2 py-3 border rounded-md">
+                        <p-button styleClass="p-button-outlined">
                             <i class="mx-2 pi pi-plus"></i>
                             Run a new Request
-                        </button>
+                        </p-button>
                     </a>
                 </div>
             </div>
@@ -34,14 +33,7 @@
 
         <!-- Molecule Input -->
         <div *ngIf="(response$ | async) as response" class="flex flex-col gap-6 mt-8">
-            <p-panel>
-                <ng-template pTemplate="header">
-                    <div
-                        class="flex items-center justify-between w-full p-2 px-4"
-                    >
-                        <span class="text-lg">Input</span>
-                    </div>
-                </ng-template>
+            <p-panel header="Input">
                 <ng-template pTemplate="content">
                     <div class="flex w-full">
                         <div
@@ -49,9 +41,7 @@
                         >
                             <div class="flex items-center mb-2">
                                 <span class="mx-2 green-dot"></span>
-                                <span class="text-base"
-                                    >Primary Precursor</span
-                                >
+                                <h6 class="font-semibold opacity-100 leading-xl">Primary Precursor</h6>
                             </div>
                             <div
                                 class="flex items-stretch justify-between gap-4 px-2"
@@ -79,11 +69,9 @@
                         <div
                             class="flex w-1/2 flex-col justify-between border-l border-solid border-[--surface-d] p-4"
                         >
-                            <div class="flex items-center">
+                            <div class="flex items-center mb-2">
                                 <span class="mx-2 blue-dot"></span>
-                                <span class="text-base font-semibold"
-                                    >Target Molecule</span
-                                >
+                                <h6 class="font-semibold opacity-100 leading-xl">Target Molecule</h6>
                             </div>
                             <div
                                 class="flex items-stretch justify-between gap-4 px-2"
@@ -114,19 +102,15 @@
 
             <p-panel>
                 <ng-template pTemplate="header">
-                    <div
-                        class="flex items-center justify-between w-full p-2 px-4"
+                    <span class="grow">Results</span>
+                    <button
+                        class="flex items-center gap-2 p-2 border rounded-lg"
+                        (click)="showResultsFilter$.next(true)"
                     >
-                        <span class="text-l">Results</span>
-                        <button
-                            class="flex items-center gap-2 p-2 border rounded-lg"
-                            (click)="showResultsFilter$.next(true)"
-                        >
-                            <i class="pi pi-filter"></i>
-                            Filter
-                            <p-chip>{{ filters$.value.length }}</p-chip>
-                        </button>
-                    </div>
+                        <i class="pi pi-filter"></i>
+                        Filter
+                        <p-chip>{{ filters$.value.length }}</p-chip>
+                    </button>
                 </ng-template>
                 <ng-template pTemplate="content">
                     <p-table
@@ -221,7 +205,7 @@
                                 <td>
                                     <button (click)="enterPathwayDesignByClick(product.stoichiometry)">
                                         <p-chip styleClass="p-1 px-3"
-                                            >Pathway Design
+                                            ><span class="leading-xl text-text-primary">Pathway Design</span>
                                             <i
                                                 class="ml-2 pi pi-arrow-right"
                                             ></i
@@ -241,18 +225,18 @@
 
 <ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
     <div class="flex justify-between mt-2">
-        <span class="font-light">Common Name</span>
+        <span class="leading-base opacity-60">Common Name</span>
         <span class="font-semibold text-end"
             >{{ molecule.commonNames[0] }}</span
         >
     </div>
-    <div class="flex justify-between mt-2">
-        <span class="font-light">KEGG ID</span>
-        <span class="font-semibold text-end">{{ molecule.keggId }}</span>
-    </div>
     <div *ngIf="showSmiles" class="flex justify-between mt-2">
-        <span class="font-light">SMILES</span>
+        <span class="leading-base opacity-60">SMILES</span>
         <span class="font-semibold text-end">{{ molecule.smiles }}</span>
+    </div>
+    <div class="flex justify-between mt-2">
+        <span class="leading-base opacity-60">KEGG ID</span>
+        <span class="font-semibold text-end">{{ molecule.keggId }}</span>
     </div>
 </ng-template>
 

@@ -13,25 +13,19 @@
                     Submission Time: {{ ((status.time_created || 0) * 1000) | date: 'short' }}
                 </h6>
             </div>
-            <div class="flex items-center">
+            <div class="flex items-center mt-2">
                 <div class="flex items-center gap-2">
-                    <button 
-                        *ngIf="isLoading$ | async"
-                        class="p-2 py-3 border rounded-md"
-                    >
+                    <p-button 
+                        *ngIf="isLoading$ | async" 
+                        styleClass="p-button-outlined">
                         Cancel
-                    </button>
-
-                    <!-- <button class="p-3 px-4 font-semibold bg-white border rounded-md border-primary text-primary" disabled>
-                        <i class="mr-2 pi pi-replay"></i>
-                        Reconfig
-                    </button> -->
+                    </p-button>
 
                     <a href="/pathway-search" target="_blank">
-                        <button class="p-2 py-3 font-semibold text-white border rounded-md bg-primary">
+                        <p-button styleClass="p-button-outlined">
                             <i class="mx-2 pi pi-plus"></i>
-                            Start a new Request
-                        </button>
+                            Run a new Request
+                        </p-button>
                     </a>
                 </div>
             </div>
