@@ -103,6 +103,7 @@ export class NovostoicService {
 
     /**
      * Get Chemical Auto Complete
+     * Returns a list of chemicals that match the search string limited to 20 results.
      * @param search 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
