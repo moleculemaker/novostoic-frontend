@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { BehaviorSubject } from "rxjs";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { EnzymeSelectionRequest } from "~/app/models/enz-rank";
 import { NovostoicService } from "~/app/services/novostoic.service";
