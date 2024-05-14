@@ -36,13 +36,16 @@
                     </div>
                     <span class="pr-1"
                         >Example:
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="form.controls['primaryPrecursor'].setValue('Pyruvate')"
                             >Pyruvate</span
                         >,
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="form.controls['primaryPrecursor'].setValue('C00022')"
                             >C00022</span
                         >,
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="form.controls['primaryPrecursor'].setValue('CC(=O)C(=O)O')"
                             >CC(=O)C(=O)O</span
                         ></span
                     >
@@ -111,12 +114,16 @@
                     </div>
                     <span class="pr-1"
                         >Example:
-                        <span class="font-semibold underline">3HP</span
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="form.controls['targetMolecule'].setValue('3HP')"
+                        >3HP</span
                         >,
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="form.controls['targetMolecule'].setValue('C01013')"
                             >C01013</span
                         >,
-                        <span class="font-semibold underline"
+                        <span class="font-semibold underline cursor-pointer"
+                            (click)="form.controls['targetMolecule'].setValue('O=C(CCO)O')"
                             >O=C(CCO)O</span
                         ></span
                     >
@@ -162,7 +169,7 @@
 
     <!-- Subscription Email Input -->
     <div
-        class="flex justify-between rounded-t-md bg-[#F3F5FB] px-10 pt-8"
+        class="sticky bottom-0 flex justify-between rounded-t-md bg-[#F3F5FB] px-10 pt-8"
     >
         <div class="flex flex-col">
             <div class="mb-2 flex items-end justify-center">

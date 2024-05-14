@@ -1,9 +1,16 @@
+$predicted_color: #C79807;
+$indicator_color: var(--surface-500);
+
 .strip_pattern {
     background: repeating-linear-gradient(white, white 3.9px, black 4px, black 7.9px);;
 }
 
-.strip_pattern_to_right {
-    background: repeating-linear-gradient(to right, white, white 4px, black 4.1px, black 7.9px);;
+.strip_pattern_to_right_thermo_infeasible {
+    background: repeating-linear-gradient(to right, white, white 3px, $predicted_color 3.1px, $predicted_color 6.1px);
+}
+
+.strip_pattern_to_right_thermo_feasible {
+    background: repeating-linear-gradient(to right, white, white 3px, $indicator_color 3.1px, $indicator_color 6.1px);
 }
 
 .strip_pattern_border {
@@ -51,21 +58,21 @@
         display: block;
         position: absolute;
         content: ' ';
-        top: 45%;
+        top: 44%;
         z-index: 1;
         @apply w-2;
         @apply h-2;
         @apply rounded;
         @apply -right-2;
         @apply scale-75;
-        background: black;
+        background-color: $indicator_color;
     }
 
     &::before {
         display: block;
         position: absolute;
         content: ' ';
-        top: 44.5%;
+        top: 43.5%;
         z-index: 1;
         @apply -left-2;
         @apply border-solid;
@@ -73,9 +80,33 @@
         @apply border-l-8;
         @apply border-y-4;
         @apply border-y-transparent;
-        @apply border-l-black;
-        @apply scale-75;
+        @apply scale-90;
+        border-left-color: $indicator_color;
     }
+}
+
+.with-start-point {
+    &::after {
+        display: block;
+        position: absolute;
+        content: ' ';
+        top: 47.5%;
+        z-index: 1;
+        @apply w-2;
+        @apply h-2;
+        @apply rounded;
+        @apply -left-2;
+        @apply scale-90;
+        background-color: $indicator_color;
+    }
+}
+
+.thermo_infeasible::before {
+    border-left-color: $predicted_color !important;
+}
+
+.next_thermo_infeasible::after {
+    background: $predicted_color !important;
 }
 
 .pathway_dialog {
@@ -88,5 +119,29 @@
         .p-dialog-header {
             @apply bg-gray-50;
         }
+    }
+}
+
+::ng-deep .p-panel {
+    .p-panel-header,
+    .p-panel-content {
+        padding: 0;
+    }
+}
+
+::ng-deep .p-dialog {
+    .p-dialog-header,
+    .p-dialog-footer {
+        @apply bg-gray-50;
+        @apply border-solid;
+        @apply border-[--surface-d];
+    }
+
+    .p-dialog-header {
+        @apply border-b;
+    }
+
+    .p-dialog-footer {
+        @apply border-t;
     }
 }

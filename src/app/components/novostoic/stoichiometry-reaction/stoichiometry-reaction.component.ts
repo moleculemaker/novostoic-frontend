@@ -14,4 +14,5 @@ export class StoichiometryReactionComponent {
   @Input() primaryPrecursor: NovostoicMolecule;
   @Input() targetMolecule: NovostoicMolecule;
   @Input() moleculeStyleClass: string = "bg-gray-50";
+  @Input() showTargetMolecule: boolean = true;
 }

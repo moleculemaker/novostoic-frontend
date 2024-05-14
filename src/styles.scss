@@ -5,25 +5,36 @@
 @tailwind utilities;
 
 .green-dot {
-    display: inline-block;
-    height: .8rem;
-    width: .8rem;
-    border-radius: 50%;
-    background-color: #00A907;
+  display: inline-block;
+  height: 0.8rem;
+  width: 0.8rem;
+  border-radius: 50%;
+  background-color: #00a907;
 }
 
 .blue-dot {
-    display: inline-block;
-    height: .8rem;
-    width: .8rem;
-    border-radius: 50%;
-    background-color: #3B82F6;
+  display: inline-block;
+  height: 0.8rem;
+  width: 0.8rem;
+  border-radius: 50%;
+  background-color: #3b82f6;
 }
 
 .gray-dot {
-    display: inline-block;
-    height: .8rem;
-    width: .8rem;
-    border-radius: 50%;
-    background-color: #616161;
+  display: inline-block;
+  height: 0.8rem;
+  width: 0.8rem;
+  border-radius: 50%;
+  background-color: #616161;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
