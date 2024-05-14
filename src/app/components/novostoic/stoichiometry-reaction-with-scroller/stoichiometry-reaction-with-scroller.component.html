@@ -1,13 +1,14 @@
 <div class="relative flex items-center">
     <div
         #resultRow
-        class="flex items-center overflow-x-scroll"
+        class="flex items-center overflow-x-scroll no-scrollbar"
     >
         <app-stoichiometry-reaction
             [primaryPrecursor]="primaryPrecursor"
             [targetMolecule]="targetMolecule"
             [stoichiometry]="stoichiometry"
             [moleculeStyleClass]="moleculeStyleClass"
+            [showTargetMolecule]="showTargetMolecule"
         ></app-stoichiometry-reaction>
     </div>
     <button

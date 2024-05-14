@@ -9,6 +9,9 @@ import { OverallStoichiometryRequest } from "~/app/models/overall-stoichiometry"
   selector: "app-overall-stoichiometry",
   templateUrl: "./overall-stoichiometry.component.html",
   styleUrls: ["./overall-stoichiometry.component.scss"],
+  host: {
+    class: 'grow px-4 xl:w-content-xl xl:mr-64 xl:pr-6'
+  }
 })
 export class OverallStoichiometryComponent {
   request = new OverallStoichiometryRequest(this.novostoicService);

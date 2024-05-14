@@ -5,13 +5,14 @@ import { NovostoicMolecule, NovostoicStoichiometry } from '~/app/models/overall-
 @Component({
   selector: 'app-stoichiometry-reaction-with-scroller',
   templateUrl: './stoichiometry-reaction-with-scroller.component.html',
-  styleUrls: ['./stoichiometry-reaction-with-scroller.component.scss']
+  styleUrls: ['./stoichiometry-reaction-with-scroller.component.scss'],
 })
 export class StoichiometryReactionWithScrollerComponent {
   @Input() primaryPrecursor: NovostoicMolecule;
   @Input() targetMolecule: NovostoicMolecule;
   @Input() stoichiometry: NovostoicStoichiometry;
   @Input() moleculeStyleClass: string;
+  @Input() showTargetMolecule: boolean = true;
 
   scrollingCounter$ = new BehaviorSubject(-1);
 

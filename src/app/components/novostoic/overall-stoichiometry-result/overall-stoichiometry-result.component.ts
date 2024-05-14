@@ -17,6 +17,9 @@ import { NovostoicService } from "~/app/services/novostoic.service";
   selector: "app-overall-stoichiometry-result",
   templateUrl: "./overall-stoichiometry-result.component.html",
   styleUrls: ["./overall-stoichiometry-result.component.scss"],
+  host: {
+    class: 'grow px-4 xl:w-content-xl xl:mr-64 xl:pr-6'
+  }
 })
 export class OverallStoichiometryResultComponent implements OnInit {
   @ViewChild("resultsTable") resultsTable: Table;
