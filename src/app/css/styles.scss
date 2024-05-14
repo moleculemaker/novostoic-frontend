@@ -111,6 +111,20 @@ html, body {
 	}
 }
 
+.p-button {
+	&.regular {
+		.p-button-label {
+			font-weight: 400;
+		}
+	}
+
+	&:disabled {
+		@apply opacity-100;
+		@apply bg-text-secondary;
+		@apply border-text-secondary;
+	}
+}
+
 .pi {
 	font-size: inherit;
 }
@@ -159,6 +173,7 @@ h5 {
 h6 {
 	@apply text-base;
 	@apply leading-lg;
+	@apply opacity-60;
 }
 
 small {

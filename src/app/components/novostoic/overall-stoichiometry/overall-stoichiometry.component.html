@@ -1,26 +1,16 @@
 <form
-    class="flex flex-col justify-between h-full"
+    class="flex flex-col justify-between h-full mt-2"
     [formGroup]="request.form"
     (ngSubmit)="onSubmit()"
 >
     <div>
         <div class="flex justify-between">
             <div>
-                <h2 class="mb-2">Input your target molecule and precursor</h2>
-                <p class="leading-6">
+                <h5 class="font-bold opacity-100 leading-lg">Input your target molecule and precursor</h5>
+                <h6 class="mt-1 leading-lg">
                     You’ll get the overall stoichiometry and theoretical yield.
                     Input format: KEGG ID, Common name, SMILES.
-                </p>
-            </div>
-            <div class="flex items-end">
-                <button
-                    type="button"
-                    class="p-2 border rounded-md"
-                    (click)="useExample()"
-                >
-                    <i class="mx-2 pi pi-box"></i>
-                    Use an Example
-                </button>
+                </h6>
             </div>
         </div>
 
@@ -30,24 +20,24 @@
                 <div class="flex items-center justify-between pb-2">
                     <div class="flex items-center">
                         <span class="mx-2 green-dot"></span>
-                        <span class="text-base font-semibold"
-                            >Primary Precursor</span
+                        <h6 class="font-semibold opacity-100 leading-xl"
+                            >Primary Precursor</h6
                         >
                     </div>
-                    <span class="pr-1"
+                    <small class="pr-1 leading-[140%]"
                         >Example:
-                        <span class="font-semibold underline cursor-pointer"
+                        <small class="font-semibold underline cursor-pointer"
                             (click)="useExampleValue('primaryPrecursor', 'pyruvate')"
-                            >Pyruvate</span
+                            >Pyruvate</small
                         >,
-                        <span class="font-semibold underline cursor-pointer"
+                        <small class="font-semibold underline cursor-pointer"
                             (click)="useExampleValue('primaryPrecursor', 'C00022')"
-                            >C00022</span
+                            >C00022</small
                         >,
-                        <span class="font-semibold underline cursor-pointer"
+                        <small class="font-semibold underline cursor-pointer"
                             (click)="useExampleValue('primaryPrecursor', 'CC(=O)C(=O)O')"
-                            >CC(=O)C(=O)O</span
-                        ></span
+                            >CC(=O)C(=O)O</small
+                        ></small
                     >
                 </div>
                 <app-marvinjs-input
@@ -91,24 +81,24 @@
                 <div class="flex items-center justify-between pb-2">
                     <div class="flex items-center">
                         <span class="mx-2 blue-dot"></span>
-                        <span class="text-base font-semibold"
-                            >Target Molecule</span
+                        <h6 class="font-semibold opacity-100 leading-xl"
+                            >Target Molecule</h6
                         >
                     </div>
-                    <span class="pr-1"
+                    <small class="pr-1"
                         >Example:
-                        <!-- <span class="font-semibold underline cursor-pointer"
+                        <!-- <small class="font-semibold underline cursor-pointer"
                             (click)="useExampleValue('targetMolecule', '3HP')"
-                        >3HP</span
+                        >3HP</small
                         >, -->
-                        <span class="font-semibold underline cursor-pointer"
+                        <small class="font-semibold underline cursor-pointer"
                             (click)="useExampleValue('targetMolecule', 'C01013')"
-                            >C01013</span
+                            >C01013</small
                         >,
-                        <span class="font-semibold underline cursor-pointer"
+                        <small class="font-semibold underline cursor-pointer"
                             (click)="useExampleValue('targetMolecule', 'O=C(CCO)O')"
-                            >O=C(CCO)O</span
-                        ></span
+                            >O=C(CCO)O</small
+                        ></small
                     >
                 </div>
                 <app-marvinjs-input
@@ -140,9 +130,9 @@
         <div class="flex flex-col">
             <div class="flex items-end justify-center mb-2">
                 <span class="pr-12 mb-1">
-                    <h2 class="inline m-0 mr-2">Email</h2>
-                    Leave an email to get an notification when your
-                    results are ready.
+                    <h5 class="inline font-semibold opacity-100 leading-lg">Email</h5>
+                    <h6 class="inline ml-4 leading-lg">Leave an email to get an notification when your
+                    results are ready.</h6>
                 </span>
             </div>
             <div class="w-full">
@@ -166,20 +156,22 @@
                 >
             </div>
             <div class="py-4">
-                <p-checkbox
-                    name="subscription"
-                    styleClass="subscription-checkbox"
-                    label="Agree to receive email notifications and updates about Novostoic."
-                    [binary]="true"
-                    [formControl]="request.form.controls['agreeToSubscription']"
-                ></p-checkbox>
+                <div class="flex items-center gap-1">
+                    <p-checkbox
+                        name="subscription"
+                        styleClass="subscription-checkbox"
+                        [binary]="true"
+                        [formControl]="request.form.controls['agreeToSubscription']"
+                    ></p-checkbox>
+                    <label class="opacity-60">Agree to receive email notifications and updates about Novostoic.</label>
+                </div>
             </div>
         </div>
         <p-button
             label="Get the Overall Stoichiometry"
             type="submit"
-            styleClass="bg-[#224063]"
-            [disabled]="request.form.invalid"
+            styleClass="bg-primary regular"
+            [disabled]="!request.form.valid"
             iconPos="right"
             icon="pi pi-arrow-right"
         ></p-button>
