@@ -9,12 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ReactionsInner } from './reactionsInner';
 
 
-export interface JobCreate { 
-    job_info?: string;
-    email?: string;
-    job_id?: string;
-    run_id?: string;
+export interface DgPredictorRequestBody { 
+    jobId: string;
+    user_email: string;
+    ph: number;
+    ionic_strength: number;
+    reactions: Array<ReactionsInner>;
 }
 

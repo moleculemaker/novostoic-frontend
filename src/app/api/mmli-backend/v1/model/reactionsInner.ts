@@ -9,12 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ReactionSmiles } from './reactionSmiles';
+import { ReactionKeggId } from './reactionKeggId';
 
 
-export interface JobCreate { 
-    job_info?: string;
-    email?: string;
-    job_id?: string;
-    run_id?: string;
+export interface ReactionsInner { 
+    type: string;
+    smiles: string;
+    molecule_number: string;
+    molecule_inchi_or_smiles: string;
+    reaction_keggid: string;
 }
 

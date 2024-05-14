@@ -11,10 +11,10 @@
  */
 
 
-export interface JobCreate { 
-    job_info?: string;
-    email?: string;
-    job_id?: string;
-    run_id?: string;
+export interface ReactionKeggId { 
+    type: string;
+    molecule_number: string;
+    molecule_inchi_or_smiles: string;
+    reaction_keggid: string;
 }
 
