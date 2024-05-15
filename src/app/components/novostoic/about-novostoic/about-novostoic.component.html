@@ -7,11 +7,12 @@
             </h6>
         </a>
     </div>
-    <div class="flex w-full p-4 pb-0 lg:w-screen-lg grow">
-        <nav class="flex max-w-[300px] flex-col">
+    <div class="flex w-full p-4 pb-0 grow">
+        <nav class="flex w-[200px] flex-col">
             <button
                 class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
                 [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.ABOUT"
+                [class.text-[#224063]]="activePanel$.value === ActiveAboutPanel.ABOUT"
                 (click)="activePanel$.next(ActiveAboutPanel.ABOUT)"
             >
                 <i class="pi pi-info-circle"></i
@@ -20,6 +21,7 @@
             <button
                 class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
                 [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.GITHUB"
+                [class.text-[#224063]]="activePanel$.value === ActiveAboutPanel.GITHUB"
                 (click)="activePanel$.next(ActiveAboutPanel.GITHUB)"
             >
                 <i class="pi pi-github"></i
@@ -28,6 +30,7 @@
             <button
                 class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
                 [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.PUBLICATIONS"
+                [class.text-[#224063]]="activePanel$.value === ActiveAboutPanel.PUBLICATIONS"
                 (click)="activePanel$.next(ActiveAboutPanel.PUBLICATIONS)"
             >
                 <i class="pi pi-book"></i
@@ -36,6 +39,7 @@
             <button
                 class="z-10 flex items-center border-r-2 border-solid p-4 hover:bg-gray-100 active:border-[#495057]"
                 [class.border-[#495057]]="activePanel$.value === ActiveAboutPanel.GET_INVOLVED"
+                [class.text-[#224063]]="activePanel$.value === ActiveAboutPanel.GET_INVOLVED"
                 (click)="activePanel$.next(ActiveAboutPanel.GET_INVOLVED)"
             >
                 <i class="pi pi-comment"></i
@@ -43,123 +47,127 @@
             </button>
         </nav>
 
-        <!-- About -->
-        <main
-            *ngIf="activePanel$.value === ActiveAboutPanel.ABOUT"
-            class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16 grow"
-        >
-            <h1 class="mb-4 font-bold">About</h1>
-            <h5 class="leading-xl">
-                NovoStoic is an integrated pathway design tool that accounts for
-                thermodynamic considerations and enzyme selection for novel reactions in pathway design.
-                <br/>
-                NovoStoic combines 4 different tools into a single platform
-            </h5>
+        <div class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb]"></div>
 
-            <h3 class="mt-16 leading-base">Overall Stoichiometry</h3>
-            <h6 class="mb-2 leading-xl">Optstoic</h6>
-            <h5 class="leading-xl">
-                Finds the optimal overall stoichiometry of conversion maximizing yield.
-            </h5>
-
-            <h3 class="mt-16 leading-base">Pathway Design</h3>
-            <h6 class="mb-2 leading-xl">Novostic</h6>
-            <h5 class="leading-xl">
-                Pathway design using optimal overall stoichiometry obtained from optStoic including 
-                both known and novel transformations learned from known reactions.
-            </h5>
-
-            <h3 class="mt-16 leading-base">Thremodynamical Feasibility</h3>
-            <h6 class="mb-2 leading-xl">dgPredictor</h6>
-            <h5 class="leading-xl">
-                Thermodynamic analysis to safegaurd against infeasible reaction directionalities, 
-                especially for reactions with novel molecules.
-            </h5>
-
-            <h3 class="mt-16 leading-base">Enzyme Activity</h3>
-            <h6 class="mb-2 leading-xl">EnzRank</h6>
-            <h5 class="leading-xl">
-                Enzyme selection tool for novel reactions.
-            </h5>
-        </main>
-
-        <!-- Github -->
-        <main
-            *ngIf="activePanel$.value === ActiveAboutPanel.GITHUB"
-            class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16 grow"
-        >
-            <h1 class="mb-4 font-bold">Github</h1>
-            <h5 class="opacity-100 leading-xl">
-                <a rel="noopener" class="font-semibold text-blue-500 underline" href="https://github.com/maranasgroup/novoStoic2.0" target="_blank"><i class="mx-2 pi pi-external-link"></i>https://github.com/maranasgroup/novoStoic2.0</a>
-            </h5>
-        </main>
-
-        <!-- Publications -->
-        <main
-            *ngIf="activePanel$.value === ActiveAboutPanel.PUBLICATIONS"
-            class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16 grow"
-        >
-            <h1 class="mb-4 font-bold">Publications</h1>
-            <h5 class="leading-xl">
-                Learn more about the research process behind the design and
-                construction of Novostoic.
-            </h5>
-
-            <ul class="max-w-screen-md mt-8">
-                <li class="mt-4">
-                    <h5 class="opacity-100 leading-xl">
-                        <b class="font-semibold">OptStoic:</b>
-                        Chowdhury, A., Maranas, C. Designing overall stoichiometric conversions and intervening metabolic reactions. Sci Rep 5, 16009 (2015).
-                        <br/>
-                    <a rel="noopener" class="font-semibold text-blue-500 underline" href="https://doi.org/10.1038/srep16009" target="_blank"><i class="mx-2 pi pi-external-link"></i>DOI: https://doi.org/10.1038/srep16009</a>
-                    </h5>
-                </li>
-                <li class="mt-4">
-                    <h5 class="opacity-100 leading-xl">
-                        <b class="font-semibold"
-                            >Novostoic 1.0:</b
-                        >
-                        Kumar, A., Wang, L., Ng, C.Y. et al. Pathway design using de novo steps through uncharted biochemical spaces. Nat Commun 9, 184 (2018).
-                        <br/>
-                        <a rel="noopener" class="font-semibold text-blue-500 underline" href="https://doi.org/10.1038/s41467-017-02362-x" target="_blank"><i class="mx-2 pi pi-external-link"></i>DOI: https://doi.org/10.1038/s41467-017-02362-x</a>
-                    </h5>
-                </li>
-                <li class="mt-4">
-                    <h5 class="opacity-100 leading-xl">
-                        <b class="font-semibold"
-                            >dgPredictor:</b
-                        >
-                        Wang L, Upadhyay V, Maranas CD (2021) dGPredictor: Automated fragmentation method for metabolic reaction free energy prediction and de novo pathway design. PLoS Comput Biol 17(9): e1009448
-                        <br/>
-                        <a rel="noopener" class="font-semibold text-blue-500 underline" href="https://doi.org/10.1371/journal.pcbi.1009448"><i class="mx-2 pi pi-external-link"></i>DOI: https://doi.org/10.1371/journal.pcbi.1009448</a>
-                    </h5>
-                </li>
-                <li class="mt-4">
-                    <h5 class="opacity-100 leading-xl">
-                        <b class="font-semibold">EnzRank:</b>
-                        Upadhyay V, Maranas CD (2023) Rank-ordering of known enzymes as starting points for re-engineering novel substrate activity using a convolutional neural network, Metab Eng.
-                        <br/>
-                        <a rel="noopener" class="font-semibold text-blue-500 underline" href="https://doi.org/10.1016/j.ymben.2023.06.001"><i class="mx-2 pi pi-external-link"></i>DOI: https://doi.org/10.1016/j.ymben.2023.06.001</a>
-                    </h5>
-                </li>
-            </ul>
-        </main>
-
-        <!-- Get Involved -->
-        <main
-            *ngIf="activePanel$.value === ActiveAboutPanel.GET_INVOLVED"
-            class="-ml-0.5 h-full border-l-2 border-solid border-[#e5e7eb] pb-4 pl-16 grow"
-        >
-            <h1 class="mb-4 font-bold">Get involved</h1>
-                <h5 class="inline leading-xl">We welcome you questions, suggestions, and feedback! Get in
-                    touch with us via email: </h5>
-                <h5 class="inline opacity-100 leading-xl">
-                    <a
-                        class="font-semibold text-[#0080FF] underline"
-                        href="mailto:novostoic-feedback@moleculemaker.org"
-                        >novostoic-feedback@moleculemaker.org</a
-                    >
+        <div class="max-w-screen-md">
+            <!-- About -->
+            <main
+                *ngIf="activePanel$.value === ActiveAboutPanel.ABOUT"
+                class="-ml-0.5 h-full pb-4 pl-16 grow"
+            >
+                <h1 class="mb-4 font-bold">About</h1>
+                <h5 class="leading-xl">
+                    NovoStoic is an integrated pathway design tool that accounts for
+                    thermodynamic considerations and enzyme selection for novel reactions in pathway design.
+                    <br/>
+                    NovoStoic combines 4 different tools into a single platform
                 </h5>
-        </main>
+
+                <h3 class="mt-16 leading-base">Overall Stoichiometry</h3>
+                <h6 class="mb-2 leading-xl">Optstoic</h6>
+                <h5 class="leading-xl">
+                    Finds the optimal overall stoichiometry of conversion maximizing yield.
+                </h5>
+
+                <h3 class="mt-16 leading-base">Pathway Design</h3>
+                <h6 class="mb-2 leading-xl">Novostic</h6>
+                <h5 class="leading-xl">
+                    Pathway design using optimal overall stoichiometry obtained from optStoic including 
+                    both known and novel transformations learned from known reactions.
+                </h5>
+
+                <h3 class="mt-16 leading-base">Thremodynamical Feasibility</h3>
+                <h6 class="mb-2 leading-xl">dgPredictor</h6>
+                <h5 class="leading-xl">
+                    Thermodynamic analysis to safegaurd against infeasible reaction directionalities, 
+                    especially for reactions with novel molecules.
+                </h5>
+
+                <h3 class="mt-16 leading-base">Enzyme Activity</h3>
+                <h6 class="mb-2 leading-xl">EnzRank</h6>
+                <h5 class="leading-xl">
+                    Enzyme selection tool for novel reactions.
+                </h5>
+            </main>
+
+            <!-- Github -->
+            <main
+                *ngIf="activePanel$.value === ActiveAboutPanel.GITHUB"
+                class="-ml-0.5 h-full pb-4 pl-16 grow"
+            >
+                <h1 class="mb-4 font-bold">Github</h1>
+                <h5 class="opacity-100 leading-xl">
+                    <a rel="noopener" class="font-semibold text-blue-500 underline" href="https://github.com/maranasgroup/novoStoic2.0" target="_blank"><i class="mx-2 pi pi-external-link"></i>https://github.com/maranasgroup/novoStoic2.0</a>
+                </h5>
+            </main>
+
+            <!-- Publications -->
+            <main
+                *ngIf="activePanel$.value === ActiveAboutPanel.PUBLICATIONS"
+                class="-ml-0.5 h-full pb-4 pl-16 grow"
+            >
+                <h1 class="mb-4 font-bold">Publications</h1>
+                <h5 class="leading-xl">
+                    Learn more about the research process behind the design and
+                    construction of Novostoic.
+                </h5>
+
+                <ul class="max-w-screen-md mt-8">
+                    <li class="mt-4">
+                        <h5 class="opacity-100 leading-xl">
+                            <b class="font-semibold">OptStoic:</b>
+                            Chowdhury, A., Maranas, C. Designing overall stoichiometric conversions and intervening metabolic reactions. Sci Rep 5, 16009 (2015).
+                            <br/>
+                        <a rel="noopener" class="font-semibold text-blue-500 underline" href="https://doi.org/10.1038/srep16009" target="_blank"><i class="mx-2 pi pi-external-link"></i>DOI: https://doi.org/10.1038/srep16009</a>
+                        </h5>
+                    </li>
+                    <li class="mt-4">
+                        <h5 class="opacity-100 leading-xl">
+                            <b class="font-semibold"
+                                >Novostoic 1.0:</b
+                            >
+                            Kumar, A., Wang, L., Ng, C.Y. et al. Pathway design using de novo steps through uncharted biochemical spaces. Nat Commun 9, 184 (2018).
+                            <br/>
+                            <a rel="noopener" class="font-semibold text-blue-500 underline" href="https://doi.org/10.1038/s41467-017-02362-x" target="_blank"><i class="mx-2 pi pi-external-link"></i>DOI: https://doi.org/10.1038/s41467-017-02362-x</a>
+                        </h5>
+                    </li>
+                    <li class="mt-4">
+                        <h5 class="opacity-100 leading-xl">
+                            <b class="font-semibold"
+                                >dgPredictor:</b
+                            >
+                            Wang L, Upadhyay V, Maranas CD (2021) dGPredictor: Automated fragmentation method for metabolic reaction free energy prediction and de novo pathway design. PLoS Comput Biol 17(9): e1009448
+                            <br/>
+                            <a rel="noopener" class="font-semibold text-blue-500 underline" href="https://doi.org/10.1371/journal.pcbi.1009448"><i class="mx-2 pi pi-external-link"></i>DOI: https://doi.org/10.1371/journal.pcbi.1009448</a>
+                        </h5>
+                    </li>
+                    <li class="mt-4">
+                        <h5 class="opacity-100 leading-xl">
+                            <b class="font-semibold">EnzRank:</b>
+                            Upadhyay V, Maranas CD (2023) Rank-ordering of known enzymes as starting points for re-engineering novel substrate activity using a convolutional neural network, Metab Eng.
+                            <br/>
+                            <a rel="noopener" class="font-semibold text-blue-500 underline" href="https://doi.org/10.1016/j.ymben.2023.06.001"><i class="mx-2 pi pi-external-link"></i>DOI: https://doi.org/10.1016/j.ymben.2023.06.001</a>
+                        </h5>
+                    </li>
+                </ul>
+            </main>
+
+            <!-- Get Involved -->
+            <main
+                *ngIf="activePanel$.value === ActiveAboutPanel.GET_INVOLVED"
+                class="-ml-0.5 h-full pb-4 pl-16 grow"
+            >
+                <h1 class="mb-4 font-bold">Get involved</h1>
+                    <h5 class="inline leading-xl">We welcome you questions, suggestions, and feedback! Get in
+                        touch with us via email: </h5>
+                    <h5 class="inline opacity-100 leading-xl">
+                        <a
+                            class="font-semibold text-[#0080FF] underline"
+                            href="mailto:novostoic-feedback@moleculemaker.org"
+                            >novostoic-feedback@moleculemaker.org</a
+                        >
+                    </h5>
+            </main>
+        </div>
     </div>
 </div>
