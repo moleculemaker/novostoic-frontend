@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, switchMap } from 'rxjs';
+import { Observable, map, of, switchMap } from 'rxjs';
 
 import { PostResponse, Job } from '../models';
 import {
@@ -59,7 +59,8 @@ export class NovostoicService {
   }
 
   getResultStatus(jobType: JobType, jobID: string): Observable<Job>{
-    return this.jobsService.getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet(jobType, jobID, '0');
+    return this.jobsService.listJobsByTypeAndJobIdJobTypeJobsJobIdGet(jobType, jobID)
+      .pipe(map((response) => response[0]));
   }
 
   getResult(jobType: JobType, jobID: string): Observable<any>{
