@@ -5,6 +5,7 @@ import { BehaviorSubject, combineLatest, map } from "rxjs";
 import { PathwaySearchRequest } from "~/app/models/pathway-search";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { NovostoicService } from "~/app/services/novostoic.service";
+import { JobType } from "~/app/api/mmli-backend/v1";
 
 @Component({
   selector: "app-pathway-search",
@@ -107,11 +108,12 @@ export class PathwaySearchComponent implements OnInit {
     if (!this.request.form.valid) {
       return;
     }
-
-    this.novostoicService.createJobAndRunPathwaySearch(
+    
+    this.novostoicService.createJobAndRun(
+      JobType.NovostoicPathways,
       this.request.toRequestBody()
     ).subscribe((response) => {
-      this.router.navigate([NovostoicTools.PATHWAY_SEARCH, 'result', response.jobId]);
+      this.router.navigate([NovostoicTools.PATHWAY_SEARCH, "result", response.job_id]);
     });
   }
 

@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { JobType } from "~/app/api/mmli-backend/v1";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { EnzymeSelectionRequest } from "~/app/models/enz-rank";
 import { NovostoicService } from "~/app/services/novostoic.service";
@@ -29,10 +30,11 @@ export class EnzRankComponent {
       return;
     }
 
-    this.novostoicService.createJobAndRunEnzrank(
+    this.novostoicService.createJobAndRun(
+      JobType.NovostoicOptstoic,
       this.request.toRequestBody()
     ).subscribe((response) => {
-      this.router.navigate([NovostoicTools.ENZYME_ACTIVITY, "result", response.jobId]);
+      this.router.navigate([NovostoicTools.ENZYME_ACTIVITY, "result", response.job_id]);
     });
   }
 }

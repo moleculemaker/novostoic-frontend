@@ -1,6 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { NovostoicService } from "../services/novostoic.service";
-import { OptstoicRequestBody } from "../api/mmli-backend/v1";
 
 export class OverallStoichiometryRequest {
   form = new FormGroup({
@@ -35,12 +34,14 @@ export class OverallStoichiometryRequest {
     });
   }
 
-  toRequestBody(): OptstoicRequestBody {
+  toRequestBody() {
+    const jobInfo = {
+      primary_precursor: this.form.controls["primaryPrecursor"].value!,
+      target_molecule: this.form.controls["targetMolecule"].value!,
+    };
     return {
-      jobId: "",
-      user_email: this.form.controls['subscriberEmail'].value!,
-      primary_precursor: this.form.controls['primaryPrecursor'].value!,
-      target_molecule: this.form.controls['targetMolecule'].value!,
+      email: this.form.controls['subscriberEmail'].value!,
+      job_info: JSON.stringify(jobInfo),
     }
   }
 }

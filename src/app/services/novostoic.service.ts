@@ -1,21 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable, map, of, switchMap, tap } from 'rxjs';
 
-import { PostResponse, Job } from '../models';
+import { PostResponse } from '../models';
 import {
   DefaultService,
-  //Molecule,
-  //ExportRequestBody,
   JobsService,
   FilesService,
   NovostoicService as NovostoicApiService,
-  OptstoicRequestBody,
-  JobCreate,
   JobType,
-  NovostoicRequestBody,
-  DgPredictorRequestBody,
-  EnzRankRequestBody,
-  ChemicalAutoCompleteResponse
+  ChemicalAutoCompleteResponse,
+  BodyCreateJobJobTypeJobsPost,
+  Job
 } from "../api/mmli-backend/v1";
 
 @Injectable({
@@ -42,20 +37,8 @@ export class NovostoicService {
     return respond;
   }
 
-  createJobAndRunOptstoic(requestBody: OptstoicRequestBody): Observable<PostResponse>{
-    return this.createJobAndRun(requestBody, JobType.NovostoicOptstoic);
-  }
-
-  createJobAndRunPathwaySearch(requestBody: NovostoicRequestBody): Observable<PostResponse> {
-    return this.createJobAndRun(requestBody, JobType.NovostoicNovostoic);
-  }
-
-  createJobAndRunDgpredictor(requestBody: DgPredictorRequestBody): Observable<PostResponse> {
-    return this.createJobAndRun(requestBody, JobType.NovostoicDgpredictor);
-  }
-
-  createJobAndRunEnzrank(requestBody: EnzRankRequestBody): Observable<PostResponse> {
-    return this.createJobAndRun(requestBody, JobType.NovostoicEnzrank);
+  createJobAndRun(jobType: JobType, requestBody: BodyCreateJobJobTypeJobsPost): Observable<Job> {
+    return this.jobsService.createJobJobTypeJobsPost(jobType, requestBody);
   }
 
   getResultStatus(jobType: JobType, jobID: string): Observable<Job>{
@@ -77,30 +60,5 @@ export class NovostoicService {
 
   validateChemical(searchString: string): Observable<ChemicalAutoCompleteResponse | null> {
     return this.novostoicService.validateChemicalChemicalValidateGet(searchString);
-  }
-
-  private createJobAndRun(requestBody: any, jobType: JobType): Observable<PostResponse>{
-    const jobCreate: JobCreate = {
-      job_info: JSON.stringify(requestBody),
-      email: requestBody.user_email,
-    }
-
-    return this.jobsService.createJobJobTypeJobsPost(jobType, jobCreate)
-      .pipe(switchMap((response) => {
-        console.log('Job created', response);
-        requestBody.jobId = response.job_id!;
-        switch (jobType) {
-          case JobType.NovostoicOptstoic:
-            return this.novostoicService.startOptstoicNovostoicOptstoicRunPost(requestBody);
-          case JobType.NovostoicNovostoic:
-            return this.novostoicService.startNovostoicNovostoicNovostoicRunPost(requestBody);
-          case JobType.NovostoicDgpredictor:
-            return this.novostoicService.startDgpredictorNovostoicDgpredictorRunPost(requestBody);
-          case JobType.NovostoicEnzrank:
-            return this.novostoicService.startEnzrankNovostoicEnzrankRunPost(requestBody);
-          default:
-            return of({ jobId: "example_job_id", submitted_at: "2020-01-01 10:10:10" });
-        }
-      }))
   }
 }

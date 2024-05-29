@@ -4,7 +4,7 @@ import { BehaviorSubject, map } from "rxjs";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { NovostoicService } from "~/app/services/novostoic.service";
 import { OverallStoichiometryRequest } from "~/app/models/overall-stoichiometry";
-import { ChemicalAutoCompleteResponse } from "~/app/api/mmli-backend/v1";
+import { ChemicalAutoCompleteResponse, JobType } from "~/app/api/mmli-backend/v1";
 import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
@@ -54,8 +54,11 @@ export class OverallStoichiometryComponent {
       return;
     }
 
-    this.novostoicService.createJobAndRunOptstoic(this.request.toRequestBody()).subscribe((response) => {
-      this.router.navigate([NovostoicTools.OVERALL_STOICHIOMETRY, "result", response.jobId]);
+    this.novostoicService.createJobAndRun(
+      JobType.NovostoicOptstoic,
+      this.request.toRequestBody()
+    ).subscribe((response) => {
+      this.router.navigate([NovostoicTools.OVERALL_STOICHIOMETRY, "result", response.job_id]);
     });
   }
 }

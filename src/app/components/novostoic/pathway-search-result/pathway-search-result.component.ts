@@ -22,7 +22,7 @@ export class PathwaySearchResultComponent implements OnInit {
 
   statusResponse$ = timer(0, 10000).pipe(
     switchMap(() => this.novostoicService.getResultStatus(
-      JobType.NovostoicNovostoic,
+      JobType.NovostoicPathways,
       this.jobId,
     )),
     takeWhile((data) => 
@@ -38,7 +38,7 @@ export class PathwaySearchResultComponent implements OnInit {
 
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
-    switchMap(() => this.novostoicService.getResult(JobType.NovostoicNovostoic, this.jobId)),
+    switchMap(() => this.novostoicService.getResult(JobType.NovostoicPathways, this.jobId)),
     tap((data) => { console.log('result: ', data) }),
     switchMap((data) => of(PathwaySearchResponse.example)), //TODO: replace with actual response
     map((response) => ({

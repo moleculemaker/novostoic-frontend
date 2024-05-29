@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
+import { JobType } from "~/app/api/mmli-backend/v1";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { ThermodynamicalFeasibilityRequest } from "~/app/models/dg-predictor";
 import { NovostoicService } from "~/app/services/novostoic.service";
@@ -30,10 +31,11 @@ export class DgPredictorComponent {
       return;
     }
 
-    this.novostoicService.createJobAndRunDgpredictor(
+    this.novostoicService.createJobAndRun(
+      JobType.NovostoicDgpredictor,
       this.request.toRequestBody()
     ).subscribe((response) => {
-      this.router.navigate([NovostoicTools.THERMODYNAMICAL_FEASIBILITY, "result", response.jobId]);
+      this.router.navigate([NovostoicTools.THERMODYNAMICAL_FEASIBILITY, "result", response.job_id]);
     });
   }
 
