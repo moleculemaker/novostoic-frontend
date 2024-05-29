@@ -8,7 +8,8 @@
             type="text"
             class="border-0"
             [placeholder]="placeholder"
-            [(ngModel)]="value"
+            [ngModel]="userInput$.value"
+            (ngModelChange)="userInput$.next($event)"
             (blur)="onTouched()"
         />
         <button
@@ -39,7 +40,8 @@
 >
     <app-marvin-js-editor
         class="marvin-editor"
-        [(smiles)]="smiles"
+        [smiles]="(smiles$ | async) || ''"
+        (smilesChange)="userInput$.next($event)"
     ></app-marvin-js-editor>
     <ng-template pTemplate="footer">
         <p-button

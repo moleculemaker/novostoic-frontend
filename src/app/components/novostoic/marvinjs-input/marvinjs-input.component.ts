@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from "@angular/core";
 import { AbstractControl, AsyncValidator, ControlValueAccessor, NG_ASYNC_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from "@angular/forms";
-import { BehaviorSubject, Observable, debounce, debounceTime, filter, map, switchMap, take } from "rxjs";
+import { BehaviorSubject, Observable, combineLatest, combineLatestWith, debounce, debounceTime, filter, map, of, switchMap, take, tap } from "rxjs";
+import { ChemicalAutoCompleteResponse } from "~/app/api/mmli-backend/v1";
 import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
@@ -25,31 +26,30 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
   @Input() errors: ValidationErrors | null;
   @Input() dirty: boolean = false;
 
-  _value = "";
-  get value() {
-    return this._value;
-  }
-  set value(value: string) {
-    this._value = value;
-    this.onChange(value);
-    this.onTouched();
-  }
+  userInput$ = new BehaviorSubject<string>("");
+  validatedChemical$ = new BehaviorSubject<ChemicalAutoCompleteResponse|null>(null);
 
-  _smiles = "";
-  get smiles() {
-    return this._smiles;
-  }
-
-  set smiles(value: string) {
-    this._smiles = value;
-    if (this.value !== value) {
-      this.value = value;
-    }
-  }
+  smiles$ = this.validatedChemical$.pipe(
+    filter((v) => !!v),
+    map((v) => v!.smiles),
+  );
 
   showDialog$ = new BehaviorSubject(false);
 
-  constructor(private novostoicService: NovostoicService) {}
+  constructor(private novostoicService: NovostoicService) {
+    this.userInput$.pipe(
+      debounceTime(1000),
+      switchMap((v) => this.novostoicService.validateChemical(v)),
+      combineLatestWith(this.userInput$),
+      tap(([chemical, v]) => {
+        if (chemical) {
+          this.onChange(chemical.metanetx_id);
+        } else {
+          this.onChange(v);
+        }
+      })
+    ).subscribe();
+  }
   
   /* -------------------------------------------------------------------------- */
   /*                      Control Value Accessor Interface                      */
@@ -59,7 +59,7 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
   onTouched = () => {};
 
   writeValue(obj: string): void {
-    this.value = obj;
+    this.userInput$.next(obj);
   }
 
   registerOnChange(fn: any): void {
@@ -80,18 +80,18 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
   onValidatorChange = () => {};
 
   validate(control: AbstractControl<any, any>): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-      return control.valueChanges.pipe(
-        debounceTime(500),
-        switchMap((v) => this.novostoicService.validateChemical(v)),
-        map((chemical) => {
-          if (chemical) {
-            this.smiles = chemical.smiles;
-            return null;
-          }
-          return { chemicalNotSupported: true };
-        }),
-        take(1),
-      );
+    return control.valueChanges.pipe(
+      debounceTime(1000),
+      tap(console.log),
+      switchMap((v) => this.novostoicService.validateChemical(v)),
+      map((chemical) => {
+        if (chemical) {
+          return null;
+        }
+        return { chemicalNotSupported: true };
+      }),
+      take(1),
+    );
   }
 
   registerOnValidatorChange?(fn: () => void): void {

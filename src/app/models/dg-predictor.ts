@@ -100,7 +100,7 @@ export class ThermodynamicalFeasibilityRequest {
       reactions: this.form.controls["reactions"].value.map((reaction) => ({
         type: reaction.type as ReactionsInner["type"],
         smiles: reaction.reactionSmiles as ReactionsInner["smiles"],
-        molecule_number: reaction.moleculeNumber as ReactionsInner["molecule_number"],
+        molecule_number: 'N' + reaction.moleculeNumber as ReactionsInner["molecule_number"],
         molecule_inchi_or_smiles: reaction.moleculeInchiOrSmiles as ReactionsInner["molecule_inchi_or_smiles"],
         reaction_keggid: reaction.reactionKeggId as ReactionsInner["reaction_keggid"],
       })),
