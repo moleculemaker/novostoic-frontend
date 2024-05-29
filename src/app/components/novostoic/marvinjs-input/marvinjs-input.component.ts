@@ -48,6 +48,7 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
         } else {
           this.onChange(v);
         }
+        this.onTouched();
       })
     ).subscribe();
   }
@@ -83,10 +84,10 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
   validate(control: AbstractControl<any, any>): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
     return control.valueChanges.pipe(
       debounceTime(1000),
-      tap(console.log),
       switchMap((v) => this.novostoicService.validateChemical(v)),
       map((chemical) => {
         if (chemical) {
+          this.validatedChemical$.next(chemical);
           return null;
         }
         return { chemicalNotSupported: true };
