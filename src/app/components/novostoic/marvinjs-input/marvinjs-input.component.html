@@ -27,6 +27,7 @@
 <div class="text-[--status-error-color] text-xs my-1" *ngIf="errors && dirty">
     <div *ngIf="errors['required']">This field is required</div>
     <div *ngIf="errors['chemicalNotSupported']">Chemical not supported</div>
+    <div *ngIf="errors['kegg_id']">This tool requires the chemical with an associated KEGG ID</div>
 </div>
 
 <p-dialog

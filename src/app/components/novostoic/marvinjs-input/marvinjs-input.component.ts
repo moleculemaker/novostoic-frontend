@@ -25,6 +25,7 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
   @Input() placeholder: string = "";
   @Input() errors: ValidationErrors | null;
   @Input() dirty: boolean = false;
+  @Input() outputFormat: string = 'metanetx_id'
   @Output() onChemicalValidated = new EventEmitter<ChemicalAutoCompleteResponse | null>();
 
   userInput$ = new BehaviorSubject<string>("");
@@ -43,7 +44,11 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
     tap(([chemical, v]) => {
       if (!this.validateCache.has(v)) {
         this.validateCache.set(v, chemical);
-        this.onChange(chemical?.metanetx_id || v);
+        this.onChange(
+          chemical 
+          ? (chemical[this.outputFormat as keyof typeof chemical] || v) 
+          : v
+        );
         this.onTouched();
       }
     }),
@@ -88,8 +93,12 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
     return this.validatedChemical$.pipe(
       map(([chemical, _]) => {
         if (chemical) {
-          this.onChemicalValidated.emit(chemical);
-          return null;
+          if (chemical[this.outputFormat as keyof typeof chemical]) {
+            this.onChemicalValidated.emit(chemical);
+            return null;
+          } else {
+            return { [this.outputFormat]: true };
+          }
         }
         return { chemicalNotSupported: true };
       }),
