@@ -25,6 +25,7 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
   @Input() placeholder: string = "";
   @Input() errors: ValidationErrors | null;
   @Input() dirty: boolean = false;
+  @Output() onChemicalValidated = new EventEmitter<ChemicalAutoCompleteResponse | null>();
 
   userInput$ = new BehaviorSubject<string>("");
   validatedChemical$ = new BehaviorSubject<ChemicalAutoCompleteResponse|null>(null);
