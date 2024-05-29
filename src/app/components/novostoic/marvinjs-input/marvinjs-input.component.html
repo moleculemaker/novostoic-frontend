@@ -10,7 +10,7 @@
             [placeholder]="placeholder"
             [ngModel]="userInput$.value"
             (ngModelChange)="userInput$.next($event)"
-            (blur)="onTouched()"
+            (blur)="onChange(userInput$.value)"
         />
         <button
             pButton
@@ -46,7 +46,10 @@
     <ng-template pTemplate="footer">
         <p-button
             icon="pi pi-check"
-            (click)="showDialog$.next(false)"
+            (click)="
+                onChange(userInput$.value);
+                showDialog$.next(false);
+            "
             label="Search Structure"
             styleClass="bg-[#224063]"
         ></p-button>
