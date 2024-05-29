@@ -26,7 +26,7 @@ export class DgPredictorResultComponent {
 
   statusResponse$ = timer(0, 10000).pipe(
     switchMap(() => this.novostoicService.getResultStatus(
-      JobType.NovostoicOptstoic,
+      JobType.NovostoicDgpredictor,
       this.jobId,
     )),
     takeWhile((data) => 

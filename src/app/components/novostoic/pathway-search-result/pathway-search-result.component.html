@@ -223,7 +223,7 @@
     <div class="flex justify-between mt-2">
         <span class="leading-base opacity-60">Common Name</span>
         <span class="font-semibold text-end"
-            >{{ molecule.commonNames[0] }}</span
+            >{{ molecule.name }}</span
         >
     </div>
     <div *ngIf="showSmiles" class="flex justify-between mt-2">
@@ -285,23 +285,23 @@
             <div class="flex flex-col rounded-lg bg-[#224063] p-4 text-white">
                 <div>
                     <span class="font-semibold"
-                        >{{ reaction.primaryPrecursor.commonNames[0] }}</span
+                        >{{ reaction.primaryPrecursor.name }}</span
                     >
                     <span
                         *ngFor="let reactant of reaction.reactants"
                         class="text-white/50"
                     >
-                        + {{ reactant.commonNames[0] }}
+                        + {{ reactant.name }}
                     </span>
                     <i class="mx-2 text-sm pi pi-arrow-right"></i>
                     <span
                         *ngFor="let reactant of reaction.products"
                         class="text-white/50"
                     >
-                        {{ reactant.commonNames[0] }} +
+                        {{ reactant.name }} +
                     </span>
                     <span class="font-semibold"
-                        >{{ reaction.targetMolecule.commonNames[0] }}</span
+                        >{{ reaction.targetMolecule.name }}</span
                     >
                     <button
                         class="inline-flex items-center p-1 ml-2 rounded-md bg-white/20"
@@ -381,10 +381,10 @@
                 <ng-container *ngIf="response.pathways[selectedPathway$.value] as pathway">
                     <div>Pathway {{ selectedPathway$.value + 1 }}:</div>
                     <div>
-                        <span class="font-semibold">{{ pathway.reactions[0].primaryPrecursor!.commonNames[0] }}</span>
+                        <span class="font-semibold">{{ pathway.reactions[0].primaryPrecursor!.name }}</span>
                         <span *ngFor="let reaction of pathway.reactions">
                             <i class="mx-2 pi pi-arrow-right"></i>
-                            <span class="font-semibold">{{ reaction.targetMolecule!.commonNames[0] }}</span>
+                            <span class="font-semibold">{{ reaction.targetMolecule!.name }}</span>
                         </span>
                         <button type="button" title="download"><i class="mx-2 pi pi-download"></i></button>
                     </div>
@@ -487,7 +487,7 @@
 
                             <ng-container *ngFor="let reactant of reaction.reactants; let i = index">
                                 <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
-                                    <span>{{ reactant.commonNames[0] }}</span>
+                                    <span>{{ reactant.name }}</span>
                                 </div>
                                 <i class="pi pi-plus" *ngIf="i !== reaction.reactants.length - 1"></i>
                             </ng-container>
@@ -497,7 +497,7 @@
                             <ng-container *ngFor="let product of reaction.products; let i = index">
                                 <i *ngIf="i !== 0" class="pi pi-plus"></i>
                                 <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
-                                    <span>{{ product.commonNames[0] }}</span>
+                                    <span>{{ product.name }}</span>
                                 </div>
                             </ng-container>
                             
@@ -541,7 +541,7 @@
                 (ngModelChange)="intermediatesFilters$.next($event)"
             >
                 <ng-template pTemplate="item" let-item>
-                    {{ item.commonNames[0] }}
+                    {{ item.name }}
                 </ng-template>
                 <ng-template pTemplate="selectedItems">
                     {{ (filterIntermediatesStr$ | async) || 'Select intermediates' }}
@@ -560,7 +560,7 @@
                 (ngModelChange)="coFactorsFilters$.next($event)"
             >
                 <ng-template pTemplate="item" let-item>
-                    {{ item.commonNames[0] }}
+                    {{ item.name }}
                 </ng-template>
                 <ng-template pTemplate="selectedItems">
                     {{ (filterCoFactorsStr$ | async) || 'Select Co-Reactants & Co-Products' }}

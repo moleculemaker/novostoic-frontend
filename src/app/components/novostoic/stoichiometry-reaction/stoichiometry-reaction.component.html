@@ -38,7 +38,7 @@
             (mouseenter)="coreactantOverlay.show($event)"
             (mouseleave)="coreactantOverlay.hide()"
             >{{ reactant.amount | number: '1.1-2' }} {{
-            reactant.molecule.commonNames[0] }}
+            reactant.molecule.name }}
             <p-overlayPanel #coreactantOverlay>
                 <div class="w-[300px] p-4">
                     <div class="mb-2">
@@ -82,7 +82,7 @@
             class="p-1 inline-block max-w-[130px] overflow-clip text-ellipsis"
             [class]="moleculeStyleClass"
             >{{ reactant.amount | number: '1.1-2' }} {{
-            reactant.molecule.commonNames[0] }}
+            reactant.molecule.name }}
             <p-overlayPanel #coproductOverlay>
                 <div class="w-[300px] p-4">
                     <div class="mb-2">
@@ -146,7 +146,7 @@
     <div class="flex justify-between mt-2">
         <span class="leading-base opacity-60">Common Name</span>
         <span class="font-semibold text-end"
-            >{{ molecule.commonNames[0] }}</span
+            >{{ molecule.name }}</span
         >
     </div>
     <div *ngIf="showSmiles" class="flex justify-between mt-2">

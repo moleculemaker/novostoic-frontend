@@ -30,14 +30,14 @@ export class PathwaySearchRequest {
 
   addPrimaryPercursorFromMolecule(molecule: NovostoicMolecule) {
     this.form.controls["primaryPrecursor"].setValue({
-      molecule: molecule.commonNames[0],
+      molecule: molecule.name,
       amount: 1,
     });
   }
 
   addTargetMoleculeFromMolecule(molecule: NovostoicMolecule) {
     this.form.controls["targetMolecule"].setValue({
-      molecule: molecule.commonNames[0],
+      molecule: molecule.name,
       amount: 1,
     });
   }
@@ -50,7 +50,7 @@ export class PathwaySearchRequest {
     this.form.controls["coReactants"].setValue(
       stoichiometry.reactants
         .map((r) => ({
-          molecule: r.molecule.commonNames[0],
+          molecule: r.molecule.name,
           amount: r.amount,
         })),
     );
@@ -62,7 +62,7 @@ export class PathwaySearchRequest {
     this.form.controls["coProducts"].setValue(
       stoichiometry.products
         .map((r) => ({
-          molecule: r.molecule.commonNames[0],
+          molecule: r.molecule.name,
           amount: r.amount,
         })),
     );
@@ -181,29 +181,25 @@ export class PathwaySearchResponse {
   static example: PathwaySearchResponse = {
     primaryPrecursor: {
       smiles: "ex consequat sit adipisicing commodo",
-      commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+      name: "N/A",
       keggId: "proident",
       structure: "https://fakeimg.pl/640x360",
     },
     targetMolecule: {
       smiles: "sint fugiat Ut",
-      commonNames: [
-        "minim fugiat pariatur deserunt Ut",
-        "exercitation Ut",
-        "Duis est nostrud",
-      ],
+      name: "N/A",
       keggId: "laborum dolor magna",
       structure: "https://fakeimg.pl/640x360",
     },
     stoichiometry: {
       reactants: [
-        { molecule: { commonNames: ["Water"], smiles: "OHO" }, amount: 1 },
-        { molecule: { commonNames: ["CO2"], smiles: "OCO" }, amount: 1 },
-        { molecule: { commonNames: ["H2"], smiles: "H" }, amount: 1 },
+        { molecule: { name: "Water", smiles: "OHO" }, amount: 1 },
+        { molecule: { name: "CO2", smiles: "OCO" }, amount: 1 },
+        { molecule: { name: "H2", smiles: "H" }, amount: 1 },
       ],
       products: [
-        { molecule: { commonNames: ["Water"], smiles: "OHO" }, amount: 1 },
-        { molecule: { commonNames: ["H2"], smiles: "H" }, amount: 4 },
+        { molecule: { name: "Water", smiles: "OHO" }, amount: 1 },
+        { molecule: { name: "H2", smiles: "H" }, amount: 4 },
       ],
     },
     pathways: [
@@ -211,28 +207,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: 10,
           enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
@@ -242,28 +234,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: -10,
           enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
@@ -273,28 +261,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: -30,
           enzymes: [
@@ -309,28 +293,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: -20,
           enzymes: [
@@ -345,28 +325,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: 10,
           enzymes: [
@@ -381,28 +357,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: 15,
           enzymes: [
@@ -419,28 +391,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: 10,
           enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
@@ -450,28 +418,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: 50,
           enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
@@ -481,28 +445,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: 18,
           enzymes: [
@@ -517,28 +477,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: -10,
           enzymes: [
@@ -555,28 +511,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: 50,
           enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
@@ -586,28 +538,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: 50,
           enzymes: [
@@ -622,28 +570,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: 50,
           enzymes: [
@@ -660,28 +604,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: 0,
           enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
@@ -691,28 +631,24 @@ export class PathwaySearchResponse {
         {
           primaryPrecursor: {
             smiles: "ex consequat sit adipisicing commodo",
-            commonNames: ["mollit", "do sunt eiusmod Lorem dolor", "cillum"],
+            name: "N/A",
             keggId: "proident",
             structure: "https://fakeimg.pl/640x360",
           },
           targetMolecule: {
             smiles: "sint fugiat Ut",
-            commonNames: [
-              "minim fugiat pariatur deserunt Ut",
-              "exercitation Ut",
-              "Duis est nostrud",
-            ],
+            name: "N/A",
             keggId: "laborum dolor magna",
             structure: "https://fakeimg.pl/640x360",
           },
           reactants: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["CO2"], smiles: "OCO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "CO2", smiles: "OCO" },
+            { name: "H2", smiles: "H" },
           ],
           products: [
-            { commonNames: ["Water"], smiles: "OHO" },
-            { commonNames: ["H2"], smiles: "H" },
+            { name: "Water", smiles: "OHO" },
+            { name: "H2", smiles: "H" },
           ],
           deltaG: 0,
           enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],

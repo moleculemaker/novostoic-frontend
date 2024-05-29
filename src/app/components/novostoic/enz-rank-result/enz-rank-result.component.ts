@@ -18,7 +18,7 @@ export class EnzRankResultComponent {
 
   statusResponse$ = timer(0, 10000).pipe(
     switchMap(() => this.novostoicService.getResultStatus(
-      JobType.NovostoicOptstoic,
+      JobType.NovostoicEnzrank,
       this.jobId,
     )),
     takeWhile((data) => 
@@ -36,7 +36,6 @@ export class EnzRankResultComponent {
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicEnzrank, this.jobId)),
     tap((data) => { console.log('result: ', data) }),
-    switchMap((data) => of(EnzymeSelectionResponse.example)), //TODO: replace with actual response
   );
 
   constructor(

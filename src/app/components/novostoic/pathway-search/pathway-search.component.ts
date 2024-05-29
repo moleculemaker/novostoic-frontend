@@ -27,13 +27,13 @@ export class PathwaySearchComponent implements OnInit {
   // those values are used to populate the initial form
   primaryPrecursor$ = new BehaviorSubject({
     smiles: "N/A",
-    commonNames: ["N/A"],
+    name: "N/A",
     keggId: "N/A",
     structure: "",
   });
   targetMolecule$ = new BehaviorSubject({
     smiles: "N/A",
-    commonNames: ["N/A"],
+    name: "N/A",
     keggId: "N/A",
     structure: "",
   });
@@ -42,7 +42,7 @@ export class PathwaySearchComponent implements OnInit {
       {
         molecule: {
           smiles: "N/A",
-          commonNames: ["N/A"],
+          name: "N/A",
           keggId: "N/A",
           structure: "",
         },
@@ -53,7 +53,7 @@ export class PathwaySearchComponent implements OnInit {
       {
         molecule: {
           smiles: "N/A",
-          commonNames: ["N/A"],
+          name: "N/A",
           keggId: "N/A",
           structure: "",
         },
@@ -62,7 +62,7 @@ export class PathwaySearchComponent implements OnInit {
       {
         molecule: {
           smiles: "N/A",
-          commonNames: ["N/A"],
+          name: "N/A",
           keggId: "N/A",
           structure: "",
         },

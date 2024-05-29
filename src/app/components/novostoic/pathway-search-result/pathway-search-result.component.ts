@@ -73,8 +73,8 @@ export class PathwaySearchResultComponent implements OnInit {
       const returnVal: NovostoicMolecule[] = [];
       response.pathways.forEach((pathway) => {
         pathway.reactions.slice(0, pathway.reactions.length - 1).forEach((reaction: NovostoicReaction) => {
-          if (reaction.targetMolecule && !intermediates.has(reaction.targetMolecule.commonNames[0])) {
-            intermediates.add(reaction.targetMolecule.commonNames[0]);
+          if (reaction.targetMolecule && !intermediates.has(reaction.targetMolecule.name)) {
+            intermediates.add(reaction.targetMolecule.name);
             returnVal.push(reaction.targetMolecule);
           }
         });
@@ -84,7 +84,7 @@ export class PathwaySearchResultComponent implements OnInit {
   );
   intermediatesFilters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
   filterIntermediatesStr$ = this.intermediatesFilters$.pipe(
-    map((filters) => filters.map((filter) => filter.commonNames[0]).join(",")),
+    map((filters) => filters.map((filter) => filter.name).join(",")),
   );
 
   filterCoFactorsOptions$ = this.response$.pipe(
@@ -94,14 +94,14 @@ export class PathwaySearchResultComponent implements OnInit {
       response.pathways.forEach((pathway) => {
         pathway.reactions.forEach((reaction: NovostoicReaction) => {
           reaction.reactants.forEach((reactant) => {
-            if (!cofactors.has(reactant.commonNames[0])) {
-              cofactors.add(reactant.commonNames[0]);
+            if (!cofactors.has(reactant.name)) {
+              cofactors.add(reactant.name);
               returnVal.push(reactant);
             }
           });
           reaction.products.forEach((product) => {
-            if (!cofactors.has(product.commonNames[0])) {
-              cofactors.add(product.commonNames[0]);
+            if (!cofactors.has(product.name)) {
+              cofactors.add(product.name);
               returnVal.push(product);
             }
           });
@@ -112,7 +112,7 @@ export class PathwaySearchResultComponent implements OnInit {
   );
   coFactorsFilters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
   filterCoFactorsStr$ = this.coFactorsFilters$.pipe(
-    map((filters) => filters.map((filter) => filter.commonNames[0]).join(",")),
+    map((filters) => filters.map((filter) => filter.name).join(",")),
   );
 
   filtersLength$ = combineLatest([
@@ -138,8 +138,8 @@ export class PathwaySearchResultComponent implements OnInit {
     this.feasibleRange$,
   ]).pipe(
     map(([response, intermediates, cofactors, mode, range]) => {
-      const intermediatesSet = new Set(intermediates.map((intermediate) => intermediate.commonNames[0]));
-      const cofactorsSet = new Set(cofactors.map((cofactor) => cofactor.commonNames[0]));
+      const intermediatesSet = new Set(intermediates.map((intermediate) => intermediate.name));
+      const cofactorsSet = new Set(cofactors.map((cofactor) => cofactor.name));
       return response.pathways.map((pathway) => {
         let intermediatesMatch = true;
         let cofactorsMatch = true;
@@ -147,16 +147,16 @@ export class PathwaySearchResultComponent implements OnInit {
         let thermodynamicalRangeMatch = true;
         pathway.reactions.forEach((reaction) => {
           if (intermediatesSet.size && intermediatesMatch && reaction.targetMolecule) {
-            intermediatesMatch = intermediatesSet.has(reaction.targetMolecule.commonNames[0]);
+            intermediatesMatch = intermediatesSet.has(reaction.targetMolecule.name);
           }
           if (cofactorsSet.size && cofactorsMatch) {
             reaction.reactants.forEach((reactant) => {
-              if (cofactorsMatch && cofactorsSet.has(reactant.commonNames[0])) {
+              if (cofactorsMatch && cofactorsSet.has(reactant.name)) {
                 cofactorsMatch = true;
               }
             });
             reaction.products.forEach((product) => {
-              if (cofactorsMatch && cofactorsSet.has(product.commonNames[0])) {
+              if (cofactorsMatch && cofactorsSet.has(product.name)) {
                 cofactorsMatch = true;
               }
             });

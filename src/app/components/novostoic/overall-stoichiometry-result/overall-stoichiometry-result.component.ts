@@ -26,7 +26,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
 
   moleculeRepresentations: Array<{
     label: string;
-    value: "smiles" | "commonNames" | "keggId";
+    value: "smiles" | "name" | "keggId";
   }> = [
     {
       label: "SMILES",
@@ -34,7 +34,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
     },
     {
       label: "Common Name",
-      value: "commonNames",
+      value: "name",
     },
     {
       label: "Kegg ID",
@@ -63,8 +63,9 @@ export class OverallStoichiometryResultComponent implements OnInit {
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicOptstoic, this.jobId)),
+    map((response) => response as OverallStoichiometryResponse),
+    shareReplay(1),
     tap((data) => { console.log('result: ', data) }),
-    switchMap((data) => of(OverallStoichiometryResponse.example)), //TODO: replace with actual response
   );
 
   showResultsFilter$ = new BehaviorSubject(false);
@@ -78,7 +79,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
     ...result.stoichiometry.products.map((product) => product.molecule),
   ]).flat()))
   filterValueStr$ = this.filters$.pipe(
-    map((filters) => filters.map((filter) => filter.commonNames[0]).join(",")),
+    map((filters) => filters.map((filter) => filter.name).join(",")),
   );
 
   subscriptions: Subscription[] = [];
@@ -100,7 +101,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
         const isSameMolecule = (m1: NovostoicMolecule, m2: NovostoicMolecule) =>
           m1.smiles === m2.smiles ||
           m1.keggId === m2.keggId ||
-          m1.commonNames.some((name) => m2.commonNames.includes(name));
+          m1.name === m2.name;
         return (
           value.reactants.some(({ molecule }) =>
             filter.some((m) => isSameMolecule(m, molecule)),

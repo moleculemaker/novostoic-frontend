@@ -227,7 +227,7 @@
     <div class="flex justify-between mt-2">
         <span class="leading-base opacity-60">Common Name</span>
         <span class="font-semibold text-end"
-            >{{ molecule.commonNames[0] }}</span
+            >{{ molecule.name }}</span
         >
     </div>
     <div *ngIf="showSmiles" class="flex justify-between mt-2">
@@ -263,7 +263,7 @@
             (ngModelChange)="filters$.next($event)"
         >
             <ng-template pTemplate="item" let-item>
-                {{ item.commonNames[0] }}
+                {{ item.name }}
             </ng-template>
             <ng-template pTemplate="selectedItems">
                 {{ (filterValueStr$ | async) || 'Select cofactors' }}
@@ -290,7 +290,7 @@
     <div class="flex justify-between mt-2">
         <span class="font-light">Common Name</span>
         <span class="font-semibold text-end"
-            >{{ molecule.commonNames[0] }}</span
+            >{{ molecule.name }}</span
         >
     </div>
     <div class="flex justify-between mt-2">
