@@ -11,10 +11,7 @@
                     <div
                         class="flex justify-center p-2 mb-2 border border-solid rounded-md border-green-primary"
                     >
-                        <img
-                            class="h-[180px] w-auto"
-                            [src]="primaryPrecursor.structure"
-                        />
+                        <app-molecule-image [width]="260" [height]="180" [molecule]="primaryPrecursor.structure!"></app-molecule-image>
                     </div>
                     <div class="flex flex-col">
                         <ng-container
@@ -48,10 +45,7 @@
                     <div
                         class="flex justify-center p-2 mb-2 border border-solid rounded-md"
                     >
-                        <img
-                            class="h-[180px] w-auto"
-                            [src]="reactant.molecule.structure"
-                        />
+                        <app-molecule-image [width]="260" [height]="180" [molecule]="reactant.molecule.structure!"></app-molecule-image>
                     </div>
                     <div class="flex flex-col">
                         <ng-container
@@ -92,10 +86,7 @@
                     <div
                         class="flex justify-center p-2 mb-2 border border-solid rounded-md"
                     >
-                        <img
-                            class="h-[180px] w-auto"
-                            [src]="reactant.molecule.structure"
-                        />
+                        <app-molecule-image [width]="260" [height]="180" [molecule]="reactant.molecule.structure!"></app-molecule-image>
                     </div>
                     <div class="flex flex-col">
                         <ng-container
@@ -123,10 +114,7 @@
                     <div
                         class="flex justify-center p-2 mb-2 border border-solid rounded-md border-blue-primary"
                     >
-                        <img
-                            class="h-[180px] w-auto"
-                            [src]="targetMolecule.structure"
-                        />
+                        <app-molecule-image [width]="260" [height]="180" [molecule]="targetMolecule.structure!"></app-molecule-image>
                     </div>
                     <div class="flex flex-col">
                         <ng-container

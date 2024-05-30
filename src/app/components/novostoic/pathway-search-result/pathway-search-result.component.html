@@ -67,10 +67,12 @@
                         <div
                             class="border-b border-solid border-green-primary"
                         >
-                            <img
-                                [src]="response.primaryPrecursor.structure"
-                                class="h-[120px]"
-                            />
+                            <app-molecule-image 
+                                [molecule]="response.primaryPrecursor.structure!"
+                                [width]="140"
+                                [height]="100"
+                            >
+                            </app-molecule-image>
                         </div>
                         <ng-container
                             *ngTemplateOutlet="moleculeInfo; context: { $implicit: response.primaryPrecursor } "
@@ -159,7 +161,7 @@
                                                             >
                                                                 <ng-container
                                                                     *ngTemplateOutlet="tableCellImg; context: { 
-                                                                        $implicit: 'https://fakeimg.pl/640x360',
+                                                                        $implicit: reaction.targetMolecule!.structure,
                                                                         thermoInfeasible: reaction.deltaG > 20,
                                                                         nextThermoInfeasible: j === pathway.reactions.length - 1 ? false : pathway.reactions[j + 1].deltaG > 20,
                                                                     }"
@@ -202,10 +204,12 @@
                         <div
                             class="border-b border-solid border-blue-primary"
                         >
-                            <img
-                                [src]="response.targetMolecule.structure"
-                                class="h-[120px]"
-                            />
+                        <app-molecule-image 
+                            [molecule]="response.targetMolecule.structure!"
+                            [width]="140"
+                            [height]="100"
+                        >
+                        </app-molecule-image>
                         </div>
                         <ng-container
                             *ngTemplateOutlet="moleculeInfo; context: { $implicit: response.targetMolecule } "
@@ -353,7 +357,12 @@
             [class.next_thermo_infeasible]="nextThermoInfeasible"
             [class.thermo_infeasible]="thermoInfeasible"
         >
-            <img [src]="src" class="w-[160px]" />
+            <app-molecule-image 
+                [molecule]="src"
+                [width]="80"
+                [height]="60"
+            >
+            </app-molecule-image>
         </div>
     </td>
 </ng-template>
@@ -482,7 +491,12 @@
                                 [class.border-[#A855F7]]="i !== 0"
                                 [class.border-green-primary]="i === 0"
                             >
-                                <img [src]="reaction.primaryPrecursor!.structure" class="h-[120px]" />
+                                <app-molecule-image 
+                                    [molecule]="reaction.primaryPrecursor!.structure!"
+                                    [width]="200"
+                                    [height]="120"
+                                >
+                                </app-molecule-image>
                             </div>
 
                             <ng-container *ngFor="let reactant of reaction.reactants; let i = index">
@@ -505,7 +519,12 @@
                                 [class.border-[#A855F7]]="i !== pathway.reactions.length - 1"
                                 [class.border-blue-primary]="i === pathway.reactions.length - 1"
                             >
-                                <img [src]="reaction.targetMolecule!.structure" class="h-[120px]" />
+                                <app-molecule-image 
+                                    [molecule]="reaction.targetMolecule!.structure!"
+                                    [width]="200"
+                                    [height]="120"
+                                >
+                                </app-molecule-image>
                             </div>
                         </div>
                     </div>

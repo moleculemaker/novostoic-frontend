@@ -20,16 +20,6 @@ export class OverallStoichiometryComponent {
   showDialog$ = new BehaviorSubject(false);
   validatedPrimaryPrecursor$ = new BehaviorSubject<ChemicalAutoCompleteResponse | null>(null);
   validatedTargetMolecule$ = new BehaviorSubject<ChemicalAutoCompleteResponse | null>(null);
-  trustedPrimaryPrecursor$ = this.validatedPrimaryPrecursor$.pipe(map((chemical) => 
-    chemical?.structure
-    ? this.sanitizer.bypassSecurityTrustHtml(chemical?.structure || "")
-    : null
-  ));
-  trustedTargetMolecule$ = this.validatedTargetMolecule$.pipe(map((chemical) => 
-    chemical?.structure
-    ? this.sanitizer.bypassSecurityTrustHtml(chemical?.structure || "")
-    : null
-  ));
 
   constructor(
     private router: Router,

@@ -72,6 +72,7 @@ import { DgPredictorComponent } from "./components/novostoic/dg-predictor/dg-pre
 import { DgPredictorResultComponent } from './components/novostoic/dg-predictor-result/dg-predictor-result.component';
 import { MainLayoutComponent } from './components/novostoic/main-layout/main-layout.component';
 import { CenterLayoutComponent } from './components/novostoic/center-layout/center-layout.component';
+import { MoleculeImageComponent } from './components/novostoic/molecule-image/molecule-image.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -99,6 +100,7 @@ const initAppFn = (envService: EnvironmentService) => {
     StoichiometryReactionWithScrollerComponent,
     MainLayoutComponent,
     CenterLayoutComponent,
+    MoleculeImageComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,
