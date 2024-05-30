@@ -44,7 +44,6 @@ export class DgPredictorResultComponent {
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicDgpredictor, this.jobId)),
     tap((data) => { console.log('result: ', data) }),
-    switchMap((data) => of(ThermodynamicalFeasibilityResponse.example)), //TODO: replace with actual response
   );
 
   constructor(

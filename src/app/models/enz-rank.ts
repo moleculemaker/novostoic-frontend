@@ -43,7 +43,7 @@ export class EnzymeSelectionResponse {
     primaryPrecursor: {
       smiles: "O[C@@H](CC([O-])=O)C([O-])=O",
       name: "N/A",
-      keggId: "C00149",
+      kegg_id: "C00149",
       structure: "https://www.genome.jp/Fig/compound/C00149.gif",
     },
     enzymeSequence:

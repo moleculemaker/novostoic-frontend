@@ -29,14 +29,14 @@ export class PathwaySearchRequest {
 
   addPrimaryPercursorFromMolecule(molecule: NovostoicMolecule) {
     this.form.controls["primaryPrecursor"].setValue({
-      molecule: molecule.name,
+      molecule: molecule.name || null,
       amount: 1,
     });
   }
 
   addTargetMoleculeFromMolecule(molecule: NovostoicMolecule) {
     this.form.controls["targetMolecule"].setValue({
-      molecule: molecule.name,
+      molecule: molecule.name || null,
       amount: 1,
     });
   }
@@ -49,7 +49,7 @@ export class PathwaySearchRequest {
     this.form.controls["coReactants"].setValue(
       stoichiometry.reactants
         .map((r) => ({
-          molecule: r.molecule.name,
+          molecule: r.molecule.name || null,
           amount: r.amount,
         })),
     );
@@ -61,7 +61,7 @@ export class PathwaySearchRequest {
     this.form.controls["coProducts"].setValue(
       stoichiometry.products
         .map((r) => ({
-          molecule: r.molecule.name,
+          molecule: r.molecule.name || null,
           amount: r.amount,
         })),
     );
@@ -140,24 +140,13 @@ export class PathwaySearchRequest {
   }
 
   toRequestBody() {
-    let stoic = this.form.controls["primaryPrecursor"].controls["amount"].value
-      + " " + this.form.controls["targetMolecule"].controls["molecule"].value;
-    this.form.controls["coReactants"].value.forEach((coReactant) => {
-      stoic += " + " + coReactant.amount + " " + coReactant.molecule;
-    });
-    stoic += " <=> ";
-    this.form.controls["coProducts"].value.forEach((coProduct) => {
-      stoic += coProduct.amount + " " + coProduct.molecule + " + ";
-    });
-    stoic += this.form.controls["targetMolecule"].controls["amount"].value
-      + " " + this.form.controls["targetMolecule"].controls["molecule"].value;
-
     const jobInfo = {
-      substrate: this.form.controls["primaryPrecursor"].controls["molecule"].value,
-      product: this.form.controls["targetMolecule"].controls["molecule"].value,
+      substrate: this.form.controls["primaryPrecursor"].value,
+      product: this.form.controls["targetMolecule"].value,
       max_steps: this.form.controls["maxSteps"].value,
       iterations: this.form.controls["maxPathways"].value,
-      stoic,
+      reactants: this.form.controls["coReactants"].value,
+      products: this.form.controls["coProducts"].value,
     };
     return {
       job_info: JSON.stringify(jobInfo),
@@ -175,8 +164,8 @@ export class PathwaySearchRequest {
 export interface NovostoicReaction {
   primaryPrecursor?: NovostoicMolecule;
   targetMolecule?: NovostoicMolecule;
-  reactants: Array<NovostoicMolecule>;
-  products: Array<NovostoicMolecule>;
+  reactants: Array<{ molecule: NovostoicMolecule, amound: number }>;
+  products: Array<{ molecule: NovostoicMolecule, amound: number }>;
   deltaG: number;
   enzymes: Array<{ name: string; amount: number }>;
   reactionId: string;
@@ -190,484 +179,484 @@ export class PathwaySearchResponse {
   stoichiometry: NovostoicStoichiometry;
   pathways: Array<Array<NovostoicReaction>>;
 
-  static example: PathwaySearchResponse = {
-    primaryPrecursor: {
-      smiles: "ex consequat sit adipisicing commodo",
-      name: "N/A",
-      keggId: "proident",
-      structure: "https://fakeimg.pl/640x360",
-    },
-    targetMolecule: {
-      smiles: "sint fugiat Ut",
-      name: "N/A",
-      keggId: "laborum dolor magna",
-      structure: "https://fakeimg.pl/640x360",
-    },
-    stoichiometry: {
-      reactants: [
-        { molecule: { name: "Water", smiles: "OHO" }, amount: 1 },
-        { molecule: { name: "CO2", smiles: "OCO" }, amount: 1 },
-        { molecule: { name: "H2", smiles: "H" }, amount: 1 },
-      ],
-      products: [
-        { molecule: { name: "Water", smiles: "OHO" }, amount: 1 },
-        { molecule: { name: "H2", smiles: "H" }, amount: 4 },
-      ],
-    },
-    pathways: [
-      [
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: 10,
-          enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: -10,
-          enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
-          reactionId: "ReactionID",
-          isPrediction: true,
-        },
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: -30,
-          enzymes: [
-            { name: "E.3.5.1.31", amount: 0.8 },
-            { name: "E.3.5.1.31", amount: 0.6 },
-            { name: "E.3.5.1.31", amount: 0.3 },
-            { name: "E.3.5.1.31", amount: 0.1 },
-          ],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: -20,
-          enzymes: [
-            { name: "E.3.5.1.31", amount: 0.8 },
-            { name: "E.3.5.1.31", amount: 0.6 },
-            { name: "E.3.5.1.31", amount: 0.3 },
-            { name: "E.3.5.1.31", amount: 0.1 },
-          ],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: 10,
-          enzymes: [
-            { name: "E.3.5.1.31", amount: 0.8 },
-            { name: "E.3.5.1.31", amount: 0.6 },
-            { name: "E.3.5.1.31", amount: 0.3 },
-            { name: "E.3.5.1.31", amount: 0.1 },
-          ],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: 15,
-          enzymes: [
-            { name: "E.3.5.1.31", amount: 0.8 },
-            { name: "E.3.5.1.31", amount: 0.6 },
-            { name: "E.3.5.1.31", amount: 0.3 },
-            { name: "E.3.5.1.31", amount: 0.1 },
-          ],
-          reactionId: "ReactionID",
-          isPrediction: true,
-        },
-      ],
-      [
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: 10,
-          enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: 50,
-          enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: 18,
-          enzymes: [
-            { name: "E.3.5.1.31", amount: 0.8 },
-            { name: "E.3.5.1.31", amount: 0.6 },
-            { name: "E.3.5.1.31", amount: 0.3 },
-            { name: "E.3.5.1.31", amount: 0.1 },
-          ],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: -10,
-          enzymes: [
-            { name: "E.3.5.1.31", amount: 0.8 },
-            { name: "E.3.5.1.31", amount: 0.6 },
-            { name: "E.3.5.1.31", amount: 0.3 },
-            { name: "E.3.5.1.31", amount: 0.1 },
-          ],
-          reactionId: "ReactionID",
-          isPrediction: true,
-        },
-      ],
-      [
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: 50,
-          enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: 50,
-          enzymes: [
-            { name: "E.3.5.1.31", amount: 0.8 },
-            { name: "E.3.5.1.31", amount: 0.6 },
-            { name: "E.3.5.1.31", amount: 0.3 },
-            { name: "E.3.5.1.31", amount: 0.1 },
-          ],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: 50,
-          enzymes: [
-            { name: "E.3.5.1.31", amount: 0.8 },
-            { name: "E.3.5.1.31", amount: 0.6 },
-            { name: "E.3.5.1.31", amount: 0.3 },
-            { name: "E.3.5.1.31", amount: 0.1 },
-          ],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-      ],
-      [
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: 0,
-          enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-        {
-          primaryPrecursor: {
-            smiles: "ex consequat sit adipisicing commodo",
-            name: "N/A",
-            keggId: "proident",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          targetMolecule: {
-            smiles: "sint fugiat Ut",
-            name: "N/A",
-            keggId: "laborum dolor magna",
-            structure: "https://fakeimg.pl/640x360",
-          },
-          reactants: [
-            { name: "Water", smiles: "OHO" },
-            { name: "CO2", smiles: "OCO" },
-            { name: "H2", smiles: "H" },
-          ],
-          products: [
-            { name: "Water", smiles: "OHO" },
-            { name: "H2", smiles: "H" },
-          ],
-          deltaG: 0,
-          enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
-          reactionId: "ReactionID",
-          isPrediction: false,
-        },
-      ],
-    ],
-  };
+  // static example: PathwaySearchResponse = {
+  //   primaryPrecursor: {
+  //     smiles: "ex consequat sit adipisicing commodo",
+  //     name: "N/A",
+  //     kegg_id: "proident",
+  //     structure: "https://fakeimg.pl/640x360",
+  //   },
+  //   targetMolecule: {
+  //     smiles: "sint fugiat Ut",
+  //     name: "N/A",
+  //     kegg_id: "laborum dolor magna",
+  //     structure: "https://fakeimg.pl/640x360",
+  //   },
+  //   stoichiometry: {
+  //     reactants: [
+  //       { molecule: { name: "Water", smiles: "OHO" }, amount: 1 },
+  //       { molecule: { name: "CO2", smiles: "OCO" }, amount: 1 },
+  //       { molecule: { name: "H2", smiles: "H" }, amount: 1 },
+  //     ],
+  //     products: [
+  //       { molecule: { name: "Water", smiles: "OHO" }, amount: 1 },
+  //       { molecule: { name: "H2", smiles: "H" }, amount: 4 },
+  //     ],
+  //   },
+  //   pathways: [
+  //     [
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: 10,
+  //         enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: -10,
+  //         enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
+  //         reactionId: "ReactionID",
+  //         isPrediction: true,
+  //       },
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: -30,
+  //         enzymes: [
+  //           { name: "E.3.5.1.31", amount: 0.8 },
+  //           { name: "E.3.5.1.31", amount: 0.6 },
+  //           { name: "E.3.5.1.31", amount: 0.3 },
+  //           { name: "E.3.5.1.31", amount: 0.1 },
+  //         ],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: -20,
+  //         enzymes: [
+  //           { name: "E.3.5.1.31", amount: 0.8 },
+  //           { name: "E.3.5.1.31", amount: 0.6 },
+  //           { name: "E.3.5.1.31", amount: 0.3 },
+  //           { name: "E.3.5.1.31", amount: 0.1 },
+  //         ],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: 10,
+  //         enzymes: [
+  //           { name: "E.3.5.1.31", amount: 0.8 },
+  //           { name: "E.3.5.1.31", amount: 0.6 },
+  //           { name: "E.3.5.1.31", amount: 0.3 },
+  //           { name: "E.3.5.1.31", amount: 0.1 },
+  //         ],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: 15,
+  //         enzymes: [
+  //           { name: "E.3.5.1.31", amount: 0.8 },
+  //           { name: "E.3.5.1.31", amount: 0.6 },
+  //           { name: "E.3.5.1.31", amount: 0.3 },
+  //           { name: "E.3.5.1.31", amount: 0.1 },
+  //         ],
+  //         reactionId: "ReactionID",
+  //         isPrediction: true,
+  //       },
+  //     ],
+  //     [
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: 10,
+  //         enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: 50,
+  //         enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: 18,
+  //         enzymes: [
+  //           { name: "E.3.5.1.31", amount: 0.8 },
+  //           { name: "E.3.5.1.31", amount: 0.6 },
+  //           { name: "E.3.5.1.31", amount: 0.3 },
+  //           { name: "E.3.5.1.31", amount: 0.1 },
+  //         ],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: -10,
+  //         enzymes: [
+  //           { name: "E.3.5.1.31", amount: 0.8 },
+  //           { name: "E.3.5.1.31", amount: 0.6 },
+  //           { name: "E.3.5.1.31", amount: 0.3 },
+  //           { name: "E.3.5.1.31", amount: 0.1 },
+  //         ],
+  //         reactionId: "ReactionID",
+  //         isPrediction: true,
+  //       },
+  //     ],
+  //     [
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: 50,
+  //         enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: 50,
+  //         enzymes: [
+  //           { name: "E.3.5.1.31", amount: 0.8 },
+  //           { name: "E.3.5.1.31", amount: 0.6 },
+  //           { name: "E.3.5.1.31", amount: 0.3 },
+  //           { name: "E.3.5.1.31", amount: 0.1 },
+  //         ],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: 50,
+  //         enzymes: [
+  //           { name: "E.3.5.1.31", amount: 0.8 },
+  //           { name: "E.3.5.1.31", amount: 0.6 },
+  //           { name: "E.3.5.1.31", amount: 0.3 },
+  //           { name: "E.3.5.1.31", amount: 0.1 },
+  //         ],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //     ],
+  //     [
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: 0,
+  //         enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //       {
+  //         primaryPrecursor: {
+  //           smiles: "ex consequat sit adipisicing commodo",
+  //           name: "N/A",
+  //           kegg_id: "proident",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         targetMolecule: {
+  //           smiles: "sint fugiat Ut",
+  //           name: "N/A",
+  //           kegg_id: "laborum dolor magna",
+  //           structure: "https://fakeimg.pl/640x360",
+  //         },
+  //         reactants: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "CO2", smiles: "OCO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         products: [
+  //           { name: "Water", smiles: "OHO" },
+  //           { name: "H2", smiles: "H" },
+  //         ],
+  //         deltaG: 0,
+  //         enzymes: [{ name: "E.3.5.1.31", amount: 0.1 }],
+  //         reactionId: "ReactionID",
+  //         isPrediction: false,
+  //       },
+  //     ],
+  //   ],
+  // };
 }

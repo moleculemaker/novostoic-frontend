@@ -29,13 +29,13 @@ export class PathwaySearchComponent implements OnInit {
   primaryPrecursor$ = new BehaviorSubject({
     smiles: "N/A",
     name: "N/A",
-    keggId: "N/A",
+    kegg_id: "N/A",
     structure: "",
   });
   targetMolecule$ = new BehaviorSubject({
     smiles: "N/A",
     name: "N/A",
-    keggId: "N/A",
+    kegg_id: "N/A",
     structure: "",
   });
   stoichiometry$ = new BehaviorSubject({
@@ -44,7 +44,7 @@ export class PathwaySearchComponent implements OnInit {
         molecule: {
           smiles: "N/A",
           name: "N/A",
-          keggId: "N/A",
+          kegg_id: "N/A",
           structure: "",
         },
         amount: -1,
@@ -55,7 +55,7 @@ export class PathwaySearchComponent implements OnInit {
         molecule: {
           smiles: "N/A",
           name: "N/A",
-          keggId: "N/A",
+          kegg_id: "N/A",
           structure: "",
         },
         amount: -1,
@@ -64,7 +64,7 @@ export class PathwaySearchComponent implements OnInit {
         molecule: {
           smiles: "N/A",
           name: "N/A",
-          keggId: "N/A",
+          kegg_id: "N/A",
           structure: "",
         },
         amount: -1,
@@ -108,7 +108,7 @@ export class PathwaySearchComponent implements OnInit {
     if (!this.request.form.valid) {
       return;
     }
-    
+
     this.novostoicService.createJobAndRun(
       JobType.NovostoicPathways,
       this.request.toRequestBody()

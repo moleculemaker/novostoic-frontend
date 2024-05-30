@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { timer, switchMap, takeWhile, tap, map, skipUntil, filter, of } from "rxjs";
 import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
-import { EnzymeSelectionResponse } from "~/app/models/enz-rank";
 import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({

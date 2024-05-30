@@ -232,7 +232,7 @@
     </div>
     <div class="flex justify-between mt-2">
         <span class="leading-base opacity-60">KEGG ID</span>
-        <span class="font-semibold text-end">{{ molecule.keggId }}</span>
+        <span class="font-semibold text-end">{{ molecule.kegg_id }}</span>
     </div>
 </ng-template>
 
@@ -291,14 +291,14 @@
                         *ngFor="let reactant of reaction.reactants"
                         class="text-white/50"
                     >
-                        + {{ reactant.name }}
+                        + {{ reactant.molecule? reactant.molecule.name : 'NA' }}
                     </span>
                     <i class="mx-2 text-sm pi pi-arrow-right"></i>
                     <span
                         *ngFor="let reactant of reaction.products"
                         class="text-white/50"
                     >
-                        {{ reactant.name }} +
+                        {{ reactant.molecule? reactant.molecule.name : 'NA' }} + 
                     </span>
                     <span class="font-semibold"
                         >{{ reaction.targetMolecule.name }}</span
@@ -326,14 +326,14 @@
                     </div>
                 </div>
                 <div class="flex justify-between gap-6">
-                    <div class="flex justify-between w-1/2">
+                    <div class="flex justify-between w-1/2" *ngIf="reaction.enzymes.length">
                         <span class="font-light">Enz</span>
                         <span class="font-semibold"
                             >{{ reaction.enzymes.length > 1 ? 'Multiple' :
                             reaction.enzymes[0].name }}</span
                         >
                     </div>
-                    <div class="flex justify-between w-1/2">
+                    <div class="flex justify-between w-1/2" *ngIf="reaction.confidenceScore">
                         <span class="text-white/50">Confidence Score</span>
                         <span class="text-white/50"
                             >{{ reaction.confidenceScore }}</span
@@ -487,7 +487,7 @@
 
                             <ng-container *ngFor="let reactant of reaction.reactants; let i = index">
                                 <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
-                                    <span>{{ reactant.name }}</span>
+                                    <span>{{ reactant.molecule.name }}</span>
                                 </div>
                                 <i class="pi pi-plus" *ngIf="i !== reaction.reactants.length - 1"></i>
                             </ng-container>
@@ -497,7 +497,7 @@
                             <ng-container *ngFor="let product of reaction.products; let i = index">
                                 <i *ngIf="i !== 0" class="pi pi-plus"></i>
                                 <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
-                                    <span>{{ product.name }}</span>
+                                    <span>{{ product.molecule.name }}</span>
                                 </div>
                             </ng-container>
                             

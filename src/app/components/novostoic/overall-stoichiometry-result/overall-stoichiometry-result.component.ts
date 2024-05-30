@@ -100,7 +100,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
       ) => {
         const isSameMolecule = (m1: NovostoicMolecule, m2: NovostoicMolecule) =>
           m1.smiles === m2.smiles ||
-          m1.keggId === m2.keggId ||
+          m1.kegg_id === m2.kegg_id ||
           m1.name === m2.name;
         return (
           value.reactants.some(({ molecule }) =>

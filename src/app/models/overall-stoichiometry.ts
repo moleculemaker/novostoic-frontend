@@ -1,5 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { NovostoicService } from "../services/novostoic.service";
+import { ChemicalAutoCompleteResponse } from "../api/mmli-backend/v1";
 
 export class OverallStoichiometryRequest {
   form = new FormGroup({
@@ -46,12 +47,7 @@ export class OverallStoichiometryRequest {
   }
 }
 
-export interface NovostoicMolecule {
-  name: string; // one molecule might have multiple common names
-  smiles: string;
-  keggId?: string;
-  structure?: string; // svg or data url to display molecule structure
-}
+export type NovostoicMolecule = Partial<ChemicalAutoCompleteResponse>;
 
 export interface NovostoicStoichiometry {
   reactants: Array<{ molecule: NovostoicMolecule; amount: number }>;
@@ -86,13 +82,13 @@ export class OverallStoichiometryResponse {
       primaryPrecursor: {
         smiles: "ex consequat sit adipisicing commodo",
         name: "N/A",
-        keggId: "proident",
+        kegg_id: "proident",
         structure: image,
       },
       targetMolecule: {
         smiles: "sint fugiat Ut",
         name: "N/A",
-        keggId: "laborum dolor magna",
+        kegg_id: "laborum dolor magna",
         structure: image,
       },
       results: [
@@ -103,7 +99,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "proident aute sint",
-                  keggId: "nostrud aute ipsum proident sit",
+                  kegg_id: "nostrud aute ipsum proident sit",
                   structure: image,
                 },
                 amount: 10.312100871722501,
@@ -112,7 +108,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "eiusmod",
-                  keggId: "proident in fugiat",
+                  kegg_id: "proident in fugiat",
                   structure: image,
                 },
                 amount: 4.731076524801776,
@@ -123,7 +119,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "nulla non",
-                  keggId: "Ut",
+                  kegg_id: "Ut",
                   structure: image,
                 },
                 amount: 9.369815488391442,
@@ -132,7 +128,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "consectetur in",
-                  keggId: "enim ut sunt in",
+                  kegg_id: "enim ut sunt in",
                   structure: image,
                 },
                 amount: 17.727498396504284,
@@ -141,7 +137,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "quis id enim reprehenderit",
-                  keggId: "laboris veniam laborum labore",
+                  kegg_id: "laboris veniam laborum labore",
                   structure: image,
                 },
                 amount: 2.1305437421409685,
@@ -150,7 +146,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "exercitation esse",
-                  keggId: "qui",
+                  kegg_id: "qui",
                   structure: image,
                 },
                 amount: 16.345199578200678,
@@ -159,7 +155,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "nisi cillum ex aute exercitation",
-                  keggId: "nisi eu commodo ipsum",
+                  kegg_id: "nisi eu commodo ipsum",
                   structure: image,
                 },
                 amount: 19.541605486692553,
@@ -168,7 +164,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "laborum cupidatat Lorem deserunt",
-                  keggId: "commodo nisi Ut",
+                  kegg_id: "commodo nisi Ut",
                   structure: image,
                 },
                 amount: 16.57133491994439,
@@ -185,7 +181,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "laborum",
                   smiles: "minim irure",
-                  keggId: "amet in anim exercitation",
+                  kegg_id: "amet in anim exercitation",
                   structure: image,
                 },
                 amount: 6.003905566127564,
@@ -194,7 +190,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "pariatur",
-                  keggId: "voluptate minim",
+                  kegg_id: "voluptate minim",
                   structure: image,
                 },
                 amount: 19.049979957804208,
@@ -203,7 +199,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "amet ad sit veniam",
-                  keggId: "aliquip in",
+                  kegg_id: "aliquip in",
                   structure: image,
                 },
                 amount: 13.878973681908393,
@@ -212,7 +208,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "cupidatat commodo",
-                  keggId: "dolore adipisicing",
+                  kegg_id: "dolore adipisicing",
                   structure: image,
                 },
                 amount: 5.924395078808123,
@@ -221,7 +217,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "in et dolore in sit",
-                  keggId: "est dolore",
+                  kegg_id: "est dolore",
                   structure: image,
                 },
                 amount: 16.484444750792957,
@@ -232,7 +228,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "exercitation",
                   smiles: "culpa",
-                  keggId: "aliqua",
+                  kegg_id: "aliqua",
                   structure: image,
                 },
                 amount: 2.9645715206094785,
@@ -241,7 +237,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "dolore Excepteur sunt consectetur sit",
-                  keggId: "deserunt consequat veniam ea",
+                  kegg_id: "deserunt consequat veniam ea",
                   structure: image,
                 },
                 amount: 11.943199726570391,
@@ -250,7 +246,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "id",
                   smiles: "in ullamco irure officia non",
-                  keggId: "magna est proident ipsum do",
+                  kegg_id: "magna est proident ipsum do",
                   structure: image,
                 },
                 amount: 4.332428925299197,
@@ -259,7 +255,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "sed dolor eu sit",
-                  keggId: "commodo mollit Excepteur",
+                  kegg_id: "commodo mollit Excepteur",
                   structure: image,
                 },
                 amount: 19.023121105320957,
@@ -268,7 +264,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "officia velit",
-                  keggId: "reprehenderit eu officia cillum cupidatat",
+                  kegg_id: "reprehenderit eu officia cillum cupidatat",
                   structure: image,
                 },
                 amount: 4.488612521809438,
@@ -277,7 +273,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "fugiat",
-                  keggId: "non ullamco sed deserunt eiusmod",
+                  kegg_id: "non ullamco sed deserunt eiusmod",
                   structure: image,
                 },
                 amount: 3.4949400333465444,
@@ -286,7 +282,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "consequat",
                   smiles: "ea",
-                  keggId: "irure est",
+                  kegg_id: "irure est",
                   structure: image,
                 },
                 amount: 15.810769914458614,
@@ -295,7 +291,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "deserunt",
-                  keggId: "Ut cillum",
+                  kegg_id: "Ut cillum",
                   structure: image,
                 },
                 amount: 2.283469645915468,
@@ -304,7 +300,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "ex laboris in",
-                  keggId: "aute",
+                  kegg_id: "aute",
                   structure: image,
                 },
                 amount: 11.618000155089236,
@@ -313,7 +309,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "in commodo sit",
-                  keggId: "Lorem exercitation sunt",
+                  kegg_id: "Lorem exercitation sunt",
                   structure: image,
                 },
                 amount: 9.628907812488588,
@@ -330,7 +326,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "id labore irure reprehenderit exercitation",
-                  keggId: "id",
+                  kegg_id: "id",
                   structure: image,
                 },
                 amount: 13.904847346819313,
@@ -339,7 +335,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "commodo cillum sed consequat reprehenderit",
-                  keggId: "enim",
+                  kegg_id: "enim",
                   structure: image,
                 },
                 amount: 2.769608755365973,
@@ -348,7 +344,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "non magna dolore sit Excepteur",
-                  keggId: "nostrud nisi ex proident fugiat",
+                  kegg_id: "nostrud nisi ex proident fugiat",
                   structure: image,
                 },
                 amount: 10.51574167117506,
@@ -357,7 +353,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "consectetur in sunt eu",
-                  keggId: "non",
+                  kegg_id: "non",
                   structure: image,
                 },
                 amount: 19.285279216688302,
@@ -368,7 +364,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "mollit esse",
-                  keggId: "voluptate",
+                  kegg_id: "voluptate",
                   structure: image,
                 },
                 amount: 12.456345474478553,
@@ -377,7 +373,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "cupidatat in do dolor in",
-                  keggId: "laboris dolor adipisicing",
+                  kegg_id: "laboris dolor adipisicing",
                   structure: image,
                 },
                 amount: 11.99812612881462,
@@ -386,7 +382,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "fugiat et officia",
-                  keggId: "aliqua id",
+                  kegg_id: "aliqua id",
                   structure: image,
                 },
                 amount: 14.87164185982841,
@@ -395,7 +391,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "culpa laboris ea",
-                  keggId: "aliquip dolore",
+                  kegg_id: "aliquip dolore",
                   structure: image,
                 },
                 amount: 2.8468519349065344,
@@ -404,7 +400,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "ut",
-                  keggId: "elit enim",
+                  kegg_id: "elit enim",
                   structure: image,
                 },
                 amount: 17.29261585756284,
@@ -413,7 +409,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "adipisicing dolor reprehenderit",
-                  keggId: "sint Excepteur sed",
+                  kegg_id: "sint Excepteur sed",
                   structure: image,
                 },
                 amount: 5.026391081214174,
@@ -422,7 +418,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "N/A",
                   smiles: "Ut",
-                  keggId: "qui labore dolor mollit adipisicing",
+                  kegg_id: "qui labore dolor mollit adipisicing",
                   structure: image,
                 },
                 amount: 1.9213166173446736,
@@ -431,7 +427,7 @@ export class OverallStoichiometryResponse {
                 molecule: {
                   name: "Lorem",
                   smiles: "ullamco",
-                  keggId: "sed in sunt ad",
+                  kegg_id: "sed in sunt ad",
                   structure: image,
                 },
                 amount: 1.4334491484541818,

@@ -11,7 +11,7 @@ import { NovostoicService } from "~/app/services/novostoic.service";
   templateUrl: "./pathway-search-result.component.html",
   styleUrls: ["./pathway-search-result.component.scss"],
   host: {
-    class: 'grow px-4 xl:w-content-xl xl:mr-64 xl:pr-6'
+    class: 'grow px-4 xl:w-content-xl w-content-lg xl:mr-64 xl:pr-6'
   }
 })
 export class PathwaySearchResultComponent implements OnInit {
@@ -40,16 +40,24 @@ export class PathwaySearchResultComponent implements OnInit {
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicPathways, this.jobId)),
     tap((data) => { console.log('result: ', data) }),
-    switchMap((data) => of(PathwaySearchResponse.example)), //TODO: replace with actual response
+    map((response) => response as PathwaySearchResponse),
     map((response) => ({
       ...response,
-      pathways: response.pathways.map((pathway) => ({
-        id: Math.random().toString(36).substring(7),
-        reactions: pathway.map((reaction) => ({
-          ...reaction,
-          isThermodynamicalInfeasible: reaction.deltaG > 20,
-        }))
-      })),
+      pathways: response.pathways.map((pathway) => {
+        return {
+          id: Math.random().toString(36).substring(7),
+          reactions: pathway.map((reaction) => ({
+            ...reaction,
+            products: reaction.products.filter((product) => {
+              return product.molecule.name !== reaction.targetMolecule?.name;
+            }),
+            reactants: reaction.reactants.filter((reactant) => {
+              return reactant.molecule.name !== reaction.primaryPrecursor?.name;
+            }),
+            isThermodynamicalInfeasible: reaction.deltaG > 20,
+          }))
+        }
+      })
     })),
     shareReplay(1),
     tap((data) => console.log('response', data))
@@ -73,7 +81,7 @@ export class PathwaySearchResultComponent implements OnInit {
       const returnVal: NovostoicMolecule[] = [];
       response.pathways.forEach((pathway) => {
         pathway.reactions.slice(0, pathway.reactions.length - 1).forEach((reaction: NovostoicReaction) => {
-          if (reaction.targetMolecule && !intermediates.has(reaction.targetMolecule.name)) {
+          if (reaction.targetMolecule!.name && reaction.targetMolecule && !intermediates.has(reaction.targetMolecule.name)) {
             intermediates.add(reaction.targetMolecule.name);
             returnVal.push(reaction.targetMolecule);
           }
@@ -94,15 +102,15 @@ export class PathwaySearchResultComponent implements OnInit {
       response.pathways.forEach((pathway) => {
         pathway.reactions.forEach((reaction: NovostoicReaction) => {
           reaction.reactants.forEach((reactant) => {
-            if (!cofactors.has(reactant.name)) {
-              cofactors.add(reactant.name);
-              returnVal.push(reactant);
+            if (reactant.molecule.name && !cofactors.has(reactant.molecule.name)) {
+              cofactors.add(reactant.molecule.name);
+              returnVal.push(reactant.molecule);
             }
           });
           reaction.products.forEach((product) => {
-            if (!cofactors.has(product.name)) {
-              cofactors.add(product.name);
-              returnVal.push(product);
+            if (product.molecule.name && !cofactors.has(product.molecule.name)) {
+              cofactors.add(product.molecule.name);
+              returnVal.push(product.molecule);
             }
           });
         });
@@ -151,12 +159,12 @@ export class PathwaySearchResultComponent implements OnInit {
           }
           if (cofactorsSet.size && cofactorsMatch) {
             reaction.reactants.forEach((reactant) => {
-              if (cofactorsMatch && cofactorsSet.has(reactant.name)) {
+              if (cofactorsMatch && cofactorsSet.has(reactant.molecule.name)) {
                 cofactorsMatch = true;
               }
             });
             reaction.products.forEach((product) => {
-              if (cofactorsMatch && cofactorsSet.has(product.name)) {
+              if (cofactorsMatch && cofactorsSet.has(product.molecule.name)) {
                 cofactorsMatch = true;
               }
             });
