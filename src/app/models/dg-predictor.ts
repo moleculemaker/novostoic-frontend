@@ -98,8 +98,9 @@ export class ThermodynamicalFeasibilityRequest {
       reactions: this.form.controls["reactions"].value.map((reaction) => ({
         type: reaction.type,
         smiles: reaction.reactionSmiles,
-        molecule_number: 'N' + reaction.moleculeNumber,
-        molecule_inchi_or_smiles: reaction.moleculeInchiOrSmiles,
+        add_info: {
+          ['N' + reaction.moleculeNumber]: reaction.moleculeInchiOrSmiles,
+        },
         reaction_keggid: reaction.reactionKeggId,
       })),
     };
