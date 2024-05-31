@@ -31,7 +31,7 @@ export class EnzRankComponent {
     }
 
     this.novostoicService.createJobAndRun(
-      JobType.NovostoicOptstoic,
+      JobType.NovostoicEnzrank,
       this.request.toRequestBody()
     ).subscribe((response) => {
       this.router.navigate([NovostoicTools.ENZYME_ACTIVITY, "result", response.job_id]);
