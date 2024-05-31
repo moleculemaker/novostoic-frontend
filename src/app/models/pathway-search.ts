@@ -105,25 +105,30 @@ export class PathwaySearchRequest {
 
   static useExample() {
     const request = new PathwaySearchRequest();
+    request.addCoProduct();
     // Create example request.
     request.form.setValue({
       primaryPrecursor: {
-        molecule: "mollit",
+        molecule: "MNXM732866",
         amount: 1,
       },
       targetMolecule: {
-        molecule: "minim fugiat pariatur deserunt Ut",
+        molecule: "MNXM5188",
         amount: 1,
       },
       coReactants: [
         {
-          molecule: "CO2",
+          molecule: "MNXM10",
           amount: 1,
         },
       ],
       coProducts: [
         {
-          molecule: "H2",
+          molecule: "MNXM8",
+          amount: 1,
+        },
+        {
+          molecule: "MNXM13",
           amount: 1,
         },
       ],
