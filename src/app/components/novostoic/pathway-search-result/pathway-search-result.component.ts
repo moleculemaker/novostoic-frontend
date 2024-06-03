@@ -48,6 +48,7 @@ export class PathwaySearchResultComponent implements OnInit {
           id: Math.random().toString(36).substring(7),
           reactions: pathway.map((reaction) => ({
             ...reaction,
+            deltaG: Math.round(reaction.deltaG * 100) / 100,
             products: reaction.products.filter((product) => {
               return product.molecule.name !== reaction.targetMolecule?.name;
             }),

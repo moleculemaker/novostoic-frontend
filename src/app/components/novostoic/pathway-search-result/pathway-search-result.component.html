@@ -224,17 +224,17 @@
 </div>
 
 <ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
-    <div class="flex justify-between mt-2">
+    <div class="flex justify-between mx-2 mt-2">
         <span class="leading-base opacity-60">Common Name</span>
         <span class="font-semibold text-end"
             >{{ molecule.name }}</span
         >
     </div>
-    <div *ngIf="showSmiles" class="flex justify-between mt-2">
+    <div *ngIf="showSmiles" class="flex justify-between mx-2 mt-2">
         <span class="leading-base opacity-60">SMILES</span>
         <span class="font-semibold text-end">{{ molecule.smiles }}</span>
     </div>
-    <div class="flex justify-between mt-2">
+    <div class="flex justify-between mx-2 mt-2">
         <span class="leading-base opacity-60">KEGG ID</span>
         <span class="font-semibold text-end">{{ molecule.kegg_id }}</span>
     </div>
@@ -282,7 +282,7 @@
                 {{ label }}
                 <i *ngIf="reaction.isThermodynamicalInfeasible" class="mx-1 text-xs pi pi-exclamation-triangle"></i>
             </span>
-            <span class="font-semibold text-black">{{ (reaction.deltaG > 0 ? '+' : '') + reaction.deltaG }}</span>
+            <span class="font-semibold text-black">{{ (reaction.deltaG > 0 ? '+' : '') + reaction.deltaG | number:"1.0-2" }}</span>
             <span class="font-light text-xs ml-1 text-[#212121]/50">kJ/mol</span>
         </button>
         <p-overlayPanel #reactionDetail>
@@ -468,7 +468,7 @@
                                 <div class="mb-1">Delta G Calculation</div>
                                 <div class="font-semibold">{{reaction.deltaG}}kJ/mol</div>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <div class="mb-1">Enzyme</div>
                                 <table class="w-full">
                                     <tr class="align-middle" *ngFor="let enzyme of reaction.enzymes">
@@ -480,9 +480,9 @@
                                         <td class="text-end" *ngIf="reaction.isPrediction">{{enzyme.amount}}</td>
                                     </tr>
                                 </table>
-                            </div>
+                            </div> -->
                             <div>
-                                <div class="mb-1">Reaction ID (Kegg):</div>
+                                <div class="mb-1">Reaction ID:</div>
                                 <div class="font-semibold underline">{{reaction.reactionId}}</div>
                             </div>
                         </div>

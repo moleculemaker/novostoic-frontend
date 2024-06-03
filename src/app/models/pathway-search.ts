@@ -12,8 +12,7 @@ export class PathwaySearchRequest {
     coProducts: new FormArray([this.createMoleculeInputWithAmount()]),
     maxSteps: new FormControl(3, [Validators.required]),
     maxPathways: new FormControl(3, [Validators.required]),
-    isThermodynamicalFeasible: new FormControl(false),
-    thermodynamicalFeasibleReactionsOnly: new FormControl(false),
+    thermodynamicReactionsFilterMode: new FormControl("none"),
     useEnzymeSelection: new FormControl(true),
     numEnzymeCandidates: new FormControl(0, [Validators.required]),
     agreeToSubscription: new FormControl(false),
@@ -97,8 +96,7 @@ export class PathwaySearchRequest {
   resetSetting() {
     this.form.controls["maxSteps"].reset(3);
     this.form.controls["maxPathways"].reset(3);
-    this.form.controls["isThermodynamicalFeasible"].reset(false);
-    this.form.controls["thermodynamicalFeasibleReactionsOnly"].reset(false);
+    this.form.controls['thermodynamicReactionsFilterMode'].reset("none");
     this.form.controls["useEnzymeSelection"].reset(false);
     this.form.controls["numEnzymeCandidates"].reset(0);
   }
@@ -134,8 +132,7 @@ export class PathwaySearchRequest {
       ],
       maxSteps: 3,
       maxPathways: 3,
-      isThermodynamicalFeasible: false,
-      thermodynamicalFeasibleReactionsOnly: false,
+      thermodynamicReactionsFilterMode: "none",
       useEnzymeSelection: false,
       numEnzymeCandidates: 0,
       agreeToSubscription: false, // Add agreeToSubscription property

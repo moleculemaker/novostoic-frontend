@@ -339,16 +339,15 @@
                             <small class="block pt-1 italic opacity-60 leading-xl">
                                 Tip: You can always adjust your selections later on the results page in the filtering section.
                             </small>
-                            <!-- TODO: update request structure -->
                             <div class="flex flex-col gap-4 mt-4">
                                 <div class="flex items-center">
-                                    <p-radioButton formControlName="thermodynamicalFeasibleReactionsOnly"/>
+                                    <p-radioButton value="all" formControlName="thermodynamicReactionsFilterMode"/>
                                     <label class="ml-2">Filter out pathways where <b class="font-bold">all reactions are thermodynamically infeasible.</b>
                                         <i class="ml-2 pi pi-info-circle"></i>
                                     </label>
                                 </div>
                                 <div class="flex items-center">
-                                    <p-radioButton formControlName="isThermodynamicalFeasible"/>
+                                    <p-radioButton value="any" formControlName="thermodynamicReactionsFilterMode"/>
                                     <label class="ml-2">Filter out pathways with <b class="font-bold">any thermodynamically infeasible reactions.</b>
                                         <i class="ml-2 pi pi-info-circle"></i>
                                     </label>
