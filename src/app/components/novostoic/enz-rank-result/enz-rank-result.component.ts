@@ -34,6 +34,11 @@ export class EnzRankResultComponent {
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicEnzrank, this.jobId)),
+    map((data) => ({
+      primaryPrecursor: data.primaryPrecursor,
+      enzymeSequence: data.results[0].enzymeSequence,
+      activityScore: data.results[0].activityScore,
+    })),
     tap((data) => { console.log('result: ', data) }),
   );
 
