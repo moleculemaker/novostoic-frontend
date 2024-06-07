@@ -29,14 +29,14 @@ export class PathwaySearchRequest {
 
   addPrimaryPercursorFromMolecule(molecule: NovostoicMolecule) {
     this.form.controls["primaryPrecursor"].setValue({
-      molecule: molecule.name || null,
+      molecule: molecule.metanetx_id || null,
       amount: 1,
     });
   }
 
   addTargetMoleculeFromMolecule(molecule: NovostoicMolecule) {
     this.form.controls["targetMolecule"].setValue({
-      molecule: molecule.name || null,
+      molecule: molecule.metanetx_id || null,
       amount: 1,
     });
   }
@@ -49,7 +49,7 @@ export class PathwaySearchRequest {
     this.form.controls["coReactants"].setValue(
       stoichiometry.reactants
         .map((r) => ({
-          molecule: r.molecule.name || null,
+          molecule: r.molecule.metanetx_id || null,
           amount: r.amount,
         })),
     );
@@ -61,7 +61,7 @@ export class PathwaySearchRequest {
     this.form.controls["coProducts"].setValue(
       stoichiometry.products
         .map((r) => ({
-          molecule: r.molecule.name || null,
+          molecule: r.molecule.metanetx_id || null,
           amount: r.amount,
         })),
     );

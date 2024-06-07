@@ -25,11 +25,11 @@ export class PathwaySearchResultComponent implements OnInit {
       JobType.NovostoicPathways,
       this.jobId,
     )),
-    map(() => ({ 
-      phase: JobStatus.Completed,
-      job_id: 'example-pathway-job',
-      time_created: Date.now() / 1000,
-    })),
+    // map(() => ({ 
+    //   phase: JobStatus.Completed,
+    //   job_id: 'example-pathway-job',
+    //   time_created: Date.now() / 1000,
+    // })),
     takeWhile((data) => 
       data.phase === JobStatus.Processing 
       || data.phase === JobStatus.Queued
