@@ -25,6 +25,11 @@ export class PathwaySearchResultComponent implements OnInit {
       JobType.NovostoicPathways,
       this.jobId,
     )),
+    map(() => ({ 
+      phase: JobStatus.Completed,
+      job_id: 'example-pathway-job',
+      time_created: Date.now() / 1000,
+    })),
     takeWhile((data) => 
       data.phase === JobStatus.Processing 
       || data.phase === JobStatus.Queued
@@ -38,6 +43,7 @@ export class PathwaySearchResultComponent implements OnInit {
 
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
+    // map(() => PathwaySearchResponse.example),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicPathways, this.jobId)),
     tap((data) => { console.log('result: ', data) }),
     map((response) => response as PathwaySearchResponse),
@@ -48,14 +54,14 @@ export class PathwaySearchResultComponent implements OnInit {
           id: Math.random().toString(36).substring(7),
           reactions: pathway.map((reaction) => ({
             ...reaction,
-            deltaG: Math.round(reaction.deltaG * 100) / 100,
+            deltaG: Math.round(reaction.deltaG.gibbsEnergy * 100) / 100,
             products: reaction.products.filter((product) => {
               return product.molecule.name !== reaction.targetMolecule?.name;
             }),
             reactants: reaction.reactants.filter((reactant) => {
               return reactant.molecule.name !== reaction.primaryPrecursor?.name;
             }),
-            isThermodynamicalInfeasible: reaction.deltaG > 20,
+            isThermodynamicalInfeasible: reaction.deltaG.gibbsEnergy > 20,
           }))
         }
       })
@@ -81,7 +87,7 @@ export class PathwaySearchResultComponent implements OnInit {
       const intermediates = new Set<string>();
       const returnVal: NovostoicMolecule[] = [];
       response.pathways.forEach((pathway) => {
-        pathway.reactions.slice(0, pathway.reactions.length - 1).forEach((reaction: NovostoicReaction) => {
+        pathway.reactions.slice(0, pathway.reactions.length - 1).forEach((reaction) => {
           if (reaction.targetMolecule!.name && reaction.targetMolecule && !intermediates.has(reaction.targetMolecule.name)) {
             intermediates.add(reaction.targetMolecule.name);
             returnVal.push(reaction.targetMolecule);
@@ -101,7 +107,7 @@ export class PathwaySearchResultComponent implements OnInit {
       const cofactors = new Set<string>();
       const returnVal: NovostoicMolecule[] = [];
       response.pathways.forEach((pathway) => {
-        pathway.reactions.forEach((reaction: NovostoicReaction) => {
+        pathway.reactions.forEach((reaction) => {
           reaction.reactants.forEach((reactant) => {
             if (reactant.molecule.name && !cofactors.has(reactant.molecule.name)) {
               cofactors.add(reactant.molecule.name);
@@ -284,5 +290,9 @@ export class PathwaySearchResultComponent implements OnInit {
 
   applyFilters() {
     this.showResultsFilter$.next(false);
+  }
+
+  getEnzymeObj(enzyme: any) {
+    return <NovostoicReaction['enzymes'][0]>(enzyme);
   }
 }

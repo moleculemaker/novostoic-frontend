@@ -315,14 +315,14 @@
                     </button>
                 </div>
                 <hr class="my-2" />
-                <div class="flex justify-between gap-6">
-                    <div class="flex justify-between w-1/2">
+                <div class="flex justify-between">
+                    <div class="flex justify-between w-1/2 px-2">
                         <span class="font-light">∆G</span>
                         <span class="font-semibold"
                             >{{ reaction.deltaG }}kJ/mol</span
                         >
                     </div>
-                    <div class="flex justify-between w-1/2">
+                    <div class="flex justify-between w-1/2 px-2">
                         <span class="text-white/50">Reaction ID</span>
                         <span class="text-white/50"
                             >{{ reaction.reactionId }}</span
@@ -330,14 +330,14 @@
                     </div>
                 </div>
                 <div class="flex justify-between gap-6">
-                    <div class="flex justify-between w-1/2" *ngIf="reaction.enzymes.length">
+                    <div class="flex justify-between w-1/2 px-2" *ngIf="reaction.enzymes.length">
                         <span class="font-light">Enz</span>
                         <span class="font-semibold"
                             >{{ reaction.enzymes.length > 1 ? 'Multiple' :
-                            reaction.enzymes[0].name }}</span
+                            reaction.enzymes[0] }}</span
                         >
                     </div>
-                    <div class="flex justify-between w-1/2" *ngIf="reaction.confidenceScore">
+                    <div class="flex justify-between w-1/2 px-2" *ngIf="reaction.confidenceScore">
                         <span class="text-white/50">Confidence Score</span>
                         <span class="text-white/50"
                             >{{ reaction.confidenceScore }}</span
@@ -468,19 +468,26 @@
                                 <div class="mb-1">Delta G Calculation</div>
                                 <div class="font-semibold">{{reaction.deltaG}}kJ/mol</div>
                             </div>
-                            <!-- <div>
+                            <div>
                                 <div class="mb-1">Enzyme</div>
                                 <table class="w-full">
                                     <tr class="align-middle" *ngFor="let enzyme of reaction.enzymes">
-                                        <td class="font-semibold underline text-start">
-                                            <a [href]="'https://brenda-enzymes.org/enzyme.php?ecno=' + enzyme.name.substr(2)" target="_blank">
-                                                {{enzyme.name}}
+                                        <td class="font-semibold underline text-start" *ngIf="!reaction.isPrediction">
+                                            <a [href]="'https://brenda-enzymes.org/enzyme.php?ecno=' + enzyme" target="_blank">
+                                                EC {{ enzyme }}
                                             </a>
                                         </td>
-                                        <td class="text-end" *ngIf="reaction.isPrediction">{{enzyme.amount}}</td>
+
+                                        <td class="font-semibold underline text-start" *ngIf="reaction.isPrediction">    
+                                            <a [pTooltip]="enzyme.sequence">
+                                                {{ enzyme.uniprot_id }}
+                                            </a>
+                                        </td>
+
+                                        <td class="text-end" *ngIf="reaction.isPrediction">{{ enzyme.score }}</td>
                                     </tr>
                                 </table>
-                            </div> -->
+                            </div>
                             <div>
                                 <div class="mb-1">Reaction ID:</div>
                                 <div class="font-semibold underline">{{reaction.reactionId}}</div>

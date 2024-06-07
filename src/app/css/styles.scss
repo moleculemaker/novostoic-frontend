@@ -151,6 +151,10 @@ html, body {
 	font-size: inherit;
 }
 
+.p-tooltip {
+	z-index: 99999;
+}
+
 body, span, div, p {
 	@apply text-base;
 }
