@@ -25,6 +25,7 @@ export class PathwaySearchResultComponent implements OnInit {
       JobType.NovostoicPathways,
       this.jobId,
     )),
+    tap(() => this.isLoading$.next(true)),
     // map(() => ({ 
     //   phase: JobStatus.Completed,
     //   job_id: 'example-pathway-job',
@@ -37,9 +38,7 @@ export class PathwaySearchResultComponent implements OnInit {
     tap((data) => { console.log('job status: ', data) }),
   );
 
-  isLoading$ = this.statusResponse$.pipe(
-    map((job) => job.phase === JobStatus.Processing || job.phase === JobStatus.Queued),
-  );
+  isLoading$ = new BehaviorSubject(true);
 
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
@@ -66,6 +65,7 @@ export class PathwaySearchResultComponent implements OnInit {
         }
       })
     })),
+    tap(() => this.isLoading$.next(false)),
     shareReplay(1),
     tap((data) => console.log('response', data))
   );

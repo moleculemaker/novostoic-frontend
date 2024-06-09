@@ -49,6 +49,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
       JobType.NovostoicOptstoic,
       this.jobId,
     )),
+    tap(() => this.isLoading$.next(true)),
     takeWhile((data) => 
       data.phase === JobStatus.Processing 
       || data.phase === JobStatus.Queued
@@ -56,14 +57,13 @@ export class OverallStoichiometryResultComponent implements OnInit {
     tap((data) => { console.log('job status: ', data) }),
   );
 
-  isLoading$ = this.statusResponse$.pipe(
-    map((job) => job.phase === JobStatus.Processing || job.phase === JobStatus.Queued),
-  );
+  isLoading$ = new BehaviorSubject(true);
 
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicOptstoic, this.jobId)),
     map((response) => response as OverallStoichiometryResponse),
+    tap(() => this.isLoading$.next(false)),
     shareReplay(1),
     tap((data) => { console.log('result: ', data) }),
   );

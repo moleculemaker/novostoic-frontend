@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { filter, map, of, skipUntil, switchMap, takeWhile, tap, timer } from "rxjs";
+import { BehaviorSubject, filter, map, of, skipUntil, switchMap, takeWhile, tap, timer } from "rxjs";
 import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
 import { ThermodynamicalFeasibilityResponse } from "~/app/models/dg-predictor";
 import { NovostoicService } from "~/app/services/novostoic.service";
@@ -29,6 +29,7 @@ export class DgPredictorResultComponent {
       JobType.NovostoicDgpredictor,
       this.jobId,
     )),
+    tap(() => this.isLoading$.next(true)),
     takeWhile((data) => 
       data.phase === JobStatus.Processing 
       || data.phase === JobStatus.Queued
@@ -36,13 +37,12 @@ export class DgPredictorResultComponent {
     tap((data) => { console.log('job status: ', data) }),
   );
 
-  isLoading$ = this.statusResponse$.pipe(
-    map((job) => job.phase === JobStatus.Processing || job.phase === JobStatus.Queued),
-  );
+  isLoading$ = new BehaviorSubject(true);
 
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicDgpredictor, this.jobId)),
+    tap(() => this.isLoading$.next(true)),
     tap((data) => { console.log('result: ', data) }),
   );
 

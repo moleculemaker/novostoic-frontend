@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { timer, switchMap, takeWhile, tap, map, skipUntil, filter, of } from "rxjs";
+import { timer, switchMap, takeWhile, tap, map, skipUntil, filter, of, BehaviorSubject } from "rxjs";
 import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
 import { NovostoicService } from "~/app/services/novostoic.service";
 
@@ -20,6 +20,7 @@ export class EnzRankResultComponent {
       JobType.NovostoicEnzrank,
       this.jobId,
     )),
+    tap(() => this.isLoading$.next(true)),
     takeWhile((data) => 
       data.phase === JobStatus.Processing 
       || data.phase === JobStatus.Queued
@@ -27,9 +28,7 @@ export class EnzRankResultComponent {
     tap((data) => { console.log('job status: ', data) }),
   );
 
-  isLoading$ = this.statusResponse$.pipe(
-    map((job) => job.phase === JobStatus.Processing || job.phase === JobStatus.Queued),
-  );
+  isLoading$ = new BehaviorSubject(true);
 
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
@@ -39,6 +38,7 @@ export class EnzRankResultComponent {
       enzymeSequence: data.results[0].enzymeSequence,
       activityScore: data.results[0].activityScore,
     })),
+    tap(() => this.isLoading$.next(true)),
     tap((data) => { console.log('result: ', data) }),
   );
 
