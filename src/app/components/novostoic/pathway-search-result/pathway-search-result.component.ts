@@ -39,12 +39,15 @@ export class PathwaySearchResultComponent implements OnInit {
   );
 
   isLoading$ = new BehaviorSubject(true);
+  noResults$ = new BehaviorSubject(false);
 
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
     // map(() => PathwaySearchResponse.example),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicPathways, this.jobId)),
     tap((data) => { console.log('result: ', data) }),
+    tap(() => this.isLoading$.next(false)),
+    tap((response) => this.noResults$.next(Object.is(response, null))),
     map((response) => response as PathwaySearchResponse),
     map((response) => ({
       ...response,
@@ -65,7 +68,6 @@ export class PathwaySearchResultComponent implements OnInit {
         }
       })
     })),
-    tap(() => this.isLoading$.next(false)),
     shareReplay(1),
     tap((data) => console.log('response', data))
   );
