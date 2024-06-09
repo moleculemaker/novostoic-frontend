@@ -273,7 +273,7 @@
                                     <span
                                         class="flex items-center justify-between my-2"
                                     >
-                                        <span>Max number of Steps</span>
+                                        <span>Number of reaction steps per pathway design</span>
                                         <i
                                             class="pi pi-info-circle"
                                         ></i>
@@ -304,7 +304,7 @@
                                         class="flex items-center justify-between my-2"
                                     >
                                         <span
-                                            >Max number of pathway</span
+                                            >Number of pathway generated</span
                                         >
                                         <i
                                             class="pi pi-info-circle"
@@ -341,14 +341,8 @@
                             </small>
                             <div class="flex flex-col gap-4 mt-4">
                                 <div class="flex items-center">
-                                    <p-radioButton value="all" formControlName="thermodynamicReactionsFilterMode"/>
-                                    <label class="ml-2">Filter out pathways where <b class="font-bold">all reactions are thermodynamically infeasible.</b>
-                                        <i class="ml-2 pi pi-info-circle"></i>
-                                    </label>
-                                </div>
-                                <div class="flex items-center">
-                                    <p-radioButton value="any" formControlName="thermodynamicReactionsFilterMode"/>
-                                    <label class="ml-2">Filter out pathways with <b class="font-bold">any thermodynamically infeasible reactions.</b>
+                                    <p-checkbox value="any" formControlName="thermodynamicReactionsFilterMode"></p-checkbox>
+                                    <label class="ml-2">Check the box to find pathways with thermodynamically feasible reactions
                                         <i class="ml-2 pi pi-info-circle"></i>
                                     </label>
                                 </div>
@@ -356,13 +350,13 @@
                         </section>
                         <hr class="my-4" />
                         <section>
-                            <h6 class="font-semibold opacity-100 leading-base">Predicted Enzyme Selection</h6>
+                            <h6 class="font-semibold opacity-100 leading-base">Enzyme selection for novel reactions</h6>
                             <small class="block pt-1 italic opacity-60 leading-xl">
-                                The number of predicted enzyme candidate you need for the novel steps
+                                Rank-ordering known enzyme candidates for the novel reactions to select top enzyme candidates
                             </small>
                             <div class="mt-1 shrink">
                                 <div class="flex items-center justify-between pr-2 my-2 leading-xl">
-                                    Number of Predicted Enzyme candidates
+                                    Number of candidates you want to see for each novel steps
                                 </div>
                                 <div class="max-w-[200px]">
                                     <input

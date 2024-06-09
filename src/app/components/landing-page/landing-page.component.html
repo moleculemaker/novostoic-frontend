@@ -3,10 +3,7 @@
         <div class="w-full p-4">
             <h1 class="font-bold">Welcome to Novostoic!</h1>
             <h5 class="max-w-screen-md mt-4 leading-xl">
-                A unified web-based interface for the biosynthesis of
-                thermodynamically feasible, carbon and energy-balanced pathways
-                with a way of selecting enzymes to undergo re-engineering for
-                novel reactions steps.
+                A unified web-based interface for biosynthesis pathway design that checks for thermodyncamic feasibility of reaction steps and offers enzyme candidates for re-engineering for novel steps.
             </h5>
             <h5 class="max-w-screen-md mt-2 leading-xl">
                 Learn more about the Novostoic workflow below and get started
@@ -92,12 +89,10 @@
                         <small class="opacity-60">Optstoic</small>
                         <ul class="mt-2 ml-6 list-disc">
                             <li class="pl-2 leading-normal">
-                                You <i>have</i> a target molecule and a
-                                precursor
+                                Input: Starting precursors and target molecule
                             </li>
                             <li class="pt-2 pl-2 leading-normal">
-                                You <i>need</i> optimal overall Stoichiometry of
-                                conversion maximizng yield
+                                Output: Optimal overall stoichiometry of conversion maximizing yield
                             </li>
                         </ul>
                     </p-card>
@@ -163,10 +158,11 @@
                         <h5 class="mt-0 font-bold opacity-100 leading-lg">Pathway Search</h5>
                         <small class="opacity-60">Novostoic 1.0</small>
                         <ul class="mt-2 ml-6 list-disc">
-                            <li class="pl-2 leading-normal">You <i>have</i> the stoichiometry</li>
+                            <li class="pl-2 leading-normal">
+                                Input: Optimal overall stoichiometry
+                            </li>
                             <li class="pt-2 pl-2 leading-normal">
-                                You <i>get</i> the possible retrobiosynthesis
-                                pathways with novel steps
+                                Output possible retrobiosynthesis pathways with novel steps
                             </li>
                         </ul>
                     </p-card>
@@ -244,13 +240,13 @@
                                 </div>
                             </ng-template>
                           <h5 class="mt-0 font-bold opacity-100 leading-lg">Thermodynamical Feasibility</h5>
-                          <small class="opacity-60">dgPredictor</small>
+                          <small class="opacity-60">dGPredictor</small>
                           <ul class="mt-2 ml-6 list-disc">
                               <li class="pl-2 leading-normal">
-                                  You <i>have</i> pathways or reactions
+                                Input: reaction equation
                               </li>
                               <li class="pt-2 pl-2 leading-normal">
-                                  You <i>need</i> to calculate Gibbs Free Energy
+                                Output: Standard Gibbs energy change
                               </li>
                           </ul>
                       </p-card>
@@ -293,11 +289,10 @@
                             <small class="opacity-60">EnzRank</small>
                             <ul class="mt-2 ml-6 list-disc">
                                 <li class="pl-2 leading-normal">
-                                    You <i>have</i> pathways or reactions
+                                    Input: pathways or reactions and protein sequence
                                 </li>
                                 <li class="pt-2 pl-2 leading-normal">
-                                    You <i>need</i> best candidates to use as
-                                    enzyme for a new/novel reaction pathway
+                                    Output: Rank-order known enzymes for novel reactions in pathways
                                 </li>
                             </ul>
                         </p-card>

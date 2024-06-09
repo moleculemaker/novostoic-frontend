@@ -136,7 +136,10 @@
                                 <th pSortableColumn="deltaG">
                                     <span
                                         class="underline decoration-dotted"
-                                        >ΔG</span
+                                        pTooltip="<b class='font-bold'>Change in Gibbs Free Energy</b>
+                                        The larger negative values indicating greater thermodynamic feasibility."
+                                        [escape]="false"
+                                        >ΔrG’°</span
                                     >
                                     <p-sortIcon
                                         field="deltaG"
