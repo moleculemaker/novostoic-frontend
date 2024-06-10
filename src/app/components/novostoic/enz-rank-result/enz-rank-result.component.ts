@@ -38,7 +38,7 @@ export class EnzRankResultComponent {
       enzymeSequence: data.results[0].enzymeSequence,
       activityScore: data.results[0].activityScore,
     })),
-    tap(() => this.isLoading$.next(true)),
+    tap(() => this.isLoading$.next(false)),
     tap((data) => { console.log('result: ', data) }),
   );
 

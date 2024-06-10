@@ -42,7 +42,7 @@ export class DgPredictorResultComponent {
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicDgpredictor, this.jobId)),
-    tap(() => this.isLoading$.next(true)),
+    tap(() => this.isLoading$.next(false)),
     tap((data) => { console.log('result: ', data) }),
   );
 
