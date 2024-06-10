@@ -43,7 +43,7 @@
         </div>
 
         <!-- Molecule Input -->
-        <div *ngIf="!(isLoading$ | async)" class="flex flex-col gap-6 mt-8">
+        <div [class.hidden]="(isLoading$ | async)" class="flex flex-col gap-6 mt-8">
             <ng-container *ngIf="(response$ | async) as response">
                 <p-panel header="Input">
                     <div
