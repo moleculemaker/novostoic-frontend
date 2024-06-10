@@ -257,7 +257,7 @@
     let-inLastColumn="inLastColumn"
     let-inFirstColumn="inFirstColumn"
 >
-    <td class="relative w-[120px] text-center align-middle">
+    <td class="relative w-[160px] text-center align-middle">
         <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
         <div
             class="absolute top-0 left-0 right-0 flex items-center h-full"
@@ -477,32 +477,32 @@
                                 <button type="button" title="download"><i class="pi pi-copy"></i></button>
                             </div>
                             <div>
-                                <div class="mb-1">Delta G Calculation</div>
-                                <div class="font-semibold">{{ reaction.deltaG.gibbsEnergy }}±{{ reaction.deltaG.std }}kJ/mol</div>
+                                <small class="font-bold">Delta G Calculation</small>
+                                <div class="leading-lg">{{ reaction.deltaG.gibbsEnergy }}±{{ reaction.deltaG.std }}kJ/mol</div>
                             </div>
                             <div>
-                                <div class="mb-1">Enzyme</div>
-                                <table class="w-full">
-                                    <tr class="align-middle" *ngFor="let enzyme of reaction.enzymes">
-                                        <td class="font-semibold underline text-start" *ngIf="!reaction.isPrediction">
+                                <small class="font-bold">{{ reaction.isPrediction ? 'Predicted ' : ''}}Enzyme</small>
+                                <div class="flex flex-col w-full max-h-[100px] overflow-scroll no-scrollbar">
+                                    <div class="flex justify-between" *ngFor="let enzyme of reaction.enzymes">
+                                        <div class="font-semibold underline leading-lg text-start" *ngIf="!reaction.isPrediction">
                                             <a [href]="'https://brenda-enzymes.org/enzyme.php?ecno=' + enzyme" target="_blank">
                                                 EC {{ enzyme }}
                                             </a>
-                                        </td>
+                                        </div>
 
-                                        <td class="font-semibold underline text-start" *ngIf="reaction.isPrediction">    
-                                            <a [pTooltip]="enzyme.sequence">
+                                        <div class="mb-1 underline text-start leading-lg" *ngIf="reaction.isPrediction">    
+                                            <a [pTooltip]="enzyme.sequence" class="leading-lg">
                                                 {{ enzyme.uniprot_id }}
                                             </a>
-                                        </td>
+                                        </div>
 
-                                        <td class="text-end" *ngIf="reaction.isPrediction">{{ enzyme.score }}</td>
-                                    </tr>
-                                </table>
+                                        <small class="text-end text-[#818EA1]" *ngIf="reaction.isPrediction">{{ enzyme.score | number:'1.0-2' }}</small>
+                                    </div>
+                                </div>
                             </div>
                             <div>
-                                <div class="mb-1">Reaction ID:</div>
-                                <div class="font-semibold underline">{{reaction.reactionId}}</div>
+                                <small class="font-bold">Reaction ID:</small>
+                                <div class="underline leading-lg">{{reaction.reactionId}}</div>
                             </div>
                         </div>
                         <div class="flex items-center justify-around w-full gap-2 px-4 py-8">
