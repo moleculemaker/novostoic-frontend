@@ -70,7 +70,7 @@
                         <td>
                             <span class="px-4"></span>{{ row.reaction }}
                         </td>
-                        <td>{{ row.gibbsEnergy }}kJ/mol</td>
+                        <td>{{ row.gibbsEnergy | number:"1.0-2" }} ± {{ row.std | number:"1.1-1" }} kJ/mol</td>
                         <td>
                             <div class="flex gap-4 item-center">
                                 <button><i class="pi pi-eye"></i></button>

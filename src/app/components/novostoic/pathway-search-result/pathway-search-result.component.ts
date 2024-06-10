@@ -56,7 +56,11 @@ export class PathwaySearchResultComponent implements OnInit {
           id: Math.random().toString(36).substring(7),
           reactions: pathway.map((reaction) => ({
             ...reaction,
-            deltaG: Math.round(reaction.deltaG.gibbsEnergy * 100) / 100,
+            deltaG: {
+              gibbsEnergy: Math.round(reaction.deltaG.gibbsEnergy * 100) / 100,
+              std: Math.round(reaction.deltaG.std * 10) / 10,
+              reaction: reaction.deltaG.reaction,
+            },
             products: reaction.products.filter((product) => {
               return product.molecule.name !== reaction.targetMolecule?.name;
             }),
@@ -76,7 +80,13 @@ export class PathwaySearchResultComponent implements OnInit {
   selectedPathway$ = new BehaviorSubject(0);
 
   pathwayDeltaGs$ = this.response$.pipe(
-    map((response) => response.pathways.map((pathway) => pathway.reactions.reduce((p, v) => p + v.deltaG, 0))),
+    map((response) => response.pathways.map((pathway) => pathway.reactions.reduce((p, v) => ({
+      gibbsEnergy: p.gibbsEnergy + v.deltaG.gibbsEnergy,
+      std: p.std + v.deltaG.std,
+    }), {
+      gibbsEnergy: 0,
+      std: 0,
+    }))),
   );
 
   /* -------------------------------------------------------------------------- */
@@ -184,7 +194,7 @@ export class PathwaySearchResultComponent implements OnInit {
               : thermodynamicalMatch && reaction.isThermodynamicalInfeasible;
           }
           if (thermodynamicalRangeMatch) {
-            thermodynamicalRangeMatch = reaction.deltaG >= range[0] && reaction.deltaG <= range[1];
+            thermodynamicalRangeMatch = reaction.deltaG.gibbsEnergy >= range[0] && reaction.deltaG.gibbsEnergy <= range[1];
           }
         });
 

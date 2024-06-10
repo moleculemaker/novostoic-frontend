@@ -162,8 +162,8 @@
                                                                 <ng-container
                                                                     *ngTemplateOutlet="tableCellImg; context: { 
                                                                         $implicit: reaction.targetMolecule!.structure,
-                                                                        thermoInfeasible: reaction.deltaG > 20,
-                                                                        nextThermoInfeasible: j === pathway.reactions.length - 1 ? false : pathway.reactions[j + 1].deltaG > 20,
+                                                                        thermoInfeasible: reaction.deltaG.gibbsEnergy > 20,
+                                                                        nextThermoInfeasible: j === pathway.reactions.length - 1 ? false : pathway.reactions[j + 1].deltaG.gibbsEnergy > 20,
                                                                     }"
                                                                 ></ng-container>
                                                             </ng-container>
@@ -291,7 +291,10 @@
                 {{ label }}
                 <i *ngIf="reaction.isThermodynamicalInfeasible" class="mx-1 text-xs pi pi-exclamation-triangle"></i>
             </span>
-            <span class="font-semibold text-black">{{ (reaction.deltaG > 0 ? '+' : '') + reaction.deltaG | number:"1.0-2" }}</span>
+            <span class="font-semibold text-black">
+                {{ (reaction.deltaG.gibbsEnergy > 0 ? '+' : '') + reaction.deltaG.gibbsEnergy }}
+                ±{{ reaction.deltaG.std }}
+            </span>
             <span class="font-light text-xs ml-1 text-[#212121]/50">kJ/mol</span>
         </button>
         <p-overlayPanel #reactionDetail>
@@ -328,7 +331,7 @@
                     <div class="flex justify-between w-1/2 px-2">
                         <span class="font-light">∆G</span>
                         <span class="font-semibold"
-                            >{{ reaction.deltaG }}kJ/mol</span
+                            >{{ reaction.deltaG.gibbsEnergy }}±{{ reaction.deltaG.std }}kJ/mol</span
                         >
                     </div>
                     <div class="flex justify-between w-1/2 px-2">
@@ -429,9 +432,9 @@
                         <div>Intermediates</div>
                     </div>
                     <div class="rounded-md border border-[--surface-d] border-solid pb-4 pt-3 pl-5 pr-6">
-                        <div class="mb-2 text-lg font-semibold" *ngIf="(pathwayDeltaGs$ | async) as deltaGs">{{ 
-                            deltaGs![selectedPathway$.value] 
-                        }}kJ/mol</div>
+                        <div class="mb-2 text-lg font-semibold" *ngIf="(pathwayDeltaGs$ | async) as deltaGs">
+                            {{ deltaGs![selectedPathway$.value].gibbsEnergy }}±{{ deltaGs![selectedPathway$.value].std | number:'1.1-1' }}kJ/mol
+                        </div>
                         <div>Delta G</div>
                     </div>
                 </div>
@@ -475,7 +478,7 @@
                             </div>
                             <div>
                                 <div class="mb-1">Delta G Calculation</div>
-                                <div class="font-semibold">{{reaction.deltaG}}kJ/mol</div>
+                                <div class="font-semibold">{{ reaction.deltaG.gibbsEnergy }}±{{ reaction.deltaG.std }}kJ/mol</div>
                             </div>
                             <div>
                                 <div class="mb-1">Enzyme</div>
