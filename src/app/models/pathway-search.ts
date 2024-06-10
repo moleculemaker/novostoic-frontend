@@ -20,10 +20,32 @@ export class PathwaySearchRequest {
     subscriberEmail: new FormControl("", [Validators.email]),
   });
 
+  constructor() {
+    this.form.controls["coReactants"].controls.forEach((control) => {
+      control.get("molecule")?.valueChanges.subscribe((value) => {
+        if (value) {
+          control.get("amount")?.addValidators(Validators.required);
+        } else {
+          control.get("amount")?.clearValidators();
+        }
+      });
+    });
+
+    this.form.controls["coProducts"].controls.forEach((control) => {
+      control.get("molecule")?.valueChanges.subscribe((value) => {
+        if (value) {
+          control.get("amount")?.addValidators(Validators.required);
+        } else {
+          control.get("amount")?.clearValidators();
+        }
+      });
+    });
+  }
+
   private createMoleculeInputWithAmount() {
     return new FormGroup({
-      molecule: new FormControl<string>("", [Validators.required]),
-      amount: new FormControl<number>(0, [Validators.required]),
+      molecule: new FormControl<string>(""),
+      amount: new FormControl<number>(0, [Validators.min(1)]),
     });
   }
 

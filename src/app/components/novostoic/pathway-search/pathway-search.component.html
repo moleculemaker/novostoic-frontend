@@ -175,6 +175,7 @@
                                         <input
                                             pInputText
                                             class="w-[48px]"
+                                            [class.ng-invalid]="control.controls['amount'].invalid"
                                             placeholder="0.0"
                                             formControlName="amount"
                                         />
