@@ -6,7 +6,7 @@
                 <h5 class="flex items-center gap-2 mb-2 font-bold opacity-100 leading-xl">
                     Job ID: {{ status.job_id || 'loading' }} 
                     <button type="button" title="copy job id" class="border-none cursor-pointer">
-                        <i class="pi pi-copy"></i>
+                        <i class="pi pi-copy" (click)="copyAndPasteURL()"></i>
                     </button>
                 </h5>
                 <h6 class="text-text-secondary leading-lg">
@@ -474,7 +474,7 @@
                         <div class="flex flex-col w-1/5 gap-4 p-4 rounded-md bg-gray-50">
                             <div class="flex justify-between">
                                 <span class="font-semibold">Reaction {{selectedPathway$.value + 1}}.{{ i + 1 }}</span>
-                                <button type="button" title="download"><i class="pi pi-copy"></i></button>
+                                <!-- <button type="button" title="download"><i class="pi pi-copy"></i></button> -->
                             </div>
                             <div>
                                 <small class="font-bold">Delta G Calculation</small>
