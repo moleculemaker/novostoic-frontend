@@ -38,7 +38,8 @@
                     [formControl]="request.form.controls['primaryPrecursor']"
                     [errors]="request.form.controls['primaryPrecursor'].errors"
                     [dirty]="request.form.controls['primaryPrecursor'].dirty"
-                    outputFormat="kegg_id"
+                    (onChemicalValidated)="request.setPrimaryPrecursor($event!)"
+                    outputFormat="smiles"
                 ></app-marvinjs-input>
 
                 <!-- Enzyme Sequence Input -->
