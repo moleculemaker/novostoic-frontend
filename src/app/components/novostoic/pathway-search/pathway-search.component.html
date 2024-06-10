@@ -114,7 +114,7 @@
                                 >
                                     <div
                                         class="flex gap-2"
-                                        *ngFor="let coreactant of request.form.controls['coReactants'].controls; let i = index"
+                                        *ngFor="let control of request.form.controls['coReactants'].controls; let i = index"
                                         [formGroupName]="i"
                                     >
                                         <input
@@ -123,13 +123,13 @@
                                             placeholder="0.0"
                                             formControlName="amount"
                                         />
-                                        <input
-                                            pInputText
-                                            type="text"
-                                            class="grow"
+                                        <app-chemical-input
+                                            class="w-full"
                                             placeholder="Name, SMILES, InChI, Kegg ID"
                                             formControlName="molecule"
-                                        />
+                                            [errors]="control.controls['molecule'].errors"
+                                            [dirty]="control.controls['molecule'].dirty"
+                                        ></app-chemical-input>
                                         <button *ngIf="i !== 0" type="button" title="remove coreactant" (click)="request.removeCoReactant(i)">
                                             <i class="mx-1 pi pi-times-circle"></i>
                                         </button>
@@ -178,13 +178,13 @@
                                             placeholder="0.0"
                                             formControlName="amount"
                                         />
-                                        <input
-                                            pInputText
-                                            type="text"
-                                            class="grow"
+                                        <app-chemical-input
+                                            class="w-full"
                                             placeholder="Name, SMILES, InChI, Kegg ID"
                                             formControlName="molecule"
-                                        />
+                                            [errors]="control.controls['molecule'].errors"
+                                            [dirty]="control.controls['molecule'].dirty"
+                                        ></app-chemical-input>
                                         <button *ngIf="i !== 0" type="button" title="remove Co-product" (click)="request.removeCoProduct(i)">
                                             <i class="mx-1 pi pi-times-circle"></i>
                                         </button>
