@@ -25,7 +25,7 @@ export class EnzymeSelectionRequest {
   toRequestBody() {
     const jobInfo = {
       primary_precursor: this.form.controls["primaryPrecursor"].value || '',
-      enzyme_sequences: [this.form.controls["enzymeSequence"].value?.replaceAll('\n', '') || ''],
+      enzyme_sequences: [this.form.controls["enzymeSequence"].value?.replaceAll('\\n', '') || ''],
     };
     return {
       job_info: JSON.stringify(jobInfo),

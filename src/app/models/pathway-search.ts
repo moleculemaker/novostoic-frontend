@@ -150,6 +150,7 @@ export class PathwaySearchRequest {
       iterations: this.form.controls["maxPathways"].value,
       reactants: this.form.controls["coReactants"].value,
       products: this.form.controls["coProducts"].value,
+      num_enzymes: this.form.controls["numEnzymeCandidates"].value,
     };
     return {
       job_info: JSON.stringify(jobInfo),
