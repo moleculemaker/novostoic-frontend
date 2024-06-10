@@ -12,10 +12,10 @@ export class ThermodynamicalFeasibilityRequest {
   form = new FormGroup({
     ph: new FormControl(5, [Validators.required]),
     ionicStrength: new FormControl(0.3, [Validators.required]),
-    reactions: new FormArray([this.createReactionSmilesFormControl()]),
+    reactions: new FormArray([this.createReactionKeggIDFormControl()]),
     agreeToSubscription: new FormControl(false),
     subscriberEmail: new FormControl("", [Validators.email]),
-    reactionInputType: new FormControl("smiles", [Validators.required]),
+    reactionInputType: new FormControl("keggId", [Validators.required]),
   });
 
   private createReactionSmilesFormControl() {
