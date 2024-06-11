@@ -106,14 +106,21 @@ export class ThermodynamicalFeasibilityRequest {
     const jobInfo = {
       ph: this.form.controls["ph"].value || 7,
       ionic_strength: this.form.controls["ionicStrength"].value || 0.3,
-      reactions: this.form.controls["reactions"].value.map((reaction) => ({
-        type: reaction.type,
-        smiles: reaction.reactionSmiles,
-        add_info: {
-          ['N' + reaction.moleculeNumber]: reaction.moleculeInchiOrSmiles,
-        },
-        reaction_keggid: reaction.reactionKeggId,
-      })),
+      reactions: this.form.controls["reactions"].value.map((reaction) => {
+        let payload: any = {
+          type: reaction.type,
+          smiles: reaction.reactionSmiles,
+          reaction_keggid: reaction.reactionKeggId,
+        }
+
+        if (reaction.moleculeInchiOrSmiles) {
+          payload["add_info"] = {
+            ['N' + reaction.moleculeNumber]: reaction.moleculeInchiOrSmiles,
+          };
+        }
+
+        return payload;
+      }),
     };
     return {
       job_info: JSON.stringify(jobInfo),
