@@ -26,12 +26,23 @@ export class ThermodynamicalFeasibilityRequest {
   }
 
   private createReactionKeggIDFormControl() {
-    return new FormGroup<ReactionFormControl>({
+    const formGroup = new FormGroup<ReactionFormControl>({
       type: new FormControl("keggId"),
-      moleculeNumber: new FormControl("", [Validators.required]),
-      moleculeInchiOrSmiles: new FormControl("", [Validators.required]),
+      moleculeNumber: new FormControl("", []),
+      moleculeInchiOrSmiles: new FormControl("", []),
       reactionKeggId: new FormControl("", [Validators.required]),
     });
+
+    formGroup.controls["moleculeInchiOrSmiles"]?.valueChanges.subscribe((value) => {
+      if (value) {
+        formGroup.controls["moleculeNumber"]?.addValidators([Validators.required]);
+      } else {
+        formGroup.controls["moleculeNumber"]?.clearValidators();
+      }
+      formGroup.controls["moleculeNumber"]?.updateValueAndValidity();
+    });
+
+    return formGroup;
   }
 
   private clearAllInputHelper(form: FormGroup | FormArray) {
