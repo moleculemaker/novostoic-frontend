@@ -158,7 +158,7 @@
             </div>
         </div>
         <p-button
-            label="Get Overall Stoichiometry"
+            [label]="request.form.status === 'PENDING' ? 'Validating...' : 'Get Overall Stoichiometry'"
             type="submit"
             styleClass="btn-submit-request"
             [disabled]="!request.form.valid"

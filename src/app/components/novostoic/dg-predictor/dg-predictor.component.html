@@ -223,7 +223,7 @@
             </div>
         </div>
         <p-button
-            label="Calculate Gibbs Free Energy"
+            [label]="request.form.status === 'PENDING' ? 'Validating...' : 'Calculate Gibbs Free Energy'"
             type="submit"
             styleClass="btn-submit-request"
             [disabled]="!request.form.valid"

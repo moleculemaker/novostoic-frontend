@@ -131,7 +131,7 @@
             </div>
         </div>
         <p-button
-            label="Calculate Activity Score"
+            [label]="request.form.status === 'PENDING' ? 'Validating...' : 'Calculate Activity Score'"
             type="submit"
             styleClass="btn-submit-request"
             [disabled]="!request.form.valid"
