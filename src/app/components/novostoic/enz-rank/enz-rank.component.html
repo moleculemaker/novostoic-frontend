@@ -135,6 +135,7 @@
             type="submit"
             styleClass="btn-submit-request"
             [disabled]="!request.form.valid"
+            [loading]="request.form.status === 'PENDING'"
             iconPos="right"
             icon="pi pi-arrow-right"
         ></p-button>
