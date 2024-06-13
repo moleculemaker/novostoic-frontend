@@ -1,24 +1,21 @@
-<div class="flex h-full flex-col max-w-screen-lg">
-    <div class="mt-16 flex justify-center">
-        <div class="lg:w-screen-lg p-4">
+<div class="flex flex-col h-full max-w-screen-lg">
+    <div class="flex justify-center mt-16">
+        <div class="w-full p-4">
             <h1 class="font-bold">Welcome to Novostoic!</h1>
-            <p class="mt-4 max-w-screen-md leading-6">
-                A unified web-based interface for the biosynthesis of
-                thermodynamically feasible, carbon and energy-balanced pathways
-                with a way of selecting enzymes to undergo re-engineering for
-                novel reactions steps.
-            </p>
-            <p class="mt-2 max-w-screen-md leading-6">
+            <h5 class="max-w-screen-md mt-4 leading-xl">
+                A unified web-based interface for biosynthesis pathway design that checks for thermodyncamic feasibility of reaction steps and offers enzyme candidates for re-engineering for novel steps.
+            </h5>
+            <h5 class="max-w-screen-md mt-2 leading-xl">
                 Learn more about the Novostoic workflow below and get started
                 using the tool today.
-            </p>
+            </h5>
         </div>
     </div>
 
-    <div class="col-span-12 mt-16 flex flex-col items-center bg-gray-50 py-8">
-        <h3 class="text-bold my-4">Which tool should I use?</h3>
+    <div class="flex flex-col items-center col-span-12 py-8 mt-16 bg-gray-50">
+        <h4 class="my-4 text-bold">Which tool should I use?</h4>
         <div class="flex items-center justify-between gap-4">
-            <span class="italic">I have -> I need</span>
+            <h5 class="mt-0 italic">I have -> I need</h5>
             <p-dropdown
                 class="dropdown-intention text-center md:w-[480px]"
                 styleClass="md:w-[480px]"
@@ -39,9 +36,9 @@
 
     <!-- TODO: add animation -->
     <!-- TODO: the bottom margin of card is incorrect -->
-    <div class="mt-16 flex justify-center">
-        <div class="lg:w-screen-lg p-4">
-            <h3 class="text-bold pb-6">Common Workflow of Novostoic</h3>
+    <div class="flex justify-center mt-16">
+        <div class="p-4 lg:w-screen-lg">
+            <h4 class="pb-6 text-bold">Common Workflow of Novostoic</h4>
             <div class="flex gap-2">
                 <a [href]="NovostoicTools.OVERALL_STOICHIOMETRY">
                     <p-card
@@ -68,7 +65,7 @@
                                         </svg>
                                     </div>
                                     <p-chip
-                                        class="absolute left-0 top-0 ml-2 mt-2"
+                                        class="absolute top-0 left-0 mt-2 ml-2"
                                         styleClass="bg-white/50"
                                         label="Commonly First Used"
                                     ></p-chip>
@@ -79,7 +76,7 @@
                             <div class="flex">
                                 <button
                                     pButton
-                                    class="-mx-2 -mb-2 mt-2 grow justify-center"
+                                    class="justify-center mt-2 -mb-2 grow"
                                     @fadeIn
                                     *ngIf="displayedResearchNeed$.value === NovostoicTools.OVERALL_STOICHIOMETRY"
                                 >
@@ -88,16 +85,14 @@
                             </div>
                         </ng-template>
 
-                        <h3 class="-mt-6">Overall Stoichiometry</h3>
-                        <h6 class="mb-4 font-light">Optstoic</h6>
-                        <ul class="-mb-10 ml-6 list-disc">
-                            <li class="pl-2">
-                                You <i>have</i> a target molecule and a
-                                precursor
+                        <h5 class="mt-0 font-bold opacity-100 leading-lg">Overall Stoichiometry</h5>
+                        <small class="opacity-60">Optstoic</small>
+                        <ul class="mt-2 ml-6 list-disc">
+                            <li class="pl-2 leading-normal">
+                                Input: Starting precursors and target molecule
                             </li>
-                            <li class="pl-2 pt-2">
-                                You <i>need</i> optimal overall Stoichiometry of
-                                conversion maximizng yield
+                            <li class="pt-2 pl-2 leading-normal">
+                                Output: Optimal overall stoichiometry of conversion maximizing yield
                             </li>
                         </ul>
                     </p-card>
@@ -152,7 +147,7 @@
                                 <button
                                     pButton
                                     @fadeIn
-                                    class="-mx-2 -mb-2 mt-2 grow justify-center"
+                                    class="justify-center mt-2 -mx-1 -mb-2 grow"
                                     *ngIf="displayedResearchNeed$.value === NovostoicTools.PATHWAY_SEARCH"
                                 >
                                     Start Using
@@ -160,13 +155,14 @@
                             </div>
                         </ng-template>
 
-                        <h3 class="-mt-6">Pathway Search</h3>
-                        <h6 class="mb-4 font-light">Novostoic 1.0</h6>
-                        <ul class="-mb-10 ml-6 list-disc">
-                            <li class="pl-2">You <i>have</i> the stoichiometry</li>
-                            <li class="pl-2 pt-2">
-                                You <i>get</i> the possible retrobiosynthesis
-                                pathways with novel steps
+                        <h5 class="mt-0 font-bold opacity-100 leading-lg">Pathway Search</h5>
+                        <small class="opacity-60">Novostoic 1.0</small>
+                        <ul class="mt-2 ml-6 list-disc">
+                            <li class="pl-2 leading-normal">
+                                Input: Optimal overall stoichiometry
+                            </li>
+                            <li class="pt-2 pl-2 leading-normal">
+                                Output possible retrobiosynthesis pathways with novel steps
                             </li>
                         </ul>
                     </p-card>
@@ -236,21 +232,21 @@
                                     <button
                                         pButton
                                         @fadeIn
-                                        class="-mx-2 -mb-2 mt-2 grow justify-center"
+                                        class="justify-center mt-2 -mx-1 -mb-2 grow"
                                         *ngIf="displayedResearchNeed$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY"
                                     >
                                         Start Using
                                     </button>
                                 </div>
                             </ng-template>
-                          <h3 class="-mt-6">Thermodynamical Feasibility</h3>
-                          <h6 class="mb-4 font-light">dgPredictor</h6>
-                          <ul class="-mb-10 ml-6 list-disc">
-                              <li class="pl-2">
-                                  You <i>have</i> pathways or reactions
+                          <h5 class="mt-0 font-bold opacity-100 leading-lg">Thermodynamical Feasibility</h5>
+                          <small class="opacity-60">dGPredictor</small>
+                          <ul class="mt-2 ml-6 list-disc">
+                              <li class="pl-2 leading-normal">
+                                Input: reaction equation
                               </li>
-                              <li class="pl-2 pt-2">
-                                  You <i>need</i> to calculate Gibbs Free Energy
+                              <li class="pt-2 pl-2 leading-normal">
+                                Output: Standard Gibbs energy change
                               </li>
                           </ul>
                       </p-card>
@@ -281,7 +277,7 @@
                                     <button
                                         pButton
                                         @fadeIn
-                                        class="-mx-2 -mb-2 mt-2 grow justify-center"
+                                        class="justify-center mt-2 -mx-1 -mb-2 grow"
                                         *ngIf="displayedResearchNeed$.value === NovostoicTools.ENZYME_ACTIVITY"
                                     >
                                         Start Using
@@ -289,15 +285,14 @@
                                 </div>
                             </ng-template>
 
-                            <h3 class="-mt-6">Enzyme Activity</h3>
-                            <h6 class="mb-4 font-light">EnzRank</h6>
-                            <ul class="-mb-10 ml-6 list-disc">
-                                <li class="pl-2">
-                                    You <i>have</i> pathways or reactions
+                            <h5 class="mt-0 font-bold opacity-100 leading-lg">Enzyme Activity</h5>
+                            <small class="opacity-60">EnzRank</small>
+                            <ul class="mt-2 ml-6 list-disc">
+                                <li class="pl-2 leading-normal">
+                                    Input: pathways or reactions and protein sequence
                                 </li>
-                                <li class="pl-2 pt-2">
-                                    You <i>need</i> best candidates to use as
-                                    enzyme for a new/novel reaction pathway
+                                <li class="pt-2 pl-2 leading-normal">
+                                    Output: Rank-order known enzymes for novel reactions in pathways
                                 </li>
                             </ul>
                         </p-card>

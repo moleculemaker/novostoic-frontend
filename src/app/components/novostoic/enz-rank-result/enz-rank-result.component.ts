@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { timer, switchMap, takeWhile, tap, map, skipUntil, filter, of } from "rxjs";
+import { timer, switchMap, takeWhile, tap, map, skipUntil, filter, of, BehaviorSubject } from "rxjs";
 import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
-import { EnzymeSelectionResponse } from "~/app/models/enz-rank";
 import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
@@ -18,9 +17,10 @@ export class EnzRankResultComponent {
 
   statusResponse$ = timer(0, 10000).pipe(
     switchMap(() => this.novostoicService.getResultStatus(
-      JobType.NovostoicOptstoic,
+      JobType.NovostoicEnzrank,
       this.jobId,
     )),
+    tap(() => this.isLoading$.next(true)),
     takeWhile((data) => 
       data.phase === JobStatus.Processing 
       || data.phase === JobStatus.Queued
@@ -28,15 +28,18 @@ export class EnzRankResultComponent {
     tap((data) => { console.log('job status: ', data) }),
   );
 
-  isLoading$ = this.statusResponse$.pipe(
-    map((job) => job.phase === JobStatus.Processing || job.phase === JobStatus.Queued),
-  );
+  isLoading$ = new BehaviorSubject(true);
 
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicEnzrank, this.jobId)),
+    map((data) => ({
+      primaryPrecursor: data.primaryPrecursor,
+      enzymeSequence: data.results[0].enzymeSequence,
+      activityScore: data.results[0].activityScore,
+    })),
+    tap(() => this.isLoading$.next(false)),
     tap((data) => { console.log('result: ', data) }),
-    switchMap((data) => of(EnzymeSelectionResponse.example)), //TODO: replace with actual response
   );
 
   constructor(
@@ -45,5 +48,19 @@ export class EnzRankResultComponent {
   ) {}
 
   exportCSV() {
+  }
+
+  copyAndPasteURL(): void {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = window.location.href;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
 }

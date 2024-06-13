@@ -7,21 +7,21 @@
     >
         <button (click)="collapsed$.next(!collapsed$.value)">
             <i
-                class="pi pi-chevron-left text-xs"
+                class="text-xs pi pi-chevron-left"
                 [style.transform]="collapsed$.value ? 'rotate(180deg)' : ''"
             ></i>
         </button>
     </div>
-    <h6 *ngIf="!collapsed$.value" class="mb-2 pl-8 text-gray-400">
+    <div *ngIf="!collapsed$.value" class="pl-8 mb-2 text-gray-400 text-[.85rem]">
         Main functions
-    </h6>
+    </div>
     <ul *ngIf="fillColorsMap$ | async as colorMap">
         <li
             [pTooltip]="collapsed$.value ? 'Overall Stoichiometry' : ''"
-            [class]="'p-2 text-[14px]'
+            [class]="'p-2'
             + (collapsed$.value ? ' px-4': ' pl-8')
             + (NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.OVERALL_STOICHIOMETRY] !== ToolStatus.DISABLED ? ' hover:bg-gray-100' : '')
-            + (selectedTool$.value === NovostoicTools.OVERALL_STOICHIOMETRY ? ' font-semibold bg-white' : '')
+            + (selectedTool$.value === NovostoicTools.OVERALL_STOICHIOMETRY ? ' bg-white' : '')
             "
             pToolTip
         >
@@ -66,15 +66,18 @@
                         [attr.fill]="colorMap[NovostoicTools.OVERALL_STOICHIOMETRY]"
                     />
                 </svg>
-                <span *ngIf="!collapsed$.value">Overall Stoichiometry</span></a
+                <h6 class="opacity-100 leading-lg" 
+                    *ngIf="!collapsed$.value"
+                    [class.text-text-primary]="selectedTool$.value === NovostoicTools.OVERALL_STOICHIOMETRY"
+                    [class.font-semibold]="selectedTool$.value === NovostoicTools.OVERALL_STOICHIOMETRY">Overall Stoichiometry</h6></a
             >
         </li>
         <li
             [pTooltip]="collapsed$.value ? 'Pathway Search' : ''"
-            [class]="'p-2 text-[14px]'
+            [class]="'p-2'
             + (collapsed$.value ? ' px-4': ' pl-8')
             + (NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.PATHWAY_SEARCH] !== ToolStatus.DISABLED ? ' hover:bg-gray-100' : '')
-            + (selectedTool$.value === NovostoicTools.PATHWAY_SEARCH ? ' font-semibold bg-white' : '')
+            + (selectedTool$.value === NovostoicTools.PATHWAY_SEARCH ? ' bg-white' : '')
             "
         >
             <a
@@ -99,22 +102,25 @@
                     />
                 </svg>
 
-                <span *ngIf="!collapsed$.value">Pathway Search</span></a
+                <h6 class="opacity-100 leading-lg" 
+                    *ngIf="!collapsed$.value"
+                    [class.text-text-primary]="selectedTool$.value === NovostoicTools.PATHWAY_SEARCH"
+                    [class.font-semibold]="selectedTool$.value === NovostoicTools.PATHWAY_SEARCH">Pathway Search</h6></a
             >
         </li>
     </ul>
 
     <hr [class]="'mb-6' + (collapsed$.value ? ' mx-2' : ' m-4 ml-8 m4-6')" />
-    <h6 *ngIf="!collapsed$.value" class="mb-2 pl-8 text-gray-400">
+    <div *ngIf="!collapsed$.value" class="pl-8 mb-2 text-gray-400 text-[.85rem]">
         Auxiliary functions
-    </h6>
+    </div>
     <ul *ngIf="(fillColorsMap$ | async) as colorMap">
         <li
             [pTooltip]="collapsed$.value ? 'Thermodynamical Feasibility' : ''"
-            [class]="'p-2 text-[14px]'
+            [class]="'p-2'
             + (collapsed$.value ? ' px-4': ' pl-8')
             + (NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.THERMODYNAMICAL_FEASIBILITY] !== ToolStatus.DISABLED ? ' hover:bg-gray-100' : '')
-            + (selectedTool$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY ? ' font-semibold bg-white' : '')
+            + (selectedTool$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY ? ' bg-white' : '')
             "
         >
             <a
@@ -152,17 +158,18 @@
                         [attr.fill]="colorMap[NovostoicTools.THERMODYNAMICAL_FEASIBILITY]"
                     />
                 </svg>
-                <span *ngIf="!collapsed$.value"
-                    >Thermodynamical Feasibility</span
-                ></a
+                <h6 class="opacity-100 leading-lg" 
+                    *ngIf="!collapsed$.value"
+                    [class.text-text-primary]="selectedTool$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY"
+                    [class.font-semibold]="selectedTool$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY">Thermodynamical Feasibility</h6></a
             >
         </li>
         <li
             [pTooltip]="collapsed$.value ? 'Enzyme Selection' : ''"
-            [class]="'p-2 text-[14px]'
+            [class]="'p-2'
             + (collapsed$.value ? ' px-4': ' pl-8')
             + (NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.ENZYME_ACTIVITY] !== ToolStatus.DISABLED ? ' hover:bg-gray-100' : '')
-            + (selectedTool$.value === NovostoicTools.ENZYME_ACTIVITY ? ' font-semibold bg-white' : '')
+            + (selectedTool$.value === NovostoicTools.ENZYME_ACTIVITY ? ' bg-white' : '')
             "
         >
             <a
@@ -189,7 +196,10 @@
                         [attr.fill]="colorMap[NovostoicTools.ENZYME_ACTIVITY]"
                     />
                 </svg>
-                <span *ngIf="!collapsed$.value">Enzyme Selection</span></a
+                <h6 class="opacity-100 leading-lg" 
+                    *ngIf="!collapsed$.value"
+                    [class.text-text-primary]="selectedTool$.value === NovostoicTools.ENZYME_ACTIVITY"
+                    [class.font-semibold]="selectedTool$.value === NovostoicTools.ENZYME_ACTIVITY">Enzyme Selection</h6></a
             >
         </li>
     </ul>

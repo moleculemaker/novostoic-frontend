@@ -1,46 +1,40 @@
 <form
-    class="flex h-full flex-col justify-between"
+    class="flex flex-col justify-between h-full mt-2"
     [formGroup]="request.form"
     (ngSubmit)="onSubmit()"
 >
     <div>
-        <h2 class="mb-2">Input an Overall Stoichiometry</h2>
-        <p class="leading-6">
-            Pathway design using optimal overall stoichiometry.
-        </p>
+        <h5 class="font-bold opacity-100 leading-lg">Input an Overall Stoichiometry</h5>
+        <h6 class="mt-1 leading-lg">
+            Pathway design using optimal overall stoichiometry. Make sure it is balanced.
+        </h6>
 
         <!-- Pathway Search -->
-        <div class="mt-8 flex flex-col gap-6">
+        <div class="flex flex-col gap-6 mt-8">
             <p-panel>
                 <ng-template pTemplate="header">
-                    <div
-                        class="flex w-full items-center justify-between p-2 px-4"
-                    >
-                        <span class="text-lg"
-                            >Overall Stoichiometry</span
+                    <span class="grow">Overall Stoichiometry</span>
+                    <div class="flex gap-2">
+                        <button
+                            type="button"
+                            class="p-2 bg-white border rounded-md"
+                            (click)="editing$.value
+                                ? useExampleCallback()
+                                : confirmUsingExample()
+                            "
                         >
-                        <div class="flex gap-2">
-                            <button
-                                type="button"
-                                class="rounded-md border bg-white p-2"
-                                (click)="editing$.value
-                                    ? useExampleCallback()
-                                    : confirmUsingExample()
-                                "
-                            >
-                                <i class="pi pi-box mx-2"></i>
-                                Use an Example
-                            </button>
-                            <button
-                                type="button"
-                                class="rounded-md border bg-white p-2"
-                                (click)="editing$.value
-                                    ? clearAllCallback()
-                                    : confirmClearAll()"
-                            >
-                                Clear All
-                            </button>
-                        </div>
+                            <i class="mx-2 pi pi-box"></i>
+                            Use an Example
+                        </button>
+                        <button
+                            type="button"
+                            class="p-2 bg-white border rounded-md"
+                            (click)="editing$.value
+                                ? clearAllCallback()
+                                : confirmClearAll()"
+                        >
+                            Clear All
+                        </button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="content">
@@ -60,12 +54,12 @@
                         <div *ngIf="editing$.value">
                             <!-- Primary Precursor -->
                             <div
-                                class="flex flex-col gap-2 rounded-md bg-green-50 p-2"
+                                class="flex flex-col gap-2 p-2 rounded-md bg-green-50"
                             >
-                                <div>
+                                <div class="inline-flex items-center">
                                     <div class="green-dot"></div>
-                                    <span class="ml-2 font-semibold"
-                                        >A Primary Precursor</span
+                                    <h6 class="inline ml-2 font-semibold opacity-100 leading-xl"
+                                        >A Primary Precursor</h6
                                     >
                                     <span class="ml-1 text-red-500"
                                         >*</span
@@ -77,14 +71,15 @@
                                 >
                                     <input
                                         pInputText
+                                        type="number"
                                         class="w-[48px]"
                                         placeholder="0.0"
                                         formControlName="amount"
                                     />
                                     <app-marvinjs-input
                                         class="grow"
-                                        formControlName="molecule"
                                         placeholder="Name, SMILES, InChi, Kegg ID"
+                                        formControlName="molecule"
                                         [errors]="request.form.controls['primaryPrecursor'].controls['molecule'].errors"
                                         [dirty]="request.form.controls['primaryPrecursor'].controls['molecule'].dirty"
                                     ></app-marvinjs-input>
@@ -92,18 +87,18 @@
                             </div>
                             <div class="py-2 text-center">
                                 <i
-                                    class="pi pi-plus text-sm font-extrabold"
+                                    class="text-sm font-extrabold pi pi-plus"
                                 ></i>
                             </div>
                             <!-- Co-reactants -->
                             <div
-                                class="flex flex-col gap-2 rounded-md bg-gray-100 p-2"
+                                class="flex flex-col gap-2 p-2 bg-gray-100 rounded-md"
                             >
                                 <div class="flex justify-between">
-                                    <div>
+                                    <div class="inline-flex items-center">
                                         <div class="gray-dot"></div>
-                                        <span class="ml-2 font-semibold"
-                                            >Co-Reactants</span
+                                        <h6 class="inline ml-2 font-semibold opacity-100 leading-xl"
+                                            >Co-Reactants</h6
                                         >
                                     </div>
                                     <button
@@ -111,7 +106,7 @@
                                         (click)="request.addCoReactant()"
                                     >
                                         <i
-                                            class="pi pi-plus-circle px-1 pt-1"
+                                            class="px-1 pt-1 pi pi-plus-circle"
                                         ></i>
                                     </button>
                                 </div>
@@ -120,24 +115,25 @@
                                 >
                                     <div
                                         class="flex gap-2"
-                                        *ngFor="let coreactant of request.form.controls['coReactants'].controls; let i = index"
+                                        *ngFor="let control of request.form.controls['coReactants'].controls; let i = index"
                                         [formGroupName]="i"
                                     >
                                         <input
                                             pInputText
+                                            type="number"
                                             class="w-[48px]"
                                             placeholder="0.0"
                                             formControlName="amount"
                                         />
-                                        <input
-                                            pInputText
-                                            type="text"
-                                            class="grow"
+                                        <app-chemical-input
+                                            class="w-full"
                                             placeholder="Name, SMILES, InChI, Kegg ID"
                                             formControlName="molecule"
-                                        />
+                                            [errors]="control.controls['molecule'].errors"
+                                            [dirty]="control.controls['molecule'].dirty"
+                                        ></app-chemical-input>
                                         <button *ngIf="i !== 0" type="button" title="remove coreactant" (click)="request.removeCoReactant(i)">
-                                            <i class="pi pi-times-circle mx-1"></i>
+                                            <i class="mx-1 pi pi-times-circle"></i>
                                         </button>
                                     </div>
                                 </ng-container>
@@ -145,19 +141,19 @@
 
                             <div class="py-2 text-center">
                                 <i
-                                    class="pi pi-angle-double-down text-lg font-extrabold"
+                                    class="text-lg font-extrabold pi pi-angle-double-down"
                                 ></i>
                             </div>
 
                             <!-- Co-products -->
                             <div
-                                class="flex flex-col gap-2 rounded-md bg-gray-100 p-2"
+                                class="flex flex-col gap-2 p-2 bg-gray-100 rounded-md"
                             >
                                 <div class="flex justify-between">
-                                    <div>
+                                    <div class="inline-flex items-center">
                                         <div class="gray-dot"></div>
-                                        <span class="ml-2 font-semibold"
-                                            >Co-Products</span
+                                        <h6 class="inline ml-2 font-semibold opacity-100 leading-xl"
+                                            >Co-Products</h6
                                         >
                                     </div>
                                     <button
@@ -166,7 +162,7 @@
                                         (click)="request.addCoProduct()"
                                     >
                                         <i
-                                            class="pi pi-plus-circle px-1 pt-1"
+                                            class="px-1 pt-1 pi pi-plus-circle"
                                         ></i>
                                     </button>
                                 </div>
@@ -180,19 +176,21 @@
                                     >
                                         <input
                                             pInputText
+                                            type="number"
                                             class="w-[48px]"
+                                            [class.ng-invalid]="control.controls['amount'].invalid"
                                             placeholder="0.0"
                                             formControlName="amount"
                                         />
-                                        <input
-                                            pInputText
-                                            type="text"
-                                            class="grow"
+                                        <app-chemical-input
+                                            class="w-full"
                                             placeholder="Name, SMILES, InChI, Kegg ID"
                                             formControlName="molecule"
-                                        />
+                                            [errors]="control.controls['molecule'].errors"
+                                            [dirty]="control.controls['molecule'].dirty"
+                                        ></app-chemical-input>
                                         <button *ngIf="i !== 0" type="button" title="remove Co-product" (click)="request.removeCoProduct(i)">
-                                            <i class="pi pi-times-circle mx-1"></i>
+                                            <i class="mx-1 pi pi-times-circle"></i>
                                         </button>
                                     </div>
                                 </ng-container>
@@ -201,16 +199,16 @@
                             <!-- Target Molecule -->
                             <div class="py-2 text-center">
                                 <i
-                                    class="pi pi-plus text-sm font-extrabold"
+                                    class="text-sm font-extrabold pi pi-plus"
                                 ></i>
                             </div>
                             <div
-                                class="flex flex-col gap-2 rounded-md bg-blue-50 p-2"
+                                class="flex flex-col gap-2 p-2 rounded-md bg-blue-50"
                             >
-                                <div>
+                                <div class="inline-flex items-center">
                                     <div class="blue-dot"></div>
-                                    <span class="ml-2 font-semibold"
-                                        >A Target Molecule</span
+                                    <h6 class="inline ml-2 font-semibold opacity-100 leading-xl"
+                                        >A Target Molecule</h6
                                     >
                                     <span class="ml-1 text-red-500"
                                         >*</span
@@ -222,14 +220,15 @@
                                 >
                                     <input
                                         pInputText
+                                        type="number"
                                         class="w-[48px]"
                                         placeholder="0.0"
                                         formControlName="amount"
                                     />
                                     <app-marvinjs-input
                                         class="grow"
-                                        formControlName="molecule"
                                         placeholder="Name, SMILES, InChi, Kegg ID"
+                                        [formControl]="request.form.controls['targetMolecule'].controls['molecule']"
                                         [errors]="request.form.controls['targetMolecule'].controls['molecule'].errors"
                                         [dirty]="request.form.controls['targetMolecule'].controls['molecule'].dirty"
                                     ></app-marvinjs-input>
@@ -239,62 +238,53 @@
                     </div>
                     <hr />
                     <div
-                        class="flex justify-between rounded-b-md bg-gray-50 p-1 px-4"
+                        class="flex justify-between p-1 px-4 rounded-b-md bg-gray-50"
                     >
                         <div class="flex gap-3">
-                            <span class="text-xs"
-                                >1 Primary Precursor</span
-                            >
-                            <span class="text-xs">{{ request.form.controls['coReactants'].length }} Co-Reactants</span>
-                            <span class="text-xs">{{ request.form.controls['coProducts'].length }} Co-Products</span>
-                            <span class="text-xs"
-                                >1 Target Molecule</span
-                            >
+                            <small>1 Primary Precursor</small>
+                            <small>{{ request.form.controls['coReactants'].length }} Co-Reactants</small>
+                            <small>{{ request.form.controls['coProducts'].length }} Co-Products</small>
+                            <small>1 Target Molecule</small>
                         </div>
-                        <div class="text-xs">Overall Stoichiometry</div>
+                        <small>Overall Stoichiometry</small>
                     </div>
                 </ng-template>
             </p-panel>
 
             <p-panel class="my-6">
                 <ng-template pTemplate="header">
-                    <div
-                        class="flex w-full items-center justify-between p-2 px-4"
-                    >
-                        <span class="text-lg">Setting</span>
-                        <div class="flex gap-2">
-                            <button
-                                type="button"
-                                class="rounded-md border bg-white p-2"
-                                (click)="request.resetSetting()"
-                            >
-                                Reset
-                            </button>
-                        </div>
+                    <span class="grow">Setting</span>
+                    <div class="flex gap-2">
+                        <button
+                            type="button"
+                            class="p-2 bg-white border rounded-md"
+                            (click)="request.resetSetting()"
+                        >
+                            Reset
+                        </button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="content">
                     <div class="p-4 px-6">
                         <section>
-                            <h3>Pathway Search setting</h3>
-                            <p class="py-1 text-sm italic">
-                                Tip: The more you choose, the longer it
-                                takes.
-                            </p>
+                            <h6 class="font-semibold opacity-100 leading-base">Pathway Search setting</h6>
+                            <small class="block pt-1 italic opacity-60 leading-xl">
+                                Tip: More you choose, the longer it takes.
+                            </small>
                             <div
-                                class="mt-4 flex w-1/2 justify-between"
+                                class="flex justify-between w-1/2 mt-4"
                             >
                                 <div>
                                     <span
-                                        class="my-2 flex items-center justify-between"
+                                        class="flex items-center justify-between my-2"
                                     >
-                                        <span>Max number of Steps</span>
+                                        <span>Number of reaction steps per pathway design</span>
                                         <i
                                             class="pi pi-info-circle"
                                         ></i>
                                     </span>
                                     <input
-                                        type="text"
+                                        type="number"
                                         pInputText
                                         class="w-full"
                                         formControlName="maxSteps"
@@ -308,7 +298,7 @@
                                         [max]="10"
                                     ></p-slider>
                                     <span
-                                        class="my-2 flex items-center justify-between"
+                                        class="flex items-center justify-between my-2"
                                     >
                                         <span class="text-sm">0</span>
                                         <span class="text-sm">10</span>
@@ -316,17 +306,17 @@
                                 </div>
                                 <div>
                                     <span
-                                        class="my-2 flex items-center justify-between"
+                                        class="flex items-center justify-between my-2"
                                     >
                                         <span
-                                            >Max number of pathway</span
+                                            >Number of pathway generated</span
                                         >
                                         <i
                                             class="pi pi-info-circle"
                                         ></i>
                                     </span>
                                     <input
-                                        type="text"
+                                        type="number"
                                         pInputText
                                         class="w-full"
                                         formControlName="maxPathways"
@@ -340,7 +330,7 @@
                                         [max]="10"
                                     ></p-slider>
                                     <span
-                                        class="my-2 flex items-center justify-between"
+                                        class="flex items-center justify-between my-2"
                                     >
                                         <span class="text-sm">0</span>
                                         <span class="text-sm">10</span>
@@ -350,103 +340,54 @@
                         </section>
                         <hr class="my-4" />
                         <section>
-                            <h3>Thermodynamic Feasibility</h3>
-                            <table class="mt-2">
-                                <tr>
-                                    <td class="py-3">
-                                        <p-checkbox
-                                            formControlName="thermodynamicalFeasibleReactionsOnly"
-                                            [binary]="true"
-                                        ></p-checkbox>
-                                    </td>
-                                    <td class="flex px-4 py-1">
-                                        Check the box to filter out any
-                                        pathways that have thermodynamic
-                                        infeasible Reactions.
-                                    </td>
-                                    <td class="py-3">
-                                        <i
-                                            class="pi pi-info-circle"
-                                        ></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-3">
-                                        <p-checkbox
-                                            [binary]="true"
-                                            formControlName="isThermodynamicalFeasible"
-                                        ></p-checkbox>
-                                    </td>
-                                    <td class="flex px-4 py-1">
-                                        Check the box to filter out any
-                                        thermodynamic infeasible
-                                        Pathways in the results
-                                    </td>
-                                    <td class="py-3">
-                                        <i
-                                            class="pi pi-info-circle"
-                                        ></i>
-                                    </td>
-                                </tr>
-                            </table>
+                            <h6 class="font-semibold opacity-100 leading-base">Gibbs Energy Predictor</h6>
+                            <small class="block pt-1 italic opacity-60 leading-xl">
+                                Tip: You can always adjust your selections later on the results page in the filtering section.
+                            </small>
+                            <div class="flex flex-col gap-4 mt-4">
+                                <div class="flex items-center">
+                                    <p-checkbox value="any" formControlName="thermodynamicReactionsFilterMode"></p-checkbox>
+                                    <label class="ml-2">Check the box to find pathways with thermodynamically feasible reactions
+                                        <i class="ml-2 pi pi-info-circle"></i>
+                                    </label>
+                                </div>
+                            </div>
                         </section>
                         <hr class="my-4" />
                         <section>
-                            <div class="flex items-start gap-4">
-                                <p-checkbox
-                                    formControlName="useEnzymeSelection"
-                                    (onChange)="$event.checked
-                                        ? request.form.controls['numEnzymeCandidates'].enable()
-                                        : request.form.controls['numEnzymeCandidates'].disable()"
-                                    [binary]="true"
-                                ></p-checkbox>
-                                <div class="flex flex-col">
-                                    <span class="font-semibold"
-                                        >Enzyme Selection
-                                        <i
-                                            class="pi pi-info-circle ml-2"
-                                        ></i
-                                    ></span>
-                                    <span class="text-sm font-light"
-                                        >Check the box to get the top
-                                        enzyme candidate for
-                                        reactions</span
-                                    >
-                                    <div class="mt-3 flex">
-                                        <div class="shrink">
-                                            <span
-                                                class="my-2 flex items-center justify-between pr-2"
+                            <h6 class="font-semibold opacity-100 leading-base">Enzyme selection for novel reactions</h6>
+                            <small class="block pt-1 italic opacity-60 leading-xl">
+                                Rank-ordering known enzyme candidates for the novel reactions to select top enzyme candidates
+                            </small>
+                            <div class="mt-1 shrink">
+                                <div class="flex items-center justify-between pr-2 my-2 leading-xl">
+                                    Number of candidates you want to see for each novel steps
+                                </div>
+                                <div class="max-w-[200px]">
+                                    <input
+                                        title="Number of Enzyme candidates"
+                                        type="number"
+                                        pInputText
+                                        formControlName="numEnzymeCandidates"
+                                        [ngModel]="request.form.controls['numEnzymeCandidates'].value"
+                                    />
+                                    <div class="mr-2">
+                                        <p-slider
+                                            [ngModel]="request.form.controls['numEnzymeCandidates'].value"
+                                            formControlName="numEnzymeCandidates"
+                                            [min]="0"
+                                            [max]="10"
+                                        ></p-slider>
+                                        <span
+                                            class="flex items-center justify-between my-2"
+                                        >
+                                            <span class="text-sm"
+                                                >0</span
                                             >
-                                                <span
-                                                    >Number of Enzyme
-                                                    candidates</span
-                                                >
-                                            </span>
-                                            <input
-                                                type="text"
-                                                class="w-full"
-                                                pInputText
-                                                formControlName="numEnzymeCandidates"
-                                                [ngModel]="request.form.controls['numEnzymeCandidates'].value"
-                                            />
-                                            <p-slider
-                                                [ngModel]="request.form.controls['numEnzymeCandidates'].value"
-                                                formControlName="numEnzymeCandidates"
-                                                class="w-full"
-                                                [min]="0"
-                                                [max]="10"
-                                            ></p-slider>
-                                            <span
-                                                class="my-2 flex items-center justify-between"
+                                            <span class="text-sm"
+                                                >10</span
                                             >
-                                                <span class="text-sm"
-                                                    >0</span
-                                                >
-                                                <span class="text-sm"
-                                                    >10</span
-                                                >
-                                            </span>
-                                        </div>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -462,11 +403,11 @@
         class="sticky bottom-0 flex justify-between rounded-t-md bg-[#F3F5FB] px-10 pt-8"
     >
         <div class="flex flex-col">
-            <div class="mb-2 flex items-end justify-center">
-                <span class="mb-1 pr-12">
-                    <h2 class="m-0 mr-2 inline">Email</h2>
-                    Leave an email to get an notification when your
-                    results are ready.
+            <div class="flex items-end justify-center mb-2">
+                <span class="pr-12 mb-1">
+                    <h5 class="inline font-semibold opacity-100 leading-lg">Email</h5>
+                    <h6 class="inline ml-4 leading-lg">Leave an email to get an notification when your
+                    results are ready.</h6>
                 </span>
             </div>
             <div class="w-full">
@@ -485,25 +426,27 @@
                     *ngIf="request.form.controls['subscriberEmail'].invalid
                         && request.form.controls['subscriberEmail'].dirty"
                     id="subscriber-email-help"
-                    class="p-error mt-2 block"
+                    class="block mt-2 p-error"
                     >Email is invalid.</small
                 >
             </div>
             <div class="py-4">
-                <p-checkbox
-                    name="subscription"
-                    styleClass="subscription-checkbox"
-                    label="Agree to receive email notifications and updates about Novostoic."
-                    [binary]="true"
-                    [formControl]="request.form.controls['agreeToSubscription']"
-                ></p-checkbox>
+                <div class="flex items-center gap-1">
+                    <p-checkbox
+                        name="subscription"
+                        styleClass="subscription-checkbox"
+                        [binary]="true"
+                        [formControl]="request.form.controls['agreeToSubscription']"
+                    ></p-checkbox>
+                    <label class="opacity-60">Agree to receive email notifications and updates about Novostoic.</label>
+                </div>
             </div>
         </div>
         <p-button
             label="Pathway Search"
             type="submit"
-            styleClass="bg-[#224063]"
-            [disabled]="request.form.invalid"
+            styleClass="btn-submit-request"
+            [disabled]="!request.form.valid"
             iconPos="right"
             icon="pi pi-arrow-right"
         ></p-button>
@@ -524,14 +467,14 @@
         {{ warningMessage }}
     </p>
     <ng-template pTemplate="footer">
-        <div class="mt-4 flex justify-end gap-2">
+        <div class="flex justify-end gap-2 mt-4">
             <button type="button" class="rounded-md border border-[--bluegray-500] border-solid p-2 px-4" 
                 (click)="confirmCallback()">
-                <i class="pi pi-pencil mr-2"></i>
+                <i class="mr-2 pi pi-pencil"></i>
                 {{ acceptLabel }}
             </button>
             <button type="button" class="rounded-md border bg-[#3B82F6] text-white p-2 px-4" (click)="warningVisible$.next(false)">
-                <i class="pi pi-check mr-2"></i>
+                <i class="mr-2 pi pi-check"></i>
                 {{ rejectLabel }}
             </button>
         </div>

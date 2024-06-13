@@ -1,22 +1,21 @@
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
-import { DgPredictorRequestBody, JobCreate, ReactionsInner } from "../api/mmli-backend/v1";
 
 interface ReactionFormControl {
-  type: FormControl<ReactionsInner['type'] | null>;
-  reactionSmiles?: FormControl<ReactionsInner['smiles'] | null>;
-  moleculeNumber?: FormControl<ReactionsInner['molecule_number'] | null>;
-  moleculeInchiOrSmiles?: FormControl<ReactionsInner['molecule_inchi_or_smiles'] | null>;
-  reactionKeggId?: FormControl<ReactionsInner['reaction_keggid'] | null>;
+  type: FormControl<string | null>;
+  reactionSmiles?: FormControl<string | null>;
+  moleculeNumber?: FormControl<string | null>;
+  moleculeInchiOrSmiles?: FormControl<string | null>;
+  reactionKeggId?: FormControl<string | null>;
 }
 
 export class ThermodynamicalFeasibilityRequest {
   form = new FormGroup({
     ph: new FormControl(5, [Validators.required]),
     ionicStrength: new FormControl(0.3, [Validators.required]),
-    reactions: new FormArray([this.createReactionSmilesFormControl()]),
+    reactions: new FormArray([this.createReactionKeggIDFormControl()]),
     agreeToSubscription: new FormControl(false),
     subscriberEmail: new FormControl("", [Validators.email]),
-    reactionInputType: new FormControl("smiles", [Validators.required]),
+    reactionInputType: new FormControl("keggId", [Validators.required]),
   });
 
   private createReactionSmilesFormControl() {
@@ -27,12 +26,23 @@ export class ThermodynamicalFeasibilityRequest {
   }
 
   private createReactionKeggIDFormControl() {
-    return new FormGroup<ReactionFormControl>({
+    const formGroup = new FormGroup<ReactionFormControl>({
       type: new FormControl("keggId"),
-      moleculeNumber: new FormControl("", [Validators.required]),
-      moleculeInchiOrSmiles: new FormControl("", [Validators.required]),
+      moleculeNumber: new FormControl("", []),
+      moleculeInchiOrSmiles: new FormControl("", []),
       reactionKeggId: new FormControl("", [Validators.required]),
     });
+
+    formGroup.controls["moleculeInchiOrSmiles"]?.valueChanges.subscribe((value) => {
+      if (value) {
+        formGroup.controls["moleculeNumber"]?.addValidators([Validators.required]);
+      } else {
+        formGroup.controls["moleculeNumber"]?.clearValidators();
+      }
+      formGroup.controls["moleculeNumber"]?.updateValueAndValidity();
+    });
+
+    return formGroup;
   }
 
   private clearAllInputHelper(form: FormGroup | FormArray) {
@@ -92,19 +102,29 @@ export class ThermodynamicalFeasibilityRequest {
     this.clearAllInputHelper(this.form.controls["reactions"]);
   }
 
-  toRequestBody(): DgPredictorRequestBody {
-    return {
-      jobId: "",
+  toRequestBody() {
+    const jobInfo = {
       ph: this.form.controls["ph"].value || 7,
       ionic_strength: this.form.controls["ionicStrength"].value || 0.3,
-      reactions: this.form.controls["reactions"].value.map((reaction) => ({
-        type: reaction.type as ReactionsInner["type"],
-        smiles: reaction.reactionSmiles as ReactionsInner["smiles"],
-        molecule_number: reaction.moleculeNumber as ReactionsInner["molecule_number"],
-        molecule_inchi_or_smiles: reaction.moleculeInchiOrSmiles as ReactionsInner["molecule_inchi_or_smiles"],
-        reaction_keggid: reaction.reactionKeggId as ReactionsInner["reaction_keggid"],
-      })),
-      user_email: this.form.controls["subscriberEmail"].value || "",
+      reactions: this.form.controls["reactions"].value.map((reaction) => {
+        let payload: any = {
+          type: reaction.type,
+          smiles: reaction.reactionSmiles,
+          reaction_keggid: reaction.reactionKeggId,
+        }
+
+        if (reaction.moleculeInchiOrSmiles) {
+          payload["add_info"] = {
+            ['N' + reaction.moleculeNumber]: reaction.moleculeInchiOrSmiles,
+          };
+        }
+
+        return payload;
+      }),
+    };
+    return {
+      job_info: JSON.stringify(jobInfo),
+      email: this.form.controls["subscriberEmail"].value || "",
     };
   }
 }

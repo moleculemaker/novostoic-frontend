@@ -1,55 +1,51 @@
 <form
-    class="flex h-full flex-col justify-between"
+    class="flex flex-col justify-between h-full mt-2"
     [formGroup]="request.form"
     (ngSubmit)="onSubmit()"
 >
     <div>
-        <h2 class="mb-2">Input Enzyme Sequence</h2>
-        <p class="leading-6">To get top enzyme candidates</p>
+        <h5 class="font-bold opacity-100 leading-lg">Input Enzyme Sequence</h5>
+        <h6 class="mt-1 leading-lg">To get top enzyme candidates</h6>
 
         <!-- Molecule Input -->
-        <div class="mt-8 flex gap-6">
-            <div class="flex grow flex-col">
+        <div class="flex gap-6 mt-8">
+            <div class="flex flex-col grow">
                 <div class="flex items-center justify-between pb-2">
                     <div class="flex items-center">
-                        <span class="green-dot mx-2"></span>
-                        <span class="text-base font-semibold"
-                            >Primary Precursor</span
+                        <span class="mx-2 green-dot"></span>
+                        <h6 class="font-semibold opacity-100 leading-xl"
+                            >Primary Precursor</h6
                         >
                     </div>
-                    <span class="pr-1"
+                    <small class="pr-1 leading-[140%]"
                         >Example:
-                        <span class="font-semibold underline cursor-pointer"
-                            (click)="request.form.controls['primaryPrecursor'].setValue('Pyruvate')"
-                            >Pyruvate</span
+                        <small class="font-semibold underline cursor-pointer"
+                            (click)="request.form.controls['primaryPrecursor'].setValue('pyruvate')"
+                            >Pyruvate</small
                         >,
-                        <span class="font-semibold underline cursor-pointer"
+                        <small class="font-semibold underline cursor-pointer"
                             (click)="request.form.controls['primaryPrecursor'].setValue('C00022')"
-                            >C00022</span
+                            >C00022</small
                         >,
-                        <span class="font-semibold underline cursor-pointer"
+                        <small class="font-semibold underline cursor-pointer"
                             (click)="request.form.controls['primaryPrecursor'].setValue('CC(=O)C(=O)O')"
-                            >CC(=O)C(=O)O</span
-                        ></span
+                            >CC(=O)C(=O)O</small
+                        ></small
                     >
                 </div>
                 <app-marvinjs-input
-                    formControlName="primaryPrecursor"
                     placeholder="CC(=O)C(=O)O"
+                    [formControl]="request.form.controls['primaryPrecursor']"
                     [errors]="request.form.controls['primaryPrecursor'].errors"
                     [dirty]="request.form.controls['primaryPrecursor'].dirty"
+                    (onChemicalValidated)="request.setPrimaryPrecursor($event!)"
+                    outputFormat="smiles"
                 ></app-marvinjs-input>
 
                 <!-- Enzyme Sequence Input -->
-                <div
-                    class="mt-4 flex flex-col rounded-md border border-solid border-[--surface-d]"
-                >
-                    <div
-                        class="flex w-full items-center justify-between rounded-t-md bg-gray-50 p-4"
-                    >
-                        <span class="font-semibold"
-                            >Enzyme Sequence Input</span
-                        >
+                <p-panel styleClass="mt-10">
+                    <ng-template pTemplate="header">
+                        <span class="grow">Enzyme Sequence Input</span>
                         <div class="flex gap-2">
                             <button
                                 type="button"
@@ -74,9 +70,7 @@
                                 Clear All
                             </button>
                         </div>
-                    </div>
-                    <hr />
-                    <!-- <div class="p-2 px-4"> -->
+                    </ng-template>
                     <textarea
                         rows="5"
                         class="w-full border-none"
@@ -84,10 +78,10 @@
                         MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHLKGTFLKGTF"
                         pInputTextarea
                         [autoResize]="true"
+                        [value]="request.form.controls['enzymeSequence'].value"
                         formControlName="enzymeSequence"
                     ></textarea>
-                    <!-- </div> -->
-                </div>
+                </p-panel>
             </div>
         </div>
     </div>
@@ -97,11 +91,11 @@
         class="sticky bottom-0 flex justify-between rounded-t-md bg-[#F3F5FB] px-10 pt-8"
     >
         <div class="flex flex-col">
-            <div class="mb-2 flex items-end justify-center">
-                <span class="mb-1 pr-12">
-                    <h2 class="m-0 mr-2 inline">Email</h2>
-                    Leave an email to get an notification when your
-                    results are ready.
+            <div class="flex items-end justify-center mb-2">
+                <span class="pr-12 mb-1">
+                    <h5 class="inline font-semibold opacity-100 leading-lg">Email</h5>
+                    <h6 class="inline ml-4 leading-lg">Leave an email to get an notification when your
+                    results are ready.</h6>
                 </span>
             </div>
             <div class="w-full">
@@ -120,25 +114,28 @@
                     *ngIf="request.form.controls['subscriberEmail'].invalid
                         && request.form.controls['subscriberEmail'].dirty"
                     id="subscriber-email-help"
-                    class="p-error mt-2 block"
+                    class="block mt-2 p-error"
                     >Email is invalid.</small
                 >
             </div>
             <div class="py-4">
-                <p-checkbox
-                    name="subscription"
-                    styleClass="subscription-checkbox"
-                    label="Agree to receive email notifications and updates about Novostoic."
-                    [binary]="true"
-                    [formControl]="request.form.controls['agreeToSubscription']"
-                ></p-checkbox>
+                <div class="flex items-center gap-1">
+                    <p-checkbox
+                        name="subscription"
+                        styleClass="subscription-checkbox"
+                        [binary]="true"
+                        [formControl]="request.form.controls['agreeToSubscription']"
+                    ></p-checkbox>
+                    <label class="opacity-60">Agree to receive email notifications and updates about Novostoic.</label>
+                </div>
             </div>
         </div>
         <p-button
-            label="Calculate Activity Score"
+            [label]="request.form.status === 'PENDING' ? 'Validating...' : 'Calculate Activity Score'"
             type="submit"
-            styleClass="bg-[#224063]"
-            [disabled]="request.form.invalid"
+            styleClass="btn-submit-request"
+            [disabled]="!request.form.valid"
+            [loading]="request.form.status === 'PENDING'"
             iconPos="right"
             icon="pi pi-arrow-right"
         ></p-button>

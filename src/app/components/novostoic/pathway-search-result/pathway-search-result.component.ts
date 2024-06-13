@@ -11,7 +11,7 @@ import { NovostoicService } from "~/app/services/novostoic.service";
   templateUrl: "./pathway-search-result.component.html",
   styleUrls: ["./pathway-search-result.component.scss"],
   host: {
-    class: 'grow px-4 xl:w-content-xl xl:mr-64 xl:pr-6'
+    class: 'grow px-4 xl:w-content-xl w-content-lg xl:mr-64 xl:pr-6'
   }
 })
 export class PathwaySearchResultComponent implements OnInit {
@@ -22,9 +22,15 @@ export class PathwaySearchResultComponent implements OnInit {
 
   statusResponse$ = timer(0, 10000).pipe(
     switchMap(() => this.novostoicService.getResultStatus(
-      JobType.NovostoicNovostoic,
+      JobType.NovostoicPathways,
       this.jobId,
     )),
+    tap(() => this.isLoading$.next(true)),
+    // map(() => ({ 
+    //   phase: JobStatus.Completed,
+    //   job_id: 'example-pathway-job',
+    //   time_created: Date.now() / 1000,
+    // })),
     takeWhile((data) => 
       data.phase === JobStatus.Processing 
       || data.phase === JobStatus.Queued
@@ -32,24 +38,39 @@ export class PathwaySearchResultComponent implements OnInit {
     tap((data) => { console.log('job status: ', data) }),
   );
 
-  isLoading$ = this.statusResponse$.pipe(
-    map((job) => job.phase === JobStatus.Processing || job.phase === JobStatus.Queued),
-  );
+  isLoading$ = new BehaviorSubject(true);
+  noResults$ = new BehaviorSubject(false);
 
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
-    switchMap(() => this.novostoicService.getResult(JobType.NovostoicNovostoic, this.jobId)),
+    // map(() => PathwaySearchResponse.example),
+    switchMap(() => this.novostoicService.getResult(JobType.NovostoicPathways, this.jobId)),
     tap((data) => { console.log('result: ', data) }),
-    switchMap((data) => of(PathwaySearchResponse.example)), //TODO: replace with actual response
+    tap(() => this.isLoading$.next(false)),
+    tap((response) => this.noResults$.next(Object.is(response, null))),
+    map((response) => response as PathwaySearchResponse),
     map((response) => ({
       ...response,
-      pathways: response.pathways.map((pathway) => ({
-        id: Math.random().toString(36).substring(7),
-        reactions: pathway.map((reaction) => ({
-          ...reaction,
-          isThermodynamicalInfeasible: reaction.deltaG > 20,
-        }))
-      })),
+      pathways: response.pathways.map((pathway) => {
+        return {
+          id: Math.random().toString(36).substring(7),
+          reactions: pathway.map((reaction) => ({
+            ...reaction,
+            deltaG: {
+              gibbsEnergy: Math.round(reaction.deltaG.gibbsEnergy * 100) / 100,
+              std: Math.round(reaction.deltaG.std * 10) / 10,
+              reaction: reaction.deltaG.reaction,
+            },
+            products: reaction.products.filter((product) => {
+              return product.molecule.name !== reaction.targetMolecule?.name;
+            }),
+            reactants: reaction.reactants.filter((reactant) => {
+              return reactant.molecule.name !== reaction.primaryPrecursor?.name;
+            }),
+            isThermodynamicalInfeasible: reaction.deltaG.gibbsEnergy > 20,
+          }))
+        }
+      })
     })),
     shareReplay(1),
     tap((data) => console.log('response', data))
@@ -59,7 +80,13 @@ export class PathwaySearchResultComponent implements OnInit {
   selectedPathway$ = new BehaviorSubject(0);
 
   pathwayDeltaGs$ = this.response$.pipe(
-    map((response) => response.pathways.map((pathway) => pathway.reactions.reduce((p, v) => p + v.deltaG, 0))),
+    map((response) => response.pathways.map((pathway) => pathway.reactions.reduce((p, v) => ({
+      gibbsEnergy: p.gibbsEnergy + v.deltaG.gibbsEnergy,
+      std: p.std + v.deltaG.std,
+    }), {
+      gibbsEnergy: 0,
+      std: 0,
+    }))),
   );
 
   /* -------------------------------------------------------------------------- */
@@ -72,9 +99,9 @@ export class PathwaySearchResultComponent implements OnInit {
       const intermediates = new Set<string>();
       const returnVal: NovostoicMolecule[] = [];
       response.pathways.forEach((pathway) => {
-        pathway.reactions.slice(0, pathway.reactions.length - 1).forEach((reaction: NovostoicReaction) => {
-          if (reaction.targetMolecule && !intermediates.has(reaction.targetMolecule.commonNames[0])) {
-            intermediates.add(reaction.targetMolecule.commonNames[0]);
+        pathway.reactions.slice(0, pathway.reactions.length - 1).forEach((reaction) => {
+          if (reaction.targetMolecule!.name && reaction.targetMolecule && !intermediates.has(reaction.targetMolecule.name)) {
+            intermediates.add(reaction.targetMolecule.name);
             returnVal.push(reaction.targetMolecule);
           }
         });
@@ -84,7 +111,7 @@ export class PathwaySearchResultComponent implements OnInit {
   );
   intermediatesFilters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
   filterIntermediatesStr$ = this.intermediatesFilters$.pipe(
-    map((filters) => filters.map((filter) => filter.commonNames[0]).join(",")),
+    map((filters) => filters.map((filter) => filter.name).join(",")),
   );
 
   filterCoFactorsOptions$ = this.response$.pipe(
@@ -92,17 +119,17 @@ export class PathwaySearchResultComponent implements OnInit {
       const cofactors = new Set<string>();
       const returnVal: NovostoicMolecule[] = [];
       response.pathways.forEach((pathway) => {
-        pathway.reactions.forEach((reaction: NovostoicReaction) => {
+        pathway.reactions.forEach((reaction) => {
           reaction.reactants.forEach((reactant) => {
-            if (!cofactors.has(reactant.commonNames[0])) {
-              cofactors.add(reactant.commonNames[0]);
-              returnVal.push(reactant);
+            if (reactant.molecule.name && !cofactors.has(reactant.molecule.name)) {
+              cofactors.add(reactant.molecule.name);
+              returnVal.push(reactant.molecule);
             }
           });
           reaction.products.forEach((product) => {
-            if (!cofactors.has(product.commonNames[0])) {
-              cofactors.add(product.commonNames[0]);
-              returnVal.push(product);
+            if (product.molecule.name && !cofactors.has(product.molecule.name)) {
+              cofactors.add(product.molecule.name);
+              returnVal.push(product.molecule);
             }
           });
         });
@@ -112,7 +139,7 @@ export class PathwaySearchResultComponent implements OnInit {
   );
   coFactorsFilters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
   filterCoFactorsStr$ = this.coFactorsFilters$.pipe(
-    map((filters) => filters.map((filter) => filter.commonNames[0]).join(",")),
+    map((filters) => filters.map((filter) => filter.name).join(",")),
   );
 
   filtersLength$ = combineLatest([
@@ -138,8 +165,8 @@ export class PathwaySearchResultComponent implements OnInit {
     this.feasibleRange$,
   ]).pipe(
     map(([response, intermediates, cofactors, mode, range]) => {
-      const intermediatesSet = new Set(intermediates.map((intermediate) => intermediate.commonNames[0]));
-      const cofactorsSet = new Set(cofactors.map((cofactor) => cofactor.commonNames[0]));
+      const intermediatesSet = new Set(intermediates.map((intermediate) => intermediate.name));
+      const cofactorsSet = new Set(cofactors.map((cofactor) => cofactor.name));
       return response.pathways.map((pathway) => {
         let intermediatesMatch = true;
         let cofactorsMatch = true;
@@ -147,16 +174,16 @@ export class PathwaySearchResultComponent implements OnInit {
         let thermodynamicalRangeMatch = true;
         pathway.reactions.forEach((reaction) => {
           if (intermediatesSet.size && intermediatesMatch && reaction.targetMolecule) {
-            intermediatesMatch = intermediatesSet.has(reaction.targetMolecule.commonNames[0]);
+            intermediatesMatch = intermediatesSet.has(reaction.targetMolecule.name);
           }
           if (cofactorsSet.size && cofactorsMatch) {
             reaction.reactants.forEach((reactant) => {
-              if (cofactorsMatch && cofactorsSet.has(reactant.commonNames[0])) {
+              if (cofactorsMatch && cofactorsSet.has(reactant.molecule.name)) {
                 cofactorsMatch = true;
               }
             });
             reaction.products.forEach((product) => {
-              if (cofactorsMatch && cofactorsSet.has(product.commonNames[0])) {
+              if (cofactorsMatch && cofactorsSet.has(product.molecule.name)) {
                 cofactorsMatch = true;
               }
             });
@@ -167,7 +194,7 @@ export class PathwaySearchResultComponent implements OnInit {
               : thermodynamicalMatch && reaction.isThermodynamicalInfeasible;
           }
           if (thermodynamicalRangeMatch) {
-            thermodynamicalRangeMatch = reaction.deltaG >= range[0] && reaction.deltaG <= range[1];
+            thermodynamicalRangeMatch = reaction.deltaG.gibbsEnergy >= range[0] && reaction.deltaG.gibbsEnergy <= range[1];
           }
         });
 
@@ -275,5 +302,23 @@ export class PathwaySearchResultComponent implements OnInit {
 
   applyFilters() {
     this.showResultsFilter$.next(false);
+  }
+
+  getEnzymeObj(enzyme: any) {
+    return <NovostoicReaction['enzymes'][0]>(enzyme);
+  }
+
+  copyAndPasteURL(): void {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = window.location.href;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
 }

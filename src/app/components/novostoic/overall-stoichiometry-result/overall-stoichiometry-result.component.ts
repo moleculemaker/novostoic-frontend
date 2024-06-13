@@ -26,7 +26,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
 
   moleculeRepresentations: Array<{
     label: string;
-    value: "smiles" | "commonNames" | "keggId";
+    value: "smiles" | "name" | "keggId";
   }> = [
     {
       label: "SMILES",
@@ -34,7 +34,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
     },
     {
       label: "Common Name",
-      value: "commonNames",
+      value: "name",
     },
     {
       label: "Kegg ID",
@@ -49,6 +49,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
       JobType.NovostoicOptstoic,
       this.jobId,
     )),
+    tap(() => this.isLoading$.next(true)),
     takeWhile((data) => 
       data.phase === JobStatus.Processing 
       || data.phase === JobStatus.Queued
@@ -56,15 +57,15 @@ export class OverallStoichiometryResultComponent implements OnInit {
     tap((data) => { console.log('job status: ', data) }),
   );
 
-  isLoading$ = this.statusResponse$.pipe(
-    map((job) => job.phase === JobStatus.Processing || job.phase === JobStatus.Queued),
-  );
+  isLoading$ = new BehaviorSubject(true);
 
   response$ = this.statusResponse$.pipe(
     skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
     switchMap(() => this.novostoicService.getResult(JobType.NovostoicOptstoic, this.jobId)),
+    map((response) => response as OverallStoichiometryResponse),
+    tap(() => this.isLoading$.next(false)),
+    shareReplay(1),
     tap((data) => { console.log('result: ', data) }),
-    switchMap((data) => of(OverallStoichiometryResponse.example)), //TODO: replace with actual response
   );
 
   showResultsFilter$ = new BehaviorSubject(false);
@@ -78,7 +79,7 @@ export class OverallStoichiometryResultComponent implements OnInit {
     ...result.stoichiometry.products.map((product) => product.molecule),
   ]).flat()))
   filterValueStr$ = this.filters$.pipe(
-    map((filters) => filters.map((filter) => filter.commonNames[0]).join(",")),
+    map((filters) => filters.map((filter) => filter.name).join(",")),
   );
 
   subscriptions: Subscription[] = [];
@@ -99,8 +100,8 @@ export class OverallStoichiometryResultComponent implements OnInit {
       ) => {
         const isSameMolecule = (m1: NovostoicMolecule, m2: NovostoicMolecule) =>
           m1.smiles === m2.smiles ||
-          m1.keggId === m2.keggId ||
-          m1.commonNames.some((name) => m2.commonNames.includes(name));
+          m1.kegg_id === m2.kegg_id ||
+          m1.name === m2.name;
         return (
           value.reactants.some(({ molecule }) =>
             filter.some((m) => isSameMolecule(m, molecule)),
@@ -136,5 +137,19 @@ export class OverallStoichiometryResultComponent implements OnInit {
       "stoichiometry",
       "containsMolecule",
     );
+  }
+
+  copyAndPasteURL(): void {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = window.location.href;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
 }

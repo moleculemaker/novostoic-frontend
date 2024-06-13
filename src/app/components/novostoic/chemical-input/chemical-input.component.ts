@@ -1,27 +1,27 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from "@angular/core";
 import { AbstractControl, AsyncValidator, ControlValueAccessor, NG_ASYNC_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from "@angular/forms";
-import { BehaviorSubject, Observable, combineLatest, combineLatestWith, debounce, debounceTime, filter, first, map, of, share, shareReplay, single, switchMap, take, tap, throttleTime, withLatestFrom } from "rxjs";
+import { BehaviorSubject, Observable, debounceTime, filter, first, map, of, share, shareReplay, single, switchMap, take, tap, throttleTime, withLatestFrom } from "rxjs";
 import { ChemicalAutoCompleteResponse } from "~/app/api/mmli-backend/v1";
 import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
-  selector: "app-marvinjs-input",
-  templateUrl: "./marvinjs-input.component.html",
-  styleUrls: ["./marvinjs-input.component.scss"],
+  selector: "app-chemical-input",
+  templateUrl: "./chemical-input.component.html",
+  styleUrls: ["./chemical-input.component.scss"],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => MarvinjsInputComponent),
+      useExisting: forwardRef(() => ChemicalInputComponent),
       multi: true
     },
     {
       provide: NG_ASYNC_VALIDATORS,
-      useExisting: forwardRef(() => MarvinjsInputComponent),
+      useExisting: forwardRef(() => ChemicalInputComponent),
       multi: true
     }
   ]
 })
-export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValidator {
+export class ChemicalInputComponent implements ControlValueAccessor, AsyncValidator {
   @Input() placeholder: string = "";
   @Input() errors: ValidationErrors | null;
   @Input() dirty: boolean = false;
@@ -29,8 +29,6 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
   @Output() onChemicalValidated = new EventEmitter<ChemicalAutoCompleteResponse | null>();
 
   userInput$ = new BehaviorSubject<string>("");
-
-  showDialog$ = new BehaviorSubject(false);
 
   validateCache = new Map();
   validatedChemical$ = this.userInput$.pipe(
@@ -52,11 +50,6 @@ export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValida
         this.onTouched();
       }
     }),
-  );
-
-  smiles$ = this.validatedChemical$.pipe(
-    filter(([chemical, _]) => !!chemical),
-    map(([chemical, _]) => chemical!.smiles),
   );
 
   constructor(private novostoicService: NovostoicService) {}

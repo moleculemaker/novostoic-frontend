@@ -5,6 +5,7 @@ import { BehaviorSubject, combineLatest, map } from "rxjs";
 import { PathwaySearchRequest } from "~/app/models/pathway-search";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { NovostoicService } from "~/app/services/novostoic.service";
+import { JobType } from "~/app/api/mmli-backend/v1";
 
 @Component({
   selector: "app-pathway-search",
@@ -27,14 +28,14 @@ export class PathwaySearchComponent implements OnInit {
   // those values are used to populate the initial form
   primaryPrecursor$ = new BehaviorSubject({
     smiles: "N/A",
-    commonNames: ["N/A"],
-    keggId: "N/A",
+    name: "N/A",
+    kegg_id: "N/A",
     structure: "",
   });
   targetMolecule$ = new BehaviorSubject({
     smiles: "N/A",
-    commonNames: ["N/A"],
-    keggId: "N/A",
+    name: "N/A",
+    kegg_id: "N/A",
     structure: "",
   });
   stoichiometry$ = new BehaviorSubject({
@@ -42,8 +43,8 @@ export class PathwaySearchComponent implements OnInit {
       {
         molecule: {
           smiles: "N/A",
-          commonNames: ["N/A"],
-          keggId: "N/A",
+          name: "N/A",
+          kegg_id: "N/A",
           structure: "",
         },
         amount: -1,
@@ -53,8 +54,8 @@ export class PathwaySearchComponent implements OnInit {
       {
         molecule: {
           smiles: "N/A",
-          commonNames: ["N/A"],
-          keggId: "N/A",
+          name: "N/A",
+          kegg_id: "N/A",
           structure: "",
         },
         amount: -1,
@@ -62,8 +63,8 @@ export class PathwaySearchComponent implements OnInit {
       {
         molecule: {
           smiles: "N/A",
-          commonNames: ["N/A"],
-          keggId: "N/A",
+          name: "N/A",
+          kegg_id: "N/A",
           structure: "",
         },
         amount: -1,
@@ -108,10 +109,11 @@ export class PathwaySearchComponent implements OnInit {
       return;
     }
 
-    this.novostoicService.createJobAndRunPathwaySearch(
+    this.novostoicService.createJobAndRun(
+      JobType.NovostoicPathways,
       this.request.toRequestBody()
     ).subscribe((response) => {
-      this.router.navigate([NovostoicTools.PATHWAY_SEARCH, 'result', response.jobId]);
+      this.router.navigate([NovostoicTools.PATHWAY_SEARCH, "result", response.job_id]);
     });
   }
 

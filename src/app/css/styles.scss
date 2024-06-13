@@ -70,3 +70,147 @@ html, body {
 		size: $font_size_default;
 	}
 }
+
+/************************** MMLI Customized Theme **************************/
+.p-panel {
+	.p-panel-header {
+		@apply flex;
+		@apply items-center;
+		@apply justify-between;
+		@apply p-4;
+		@apply w-full;
+		@apply font-semibold;
+
+		.p-panel-title {
+			@apply font-semibold;
+		}
+	}
+
+	.p-panel-header:has(button) {
+		@apply py-3;
+	}
+  
+	.p-panel-content {
+		padding: 0;
+		@apply flex;
+		@apply flex-col;
+		@apply grow;
+	}
+}
+
+.p-card {
+	.p-card-body {
+		padding: 0.71429rem 0.85714rem 1.14286rem 0.85714rem;;
+	}
+
+	.p-card-content,
+	.p-card-footer {
+		padding: 0;
+	}
+}
+
+.p-button {
+	&.btn-submit-request {
+		@apply bg-primary;
+		@apply gap-4;
+		@apply px-8;
+		.p-button-label {
+			font-weight: 400;
+		}
+	}
+
+	&:disabled {
+		@apply opacity-100;
+		@apply bg-text-secondary;
+		@apply border-text-secondary;
+	}
+}
+
+.p-button-outlined {
+	@apply text-base;
+}
+
+.p-datatable .p-paginator-bottom {
+	@apply border-0;
+	@apply bg-transparent;
+}
+
+.btn-outline {
+	@apply border;
+	@apply border-solid;
+	@apply border-[--surface-d];
+	@apply bg-[--surface-b];
+	@apply text-text-primary;
+	@apply rounded-md;
+	@apply p-2;
+	@apply text-base;
+	@apply leading-lg;
+}
+
+.pi {
+	font-size: inherit;
+}
+
+.p-tooltip {
+	z-index: 99999;
+}
+
+body, span, div, p {
+	@apply text-base;
+}
+
+button {
+	@apply font-normal;
+	@apply bg-transparent;
+}
+
+h1 {
+	@apply text-4xl;
+	@apply font-bold;
+	@apply leading-xl;
+}
+
+h2 {
+	@apply text-3xl;
+	@apply font-bold;
+	@apply leading-normal;
+}
+
+h4 {
+	@apply text-xl;
+	@apply leading-lg;
+	@apply opacity-100;
+	@apply font-bold;
+	@apply leading-lg;
+
+	text: {
+        transform: none;
+    }
+}
+
+h5 {
+	@apply text-lg;
+
+	text: {
+        transform: none;
+    }
+}
+
+h6 {
+	@apply text-base;
+	@apply leading-lg;
+	@apply opacity-60;
+}
+
+small {
+	@apply text-sm;
+}
+
+hr {
+	@apply border-t;
+	@apply border-b-0;
+	@apply border-solid;
+	@apply border-[--surface-d];
+	@apply m-0;
+}
+/**************************** MMLI Customized END **************************/
