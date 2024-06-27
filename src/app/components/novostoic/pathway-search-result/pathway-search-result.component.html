@@ -519,19 +519,19 @@
                             </div>
 
                             <ng-container *ngFor="let reactant of reaction.reactants; let i = index">
+                                <i class="pi pi-plus"></i>
                                 <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
                                     <span>{{ reactant.molecule.name }}</span>
                                 </div>
-                                <i class="pi pi-plus" *ngIf="i !== reaction.reactants.length - 1"></i>
                             </ng-container>
 
                             <i class="pi pi-arrow-right"></i>
 
                             <ng-container *ngFor="let product of reaction.products; let i = index">
-                                <i *ngIf="i !== 0" class="pi pi-plus"></i>
                                 <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
                                     <span>{{ product.molecule.name }}</span>
                                 </div>
+                                <i class="pi pi-plus"></i>
                             </ng-container>
                             
                             <div class="flex items-center h-full p-2 border border-solid rounded-md"
