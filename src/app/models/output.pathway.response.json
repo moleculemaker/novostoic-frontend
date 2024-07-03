@@ -169,6 +169,7 @@
           }
         ],
         "reactionId": "MNXR105183",
+        "reactionRule": "MNXR105183",
         "deltaG": {
           "reaction": "",
           "gibbsEnergy": -20,
@@ -280,6 +281,7 @@
           }
         ],
         "reactionId": "MNXR99381",
+        "reactionRule": "MNXR99381",
         "deltaG": {
           "reaction": "",
           "gibbsEnergy": -30,
@@ -391,6 +393,7 @@
           }
         ],
         "reactionId": "MNXR107153",
+        "reactionRule": "MNXR107153",
         "deltaG": {
           "reaction": "",
           "gibbsEnergy": -40,
@@ -488,6 +491,7 @@
           }
         ],
         "reactionId": "MNXR97909",
+        "reactionRule": "MNXR97909",
         "deltaG": {
           "reaction": "",
           "gibbsEnergy": -50,
@@ -599,6 +603,7 @@
           }
         ],
         "reactionId": "MNXR107154",
+        "reactionRule": "MNXR107154",
         "deltaG": {
           "reaction": "",
           "gibbsEnergy": 20,
@@ -696,6 +701,7 @@
           }
         ],
         "reactionId": "MNXR173125",
+        "reactionRule": "MNXR173125",
         "deltaG": {
           "reaction": "",
           "gibbsEnergy": 30,
@@ -807,6 +813,7 @@
           }
         ],
         "reactionId": "MNXR107154",
+        "reactionRule": "MNXR107154",
         "deltaG": {
           "reaction": "",
           "gibbsEnergy": 40,
@@ -904,6 +911,7 @@
           }
         ],
         "reactionId": "MNXR97909",
+        "reactionRule": "MNXR97909",
         "deltaG": {
           "reaction": "",
           "gibbsEnergy": 50,
