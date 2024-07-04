@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { BehaviorSubject, combineLatest, filter, first, last, map, of, shareReplay, skipUntil, switchMap, take, takeWhile, tap, throttleTime, timer } from "rxjs";
 import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
+import { JobResult } from "~/app/models/job-result";
 import { NovostoicMolecule } from "~/app/models/overall-stoichiometry";
 import { NovostoicReaction, PathwaySearchResponse } from "~/app/models/pathway-search";
 import { NovostoicService } from "~/app/services/novostoic.service";
@@ -14,39 +15,14 @@ import { NovostoicService } from "~/app/services/novostoic.service";
     class: 'grow px-4 xl:w-content-xl w-content-lg xl:mr-64 xl:pr-6'
   }
 })
-export class PathwaySearchResultComponent implements OnInit {
-  loading = false;
+export class PathwaySearchResultComponent extends JobResult {
+  override jobId: string = this.route.snapshot.paramMap.get("id") || "";
+  override jobType: JobType = JobType.NovostoicPathways;
+  
   showRightBoundaryLine$ = new BehaviorSubject(false);
-
-  jobId: string = this.route.snapshot.paramMap.get("id") || "";
-
-  statusResponse$ = timer(0, 10000).pipe(
-    switchMap(() => this.novostoicService.getResultStatus(
-      JobType.NovostoicPathways,
-      this.jobId,
-    )),
-    tap(() => this.isLoading$.next(true)),
-    // map(() => ({ 
-    //   phase: JobStatus.Completed,
-    //   job_id: 'example-pathway-job',
-    //   time_created: Date.now() / 1000,
-    // })),
-    takeWhile((data) => 
-      data.phase === JobStatus.Processing 
-      || data.phase === JobStatus.Queued
-    , true),
-    tap((data) => { console.log('job status: ', data) }),
-  );
-
-  isLoading$ = new BehaviorSubject(true);
   noResults$ = new BehaviorSubject(false);
 
-  response$ = this.statusResponse$.pipe(
-    skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
-    // map(() => PathwaySearchResponse.example),
-    switchMap(() => this.novostoicService.getResult(JobType.NovostoicPathways, this.jobId)),
-    tap((data) => { console.log('result: ', data) }),
-    tap(() => this.isLoading$.next(false)),
+  response$ = this.jobResultResponse$.pipe(
     tap((response) => this.noResults$.next(Object.is(response, null))),
     map((response) => response as PathwaySearchResponse),
     map((response) => ({
@@ -284,12 +260,8 @@ export class PathwaySearchResultComponent implements OnInit {
   constructor(
     private novostoicService: NovostoicService,
     private route: ActivatedRoute,
-  ) {}
-
-  ngOnInit(): void {
-    setTimeout(() => {
-      this.loading = false;
-    }, 3000);
+  ) {
+    super(novostoicService)
   }
 
   resetFilters() {

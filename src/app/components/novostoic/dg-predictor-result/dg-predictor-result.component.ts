@@ -3,6 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { BehaviorSubject, filter, map, of, skipUntil, switchMap, takeWhile, tap, timer } from "rxjs";
 import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
 import { ThermodynamicalFeasibilityResponse } from "~/app/models/dg-predictor";
+import { JobResult } from "~/app/models/job-result";
 import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
@@ -13,7 +14,10 @@ import { NovostoicService } from "~/app/services/novostoic.service";
     class: 'grow px-4 xl:w-content-xl xl:mr-64 xl:pr-6'
   }
 })
-export class DgPredictorResultComponent {
+export class DgPredictorResultComponent extends JobResult {
+  override jobId: string = this.route.snapshot.paramMap.get("id") || "";
+  override jobType: JobType = JobType.NovostoicDgpredictor;
+
   columnsForExport = [
     { field: "reaction", header: "Reaction" },
     {
@@ -22,34 +26,14 @@ export class DgPredictorResultComponent {
     },
   ];
 
-  jobId: string = this.route.snapshot.paramMap.get("id") || "";
-
-  statusResponse$ = timer(0, 10000).pipe(
-    switchMap(() => this.novostoicService.getResultStatus(
-      JobType.NovostoicDgpredictor,
-      this.jobId,
-    )),
-    tap(() => this.isLoading$.next(true)),
-    takeWhile((data) => 
-      data.phase === JobStatus.Processing 
-      || data.phase === JobStatus.Queued
-    , true),
-    tap((data) => { console.log('job status: ', data) }),
-  );
-
-  isLoading$ = new BehaviorSubject(true);
-
-  response$ = this.statusResponse$.pipe(
-    skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
-    switchMap(() => this.novostoicService.getResult(JobType.NovostoicDgpredictor, this.jobId)),
-    tap(() => this.isLoading$.next(false)),
-    tap((data) => { console.log('result: ', data) }),
-  );
+  response$ = this.jobResultResponse$;
 
   constructor(
     private route: ActivatedRoute,
     private novostoicService: NovostoicService,
-  ) {}
+  ) {
+    super(novostoicService);
+  }
 
   copyAndPasteURL(): void {
     const selBox = document.createElement('textarea');

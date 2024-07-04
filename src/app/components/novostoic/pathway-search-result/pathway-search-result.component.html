@@ -228,7 +228,10 @@
             <p class="text-center">Try adjusting your search criteria</p>
         </div>
 
-        <app-loading *ngIf="isLoading$ | async"></app-loading>
+        <app-loading 
+            *ngIf="(isLoading$ | async)"
+            [jobType]="jobType"
+        ></app-loading>
     </div>
 </div>
 

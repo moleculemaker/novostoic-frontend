@@ -1,7 +1,8 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { timer, switchMap, takeWhile, tap, map, skipUntil, filter, of, BehaviorSubject } from "rxjs";
+import { timer, switchMap, takeWhile, tap, map, skipUntil, filter, of, BehaviorSubject, interval } from "rxjs";
 import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
+import { JobResult } from "~/app/models/job-result";
 import { NovostoicService } from "~/app/services/novostoic.service";
 
 @Component({
@@ -12,40 +13,24 @@ import { NovostoicService } from "~/app/services/novostoic.service";
     class: 'grow px-4 xl:w-content-xl xl:mr-64 xl:pr-6'
   }
 })
-export class EnzRankResultComponent {
-  jobId: string = this.route.snapshot.paramMap.get("id") || "";
+export class EnzRankResultComponent extends JobResult {
+  override jobId: string = this.route.snapshot.paramMap.get("id") || "";
+  override jobType: JobType = JobType.NovostoicEnzrank;
 
-  statusResponse$ = timer(0, 10000).pipe(
-    switchMap(() => this.novostoicService.getResultStatus(
-      JobType.NovostoicEnzrank,
-      this.jobId,
-    )),
-    tap(() => this.isLoading$.next(true)),
-    takeWhile((data) => 
-      data.phase === JobStatus.Processing 
-      || data.phase === JobStatus.Queued
-    , true),
-    tap((data) => { console.log('job status: ', data) }),
-  );
-
-  isLoading$ = new BehaviorSubject(true);
-
-  response$ = this.statusResponse$.pipe(
-    skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
-    switchMap(() => this.novostoicService.getResult(JobType.NovostoicEnzrank, this.jobId)),
+  response$ = this.jobResultResponse$.pipe(
     map((data) => ({
       primaryPrecursor: data.primaryPrecursor,
       enzymeSequence: data.results[0].enzymeSequence,
       activityScore: data.results[0].activityScore,
     })),
-    tap(() => this.isLoading$.next(false)),
-    tap((data) => { console.log('result: ', data) }),
-  );
+  )
 
   constructor(
     private route: ActivatedRoute,
     private novostoicService: NovostoicService,
-  ) {}
+  ) {
+    super(novostoicService);
+  }
 
   exportCSV() {
   }
