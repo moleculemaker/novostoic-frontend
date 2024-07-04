@@ -486,6 +486,7 @@
                             <div>
                                 <small class="font-bold">{{ reaction.isPrediction ? 'Predicted ' : ''}}Enzyme</small>
                                 <div class="flex flex-col w-full max-h-[100px] overflow-scroll no-scrollbar">
+                                    <small class="text-start text-[#818EA1]" *ngIf="!reaction.enzymes.length">None</small>
                                     <div class="flex justify-between" *ngFor="let enzyme of reaction.enzymes">
                                         <div class="font-semibold underline leading-lg text-start" *ngIf="!reaction.isPrediction">
                                             <a [href]="'https://brenda-enzymes.org/enzyme.php?ecno=' + enzyme" target="_blank">
@@ -506,6 +507,10 @@
                             <div>
                                 <small class="font-bold">Reaction ID:</small>
                                 <div class="underline leading-lg">{{reaction.reactionId}}</div>
+                            </div>
+                            <div>
+                                <small class="font-bold">Reaction Rule:</small>
+                                <div class="underline leading-lg">{{reaction.reactionRule}}</div>
                             </div>
                         </div>
                         <div class="flex items-center justify-around w-full gap-2 px-4 py-8">

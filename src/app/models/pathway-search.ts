@@ -199,6 +199,7 @@ export interface NovostoicReaction {
   };
   enzymes: Array<any>;
   reactionId: string;
+  reactionRule: string;
   isPrediction: boolean;
   confidenceScore?: number;
 }
