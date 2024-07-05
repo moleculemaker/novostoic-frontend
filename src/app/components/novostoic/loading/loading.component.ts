@@ -94,16 +94,4 @@ export class LoadingComponent extends JobResult implements OnInit {
     
     this.estimatedTimeString = resultString;
   }
-
-  onSubmit() {
-    if (this.form.invalid) {
-      return;
-    }
-    
-    this.novostoicService.updateSubscriberEmail(
-      this.jobType,
-      this.jobId, 
-      this.form.controls["subscriberEmail"].value || ''
-    );
-  }
 }
