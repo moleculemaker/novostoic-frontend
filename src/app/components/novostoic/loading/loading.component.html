@@ -1,4 +1,4 @@
-<div class="flex flex-col mt-6">
+<div class="flex flex-col mt-6" *ngIf="!(showError$.value)">
     <p-progressBar
         class="w-full"
         [showValue]="false"
@@ -9,7 +9,9 @@
         Estimated processing time: {{ estimatedTimeString }}
     </div>
 </div>
+
 <div
+    *ngIf="!(showError$.value)"
     class="my-8 flex max-h-[540px] grow items-center gap-12 rounded-md bg-[#F3F5FB] px-12 pb-12"
 >
     <img
@@ -29,4 +31,12 @@
             construction of Novostoic.
         </p>
     </div>
+</div>
+
+<div
+    class="flex flex-col items-center justify-center h-full gap-4"
+    *ngIf="(showError$.value)"
+>
+    <h5 class="font-semibold text-center">Error</h5>
+    <p class="text-center">An error occurs running the job.</p>
 </div>
