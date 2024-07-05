@@ -41,7 +41,10 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     const url = this.router.url;
-    const tool = url.split("/")[1];
-    this.selectedTool$.next(tool as NovostoicTools);
+    let possibleTool = url.split("/")[1];
+    if (possibleTool.indexOf("?") !== -1) {
+      possibleTool = possibleTool.split("?")[0];
+    }
+    this.selectedTool$.next(possibleTool as NovostoicTools);
   }
 }

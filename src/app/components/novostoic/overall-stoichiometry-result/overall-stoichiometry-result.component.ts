@@ -85,11 +85,22 @@ export class OverallStoichiometryResultComponent extends JobResult implements On
     this.subscriptions.push(
       this.response$.pipe(take(1)).subscribe((response) => {
         const state = {
-          primaryPrecursor: response.primaryPrecursor,
-          targetMolecule: response.targetMolecule,
-          stoichiometry,
+          primaryPrecursor: response.primaryPrecursor.metanetx_id,
+          targetMolecule: response.targetMolecule.metanetx_id,
+          stoichiometry: {
+            products: stoichiometry.products.map((product) => ({ 
+              amount: product.amount, 
+              molecule: product.molecule.metanetx_id,
+            })),
+            reactants: stoichiometry.reactants.map((reactant) => ({ 
+              amount: reactant.amount, 
+              molecule: reactant.molecule.metanetx_id,
+            })),
+          },
         };
-        this.router.navigate([NovostoicTools.PATHWAY_SEARCH], { state });
+        const stateStr = encodeURIComponent(JSON.stringify(state));
+        const url = this.router.serializeUrl(this.router.createUrlTree([NovostoicTools.PATHWAY_SEARCH], { queryParams: { input: stateStr } }));
+        window.open(url, "_blank");
       })
     );
   }

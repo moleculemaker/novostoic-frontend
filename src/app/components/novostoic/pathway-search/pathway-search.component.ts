@@ -1,11 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
-import { Router } from "@angular/router";
-import { BehaviorSubject, combineLatest, map } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { BehaviorSubject, Observable, combineLatest, first, forkJoin, from, map, of, switchMap } from "rxjs";
 import { PathwaySearchRequest } from "~/app/models/pathway-search";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { NovostoicService } from "~/app/services/novostoic.service";
-import { JobType } from "~/app/api/mmli-backend/v1";
+import { ChemicalAutoCompleteResponse, JobType } from "~/app/api/mmli-backend/v1";
 
 @Component({
   selector: "app-pathway-search",
@@ -26,51 +26,12 @@ export class PathwaySearchComponent implements OnInit {
 
   // to maintain consistency when user goes from overall stoichiometry page
   // those values are used to populate the initial form
-  primaryPrecursor$ = new BehaviorSubject({
-    smiles: "N/A",
-    name: "N/A",
-    kegg_id: "N/A",
-    structure: "",
-  });
-  targetMolecule$ = new BehaviorSubject({
-    smiles: "N/A",
-    name: "N/A",
-    kegg_id: "N/A",
-    structure: "",
-  });
-  stoichiometry$ = new BehaviorSubject({
-    reactants: [
-      {
-        molecule: {
-          smiles: "N/A",
-          name: "N/A",
-          kegg_id: "N/A",
-          structure: "",
-        },
-        amount: -1,
-      },
-    ],
-    products: [
-      {
-        molecule: {
-          smiles: "N/A",
-          name: "N/A",
-          kegg_id: "N/A",
-          structure: "",
-        },
-        amount: -1,
-      },
-      {
-        molecule: {
-          smiles: "N/A",
-          name: "N/A",
-          kegg_id: "N/A",
-          structure: "",
-        },
-        amount: -1,
-      },
-    ],
-  });
+  primaryPrecursor$ = new BehaviorSubject<ChemicalAutoCompleteResponse | null>(null);
+  targetMolecule$ = new BehaviorSubject<ChemicalAutoCompleteResponse | null>(null);
+  stoichiometry$ = new BehaviorSubject<{
+    reactants: { molecule: ChemicalAutoCompleteResponse; amount: number }[];
+    products: { molecule: ChemicalAutoCompleteResponse; amount: number }[];
+  } | null>(null);
 
   showWarning$ = combineLatest([
     this.warningVisible$,
@@ -84,24 +45,54 @@ export class PathwaySearchComponent implements OnInit {
   confirmCallback = this.clearAllCallback
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private location: Location,
     private novostoicService: NovostoicService) {}
 
   ngOnInit(): void {
-    const state: any = this.location.getState();
-    // check if the user comes from overall stoichiiometry page
-    if (Object.hasOwn(state, "primaryPrecursor")) {
-      this.primaryPrecursor$.next(state.primaryPrecursor);
-      this.targetMolecule$.next(state.targetMolecule);
-      this.stoichiometry$.next(state.stoichiometry);
+    this.route.queryParamMap.subscribe((params) => {
+      if (params.has("input")) {
+        const input = JSON.parse(decodeURIComponent(params.get("input")!));
 
-      this.request.addPrimaryPercursorFromMolecule(state.primaryPrecursor);
-      this.request.addTargetMoleculeFromMolecule(state.targetMolecule);
-      this.request.addFromStoichiometry(state.stoichiometry);
-    } else {
-      this.editing$.next(true);
-    }
+        const reactantsAndProducts: string[] = input.stoichiometry.reactants.map((e: any) => e.molecule)
+          .concat(input.stoichiometry.products.map((e: any) => e.molecule));
+
+        const primaryPrecursor$ = this.novostoicService.validateChemical(input.primaryPrecursor);
+        const targetMolecule$ = this.novostoicService.validateChemical(input.targetMolecule);
+        const molecules$ = reactantsAndProducts.map((m: string) => this.novostoicService.validateChemical(m));
+
+        combineLatest([
+          primaryPrecursor$, 
+          targetMolecule$, 
+          forkJoin(molecules$)
+        ]).subscribe(([
+          primaryPrecursor, 
+          targetMolecule, 
+          molecules
+        ]) => {
+          input.stoichiometry.reactants.forEach((reactant: { amount: number, molecule: any }) => {
+            reactant.molecule = molecules!.find((m: any) => m.metanetx_id === reactant.molecule);
+          });
+
+          input.stoichiometry.products.forEach((product: { amount: number, molecule: any }) => {
+            product.molecule = molecules!.find((m: any) => m.metanetx_id === product.molecule);
+          });
+
+          this.primaryPrecursor$.next(primaryPrecursor);
+          this.targetMolecule$.next(targetMolecule);
+          this.stoichiometry$.next(input.stoichiometry);
+
+          this.request.addPrimaryPercursorFromMolecule(primaryPrecursor!);
+          this.request.addTargetMoleculeFromMolecule(targetMolecule!);
+          this.request.addFromStoichiometry(input.stoichiometry);
+
+          this.editing$.next(false);
+        });
+      } else {
+        this.editing$.next(true);
+      }
+    })
   }
 
   onSubmit() {
