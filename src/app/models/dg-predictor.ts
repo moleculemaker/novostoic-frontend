@@ -111,6 +111,7 @@ export class ThermodynamicalFeasibilityRequest {
           type: reaction.type,
           smiles: reaction.reactionSmiles,
           reaction_keggid: reaction.reactionKeggId,
+          add_info: {},
         }
 
         if (reaction.moleculeInchiOrSmiles) {
