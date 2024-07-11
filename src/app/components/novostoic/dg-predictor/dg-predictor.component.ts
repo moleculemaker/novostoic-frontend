@@ -31,14 +31,12 @@ export class DgPredictorComponent {
       return;
     }
 
-    console.log(this.request.toRequestBody());
-
-    // this.novostoicService.createJobAndRun(
-    //   JobType.NovostoicDgpredictor,
-    //   this.request.toRequestBody()
-    // ).subscribe((response) => {
-    //   this.router.navigate([NovostoicTools.THERMODYNAMICAL_FEASIBILITY, "result", response.job_id]);
-    // });
+    this.novostoicService.createJobAndRun(
+      JobType.NovostoicDgpredictor,
+      this.request.toRequestBody()
+    ).subscribe((response) => {
+      this.router.navigate([NovostoicTools.THERMODYNAMICAL_FEASIBILITY, "result", response.job_id]);
+    });
   }
 
   useExampleRequest() {
