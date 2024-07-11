@@ -122,8 +122,12 @@
                                                 N{{ ("" + (i + 1)).padStart(5, '0') }}
                                             </div>
                                         </div>
-                                        <button (click)="request.removeNovelMolecule(subform, i)">
-                                            <i class="pi pi-times-circle text-[--text-color-secondary] !text-xl"></i>
+                                        <button 
+                                            [disabled]="novelMoleculeInput.invalid"
+                                            (click)="request.removeNovelMolecule(subform, i)">
+                                            <i class="pi pi-times-circle text-[--text-color-secondary] !text-xl"
+                                                [class.text-bluegray-100]="novelMoleculeInput.invalid"
+                                            ></i>
                                         </button>
                                     </div>
                                     
