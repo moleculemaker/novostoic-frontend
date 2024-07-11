@@ -31,6 +31,7 @@ import { TabViewModule } from "primeng/tabview";
 import { ScrollPanelModule } from "primeng/scrollpanel";
 import { MultiSelectModule } from "primeng/multiselect";
 import { InputNumberModule } from "primeng/inputnumber";
+import { InputSwitchModule } from "primeng/inputswitch";
 import { SliderModule } from "primeng/slider";
 
 import { LandingPageComponent } from "./components/landing-page/landing-page.component";
@@ -135,6 +136,7 @@ const initAppFn = (envService: EnvironmentService) => {
     TableModule,
     TabViewModule,
     InputTextModule,
+    InputSwitchModule,
     ListboxModule,
     OverlayPanelModule,
     SidebarModule,
