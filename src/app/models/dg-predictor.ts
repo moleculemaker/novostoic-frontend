@@ -80,6 +80,7 @@ export class ThermodynamicalFeasibilityRequest {
       reactions: [
         {
           type: "keggId",
+          containNovelMolecule: true,
           novelMolecules: [
             "InChI=1S/C14H12O/c15-14-8-4-7-13(11-14)10-9-12-5-2-1-3-6-12/h1-11,15H/b10-9+"
           ],
