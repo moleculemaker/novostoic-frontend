@@ -26,7 +26,9 @@ export class DgPredictorResultComponent extends JobResult {
     },
   ];
 
-  response$ = this.jobResultResponse$;
+  response$ = this.jobResultResponse$.pipe(
+    map((data) => data.map((d: any, i: number) => ({ ...d, index: i + 1 }))),
+  );
 
   constructor(
     private route: ActivatedRoute,

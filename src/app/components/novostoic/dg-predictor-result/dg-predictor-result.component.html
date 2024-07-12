@@ -49,6 +49,7 @@
         <p-panel header="Results">
             <p-table
                 #resultsTable
+                dataKey="index"
                 [columns]="columnsForExport"
                 [value]="(response$ | async) || []"
                 [paginator]="true"
@@ -59,35 +60,86 @@
             >
                 <ng-template pTemplate="header">
                     <tr>
+                        <th>No.</th>
                         <th><span class="px-4"></span>Reactions</th>
                         <th pSortableColumn="gibbsEnergy">
-                            Gibbs Free Energy<p-sortIcon
+                            ΔG<p-sortIcon
                                 field="gibbsEnergy"
                             ></p-sortIcon>
                         </th>
-                        <th>Actions</th>
+                        <th>Status<p-sortIcon
+                            field="gibbsEnergy"
+                        ></p-sortIcon></th>
+                        <th></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-row>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
                     <tr>
+                        <td>{{ rowIndex + 1 }}</td>
                         <td>
                             <span class="px-4"></span>{{ row.reaction }}
                         </td>
                         <td>{{ row.gibbsEnergy | number:"1.0-2" }} ± {{ row.std | number:"1.1-1" }} kJ/mol</td>
                         <td>
-                            <div class="flex gap-4 item-center">
-                                <button><i class="pi pi-eye"></i></button>
-                                <button>
-                                    <p-chip styleClass="p-1 px-3"
-                                        >Enzyme selection
-                                        <i
-                                            class="ml-2 pi pi-arrow-right"
-                                        ></i
-                                    ></p-chip>
-                                </button>
-                            </div>
+                            <p-chip styleClass="bg-blue-50 text-[#326FD1]">
+                                <div class="flex items-center gap-2 py-2">
+                                    <i class="pi pi-check-circle"></i>
+                                    <div>Feasible</div>
+                                </div>
+                            </p-chip>
+                        </td>
+                        <td>
+                            <button class="p-2 rounded-full bg-primary w-[26px] h-[26px]" [pRowToggler]="row">
+                                <i class="text-white pi"
+                                    [class.pi-chevron-down]="expanded"
+                                    [class.pi-chevron-right]="!expanded"
+                                ></i>
+                            </button>
                         </td>
                     </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-row>
+                    <!-- <div class="flex items-center justify-around w-full gap-2 px-4 py-8">
+                        <div class="flex items-center h-full p-2 border border-solid rounded-md"
+                            [class.border-[#A855F7]]="i !== 0"
+                            [class.border-green-primary]="i === 0"
+                        >
+                            <app-molecule-image 
+                                [molecule]="reaction.primaryPrecursor!.structure!"
+                                [width]="200"
+                                [height]="120"
+                            >
+                            </app-molecule-image>
+                        </div>
+
+                        <ng-container *ngFor="let reactant of reaction.reactants; let i = index">
+                            <i class="pi pi-plus"></i>
+                            <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
+                                <span>{{ reactant.molecule.name }}</span>
+                            </div>
+                        </ng-container>
+
+                        <i class="pi pi-arrow-right"></i>
+
+                        <ng-container *ngFor="let product of reaction.products; let i = index">
+                            <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
+                                <span>{{ product.molecule.name }}</span>
+                            </div>
+                            <i class="pi pi-plus"></i>
+                        </ng-container>
+                        
+                        <div class="flex items-center h-full p-2 border border-solid rounded-md"
+                            [class.border-[#A855F7]]="i !== pathway.reactions.length - 1"
+                            [class.border-blue-primary]="i === pathway.reactions.length - 1"
+                        >
+                            <app-molecule-image 
+                                [molecule]="reaction.targetMolecule!.structure!"
+                                [width]="200"
+                                [height]="120"
+                            >
+                            </app-molecule-image>
+                        </div>
+                    </div> -->
                 </ng-template>
             </p-table>
         </p-panel>
