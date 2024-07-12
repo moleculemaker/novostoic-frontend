@@ -12,6 +12,7 @@ import {
   OverallStoichiometryResponse,
 } from "~/app/models/overall-stoichiometry";
 import { NovostoicService } from "~/app/services/novostoic.service";
+import { JobResult } from "~/app/models/job-result";
 
 @Component({
   selector: "app-overall-stoichiometry-result",
@@ -21,57 +22,17 @@ import { NovostoicService } from "~/app/services/novostoic.service";
     class: 'grow px-4 xl:w-content-xl xl:mr-64 xl:pr-6'
   }
 })
-export class OverallStoichiometryResultComponent implements OnInit {
+export class OverallStoichiometryResultComponent extends JobResult implements OnInit {
   @ViewChild("resultsTable") resultsTable: Table;
 
-  moleculeRepresentations: Array<{
-    label: string;
-    value: "smiles" | "name" | "keggId";
-  }> = [
-    {
-      label: "SMILES",
-      value: "smiles",
-    },
-    {
-      label: "Common Name",
-      value: "name",
-    },
-    {
-      label: "Kegg ID",
-      value: "keggId",
-    },
-  ];
+  override jobId: string = this.route.snapshot.paramMap.get("id") || "";
+  override jobType: JobType = JobType.NovostoicOptstoic;
 
-  jobId: string = this.route.snapshot.paramMap.get("id") || "";
-
-  statusResponse$ = timer(0, 10000).pipe(
-    switchMap(() => this.novostoicService.getResultStatus(
-      JobType.NovostoicOptstoic,
-      this.jobId,
-    )),
-    tap(() => this.isLoading$.next(true)),
-    takeWhile((data) => 
-      data.phase === JobStatus.Processing 
-      || data.phase === JobStatus.Queued
-    , true),
-    tap((data) => { console.log('job status: ', data) }),
-  );
-
-  isLoading$ = new BehaviorSubject(true);
-
-  response$ = this.statusResponse$.pipe(
-    skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
-    switchMap(() => this.novostoicService.getResult(JobType.NovostoicOptstoic, this.jobId)),
+  response$ = this.jobResultResponse$.pipe(
     map((response) => response as OverallStoichiometryResponse),
-    tap(() => this.isLoading$.next(false)),
-    shareReplay(1),
-    tap((data) => { console.log('result: ', data) }),
   );
 
   showResultsFilter$ = new BehaviorSubject(false);
-  selectedMoleculeRepresentation$ = new BehaviorSubject(
-    this.moleculeRepresentations[0].value,
-  );
 
   filters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
   filterOptions$ = this.response$.pipe(map(({ results }) => results.map((result) => [
@@ -89,7 +50,9 @@ export class OverallStoichiometryResultComponent implements OnInit {
     private router: Router,
     private filterService: FilterService,
     private novostoicService: NovostoicService,
-  ) {}
+  ) {
+    super(novostoicService);
+  }
 
   ngOnInit(): void {
     this.filterService.register(
@@ -122,11 +85,22 @@ export class OverallStoichiometryResultComponent implements OnInit {
     this.subscriptions.push(
       this.response$.pipe(take(1)).subscribe((response) => {
         const state = {
-          primaryPrecursor: response.primaryPrecursor,
-          targetMolecule: response.targetMolecule,
-          stoichiometry,
+          primaryPrecursor: response.primaryPrecursor.metanetx_id,
+          targetMolecule: response.targetMolecule.metanetx_id,
+          stoichiometry: {
+            products: stoichiometry.products.map((product) => ({ 
+              amount: product.amount, 
+              molecule: product.molecule.metanetx_id,
+            })),
+            reactants: stoichiometry.reactants.map((reactant) => ({ 
+              amount: reactant.amount, 
+              molecule: reactant.molecule.metanetx_id,
+            })),
+          },
         };
-        this.router.navigate([NovostoicTools.PATHWAY_SEARCH], { state });
+        const stateStr = encodeURIComponent(JSON.stringify(state));
+        const url = this.router.serializeUrl(this.router.createUrlTree([NovostoicTools.PATHWAY_SEARCH], { queryParams: { input: stateStr } }));
+        window.open(url, "_blank");
       })
     );
   }

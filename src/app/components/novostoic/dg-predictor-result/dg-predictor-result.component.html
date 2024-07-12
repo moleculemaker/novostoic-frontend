@@ -40,7 +40,10 @@
         </div>
     </div>
 
-    <app-loading *ngIf="(isLoading$ | async)"></app-loading>
+    <app-loading 
+      *ngIf="(isLoading$ | async)"
+      [jobType]="jobType"
+    ></app-loading>
 
     <div class="mt-6" [class.hidden]="isLoading$ | async">
         <p-panel header="Results">

@@ -42,14 +42,23 @@
                         class="p-4"
                         [class.bg-[#ebebeb]]="!editing$.value"
                     >
-                        <div class="p-2 cursor-pointer" *ngIf="!editing$.value" (click)="confirmUsingExample()">
-                            <app-stoichiometry-reaction-with-scroller
-                                [primaryPrecursor]="primaryPrecursor$.value"
-                                [targetMolecule]="targetMolecule$.value"
-                                [stoichiometry]="stoichiometry$.value"
-                                moleculeStyleClass="bg-[#ebebeb]"
-                                maxWidth="800px"
-                            ></app-stoichiometry-reaction-with-scroller>
+                        <div class="relative p-2 cursor-pointer" *ngIf="!editing$.value" (click)="confirmUsingExample()">
+                            <div class="flex justify-center w-full" *ngIf="!primaryPrecursor$.value || !targetMolecule$.value || !stoichiometry$.value">
+                                <p-progressSpinner styleClass="w-2 h-2" ariaLabel="loading"/>
+                            </div>
+                            <ng-container *ngIf="primaryPrecursor$.value as p">
+                                <ng-container *ngIf="targetMolecule$.value as t">
+                                    <ng-container *ngIf="stoichiometry$.value as s">
+                                        <app-stoichiometry-reaction-with-scroller
+                                            [primaryPrecursor]="p"
+                                            [targetMolecule]="t"
+                                            [stoichiometry]="s"
+                                            moleculeStyleClass="bg-[#ebebeb]"
+                                            maxWidth="800px"
+                                        ></app-stoichiometry-reaction-with-scroller>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
                         </div>
                         <div *ngIf="editing$.value">
                             <!-- Primary Precursor -->

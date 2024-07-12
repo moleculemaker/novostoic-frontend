@@ -38,7 +38,7 @@ const routes: Routes = [
         component: EnzRankResultComponent 
       },
       { 
-        path: NovostoicTools.PATHWAY_SEARCH, 
+        path: NovostoicTools.PATHWAY_SEARCH,
         component: PathwaySearchComponent 
       },
       { 
