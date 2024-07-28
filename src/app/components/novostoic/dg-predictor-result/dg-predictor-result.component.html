@@ -82,7 +82,7 @@
                             <span class="px-4"></span>{{ row.reaction }}
                         </td>
                         <td>
-                            <span class="text-xl font-bold">{{ row.gibbsEnergy | number:"1.0-2" }} </span> 
+                            <span class="text-xl font-bold">{{ row.gibbsEnergy > 0 ? '+' : ''}}{{ row.gibbsEnergy | number:"1.0-2" }} </span> 
                             <span class="text-xs">± {{ row.std | number:"1.1-1" }} kJ/mol</span></td>
                         <td>
                             <p-chip *ngIf="row.gibbsEnergy < 20" styleClass="bg-blue-50 text-[#326FD1]">
