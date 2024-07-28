@@ -89,7 +89,7 @@ export class ThermodynamicalFeasibilityRequest {
       ],
       agreeToSubscription: false,
       subscriberEmail: "",
-      reactionInputType: "smiles",
+      reactionInputType: "keggId",
     });
     
     return request;
