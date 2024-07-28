@@ -65,6 +65,8 @@ export class PathwaySearchResultComponent extends JobResult {
     }))),
   );
 
+  highlightPathway: number | null = null;
+
   /* -------------------------------------------------------------------------- */
   /*                                   Filters                                  */
   /* -------------------------------------------------------------------------- */

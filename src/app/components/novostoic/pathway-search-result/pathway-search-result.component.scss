@@ -2,15 +2,15 @@ $predicted_color: #C79807;
 $indicator_color: var(--surface-500);
 
 .strip_pattern {
-    background: repeating-linear-gradient(white, white 3.9px, black 4px, black 7.9px);;
+    background: repeating-linear-gradient(transparent, transparent 3.9px, black 4px, black 7.9px);;
 }
 
 .strip_pattern_to_right_thermo_infeasible {
-    background: repeating-linear-gradient(to right, white, white 3px, $predicted_color 3.1px, $predicted_color 6.1px);
+    background: repeating-linear-gradient(to right, transparent, transparent 3px, $predicted_color 3.1px, $predicted_color 6.1px);
 }
 
 .strip_pattern_to_right_thermo_feasible {
-    background: repeating-linear-gradient(to right, white, white 3px, $indicator_color 3.1px, $indicator_color 6.1px);
+    background: repeating-linear-gradient(to right, transparent, transparent 3px, $indicator_color 3.1px, $indicator_color 6.1px);
 }
 
 .strip_pattern_border {
@@ -138,3 +138,17 @@ $indicator_color: var(--surface-500);
         @apply border-t;
     }
 }
+
+.has-indicator::after {
+    content: 'Click the whole pathway to learn more';
+    @apply absolute;
+    @apply bg-white;
+    @apply text-center;
+    @apply block;
+    @apply bottom-0;
+    @apply left-0;
+    @apply w-full;
+    @apply py-1;
+    @apply border border-solid border-y border-[--surface-d];
+    @apply shadow-sm;
+  }

@@ -132,14 +132,20 @@
                                                 <ng-container
                                                     *ngFor="let pathway of (filteredPathways$ | async); let i = index"
                                                 >
-                                                    <tr class="h-[120px]"
+                                                    <tr class="relative h-[120px] cursor-pointer"
+                                                        (mouseover)="highlightPathway = i"
+                                                        (mouseleave)="highlightPathway = null"
                                                         [class.opacity-30]="!pathway.match"
+                                                        [class.has-indicator]="highlightPathway === i"
                                                     >
                                                         <td
                                                             class="sticky left-0 z-10 bg-[--surface-b]"
                                                         >
                                                             <span
-                                                                class="absolute -left-8 top-[3.4rem] -rotate-90 text-nowrap bg-[--surface-b] p-1 text-[--surface-600]"
+                                                                class="absolute -left-8 top-[3.4rem] -rotate-90 text-nowrap p-1 text-[--surface-600]"
+                                                                [class.bg-[--surface-b]]="highlightPathway !== i"
+                                                                [class.bg-primary]="highlightPathway === i"
+                                                                [class.text-white]="highlightPathway === i"
                                                                 >PATHWAY {{ i +
                                                                 1}}</span
                                                             >
@@ -153,6 +159,7 @@
                                                                     label: 'R' + (i + 1) + '.' + (j + 1),
                                                                     pathwayIndex: i,
                                                                     inFirstColumn: j === 0,
+                                                                    highlight: highlightPathway === i,
                                                                     inLastColumn: j === pathway.reactions.length - 1
                                                                 } "
                                                             ></ng-container>
@@ -163,6 +170,7 @@
                                                                     *ngTemplateOutlet="tableCellImg; context: { 
                                                                         $implicit: reaction.targetMolecule!.structure,
                                                                         thermoInfeasible: reaction.deltaG.gibbsEnergy > 20,
+                                                                        highlight: highlightPathway === i,
                                                                         nextThermoInfeasible: j === pathway.reactions.length - 1 ? false : pathway.reactions[j + 1].deltaG.gibbsEnergy > 20,
                                                                     }"
                                                                 ></ng-container>
@@ -181,7 +189,9 @@
                                                                     [class.strip_pattern_to_right_thermo_infeasible]="pathway.reactions[pathway.reactions.length - 1].isPrediction && pathway.reactions[pathway.reactions.length - 1].isThermodynamicalInfeasible"
                                                                     [class.strip_pattern_to_right_thermo_feasible]="pathway.reactions[pathway.reactions.length - 1].isPrediction && !pathway.reactions[pathway.reactions.length - 1].isThermodynamicalInfeasible"
                                                                 ></div>
-                                                                <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
+                                                                <ng-container *ngTemplateOutlet="tableCellBackground; context: {
+                                                                    highlight: highlightPathway === i,
+                                                                }"></ng-container>
                                                             </td>
                                                         </ng-container>
                                                     </tr>
@@ -259,9 +269,10 @@
     let-label="label"
     let-inLastColumn="inLastColumn"
     let-inFirstColumn="inFirstColumn"
+    let-highlight="highlight"
 >
     <td class="relative w-[160px] text-center align-middle">
-        <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
+        <ng-container *ngTemplateOutlet="tableCellBackground; context: {highlight}"></ng-container>
         <div
             class="absolute top-0 left-0 right-0 flex items-center h-full"
             [class.with-start-point]="inFirstColumn"
@@ -364,9 +375,14 @@
     </td>
 </ng-template>
 
-<ng-template #tableCellImg let-src let-nextThermoInfeasible="nextThermoInfeasible" let-thermoInfeasible="thermoInfeasible">
+<ng-template #tableCellImg 
+    let-src 
+    let-nextThermoInfeasible="nextThermoInfeasible" 
+    let-thermoInfeasible="thermoInfeasible" 
+    let-highlight="highlight"
+>
     <td class="w-[180px] align-middle relative">
-        <ng-container *ngTemplateOutlet="tableCellBackground"></ng-container>
+        <ng-container *ngTemplateOutlet="tableCellBackground; context: {highlight}"></ng-container>
         <div
             class="table_cell_img relative flex items-center justify-center rounded-md border border-solid border-[--surface-500] bg-white py-1"
             [class.next_thermo_infeasible]="nextThermoInfeasible"
@@ -382,9 +398,12 @@
     </td>
 </ng-template>
 
-<ng-template #tableCellBackground>
+<ng-template #tableCellBackground let-highlight="highlight">
     <div class="absolute top-0 left-0 z-0 flex items-center w-full h-full">
-        <div class="h-[70%] w-full bg-[#F8F9FA]"></div>
+        <div class="h-[70%] w-full"
+            [class.bg-[#F8F9FA]]="!highlight"
+            [class.bg-[#E9F2FF]]="highlight"
+        ></div>
     </div>
 </ng-template>
 
