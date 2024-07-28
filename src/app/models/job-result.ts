@@ -1,4 +1,4 @@
-import { timer, switchMap, tap, takeWhile, BehaviorSubject, skipUntil, filter, map, delay, shareReplay } from "rxjs";
+import { timer, switchMap, tap, takeWhile, BehaviorSubject, skipUntil, filter, map, delay, shareReplay, share, combineLatest } from "rxjs";
 import { JobStatus, JobType } from "../api/mmli-backend/v1";
 import { NovostoicService } from "../services/novostoic.service";
 
@@ -7,13 +7,14 @@ export class JobResult {
     jobType: JobType;
 
     isLoading$ = new BehaviorSubject(true);
+    resultLoaded$ = new BehaviorSubject(false);
 
     statusResponse$ = timer(0, 10000).pipe(
         switchMap(() => this.service.getResultStatus(
             this.jobType,
             this.jobId,
         )),
-        tap(() => this.isLoading$.next(true)),
+        tap(() => this.resultLoaded$.value ? null : this.isLoading$.next(true)),
         takeWhile((data) =>
             data.phase === JobStatus.Processing
             || data.phase === JobStatus.Queued
@@ -26,6 +27,7 @@ export class JobResult {
         switchMap(() => this.service.getResult(this.jobType, this.jobId)),
         delay(1000),
         tap(() => this.isLoading$.next(false)),
+        tap(() => this.resultLoaded$.next(true)),
         tap((data) => { console.log('result: ', data) }),
         shareReplay(1),
     );

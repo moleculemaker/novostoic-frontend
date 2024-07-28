@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { BehaviorSubject, filter, map, of, skipUntil, switchMap, takeWhile, tap, timer } from "rxjs";
-import { JobType, JobStatus } from "~/app/api/mmli-backend/v1";
-import { ThermodynamicalFeasibilityResponse } from "~/app/models/dg-predictor";
+import { BehaviorSubject, combineLatest, filter, forkJoin, map, of, switchMap, take, tap } from "rxjs";
+import { JobType } from "~/app/api/mmli-backend/v1";
 import { JobResult } from "~/app/models/job-result";
 import { NovostoicService } from "~/app/services/novostoic.service";
 
@@ -27,7 +26,17 @@ export class DgPredictorResultComponent extends JobResult {
   ];
 
   response$ = this.jobResultResponse$.pipe(
-    map((data) => data.map((d: any, i: number) => ({ ...d, index: i + 1 }))),
+    map((data) => data.map((d: any, i: number) => ({ 
+      ...d, 
+      id: i,
+      reactants: Object.values(d.molecules)
+        .filter((val: any) => val['amount'] < 0)
+        .sort((a: any, b: any) => a['is_cofactor'] ? 1 : b['is_cofactor'] ? -1 : 0),
+      products: Object.values(d.molecules)
+        .filter((val: any) => val['amount'] > 0)
+        .sort((a: any, b: any) => a['is_cofactor'] ? -1 : b['is_cofactor'] ? 1 : 0),
+    }))),
+    tap(console.log)
   );
 
   constructor(

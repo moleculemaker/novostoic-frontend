@@ -46,12 +46,14 @@
     ></app-loading>
 
     <div class="mt-6" [class.hidden]="isLoading$ | async">
-        <p-panel header="Results">
+        <p-panel header="Results" styleClass="w-full">
             <p-table
                 #resultsTable
-                dataKey="index"
+                dataKey="id"
                 [columns]="columnsForExport"
                 [value]="(response$ | async) || []"
+                [scrollable]="true" 
+                scrollHeight="600px"
                 [paginator]="true"
                 [rows]="10"
                 [showCurrentPageReport]="true"
@@ -79,12 +81,20 @@
                         <td>
                             <span class="px-4"></span>{{ row.reaction }}
                         </td>
-                        <td>{{ row.gibbsEnergy | number:"1.0-2" }} ± {{ row.std | number:"1.1-1" }} kJ/mol</td>
                         <td>
-                            <p-chip styleClass="bg-blue-50 text-[#326FD1]">
+                            <span class="text-xl font-bold">{{ row.gibbsEnergy | number:"1.0-2" }} </span> 
+                            <span class="text-xs">± {{ row.std | number:"1.1-1" }} kJ/mol</span></td>
+                        <td>
+                            <p-chip *ngIf="row.gibbsEnergy < 20" styleClass="bg-blue-50 text-[#326FD1]">
                                 <div class="flex items-center gap-2 py-2">
                                     <i class="pi pi-check-circle"></i>
                                     <div>Feasible</div>
+                                </div>
+                            </p-chip>
+                            <p-chip *ngIf="row.gibbsEnergy > 20" styleClass="bg-yellow-50 text-yellow-600">
+                                <div class="flex items-center gap-2 py-2">
+                                    <i class="pi pi-exclamation-triangle"></i>
+                                    <div>Infeasible</div>
                                 </div>
                             </p-chip>
                         </td>
@@ -99,47 +109,52 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-row>
-                    <!-- <div class="flex items-center justify-around w-full gap-2 px-4 py-8">
-                        <div class="flex items-center h-full p-2 border border-solid rounded-md"
-                            [class.border-[#A855F7]]="i !== 0"
-                            [class.border-green-primary]="i === 0"
-                        >
-                            <app-molecule-image 
-                                [molecule]="reaction.primaryPrecursor!.structure!"
-                                [width]="200"
-                                [height]="120"
-                            >
-                            </app-molecule-image>
-                        </div>
-
-                        <ng-container *ngFor="let reactant of reaction.reactants; let i = index">
-                            <i class="pi pi-plus"></i>
-                            <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
-                                <span>{{ reactant.molecule.name }}</span>
+                    <tr>
+                        <td colspan="5" class="relative h-48 overflow-x-scroll no-scrollbar bg-blue-50">
+                            <div class="absolute flex items-stretch justify-around min-w-[96%] gap-2">
+        
+                                <ng-container *ngFor="let reactant of row.reactants; let i = index">
+                                    <i *ngIf="i !== 0" class="flex items-center pi pi-plus"></i>
+                                    <div class="flex items-center p-2 bg-white border border-solid rounded-md"
+                                        [class.border-[--surface-d]]="reactant.is_cofactor"
+                                        [class.border-black]="!reactant.is_cofactor"
+                                    >
+                                        <span *ngIf="reactant.is_cofactor">
+                                            {{ reactant.name }}
+                                        </span>
+                                        <app-molecule-image 
+                                            *ngIf="!reactant.is_cofactor"
+                                            [molecule]="reactant.structure!"
+                                            [width]="200"
+                                            [height]="120"
+                                        >
+                                        </app-molecule-image>
+                                    </div>
+                                </ng-container>
+        
+                                <i class="flex items-center pi pi-arrow-right"></i>
+        
+                                <ng-container *ngFor="let product of row.products; let i = index">
+                                    <div class="flex items-center p-2 bg-white border border-solid rounded-md"
+                                        [class.border-[--surface-d]]="product.is_cofactor"
+                                        [class.border-black]="!product.is_cofactor"
+                                    >
+                                        <span *ngIf="product.is_cofactor">
+                                            {{ product.name }}
+                                        </span>
+                                        <app-molecule-image 
+                                            *ngIf="!product.is_cofactor"
+                                            [molecule]="product.structure!"
+                                            [width]="200"
+                                            [height]="120"
+                                        >
+                                        </app-molecule-image>
+                                    </div>
+                                    <i *ngIf="i !== row.products.length - 1" class="flex items-center pi pi-plus"></i>
+                                </ng-container>
                             </div>
-                        </ng-container>
-
-                        <i class="pi pi-arrow-right"></i>
-
-                        <ng-container *ngFor="let product of reaction.products; let i = index">
-                            <div class="flex items-center border border-solid border-[--surface-d] p-2 rounded-md h-full">
-                                <span>{{ product.molecule.name }}</span>
-                            </div>
-                            <i class="pi pi-plus"></i>
-                        </ng-container>
-                        
-                        <div class="flex items-center h-full p-2 border border-solid rounded-md"
-                            [class.border-[#A855F7]]="i !== pathway.reactions.length - 1"
-                            [class.border-blue-primary]="i === pathway.reactions.length - 1"
-                        >
-                            <app-molecule-image 
-                                [molecule]="reaction.targetMolecule!.structure!"
-                                [width]="200"
-                                [height]="120"
-                            >
-                            </app-molecule-image>
-                        </div>
-                    </div> -->
+                        </td>
+                    </tr>
                 </ng-template>
             </p-table>
         </p-panel>
