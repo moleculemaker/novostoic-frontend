@@ -146,26 +146,26 @@ export class PathwaySearchResultComponent extends JobResult {
       const intermediatesSet = new Set(intermediates.map((intermediate) => intermediate.name));
       const cofactorsSet = new Set(cofactors.map((cofactor) => cofactor.name));
       return response.pathways.map((pathway) => {
-        let intermediatesMatch = true;
-        let cofactorsMatch = true;
+        let intermediatesMatch = false;
+        let cofactorsMatch = false;
         let thermodynamicalMatch = true;
         let thermodynamicalRangeMatch = true;
         pathway.reactions.forEach((reaction) => {
-          if (intermediatesSet.size && intermediatesMatch && reaction.targetMolecule) {
-            intermediatesMatch = intermediatesSet.has(reaction.targetMolecule.name);
+          if (reaction.targetMolecule) {
+            intermediatesMatch ||= intermediatesSet.size > 0 ? intermediatesSet.has(reaction.targetMolecule.name) : true;
           }
-          if (cofactorsSet.size && cofactorsMatch) {
+          
+          if (cofactorsSet.size) {
             reaction.reactants.forEach((reactant) => {
-              if (cofactorsMatch && cofactorsSet.has(reactant.molecule.name)) {
-                cofactorsMatch = true;
-              }
+              cofactorsMatch ||= cofactorsSet.has(reactant.molecule.name);
             });
             reaction.products.forEach((product) => {
-              if (cofactorsMatch && cofactorsSet.has(product.molecule.name)) {
-                cofactorsMatch = true;
-              }
+              cofactorsMatch ||= cofactorsSet.has(product.molecule.name);
             });
+          } else {
+            cofactorsMatch = true;
           }
+
           if (mode && thermodynamicalMatch) {
             thermodynamicalMatch = mode === 'any' 
               ? thermodynamicalMatch && !reaction.isThermodynamicalInfeasible
@@ -179,6 +179,8 @@ export class PathwaySearchResultComponent extends JobResult {
         if (mode === 'all') {
           thermodynamicalMatch = !thermodynamicalMatch;
         }
+
+        console.log('pathway', pathway, intermediatesMatch, cofactorsMatch, thermodynamicalMatch, thermodynamicalRangeMatch);
 
         return {
           ...pathway,
