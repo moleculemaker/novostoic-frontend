@@ -6,23 +6,11 @@
             (mouseenter)="primaryPrecursorOverlay.show($event)"
             (mouseleave)="primaryPrecursorOverlay.hide()"
         >
-            <p-overlayPanel #primaryPrecursorOverlay>
-                <div class="w-[300px] p-4">
-                    <div
-                        class="flex justify-center p-2 mb-2 border border-solid rounded-md border-green-primary"
-                    >
-                        <app-molecule-image [width]="260" [height]="180" [molecule]="primaryPrecursor.structure!"></app-molecule-image>
-                    </div>
-                    <div class="flex flex-col">
-                        <ng-container
-                            *ngTemplateOutlet="moleculeInfo; context: {
-                            $implicit: primaryPrecursor,
-                            showSmiles: true
-                        }"
-                        ></ng-container>
-                    </div>
-                </div>
-            </p-overlayPanel>
+            <app-molecule-info-overlay #primaryPrecursorOverlay
+                [molecule]="primaryPrecursor"
+                [showSmiles]="true"
+                imageBorderStyle="border-green-primary"
+            ></app-molecule-info-overlay>
         </span>
     </span>
 
@@ -36,27 +24,10 @@
             (mouseleave)="coreactantOverlay.hide()"
             >{{ reactant.amount | number: '1.1-2' }} {{
             reactant.molecule.name }}
-            <p-overlayPanel #coreactantOverlay>
-                <div class="w-[300px] p-4">
-                    <div class="mb-2">
-                        <span class="gray-dot"></span>
-                        <span class="ml-2 font-semibold">Co-Reactant</span>
-                    </div>
-                    <div
-                        class="flex justify-center p-2 mb-2 border border-solid rounded-md"
-                    >
-                        <app-molecule-image [width]="260" [height]="180" [molecule]="reactant.molecule.structure!"></app-molecule-image>
-                    </div>
-                    <div class="flex flex-col">
-                        <ng-container
-                            *ngTemplateOutlet="moleculeInfo; context: {
-                        $implicit: reactant.molecule,
-                        showSmiles: false
-                    }"
-                        ></ng-container>
-                    </div>
-                </div>
-            </p-overlayPanel>
+            <app-molecule-info-overlay #coreactantOverlay
+                [molecule]="reactant.molecule"
+                [showSmiles]="false"
+            ></app-molecule-info-overlay>
         </span>
     </span>
 
@@ -77,27 +48,10 @@
             [class]="moleculeStyleClass"
             >{{ reactant.amount | number: '1.1-2' }} {{
             reactant.molecule.name }}
-            <p-overlayPanel #coproductOverlay>
-                <div class="w-[300px] p-4">
-                    <div class="mb-2">
-                        <span class="gray-dot"></span>
-                        <span class="ml-2 font-semibold">Co-Product</span>
-                    </div>
-                    <div
-                        class="flex justify-center p-2 mb-2 border border-solid rounded-md"
-                    >
-                        <app-molecule-image [width]="260" [height]="180" [molecule]="reactant.molecule.structure!"></app-molecule-image>
-                    </div>
-                    <div class="flex flex-col">
-                        <ng-container
-                            *ngTemplateOutlet="moleculeInfo; context: {
-                        $implicit: reactant.molecule,
-                        showSmiles: false
-                    }"
-                        ></ng-container>
-                    </div>
-                </div>
-            </p-overlayPanel>
+            <app-molecule-info-overlay #coproductOverlay
+                [molecule]="reactant.molecule"
+                [showSmiles]="false"
+            ></app-molecule-info-overlay>
         </span>
         <span class="mx-1">+</span>
     </span>
@@ -109,40 +63,11 @@
             (mouseenter)="targetMoleculeOverlay.show($event)"
             (mouseleave)="targetMoleculeOverlay.hide()"
         >
-            <p-overlayPanel #targetMoleculeOverlay>
-                <div class="w-[300px] p-4">
-                    <div
-                        class="flex justify-center p-2 mb-2 border border-solid rounded-md border-blue-primary"
-                    >
-                        <app-molecule-image [width]="260" [height]="180" [molecule]="targetMolecule.structure!"></app-molecule-image>
-                    </div>
-                    <div class="flex flex-col">
-                        <ng-container
-                            *ngTemplateOutlet="moleculeInfo; context: {
-                        $implicit: targetMolecule,
-                        showSmiles: true
-                    }"
-                        ></ng-container>
-                    </div>
-                </div>
-            </p-overlayPanel>
+            <app-molecule-info-overlay #targetMoleculeOverlay
+                [molecule]="targetMolecule"
+                [showSmiles]="true"
+                imageBorderStyle="border-blue-primary"
+            ></app-molecule-info-overlay>
         </span>
     </span>
 </div>
-
-<ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
-    <div class="flex justify-between mt-2">
-        <span class="leading-base opacity-60">Common Name</span>
-        <span class="font-semibold text-end"
-            >{{ molecule.name }}</span
-        >
-    </div>
-    <div *ngIf="showSmiles" class="flex justify-between mt-2">
-        <span class="leading-base opacity-60">SMILES</span>
-        <span class="font-semibold text-end">{{ molecule.smiles }}</span>
-    </div>
-    <div class="flex justify-between mt-2">
-        <span class="leading-base opacity-60">KEGG ID</span>
-        <span class="font-semibold text-end">{{ molecule.kegg_id }}</span>
-    </div>
-</ng-template>

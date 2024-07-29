@@ -31,6 +31,7 @@ import { TabViewModule } from "primeng/tabview";
 import { ScrollPanelModule } from "primeng/scrollpanel";
 import { MultiSelectModule } from "primeng/multiselect";
 import { InputNumberModule } from "primeng/inputnumber";
+import { InputSwitchModule } from "primeng/inputswitch";
 import { SliderModule } from "primeng/slider";
 
 import { LandingPageComponent } from "./components/landing-page/landing-page.component";
@@ -74,6 +75,7 @@ import { MainLayoutComponent } from './components/novostoic/main-layout/main-lay
 import { CenterLayoutComponent } from './components/novostoic/center-layout/center-layout.component';
 import { MoleculeImageComponent } from './components/novostoic/molecule-image/molecule-image.component';
 import { ChemicalInputComponent } from './components/novostoic/chemical-input/chemical-input.component';
+import { MoleculeInfoOverlayComponent } from './components/novostoic/molecule-info-overlay/molecule-info-overlay.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -103,6 +105,7 @@ const initAppFn = (envService: EnvironmentService) => {
     CenterLayoutComponent,
     MoleculeImageComponent,
     ChemicalInputComponent,
+    MoleculeInfoOverlayComponent,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,
@@ -135,6 +138,7 @@ const initAppFn = (envService: EnvironmentService) => {
     TableModule,
     TabViewModule,
     InputTextModule,
+    InputSwitchModule,
     ListboxModule,
     OverlayPanelModule,
     SidebarModule,
