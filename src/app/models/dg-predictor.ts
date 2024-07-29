@@ -81,8 +81,10 @@ export class ThermodynamicalFeasibilityRequest {
           containNovelMolecule: true,
           novelMolecules: [
             {
+              iid: "iid-0.123456789",
               alias: "N00001",
-              value: "InChI=1S/C14H12O/c15-14-8-4-7-13(11-14)10-9-12-5-2-1-3-6-12/h1-11,15H/b10-9+"
+              value: "InChI=1S/C14H12O/c15-14-8-4-7-13(11-14)10-9-12-5-2-1-3-6-12/h1-11,15H/b10-9+",
+              moleculeExisted: false
             }
           ],
           reactionKeggId: "C01745 + C00004 <=> N00001 + C00003 + C00001",

@@ -333,9 +333,7 @@
                 [class.bg-yellow-50]="reaction.isThermodynamicalInfeasible"
             >
                 <div>
-                    <span 
-                        >{{ reaction.primaryPrecursor.name }}</span
-                    >
+                    <span>~</span>
                     <span class="font-semibold"
                         *ngFor="let reactant of reaction.reactants"
                     >
@@ -347,9 +345,7 @@
                     >
                         {{ reactant.molecule? reactant.molecule.name : 'NA' }} + 
                     </span>
-                    <span
-                        >{{ reaction.targetMolecule.name }}</span
-                    >
+                    <span>~</span>
                     <button
                         type="button"
                         title="detail"
