@@ -104,34 +104,38 @@
                                     </button>
                                 </div>
 
-                                <div *ngFor="let novelMoleculeInput of subform.controls['novelMolecules']!.controls; let i = index"
-                                    class="grow">
-                                    
-                                    <div class="flex justify-between gap-2 mb-3">
-                                        <div class="flex gap-3 grow">
-                                            <input
-                                                pInputText
-                                                placeholder="O=C(CCO)O"
-                                                class="w-full"
-                                                [formControl]="novelMoleculeInput"
-                                            />
-                                            <div class="px-[.66rem] py-[.33rem] bg-[--surface-d] text-[--surface-500] my-1 text-base flex items-center justify-center rounded-md"
-                                                [class.bg-primary]="novelMoleculeInput.valid"
-                                                [class.text-white]="novelMoleculeInput.valid"
-                                            >
-                                                N{{ ("" + (i + 1)).padStart(5, '0') }}
+                                <ng-container formArrayName="novelMolecules">
+                                    <div *ngFor="let novelMoleculeInput of subform.controls['novelMolecules']!.controls; let i = index"
+                                        [formGroupName]="i"
+                                        class="mb-3 grow">
+                                        <div class="flex justify-between gap-2">
+                                            <div class="flex gap-3 grow">
+                                                <input
+                                                    pInputText
+                                                    placeholder="O=C(CCO)O"
+                                                    class="w-full"
+                                                    formControlName="value"
+                                                />
+                                                <div class="px-[.66rem] py-[.33rem] bg-[--surface-d] text-[--surface-500] my-1 text-base flex items-center justify-center rounded-md"
+                                                    [class.bg-primary]="novelMoleculeInput.valid"
+                                                    [class.text-white]="novelMoleculeInput.valid"
+                                                >
+                                                    {{ novelMoleculeInput.controls['alias'].value }}
+                                                </div>
                                             </div>
+                                            <button 
+                                                [disabled]="novelMoleculeInput.invalid"
+                                                (click)="request.removeNovelMolecule(subform, i)">
+                                                <i class="pi pi-times-circle text-[--text-color-secondary] !text-xl"
+                                                    [class.text-bluegray-100]="novelMoleculeInput.invalid"
+                                                ></i>
+                                            </button>
                                         </div>
-                                        <button 
-                                            [disabled]="novelMoleculeInput.invalid"
-                                            (click)="request.removeNovelMolecule(subform, i)">
-                                            <i class="pi pi-times-circle text-[--text-color-secondary] !text-xl"
-                                                [class.text-bluegray-100]="novelMoleculeInput.invalid"
-                                            ></i>
-                                        </button>
+                                        <small class="font-semibold text-orange-400" *ngIf="novelMoleculeInput.controls['moleculeExisted'].value">
+                                            Note: This new molecule already has a unique number assigned; use that same number for this entry.
+                                        </small>
                                     </div>
-                                    
-                                </div>
+                                </ng-container>
                             </ng-container>
                             <div class="grow">
                                 <h6 class="mb-2 font-semibold opacity-100">
