@@ -2,9 +2,9 @@ import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 
 interface ReactionFormControl {
   type: FormControl<string | null>;
+  containNovelMolecule?: FormControl<boolean | null>;
   reactionSmiles?: FormControl<string | null>;
-  moleculeNumber?: FormControl<string | null>;
-  moleculeInchiOrSmiles?: FormControl<string | null>;
+  novelMolecules?: FormArray<FormControl<string | null>>;
   reactionKeggId?: FormControl<string | null>;
 }
 
@@ -12,7 +12,9 @@ export class ThermodynamicalFeasibilityRequest {
   form = new FormGroup({
     ph: new FormControl(5, [Validators.required]),
     ionicStrength: new FormControl(0.3, [Validators.required]),
-    reactions: new FormArray([this.createReactionKeggIDFormControl()]),
+    reactions: new FormArray([
+      this.createReactionKeggIDFormControl()
+    ]),
     agreeToSubscription: new FormControl(false),
     subscriberEmail: new FormControl("", [Validators.email]),
     reactionInputType: new FormControl("keggId", [Validators.required]),
@@ -28,18 +30,26 @@ export class ThermodynamicalFeasibilityRequest {
   private createReactionKeggIDFormControl() {
     const formGroup = new FormGroup<ReactionFormControl>({
       type: new FormControl("keggId"),
-      moleculeNumber: new FormControl("", []),
-      moleculeInchiOrSmiles: new FormControl("", []),
+      containNovelMolecule: new FormControl(false),
+      novelMolecules: new FormArray([
+        new FormControl(""),
+      ]),
       reactionKeggId: new FormControl("", [Validators.required]),
     });
 
-    formGroup.controls["moleculeInchiOrSmiles"]?.valueChanges.subscribe((value) => {
+    formGroup.controls["containNovelMolecule"]?.valueChanges.subscribe((value) => {
       if (value) {
-        formGroup.controls["moleculeNumber"]?.addValidators([Validators.required]);
+        formGroup.controls["novelMolecules"]?.controls.forEach((control) => {
+          control.setValidators([Validators.required]);
+        });
       } else {
-        formGroup.controls["moleculeNumber"]?.clearValidators();
+        formGroup.controls["novelMolecules"]?.controls.forEach((control) => {
+          control.clearValidators();
+        });
       }
-      formGroup.controls["moleculeNumber"]?.updateValueAndValidity();
+      formGroup.controls["novelMolecules"]?.controls.forEach((control) => {
+        control.updateValueAndValidity();
+      });
     });
 
     return formGroup;
@@ -70,14 +80,16 @@ export class ThermodynamicalFeasibilityRequest {
       reactions: [
         {
           type: "keggId",
-          moleculeNumber: "00001",
-          moleculeInchiOrSmiles: "InChI=1S/C14H12O/c15-14-8-4-7-13(11-14)10-9-12-5-2-1-3-6-12/h1-11,15H/b10-9+",
+          containNovelMolecule: true,
+          novelMolecules: [
+            "InChI=1S/C14H12O/c15-14-8-4-7-13(11-14)10-9-12-5-2-1-3-6-12/h1-11,15H/b10-9+"
+          ],
           reactionKeggId: "C01745 + C00004 <=> N00001 + C00003 + C00001",
         }
       ],
       agreeToSubscription: false,
       subscriberEmail: "",
-      reactionInputType: "smiles",
+      reactionInputType: "keggId",
     });
     
     return request;
@@ -98,6 +110,19 @@ export class ThermodynamicalFeasibilityRequest {
     }
   }
 
+  addNovelMolecule(subform: FormGroup<ReactionFormControl>) {
+    subform.controls['novelMolecules']!.push(
+      new FormControl("", [Validators.required])
+    );
+  }
+
+  removeNovelMolecule(subform: FormGroup<ReactionFormControl>, idx: number) {
+    subform.controls['novelMolecules']!.removeAt(idx);
+    if (!subform.controls['novelMolecules']!.length) {
+      this.addNovelMolecule(subform);
+    }
+  }
+
   clearAllReactions() {
     this.clearAllInputHelper(this.form.controls["reactions"]);
   }
@@ -114,10 +139,12 @@ export class ThermodynamicalFeasibilityRequest {
           add_info: {},
         }
 
-        if (reaction.moleculeInchiOrSmiles) {
-          payload["add_info"] = {
-            ['N' + reaction.moleculeNumber]: reaction.moleculeInchiOrSmiles,
-          };
+        if (reaction.containNovelMolecule) {
+          payload['add_info'] = {};
+          reaction.novelMolecules?.forEach((molecule, i) => {
+            const key = `${i + 1}`.padStart(5, "0");
+            payload["add_info"][`N${key}`] = molecule;
+          });
         }
 
         return payload;
