@@ -1,4 +1,4 @@
-$predicted_color: #C79807;
+$infeasible_color: #C79807;
 $indicator_color: var(--surface-500);
 
 .strip_pattern {
@@ -6,7 +6,7 @@ $indicator_color: var(--surface-500);
 }
 
 .strip_pattern_to_right_thermo_infeasible {
-    background: repeating-linear-gradient(to right, transparent, transparent 3px, $predicted_color 3.1px, $predicted_color 6.1px);
+    background: repeating-linear-gradient(to right, transparent, transparent 3px, $infeasible_color 3.1px, $infeasible_color 6.1px);
 }
 
 .strip_pattern_to_right_thermo_feasible {
@@ -14,7 +14,14 @@ $indicator_color: var(--surface-500);
 }
 
 .strip_pattern_border {
-    border-image: url("/assets/border.png") 2 round;
+
+    &.thermodynamic_feasible {
+        background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='6' ry='6' stroke='%239FA9B7FF' stroke-width='2' stroke-dasharray='8%2c 7' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+    }
+
+    &.thermodynamic_infeasible {
+        background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='6' ry='6' stroke='%23C79807FF' stroke-width='3' stroke-dasharray='9%2c 13' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+    }
 }
 
 .primary_precursor_container {
@@ -102,11 +109,11 @@ $indicator_color: var(--surface-500);
 }
 
 .thermo_infeasible::before {
-    border-left-color: $predicted_color !important;
+    border-left-color: $infeasible_color !important;
 }
 
 .next_thermo_infeasible::after {
-    background: $predicted_color !important;
+    background: $infeasible_color !important;
 }
 
 .pathway_dialog {
