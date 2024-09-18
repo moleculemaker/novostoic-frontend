@@ -43,7 +43,7 @@ export class PathwaySearchResultComponent extends JobResult {
             reactants: reaction.reactants.filter((reactant) => {
               return reactant.molecule.name !== reaction.primaryPrecursor?.name;
             }),
-            isThermodynamicalInfeasible: reaction.deltaG.gibbsEnergy > 20,
+            isThermodynamicalInfeasible: reaction.deltaG.gibbsEnergy > this.novostoicService.thermoFeasibilityMax,
           }))
         }
       })
@@ -52,8 +52,10 @@ export class PathwaySearchResultComponent extends JobResult {
     tap((data) => console.log('response', data))
   );
 
-  visible$ = new BehaviorSubject(false);
-  selectedPathway$ = new BehaviorSubject(0);
+  visible: boolean = false;
+  highlightPathway: number | null = null;
+  selectedPathway: number = 0;
+  selectedReactionIdx: number | null = null;
 
   pathwayDeltaGs$ = this.response$.pipe(
     map((response) => response.pathways.map((pathway) => pathway.reactions.reduce((p, v) => ({
@@ -124,8 +126,8 @@ export class PathwaySearchResultComponent extends JobResult {
   ]).pipe(map(([intermediates, cofactors]) => intermediates.length + cofactors.length));
 
   selectedThermoFeasibleMode$ = new BehaviorSubject<'all' | 'any' | null>(null);
-  feasibleRangeMin$ = new BehaviorSubject<number>(-80);
-  feasibleRangeMax$ = new BehaviorSubject<number>(20);
+  feasibleRangeMin$ = new BehaviorSubject<number>(this.novostoicService.thermoFeasibilityMin);
+  feasibleRangeMax$ = new BehaviorSubject<number>(this.novostoicService.thermoFeasibilityMax);
   feasibleRange$ = combineLatest([
     this.feasibleRangeMin$,
     this.feasibleRangeMax$,
@@ -144,26 +146,26 @@ export class PathwaySearchResultComponent extends JobResult {
       const intermediatesSet = new Set(intermediates.map((intermediate) => intermediate.name));
       const cofactorsSet = new Set(cofactors.map((cofactor) => cofactor.name));
       return response.pathways.map((pathway) => {
-        let intermediatesMatch = true;
-        let cofactorsMatch = true;
+        let intermediatesMatch = false;
+        let cofactorsMatch = false;
         let thermodynamicalMatch = true;
         let thermodynamicalRangeMatch = true;
         pathway.reactions.forEach((reaction) => {
-          if (intermediatesSet.size && intermediatesMatch && reaction.targetMolecule) {
-            intermediatesMatch = intermediatesSet.has(reaction.targetMolecule.name);
+          if (reaction.targetMolecule) {
+            intermediatesMatch ||= intermediatesSet.size > 0 ? intermediatesSet.has(reaction.targetMolecule.name) : true;
           }
-          if (cofactorsSet.size && cofactorsMatch) {
+          
+          if (cofactorsSet.size) {
             reaction.reactants.forEach((reactant) => {
-              if (cofactorsMatch && cofactorsSet.has(reactant.molecule.name)) {
-                cofactorsMatch = true;
-              }
+              cofactorsMatch ||= cofactorsSet.has(reactant.molecule.name);
             });
             reaction.products.forEach((product) => {
-              if (cofactorsMatch && cofactorsSet.has(product.molecule.name)) {
-                cofactorsMatch = true;
-              }
+              cofactorsMatch ||= cofactorsSet.has(product.molecule.name);
             });
+          } else {
+            cofactorsMatch = true;
           }
+
           if (mode && thermodynamicalMatch) {
             thermodynamicalMatch = mode === 'any' 
               ? thermodynamicalMatch && !reaction.isThermodynamicalInfeasible
@@ -177,6 +179,8 @@ export class PathwaySearchResultComponent extends JobResult {
         if (mode === 'all') {
           thermodynamicalMatch = !thermodynamicalMatch;
         }
+
+        console.log('pathway', pathway, intermediatesMatch, cofactorsMatch, thermodynamicalMatch, thermodynamicalRangeMatch);
 
         return {
           ...pathway,
@@ -258,7 +262,7 @@ export class PathwaySearchResultComponent extends JobResult {
   );
 
   constructor(
-    private novostoicService: NovostoicService,
+    protected novostoicService: NovostoicService,
     private route: ActivatedRoute,
   ) {
     super(novostoicService)
@@ -267,8 +271,8 @@ export class PathwaySearchResultComponent extends JobResult {
   resetFilters() {
     this.intermediatesFilters$.next([]);
     this.coFactorsFilters$.next([]);
-    this.feasibleRangeMax$.next(20);
-    this.feasibleRangeMin$.next(-80);
+    this.feasibleRangeMax$.next(this.novostoicService.thermoFeasibilityMax);
+    this.feasibleRangeMin$.next(this.novostoicService.thermoFeasibilityMin);
     this.selectedThermoFeasibleMode$.next(null);
   }
 

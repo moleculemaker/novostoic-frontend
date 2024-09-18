@@ -1,0 +1,35 @@
+<p-overlayPanel #overlay>
+    <div class="w-[300px] p-4">
+        <div
+            class="flex justify-center p-2 mb-2 border border-black border-solid rounded-md"
+            [class]="imageBorderStyle"
+        >
+            <app-molecule-image [width]="260" [height]="180" [molecule]="molecule.structure!"></app-molecule-image>
+        </div>
+        <div class="flex flex-col">
+            <ng-container
+                *ngTemplateOutlet="moleculeInfo; context: {
+                $implicit: molecule,
+                showSmiles: showSmiles,
+            }"
+            ></ng-container>
+        </div>
+    </div>
+</p-overlayPanel>
+
+<ng-template #moleculeInfo let-molecule let-showSmiles="showSmiles">
+    <div class="flex justify-between mt-2">
+        <span class="leading-base opacity-60">Common Name</span>
+        <span class="font-semibold text-end"
+            >{{ molecule.name }}</span
+        >
+    </div>
+    <div *ngIf="showSmiles" class="flex justify-between mt-2">
+        <span class="leading-base opacity-60">SMILES</span>
+        <span class="font-semibold text-end">{{ molecule.smiles }}</span>
+    </div>
+    <div class="flex justify-between mt-2">
+        <span class="leading-base opacity-60">KEGG ID</span>
+        <span class="font-semibold text-end">{{ molecule.kegg_id }}</span>
+    </div>
+</ng-template>
