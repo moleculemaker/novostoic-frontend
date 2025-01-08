@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss'],
   host: {
-    class: 'grow flex'
+    class: 'grow flex w-screen max-w-screen'
   }
 })
 export class MainLayoutComponent {

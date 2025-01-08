@@ -72,48 +72,10 @@
                     </div>
                     <div
                         *ngIf="subform.controls['type'].value === 'keggId'"
-                        class="flex p-4 border border-dotted rounded-md bg-gray-50"
+                        class="flex flex-col p-5 border border-dotted rounded-md bg-gray-50"
                     >
-                        <div class="grow">
-                            <div class="mb-2 font-semibold">
-                                Assign a number to the new molecule that
-                                does not have a Kegg ID
-                            </div>
-                            <div class="mb-4 p-inputgroup">
-                                <span class="p-inputgroup-addon">
-                                    N
-                                </span>
-                                <input
-                                    pInputText
-                                    placeholder="000001"
-                                    class="max-w-24"
-                                    formControlName="moleculeNumber"
-                                />
-                            </div>
-
-                            <div class="mb-2 font-semibold">
-                                Enter the new molecule’s SMILES or InChl
-                            </div>
-                            <input
-                                pInputText
-                                placeholder="SMILES or Inchi"
-                                class="w-full mb-4"
-                                formControlName="moleculeInchiOrSmiles"
-                            />
-
-                            <div class="mb-2 font-semibold">
-                                Enter Reactions with Kegg ID and/or the
-                                unique number you assign to the new
-                                molecule
-                            </div>
-                            <input
-                                pInputText
-                                placeholder="Kegg ID"
-                                class="w-full"
-                                formControlName="reactionKeggId"
-                            />
-                        </div>
-                        <div>
+                        <div class="flex justify-between mb-3">
+                            <h5 class="mt-0 opacity-100">Reaction {{ i + 1 }}</h5>
                             <button
                                 type="button"
                                 (click)="request.removeReaction(i)"
@@ -121,6 +83,72 @@
                                 <i class="pi pi-times"></i>
                             </button>
                         </div>
+                        <section class="lg:max-w-[80%]">
+                            <div class="flex justify-between gap-2 mb-3">
+                                <h6 class="flex items-center gap-2 mt-0 font-semibold opacity-100">
+                                    Have new molecule(s) not listed in KEGG database and MetaNetX database
+                                    <!-- TODO: add tooltip -->
+                                    <i class="pi pi-info-circle text-[--surface-500]"></i>
+                                </h6>
+                                <p-inputSwitch formControlName="containNovelMolecule"/>
+                            </div>
+                            <ng-container *ngIf="subform.controls['containNovelMolecule']!.value">
+                                <div class="flex justify-between gap-2 mb-3">
+                                    <h6 class="flex items-center gap-2 mb-2 font-semibold opacity-100">
+                                        Enter the new molecule's SMILES or InChl
+                                        <!-- TODO: add tooltip -->
+                                        <i class="pi pi-info-circle text-[--surface-500]"></i>
+                                    </h6>
+                                    <button (click)="request.addNovelMolecule(subform)">
+                                        <i class="pi pi-plus-circle text-[--text-color-secondary] !text-xl"></i>
+                                    </button>
+                                </div>
+
+                                <ng-container formArrayName="novelMolecules">
+                                    <div *ngFor="let novelMoleculeInput of subform.controls['novelMolecules']!.controls; let i = index"
+                                        [formGroupName]="i"
+                                        class="mb-3 grow">
+                                        <div class="flex justify-between gap-2">
+                                            <div class="flex gap-3 grow">
+                                                <input
+                                                    pInputText
+                                                    placeholder="O=C(CCO)O"
+                                                    class="w-full"
+                                                    formControlName="value"
+                                                />
+                                                <div class="px-[.66rem] py-[.33rem] bg-[--surface-d] text-[--surface-500] my-1 text-base flex items-center justify-center rounded-md"
+                                                    [class.bg-primary]="novelMoleculeInput.valid"
+                                                    [class.text-white]="novelMoleculeInput.valid"
+                                                >
+                                                    {{ novelMoleculeInput.controls['alias'].value }}
+                                                </div>
+                                            </div>
+                                            <button 
+                                                [disabled]="novelMoleculeInput.invalid"
+                                                (click)="request.removeNovelMolecule(subform, i)">
+                                                <i class="pi pi-times-circle text-[--text-color-secondary] !text-xl"
+                                                    [class.text-bluegray-100]="novelMoleculeInput.invalid"
+                                                ></i>
+                                            </button>
+                                        </div>
+                                        <small class="font-semibold text-orange-400" *ngIf="novelMoleculeInput.controls['moleculeExisted'].value">
+                                            Note: This new molecule already has a unique number assigned; use that same number for this entry.
+                                        </small>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <div class="grow">
+                                <h6 class="mb-2 font-semibold opacity-100">
+                                    Enter a reaction with database IDs of known compounds. 
+                                </h6>
+                                <input
+                                    pInputText
+                                    placeholder="e.g. C00001 + C00002 -> C00003 + C00004"
+                                    class="w-full"
+                                    formControlName="reactionKeggId"
+                                />
+                            </div>
+                        </section>
                     </div>
                 </div>
             </ng-container>
