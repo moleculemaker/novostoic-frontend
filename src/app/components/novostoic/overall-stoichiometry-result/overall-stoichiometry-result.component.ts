@@ -30,6 +30,11 @@ export class OverallStoichiometryResultComponent extends JobResult implements On
 
   response$ = this.jobResultResponse$.pipe(
     map((response) => response as OverallStoichiometryResponse),
+    tap((response) => {
+      response.results.forEach((result) => {
+        result.deltaG = parseFloat(result.deltaG as unknown as string);
+      });
+    })
   );
 
   showResultsFilter$ = new BehaviorSubject(false);
