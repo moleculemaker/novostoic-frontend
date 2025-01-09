@@ -116,6 +116,16 @@
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                         [rowsPerPageOptions]="[10, 25, 50]"
                     >
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="5">
+                                    <div class="flex flex-col items-center justify-center h-full gap-4">
+                                        <h5 class="font-semibold text-center">No Results Found</h5>
+                                        <p class="text-center">Try adjusting your search criteria</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>
