@@ -6,16 +6,63 @@ import {
 import exampleResponse from './output.pathway.response.json'
 
 export class PathwaySearchRequest {
+  pathwayParameterSettings = {
+    maxSteps: {
+      min: 0,
+      max: 10,
+      step: 1,
+    },
+    maxPathways: {
+      min: 0,
+      max: 10,
+      step: 1,
+    },
+    numEnzymeCandidates: {
+      min: 0,
+      max: 10,
+      step: 1,
+    },
+    primaryPrecursorAmount: {
+      min: 0,
+      max: Infinity,
+      step: 0.1,
+    },
+    targetMoleculeAmount: {
+      min: 0.1,
+      max: Infinity,
+      step: 0.1,
+    },
+    coReactantAmount: {
+      min: 0.1,
+      max: Infinity,
+      step: 0.1,
+    },
+    coProductAmount: {
+      min: 0.1,
+      max: Infinity,
+      step: 0.1,
+    },
+  };
+
   form = new FormGroup({
     primaryPrecursor: this.createMoleculeInputWithAmount(),
     targetMolecule: this.createMoleculeInputWithAmount(),
     coReactants: new FormArray([this.createMoleculeInputWithAmount()]),
     coProducts: new FormArray([this.createMoleculeInputWithAmount()]),
-    maxSteps: new FormControl(3, [Validators.required]),
-    maxPathways: new FormControl(3, [Validators.required]),
+    maxSteps: new FormControl(3, [
+      Validators.required, 
+      Validators.min(this.pathwayParameterSettings.maxSteps.min), 
+      Validators.max(this.pathwayParameterSettings.maxSteps.max)]),
+    maxPathways: new FormControl(3, [
+      Validators.required, 
+      Validators.min(this.pathwayParameterSettings.maxPathways.min), 
+     Validators.max(this.pathwayParameterSettings.maxPathways.max)]),
     thermodynamicReactionsFilterMode: new FormControl("none"),
     useEnzymeSelection: new FormControl(true),
-    numEnzymeCandidates: new FormControl(0, [Validators.required]),
+    numEnzymeCandidates: new FormControl(0, [
+      Validators.required, 
+      Validators.min(this.pathwayParameterSettings.numEnzymeCandidates.min), 
+      Validators.max(this.pathwayParameterSettings.numEnzymeCandidates.max)]),
     agreeToSubscription: new FormControl(false),
     subscriberEmail: new FormControl("", [Validators.email]),
   });
@@ -45,7 +92,9 @@ export class PathwaySearchRequest {
   private createMoleculeInputWithAmount() {
     return new FormGroup({
       molecule: new FormControl<string>(""),
-      amount: new FormControl<number>(0, [Validators.min(1)]),
+      amount: new FormControl<number | null>(null, [
+        Validators.min(0.1)
+      ]),
     });
   }
 

@@ -114,6 +114,16 @@ export class PathwaySearchComponent implements OnInit {
     });
   }
 
+  onNumberInputKeyDown(event: KeyboardEvent) {
+    if (event.key === "e" 
+      || event.key === "E" 
+      || event.key === "-" 
+      || event.key === "+"
+    ) {
+      event.preventDefault();
+    }
+  }
+
   confirmUsingExample() {
     this.confirmCallback = this.useExampleCallback;
     this.warningMessage = "The current overall stoichiometry input comes from the previous step - Overall Stoichiometry - of NovoStoic. If you click Use an Example, you are starting a new request on “Pathway Search”. You can find previous steps results in the Job Management.";

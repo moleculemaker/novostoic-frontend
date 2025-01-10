@@ -83,6 +83,10 @@
                                         type="number"
                                         class="w-[48px]"
                                         placeholder="0.0"
+                                        [step]="request.pathwayParameterSettings.primaryPrecursorAmount.step"
+                                        [min]="request.pathwayParameterSettings.primaryPrecursorAmount.min"
+                                        [max]="request.pathwayParameterSettings.primaryPrecursorAmount.max"
+                                        (keydown)="onNumberInputKeyDown($event)"
                                         formControlName="amount"
                                     />
                                     <app-marvinjs-input
@@ -132,6 +136,10 @@
                                             type="number"
                                             class="w-[48px]"
                                             placeholder="0.0"
+                                            [step]="request.pathwayParameterSettings.coReactantAmount.step"
+                                            [min]="request.pathwayParameterSettings.coReactantAmount.min"
+                                            [max]="request.pathwayParameterSettings.coReactantAmount.max"
+                                            (keydown)="onNumberInputKeyDown($event)"
                                             formControlName="amount"
                                         />
                                         <app-chemical-input
@@ -189,6 +197,10 @@
                                             class="w-[48px]"
                                             [class.ng-invalid]="control.controls['amount'].invalid"
                                             placeholder="0.0"
+                                            [step]="request.pathwayParameterSettings.coProductAmount.step"
+                                            [min]="request.pathwayParameterSettings.coProductAmount.min"
+                                            [max]="request.pathwayParameterSettings.coProductAmount.max"
+                                            (keydown)="onNumberInputKeyDown($event)"
                                             formControlName="amount"
                                         />
                                         <app-chemical-input
@@ -232,6 +244,10 @@
                                         type="number"
                                         class="w-[48px]"
                                         placeholder="0.0"
+                                        [step]="request.pathwayParameterSettings.targetMoleculeAmount.step"
+                                        [min]="request.pathwayParameterSettings.targetMoleculeAmount.min"
+                                        [max]="request.pathwayParameterSettings.targetMoleculeAmount.max"
+                                        (keydown)="onNumberInputKeyDown($event)"
                                         formControlName="amount"
                                     />
                                     <app-marvinjs-input
@@ -293,18 +309,24 @@
                                         ></i> -->
                                     </span>
                                     <input
+                                        title="Number of reaction steps per pathway design"
                                         type="number"
                                         pInputText
                                         class="w-full"
                                         formControlName="maxSteps"
+                                        [step]="request.pathwayParameterSettings.maxSteps.step"
+                                        [min]="request.pathwayParameterSettings.maxSteps.min"
+                                        [max]="request.pathwayParameterSettings.maxSteps.max"
+                                        (keydown)="onNumberInputKeyDown($event)"
                                         [ngModel]="request.form.controls['maxSteps'].value"
                                     />
                                     <p-slider
                                         class="w-full"
                                         [ngModel]="request.form.controls['maxSteps'].value"
                                         formControlName="maxSteps"
-                                        [min]="0"
-                                        [max]="10"
+                                        [step]="request.pathwayParameterSettings.maxSteps.step"
+                                        [min]="request.pathwayParameterSettings.maxSteps.min"
+                                        [max]="request.pathwayParameterSettings.maxSteps.max"
                                     ></p-slider>
                                     <span
                                         class="flex items-center justify-between my-2"
@@ -325,9 +347,14 @@
                                         ></i> -->
                                     </span>
                                     <input
+                                        title="Number of pathway generated"
                                         type="number"
                                         pInputText
                                         class="w-full"
+                                        [step]="request.pathwayParameterSettings.maxPathways.step"
+                                        [min]="request.pathwayParameterSettings.maxPathways.min"
+                                        [max]="request.pathwayParameterSettings.maxPathways.max"
+                                        (keydown)="onNumberInputKeyDown($event)"
                                         formControlName="maxPathways"
                                         [ngModel]="request.form.controls['maxPathways'].value"
                                     />
@@ -335,8 +362,9 @@
                                         class="w-full"
                                         formControlName="maxPathways"
                                         [ngModel]="request.form.controls['maxPathways'].value"
-                                        [min]="0"
-                                        [max]="10"
+                                        [step]="request.pathwayParameterSettings.maxPathways.step"
+                                        [min]="request.pathwayParameterSettings.maxPathways.min"
+                                        [max]="request.pathwayParameterSettings.maxPathways.max"
                                     ></p-slider>
                                     <span
                                         class="flex items-center justify-between my-2"
@@ -377,15 +405,21 @@
                                         title="Number of Enzyme candidates"
                                         type="number"
                                         pInputText
+                                        class="w-full"
+                                        [step]="request.pathwayParameterSettings.numEnzymeCandidates.step"
+                                        [min]="request.pathwayParameterSettings.numEnzymeCandidates.min"
+                                        [max]="request.pathwayParameterSettings.numEnzymeCandidates.max"
+                                        (keydown)="onNumberInputKeyDown($event)"
                                         formControlName="numEnzymeCandidates"
                                         [ngModel]="request.form.controls['numEnzymeCandidates'].value"
                                     />
-                                    <div class="mr-2">
+                                    <div>
                                         <p-slider
                                             [ngModel]="request.form.controls['numEnzymeCandidates'].value"
                                             formControlName="numEnzymeCandidates"
-                                            [min]="0"
-                                            [max]="10"
+                                            [step]="request.pathwayParameterSettings.numEnzymeCandidates.step"
+                                            [min]="request.pathwayParameterSettings.numEnzymeCandidates.min"
+                                            [max]="request.pathwayParameterSettings.numEnzymeCandidates.max"
                                         ></p-slider>
                                         <span
                                             class="flex items-center justify-between my-2"
