@@ -7,7 +7,6 @@ import exampleResponse from './output.pathway.response.json'
 import { presenceEnforcementOnAmountAndMolecule, requireBothAmountAndMolecule } from "../validators/novostoic-chemical-validator";
 import { NovostoicService } from "../services/novostoic.service";
 import { ChemicalAutoCompleteResponse } from "../api/mmli-backend/v1/model/chemicalAutoCompleteResponse";
-import { OptstoicChemicalValidatorDirective } from "../directives/optstoic-chemical-validator.directive";
 
 export class PathwaySearchRequest {
   primaryPrecursor: ChemicalAutoCompleteResponse | null = null;
