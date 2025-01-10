@@ -45,10 +45,10 @@ export class PathwaySearchRequest {
   };
 
   form = new FormGroup({
-    primaryPrecursor: this.createMoleculeInputWithAmount(),
-    targetMolecule: this.createMoleculeInputWithAmount(),
-    coReactants: new FormArray([this.createMoleculeInputWithAmount()]),
-    coProducts: new FormArray([this.createMoleculeInputWithAmount()]),
+    primaryPrecursor: this.createMoleculeInputWithAmount(true),
+    targetMolecule: this.createMoleculeInputWithAmount(true),
+    coReactants: new FormArray([this.createMoleculeInputWithAmount(false)]),
+    coProducts: new FormArray([this.createMoleculeInputWithAmount(false)]),
     maxSteps: new FormControl(3, [
       Validators.required, 
       Validators.min(this.pathwayParameterSettings.maxSteps.min), 
@@ -89,9 +89,9 @@ export class PathwaySearchRequest {
     });
   }
 
-  private createMoleculeInputWithAmount() {
+  private createMoleculeInputWithAmount(required: boolean) {
     return new FormGroup({
-      molecule: new FormControl<string>(""),
+      molecule: new FormControl<string>("", required ? [Validators.required] : []),
       amount: new FormControl<number | null>(null, [
         Validators.min(0.1)
       ]),
@@ -140,12 +140,12 @@ export class PathwaySearchRequest {
 
   addCoReactant() {
     this.form.controls["coReactants"].push(
-      this.createMoleculeInputWithAmount(),
+      this.createMoleculeInputWithAmount(false),
     );
   }
 
   addCoProduct() {
-    this.form.controls["coProducts"].push(this.createMoleculeInputWithAmount());
+    this.form.controls["coProducts"].push(this.createMoleculeInputWithAmount(false));
   }
 
   removeCoReactant(index: number) {
