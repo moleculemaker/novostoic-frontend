@@ -448,7 +448,7 @@
                         <div class="mb-2 text-lg font-semibold" *ngIf="(pathwayDeltaGs$ | async) as deltaGs">
                             {{ deltaGs![selectedPathway].gibbsEnergy | number: '1.1-2' }}±{{ deltaGs![selectedPathway].std | number:'1.1-1' }}kJ/mol
                         </div>
-                        <div>Delta G</div>
+                        <div>ΔG°</div>
                     </div>
                 </div>
                 <div class="flex flex-col">
@@ -494,7 +494,7 @@
                                 <span class="font-semibold">Reaction {{selectedPathway + 1}}.{{ i + 1 }}</span>
                             </div>
                             <div>
-                                <small class="font-bold">Delta G Calculation</small>
+                                <small class="font-bold">ΔG° Calculation</small>
                                 <div class="leading-lg">{{ reaction.deltaG.gibbsEnergy }}±{{ reaction.deltaG.std }}kJ/mol</div>
                             </div>
                             <div>

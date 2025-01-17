@@ -9,7 +9,7 @@ import { MenuItem } from "primeng/api";
 })
 export class AppComponent {
   emailstring: string =
-    "mailto:novostoic-feedback@moleculemaker.org?Subject=User feedback for Novostoic";
+    "mailto:novostoic-feedback@moleculemaker.org?Subject=User feedback for NovoStoic";
   showCite: boolean = false;
 
   showComingSoonPopup: boolean = false;
