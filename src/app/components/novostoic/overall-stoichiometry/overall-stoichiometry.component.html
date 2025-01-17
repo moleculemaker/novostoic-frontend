@@ -157,15 +157,21 @@
                 </div>
             </div>
         </div>
-        <p-button
-            [label]="request.form.status === 'PENDING' ? 'Validating...' : 'Get Overall Stoichiometry'"
-            type="submit"
-            styleClass="btn-submit-request"
-            [disabled]="!request.form.valid"
-            [loading]="request.form.status === 'PENDING'"
-            iconPos="right"
-            icon="pi pi-arrow-right"
-        ></p-button>
+        <div class="flex flex-col items-end gap-2">
+            <p-button
+                [label]="request.form.status === 'PENDING' ? 'Validating...' : 'Get Overall Stoichiometry'"
+                type="submit"
+                styleClass="btn-submit-request"
+                [disabled]="!request.form.valid"
+                [loading]="request.form.status === 'PENDING'"
+                iconPos="right"
+                icon="pi pi-arrow-right"
+            ></p-button>
+            <span *ngIf="examplePrimaryPrecursorUsed && exampleTargetMoleculeUsed">
+                <i class="pi pi-exclamation-triangle text-yellow-400"></i>
+                A precomputed result will be returned for the example values.
+            </span>
+        </div>
     </div>
 </form>
 
