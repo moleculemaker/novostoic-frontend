@@ -21,6 +21,8 @@ export class DgPredictorComponent {
   reactionTypeInput$ =
     this.request.form.controls["reactionInputType"].valueChanges;
 
+  exampleJobId = "38d59b3a94db4b48a843a5dfb7c51de3";
+
   constructor(
     private router: Router, 
     private novostoicService: NovostoicService
@@ -28,6 +30,11 @@ export class DgPredictorComponent {
 
   onSubmit() {
     if (!this.request.form.valid) {
+      return;
+    }
+
+    if (this.request.isExampleUsed()) {
+      this.router.navigate([NovostoicTools.THERMODYNAMICAL_FEASIBILITY, "result", this.exampleJobId]);
       return;
     }
 
