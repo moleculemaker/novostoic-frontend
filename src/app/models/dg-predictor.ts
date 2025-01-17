@@ -98,6 +98,15 @@ export class ThermodynamicalFeasibilityRequest {
     return request;
   }
 
+  isExampleUsed() {
+    return this.form.controls["reactions"].value.length === 1
+      && this.form.controls["reactions"].value[0].reactionKeggId === "C01745 + C00004 <=> N00001 + C00003 + C00001"
+      && this.form.controls["reactions"].value[0].novelMolecules?.length === 1
+      && this.form.controls["reactions"].value[0].novelMolecules?.[0].value === "InChI=1S/C14H12O/c15-14-8-4-7-13(11-14)10-9-12-5-2-1-3-6-12/h1-11,15H/b10-9+"
+      && this.form.controls["ph"].value === 7
+      && this.form.controls["ionicStrength"].value === 0.1;
+  }
+
   addReaction() {
     this.form.controls["reactions"].push(
       this.form.controls["reactionInputType"].value === "smiles"
