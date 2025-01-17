@@ -164,6 +164,23 @@ export class PathwaySearchRequest {
     return request;
   }
 
+  isExampleUsed() {
+    return this.form.controls["primaryPrecursor"].value.molecule === "MNXM732866" &&
+      this.form.controls["primaryPrecursor"].value.amount === 1 &&
+      this.form.controls["targetMolecule"].value.molecule === "MNXM5188" &&
+      this.form.controls["targetMolecule"].value.amount === 1 &&
+      this.form.controls["coReactants"].value[0].molecule === "MNXM10" &&
+      this.form.controls["coReactants"].value[0].amount === 1 &&
+      this.form.controls["coProducts"].value[0].molecule === "MNXM8" &&
+      this.form.controls["coProducts"].value[0].amount === 1 &&
+      this.form.controls["coProducts"].value[1].molecule === "MNXM13" &&
+      this.form.controls["coProducts"].value[1].amount === 1 &&
+      this.form.controls["maxSteps"].value === 3 &&
+      this.form.controls["maxPathways"].value === 3 &&
+      this.form.controls["useEnzymeSelection"].value === false &&
+      this.form.controls["numEnzymeCandidates"].value === 0;
+  }
+
   toRequestBody() {
     const jobInfo = {
       substrate: this.form.controls["primaryPrecursor"].value,

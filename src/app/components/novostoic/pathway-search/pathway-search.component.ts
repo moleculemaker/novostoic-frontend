@@ -43,6 +43,7 @@ export class PathwaySearchComponent implements OnInit {
   acceptLabel = "Clear all and start a new request input"
   rejectLabel = "Stay on this page"
   confirmCallback = this.clearAllCallback
+  exampleJobId = "bbabbd4fb3b747a7a7302172698d7499";
 
   constructor(
     private route: ActivatedRoute,
@@ -97,6 +98,11 @@ export class PathwaySearchComponent implements OnInit {
 
   onSubmit() {
     if (!this.request.form.valid) {
+      return;
+    }
+
+    if (this.request.isExampleUsed()) {
+      this.router.navigate([NovostoicTools.PATHWAY_SEARCH, "result", this.exampleJobId]);
       return;
     }
 
