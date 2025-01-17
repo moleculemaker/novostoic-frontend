@@ -15,6 +15,7 @@ import { NovostoicService } from "~/app/services/novostoic.service";
 })
 export class EnzRankComponent {
   request = new EnzymeSelectionRequest();
+  exampleJobId = "23f7f85f3b0545839785efc6368b4fe5";
 
   constructor(
     private router: Router, 
@@ -27,6 +28,11 @@ export class EnzRankComponent {
 
   onSubmit() {
     if (!this.request.form.valid) {
+      return;
+    }
+
+    if (this.request.isExampleUsed()) {
+      this.router.navigate([NovostoicTools.ENZYME_ACTIVITY, "result", this.exampleJobId]);
       return;
     }
 
