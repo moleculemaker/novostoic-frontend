@@ -116,7 +116,7 @@
     </div>
     <ul *ngIf="(fillColorsMap$ | async) as colorMap">
         <li
-            [pTooltip]="collapsed$.value ? 'Thermodynamical Feasibility' : ''"
+            [pTooltip]="collapsed$.value ? 'Thermodynamic Feasibility' : ''"
             [class]="'p-2'
             + (collapsed$.value ? ' px-4': ' pl-8')
             + (NOVOSTOIC_TOOLS_STATUS_MAP[NovostoicTools.THERMODYNAMICAL_FEASIBILITY] !== ToolStatus.DISABLED ? ' hover:bg-gray-100' : '')
@@ -161,7 +161,7 @@
                 <h6 class="opacity-100 leading-lg" 
                     *ngIf="!collapsed$.value"
                     [class.text-text-primary]="selectedTool$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY"
-                    [class.font-semibold]="selectedTool$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY">Thermodynamical Feasibility</h6></a
+                    [class.font-semibold]="selectedTool$.value === NovostoicTools.THERMODYNAMICAL_FEASIBILITY">Thermodynamic Feasibility</h6></a
             >
         </li>
         <li
