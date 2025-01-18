@@ -251,8 +251,8 @@
                     >
                         <div class="flex gap-3">
                             <small>1 Primary Precursor</small>
-                            <small>{{ request.form.controls['coReactants'].length }} Co-Reactants</small>
-                            <small>{{ request.form.controls['coProducts'].length }} Co-Products</small>
+                            <small>{{ request.form.controls['coReactants'].length }} Co-Reactant{{ request.form.controls['coReactants'].length > 1 ? 's' : '' }}</small>
+                            <small>{{ request.form.controls['coProducts'].length }} Co-Product{{ request.form.controls['coProducts'].length > 1 ? 's' : '' }}</small>
                             <small>1 Target Molecule</small>
                         </div>
                         <small>Overall Stoichiometry</small>
@@ -276,7 +276,7 @@
                 <ng-template pTemplate="content">
                     <div class="p-4 px-6">
                         <section>
-                            <h6 class="font-semibold opacity-100 leading-base">Pathway Search setting</h6>
+                            <h6 class="font-semibold opacity-100 leading-base">Pathway Search Setting</h6>
                             <small class="block pt-1 italic opacity-60 leading-xl">
                                 Tip: More you choose, the longer it takes.
                             </small>
@@ -288,9 +288,9 @@
                                         class="flex items-center justify-between my-2"
                                     >
                                         <span>Number of reaction steps per pathway design</span>
-                                        <i
+                                        <!-- <i
                                             class="pi pi-info-circle"
-                                        ></i>
+                                        ></i> -->
                                     </span>
                                     <input
                                         type="number"
@@ -320,9 +320,9 @@
                                         <span
                                             >Number of pathway generated</span
                                         >
-                                        <i
+                                        <!-- <i
                                             class="pi pi-info-circle"
-                                        ></i>
+                                        ></i> -->
                                     </span>
                                     <input
                                         type="number"
@@ -357,14 +357,14 @@
                                 <div class="flex items-center">
                                     <p-checkbox value="any" formControlName="thermodynamicReactionsFilterMode"></p-checkbox>
                                     <label class="ml-2">Check the box to find pathways with thermodynamically feasible reactions
-                                        <i class="ml-2 pi pi-info-circle"></i>
+                                        <!-- <i class="ml-2 pi pi-info-circle"></i> -->
                                     </label>
                                 </div>
                             </div>
                         </section>
                         <hr class="my-4" />
                         <section>
-                            <h6 class="font-semibold opacity-100 leading-base">Enzyme selection for novel reactions</h6>
+                            <h6 class="font-semibold opacity-100 leading-base">Enzyme Selection for Novel Reactions</h6>
                             <small class="block pt-1 italic opacity-60 leading-xl">
                                 Rank-ordering known enzyme candidates for the novel reactions to select top enzyme candidates
                             </small>
