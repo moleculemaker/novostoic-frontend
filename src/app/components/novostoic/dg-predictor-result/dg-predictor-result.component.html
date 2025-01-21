@@ -63,7 +63,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th>No.</th>
-                        <th><span class="px-4"></span>Reaction{{ (response$ | async).length > 1 ? 's' : '' }}</th>
+                        <th><span class="px-4"></span>Reaction{{ ((response$ | async) && (response$ | async).length > 1) ? 's' : '' }}</th>
                         <th pSortableColumn="gibbsEnergy">
                             ΔG°<p-sortIcon
                                 field="gibbsEnergy"
