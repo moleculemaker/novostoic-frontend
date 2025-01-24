@@ -16,7 +16,7 @@ import { ChemicalAutoCompleteResponse, JobType } from "~/app/api/mmli-backend/v1
   }
 })
 export class PathwaySearchComponent implements OnInit {
-  request = new PathwaySearchRequest();
+  request = new PathwaySearchRequest(this.novostoicService);
   editing$ = new BehaviorSubject(false);
   showDialog$ = new BehaviorSubject(false);
   warningVisible$ = new BehaviorSubject(false);
@@ -149,6 +149,6 @@ export class PathwaySearchComponent implements OnInit {
   useExampleCallback() {
     this.warningVisible$.next(false);
     this.editing$.next(true);
-    this.request = PathwaySearchRequest.useExample();
+    this.request = PathwaySearchRequest.useExample(this.novostoicService);
   }
 }

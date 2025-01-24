@@ -1,6 +1,4 @@
-<div class="marvin-filter-container"
-    [class.invalid]="errors && dirty"
->
+<div class="marvin-filter-container">
     <div class="p-inputgroup">
         <input
             title="Input your molecule"
@@ -8,49 +6,38 @@
             type="text"
             class="border-0"
             [placeholder]="placeholder"
-            [ngModel]="userInput$.value"
-            (ngModelChange)="userInput$.next($event)"
-            (blur)="onChange(userInput$.value)"
+            [(ngModel)]="textInput"
         />
         <button
             pButton
             type="button"
             class="p-button-secondary p-button-link p-button-outlined"
             icon="pi pi-pencil mr-2"
-            (click)="showDialog$.next(true)"
+            (click)="showDialog = true"
         >
             <span class="font-semibold">Draw / Upload</span>
         </button>
     </div>
 </div>
 
-<div class="text-[--status-error-color] text-xs my-1" *ngIf="errors && dirty">
-    <div *ngIf="errors['required']">This field is required</div>
-    <div *ngIf="errors['chemicalNotSupported']">Chemical not supported</div>
-    <div *ngIf="errors['kegg_id']">This tool requires the chemical with an associated KEGG ID</div>
-</div>
+<ng-content select="[errors]"></ng-content>
 
 <p-dialog
-    *ngIf="showDialog$.value"
+    *ngIf="showDialog"
     class="marvin-editor-container"
-    [visible]="showDialog$.value"
-    (visibleChange)="showDialog$.next($event)"
+    [(visible)]="showDialog"
     [modal]="true"
     [draggable]="false"
     [resizable]="false"
 >
     <app-marvin-js-editor
         class="marvin-editor"
-        [smiles]="(smiles$ | async) || ''"
-        (smilesChange)="userInput$.next($event)"
+        [(ngModel)]="marvinInput"
     ></app-marvin-js-editor>
     <ng-template pTemplate="footer">
         <p-button
             icon="pi pi-check"
-            (click)="
-                onChange(userInput$.value);
-                showDialog$.next(false);
-            "
+            (click)="showDialog = false"
             label="Search Structure"
             styleClass="bg-[#224063]"
         ></p-button>
