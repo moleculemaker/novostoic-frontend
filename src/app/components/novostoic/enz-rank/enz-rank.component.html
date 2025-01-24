@@ -35,11 +35,9 @@
                 </div>
                 <app-marvinjs-input
                     placeholder="CC(=O)C(=O)O"
-                    [formControl]="request.form.controls['primaryPrecursor']"
-                    [errors]="request.form.controls['primaryPrecursor'].errors"
-                    [dirty]="request.form.controls['primaryPrecursor'].dirty"
+                    formControlName="primaryPrecursor"
+                    appOptstoicChemicalValidator
                     (onChemicalValidated)="request.setPrimaryPrecursor($event!)"
-                    outputFormat="smiles"
                 ></app-marvinjs-input>
 
                 <!-- Enzyme Sequence Input -->

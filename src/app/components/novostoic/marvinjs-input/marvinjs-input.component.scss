@@ -6,10 +6,6 @@
   border-radius: 6px;
   background-color: white;
 
-  &.invalid {
-    border-color: var(--status-error-color);
-  }
-
   .p-inputgroup{
     input{
       border-width: 0px;

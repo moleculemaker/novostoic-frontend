@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FilterService } from "primeng/api";
 import { Table } from "primeng/table";
-import { BehaviorSubject, Observable, Subscription, filter, map, of, shareReplay, skipUntil, switchMap, take, takeLast, takeUntil, takeWhile, tap, timer } from "rxjs";
+import { Subscription, map, tap, take } from "rxjs";
 
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
-import { JobStatus, JobType, JobsService } from "~/app/api/mmli-backend/v1";
+import { JobType } from "~/app/api/mmli-backend/v1";
 import {
   NovostoicMolecule,
   NovostoicStoichiometry,
@@ -28,20 +28,50 @@ export class OverallStoichiometryResultComponent extends JobResult implements On
   override jobId: string = this.route.snapshot.paramMap.get("id") || "";
   override jobType: JobType = JobType.NovostoicOptstoic;
 
+  cofactorOptions: { value: NovostoicMolecule, label: string }[] = [];
+  selectedCofactors: NovostoicMolecule[] = [];
+  selectedCofactorsLabel: string = "Select cofactors";
+
   response$ = this.jobResultResponse$.pipe(
     map((response) => response as OverallStoichiometryResponse),
+    tap((response) => {
+      response.results.forEach((result) => {
+        result.deltaG = parseFloat(result.deltaG as unknown as string);
+      });
+
+      // build options for filter
+      const moleculeSet = new Set();
+      const buildOptions = (molecules: NovostoicMolecule[]) => {
+        const options: { value: NovostoicMolecule, label: string }[] = [];
+        molecules.forEach((molecule) => {
+          if (!moleculeSet.has(molecule.kegg_id) 
+            || !moleculeSet.has(molecule.name)
+            || !moleculeSet.has(molecule.smiles)
+          ) {
+            options.push({
+              value: molecule,
+              label: molecule.name || molecule.kegg_id || molecule.smiles || "Unknown",
+            });
+          }
+  
+          moleculeSet.add(molecule.kegg_id);
+          moleculeSet.add(molecule.name);
+          moleculeSet.add(molecule.smiles);
+        });
+
+        return options;
+      };
+
+      this.cofactorOptions = buildOptions(
+        [
+          ...response.results.flatMap((result) => result.stoichiometry.products.map((product) => product.molecule)),
+          ...response.results.flatMap((result) => result.stoichiometry.reactants.map((reactant) => reactant.molecule)),
+        ]
+      );
+    })
   );
 
-  showResultsFilter$ = new BehaviorSubject(false);
-
-  filters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
-  filterOptions$ = this.response$.pipe(map(({ results }) => results.map((result) => [
-    ...result.stoichiometry.reactants.map((reactant) => reactant.molecule),
-    ...result.stoichiometry.products.map((product) => product.molecule),
-  ]).flat()))
-  filterValueStr$ = this.filters$.pipe(
-    map((filters) => filters.map((filter) => filter.name).join(",")),
-  );
+  showResultsFilter = false;
 
   subscriptions: Subscription[] = [];
 
@@ -105,9 +135,15 @@ export class OverallStoichiometryResultComponent extends JobResult implements On
     );
   }
 
+  updateSelectedCofactorsLabel() {
+    this.selectedCofactorsLabel = this.selectedCofactors.map((cofactor) => 
+      cofactor.name || cofactor.kegg_id || cofactor.smiles || "Unknown"
+    ).join(", ");
+  }
+
   applyFilters() {
     this.resultsTable.filter(
-      this.filters$.value,
+      this.selectedCofactors,
       "stoichiometry",
       "containsMolecule",
     );
