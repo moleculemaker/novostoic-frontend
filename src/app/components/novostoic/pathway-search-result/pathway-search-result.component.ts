@@ -43,7 +43,7 @@ export class PathwaySearchResultComponent extends JobResult {
             reactants: reaction.reactants.filter((reactant) => {
               return reactant.molecule.name !== reaction.primaryPrecursor?.name;
             }),
-            isThermodynamicalInfeasible: reaction.deltaG.gibbsEnergy > this.novostoicService.thermoFeasibilityMax,
+            isThermodynamicalInfeasible: reaction.deltaG.gibbsEnergy > 0,
           }))
         }
       })
@@ -126,8 +126,8 @@ export class PathwaySearchResultComponent extends JobResult {
   ]).pipe(map(([intermediates, cofactors]) => intermediates.length + cofactors.length));
 
   selectedThermoFeasibleMode$ = new BehaviorSubject<'all' | 'any' | null>(null);
-  feasibleRangeMin$ = new BehaviorSubject<number>(this.novostoicService.thermoFeasibilityMin);
-  feasibleRangeMax$ = new BehaviorSubject<number>(this.novostoicService.thermoFeasibilityMax);
+  feasibleRangeMin$ = new BehaviorSubject<number>(this.novostoicService.thermoFeasibilityFilterMin);
+  feasibleRangeMax$ = new BehaviorSubject<number>(this.novostoicService.thermoFeasibilityFilterMax);
   feasibleRange$ = combineLatest([
     this.feasibleRangeMin$,
     this.feasibleRangeMax$,
@@ -271,8 +271,8 @@ export class PathwaySearchResultComponent extends JobResult {
   resetFilters() {
     this.intermediatesFilters$.next([]);
     this.coFactorsFilters$.next([]);
-    this.feasibleRangeMax$.next(this.novostoicService.thermoFeasibilityMax);
-    this.feasibleRangeMin$.next(this.novostoicService.thermoFeasibilityMin);
+    this.feasibleRangeMax$.next(this.novostoicService.thermoFeasibilityFilterMax);
+    this.feasibleRangeMin$.next(this.novostoicService.thermoFeasibilityFilterMin);
     this.selectedThermoFeasibleMode$.next(null);
   }
 

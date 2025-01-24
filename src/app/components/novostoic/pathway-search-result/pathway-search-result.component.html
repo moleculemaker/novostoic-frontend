@@ -175,10 +175,10 @@
                                                                 <ng-container
                                                                     *ngTemplateOutlet="tableCellImg; context: { 
                                                                         $implicit: reaction.targetMolecule,
-                                                                        thermoInfeasible: reaction.deltaG.gibbsEnergy > novostoicService.thermoFeasibilityMax,
+                                                                        thermoInfeasible: reaction.deltaG.gibbsEnergy > 0,
                                                                         highlight: highlightPathway === i,
                                                                         nextThermoInfeasible: j === pathway.reactions.length - 1 
-                                                                            ? false : pathway.reactions[j + 1].deltaG.gibbsEnergy > novostoicService.thermoFeasibilityMax,
+                                                                            ? false : pathway.reactions[j + 1].deltaG.gibbsEnergy > 0,
                                                                     }"
                                                                 ></ng-container>
                                                             </ng-container>
@@ -657,15 +657,15 @@
                     <input title="feasible range max" pInputText class="w-1/2" [ngModel]="feasibleRangeMax$.value" (ngModelChange)="feasibleRangeMax$.next($event)"/>
                 </div>
                 <p-slider 
-                    [min]="novostoicService.thermoFeasibilityMin" 
-                    [max]="novostoicService.thermoFeasibilityMax" 
+                    [min]="novostoicService.thermoFeasibilityFilterMin" 
+                    [max]="novostoicService.thermoFeasibilityFilterMax" 
                     [step]="200" [range]="true" [ngModel]="feasibleRange$ | async" (ngModelChange)="
                     feasibleRangeMin$.next($event[0]);
                     feasibleRangeMax$.next($event[1])"
                 ></p-slider>
                 <div class="flex justify-between w-full mt-2">
-                    <span class="text-xs">{{ novostoicService.thermoFeasibilityMin }}</span>
-                    <span class="text-xs">+{{ novostoicService.thermoFeasibilityMax }}</span>
+                    <span class="text-xs">{{ novostoicService.thermoFeasibilityFilterMin }}</span>
+                    <span class="text-xs">+{{ novostoicService.thermoFeasibilityFilterMax }}</span>
                 </div>
             </div>
         </div>

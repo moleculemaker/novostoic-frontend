@@ -23,8 +23,8 @@ export class NovostoicService {
     submitted_at: "2020-01-01 10:10:10"
   };
 
-  readonly thermoFeasibilityMax = 50;
-  readonly thermoFeasibilityMin = -8000;
+  readonly thermoFeasibilityFilterMax = 1000;
+  readonly thermoFeasibilityFilterMin = -8000;
 
   constructor(
     private apiService: DefaultService,
