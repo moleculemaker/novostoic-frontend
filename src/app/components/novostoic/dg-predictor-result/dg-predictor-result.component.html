@@ -85,13 +85,13 @@
                             <span class="text-xl font-bold">{{ row.gibbsEnergy > 0 ? '+' : ''}}{{ row.gibbsEnergy | number:"1.0-2" }} </span> 
                             <span class="text-xs">± {{ row.std | number:"1.1-1" }} kJ/mol</span></td>
                         <td>
-                            <p-chip *ngIf="row.gibbsEnergy < 20" styleClass="bg-blue-50 text-[#326FD1]">
+                            <p-chip *ngIf="row.gibbsEnergy < 0" styleClass="bg-blue-50 text-[#326FD1]">
                                 <div class="flex items-center gap-2 py-2">
                                     <i class="pi pi-check-circle"></i>
                                     <div>Feasible</div>
                                 </div>
                             </p-chip>
-                            <p-chip *ngIf="row.gibbsEnergy > 20" styleClass="bg-yellow-50 text-yellow-600">
+                            <p-chip *ngIf="row.gibbsEnergy > 0" styleClass="bg-yellow-50 text-yellow-600">
                                 <div class="flex items-center gap-2 py-2">
                                     <i class="pi pi-exclamation-triangle"></i>
                                     <div>Infeasible</div>
