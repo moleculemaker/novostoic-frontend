@@ -43,7 +43,7 @@
                 <!-- Enzyme Sequence Input -->
                 <p-panel styleClass="mt-10">
                     <ng-template pTemplate="header">
-                        <span class="grow">Enzyme Sequence Input</span>
+                        <span class="grow">Enzyme Sequences Input</span>
                         <div class="flex gap-2">
                             <button
                                 type="button"
@@ -72,13 +72,28 @@
                     <textarea
                         rows="5"
                         class="w-full border-none"
-                        placeholder="example: >sp|P68871|HBB_HUMAN Hemoglobin subunit beta OS=Homo sapiens GN=HBB PE=1 SV=2
-                        MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHLKGTFLKGTF"
+                        placeholder="Please enter enzyme amino acid sequence in FASTA format. Multiple enzyme sequences should be separated by a new line. Example:
+
+>sp|P68871|HBB_HUMAN Hemoglobin subunit beta OS=Homo sapiens GN=HBB PE=1 SV=2
+MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHLKGTFLKGTF"
                         pInputTextarea
                         [autoResize]="true"
                         [value]="request.form.controls['enzymeSequence'].value"
                         formControlName="enzymeSequence"
                     ></textarea>
+                    <small *ngIf="request.form.controls['enzymeSequence'].errors">
+                        {{ request.form.controls['enzymeSequence'].errors | json }}
+                    </small>
+
+                    <hr />
+                    <div
+                        class="flex justify-between p-1 px-4 rounded-b-md bg-gray-50"
+                    >
+                        <div class="flex gap-3">
+                            <small>{{ request.validSeqNum }}/{{ request.totalSeqNum }} Enzyme Sequence{{ request.totalSeqNum > 1 ? 's' : '' }}</small>
+                        </div>
+                        <small>Enzyme Selection</small>
+                    </div>
                 </p-panel>
             </div>
         </div>

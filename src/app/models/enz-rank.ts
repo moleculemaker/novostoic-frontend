@@ -1,16 +1,70 @@
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { NovostoicMolecule } from "./overall-stoichiometry";
 import { ChemicalAutoCompleteResponse } from "../api/mmli-backend/v1";
 
 export class EnzymeSelectionRequest {
   form = new FormGroup({
     primaryPrecursor: new FormControl("", [Validators.required]),
-    enzymeSequence: new FormControl("", [Validators.required]),
+    enzymeSequence: new FormControl("", [Validators.required, this.enzSeqValidator.bind(this)]),
     agreeToSubscription: new FormControl(false),
     subscriberEmail: new FormControl("", [Validators.email]),
   });
 
   primaryPrecursor: ChemicalAutoCompleteResponse | null;
+  static MAX_SEQ_NUM = 20;
+  totalSeqNum = 0;
+  validSeqNum = 0;
+
+  enzSeqValidator(control: AbstractControl): ValidationErrors | null {
+    const sequence = control.value;
+    let splitString: string[] = sequence.split('>').slice(1);
+
+    const validAminoAcid = new RegExp("[^GPAVLIMCFYWHKRQNEDST]", "i");
+
+    if (splitString.length > EnzymeSelectionRequest.MAX_SEQ_NUM) {
+      return { exceedsMaxSeqNum: true }
+    }
+
+    const errors = splitString.map((seq: string, idx: number) => {
+      let aminoHeader: string = seq.split('\n')[0];
+      let aminoSeq: string = seq.split('\n').slice(1).join('');
+
+      if (aminoSeq.slice(-1) == '*') {
+        aminoSeq = aminoSeq.slice(0,-1);
+      }
+      aminoSeq = aminoSeq.toUpperCase();
+
+      if (aminoHeader.length == 0) {
+        return { headerCannotBeEmpty: idx }
+      }
+
+      if (validAminoAcid.test(aminoSeq)) {
+        return { invalidSequence: idx }
+      }
+
+      if (aminoSeq.length > 1022) {
+        return { sequenceLengthGreaterThan1022: idx }
+      }
+
+      if (aminoSeq.length == 0) {
+        return { sequenceLengthIs0: idx }
+      }
+
+      return null;
+    });
+
+    const retVal = errors.reduce((acc, error) => {
+      if (error) {
+        Object.assign(acc, error);
+      }
+      return acc;
+    }, {});
+
+    this.totalSeqNum = splitString.length;
+    this.validSeqNum = splitString.length - errors.filter(error => error).length;
+
+    return retVal;
+  }
 
   static example() {
     const request = new EnzymeSelectionRequest();
