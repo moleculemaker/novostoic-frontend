@@ -26,6 +26,29 @@ export class EnzRankComponent {
     this.request = EnzymeSelectionRequest.example();
   }
 
+  getErrorString(errors: any) {
+    return errors.map((error: any) => {
+      const key = Object.keys(error)[0];
+      const value = Object.values(error)[0];
+      switch (key) {
+        case 'noSequence':
+          return `No sequence found.`;
+        case 'exceedsMaxSeqNum':
+          return `Exceeds maximum number of sequences (${this.request.MAX_SEQ_NUM}).`;
+        case 'headerCannotBeEmpty':
+          return `Header cannot be empty at sequence idx ${value}.`;
+        case 'invalidSequence':
+          return `Invalid sequence for sequence name "${value}".`;
+        case 'sequenceLengthGreaterThan1022':
+          return `Sequence length greater than 1022 for sequence name "${value}".`;
+        case 'sequenceLengthIs0':
+          return `Sequence length is 0 for sequence name "${value}".`;
+        default:
+          return null;
+      }
+    }).filter((error: string | null) => error !== null).join('<br/>');
+  }
+
   onSubmit() {
     if (!this.request.form.valid) {
       return;

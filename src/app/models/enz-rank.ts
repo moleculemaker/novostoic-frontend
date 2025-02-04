@@ -11,9 +11,10 @@ export class EnzymeSelectionRequest {
   });
 
   primaryPrecursor: ChemicalAutoCompleteResponse | null;
-  static MAX_SEQ_NUM = 20;
+  MAX_SEQ_NUM = 20;
   totalSeqNum = 0;
   validSeqNum = 0;
+  sequences: string[] = [];
 
   enzSeqValidator(control: AbstractControl): ValidationErrors | null {
     const sequence = control.value;
@@ -21,13 +22,19 @@ export class EnzymeSelectionRequest {
 
     const validAminoAcid = new RegExp("[^GPAVLIMCFYWHKRQNEDST]", "i");
 
-    if (splitString.length > EnzymeSelectionRequest.MAX_SEQ_NUM) {
-      return { exceedsMaxSeqNum: true }
+    if (splitString.length == 0) {
+      return { errors: [{ noSequence: true }]}
     }
 
+    if (splitString.length > this.MAX_SEQ_NUM) {
+      return { errors: [{ exceedsMaxSeqNum: true }] }
+    }
+
+    this.sequences = [];
     const errors = splitString.map((seq: string, idx: number) => {
       let aminoHeader: string = seq.split('\n')[0];
       let aminoSeq: string = seq.split('\n').slice(1).join('');
+      let aminoSeqName: string = aminoHeader.split(' ')[0];
 
       if (aminoSeq.slice(-1) == '*') {
         aminoSeq = aminoSeq.slice(0,-1);
@@ -39,31 +46,29 @@ export class EnzymeSelectionRequest {
       }
 
       if (validAminoAcid.test(aminoSeq)) {
-        return { invalidSequence: idx }
+        return { invalidSequence: aminoSeqName }
       }
 
       if (aminoSeq.length > 1022) {
-        return { sequenceLengthGreaterThan1022: idx }
+        return { sequenceLengthGreaterThan1022: aminoSeqName }
       }
 
       if (aminoSeq.length == 0) {
-        return { sequenceLengthIs0: idx }
+        return { sequenceLengthIs0: aminoSeqName }
       }
 
+      this.sequences.push(`${aminoSeqName}:${aminoSeq}`);
       return null;
     });
-
-    const retVal = errors.reduce((acc, error) => {
-      if (error) {
-        Object.assign(acc, error);
-      }
-      return acc;
-    }, {});
 
     this.totalSeqNum = splitString.length;
     this.validSeqNum = splitString.length - errors.filter(error => error).length;
 
-    return retVal;
+    if (errors.filter(error => error).length === 0) {
+      return null;
+    }
+
+    return { errors: errors.filter(error => error) };
   }
 
   static example() {
@@ -104,7 +109,7 @@ export class EnzymeSelectionRequest {
     const jobInfo = {
       primary_precursor: 'N00001',
       add_info: `N00001:${this.primaryPrecursor.smiles}`,
-      enzyme_sequences: [this.form.controls["enzymeSequence"].value?.replaceAll('\\n', '') || ''],
+      enzyme_sequences: this.sequences,
     };
     return {
       job_info: JSON.stringify(jobInfo),
