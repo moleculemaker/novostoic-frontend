@@ -28,6 +28,11 @@ export class EnzRankResultComponent extends JobResult {
         enzymeSequence: 'user_input_map' in this.jobInfo 
           ? this.jobInfo.user_input_map[result.enzymeSequence] 
           : result.enzymeSequence,
+        color: result.activityScore > 0.66 
+          ? '#2152CE' 
+          : (result.activityScore > 0.33 
+            ? '#7FC9EF' 
+            : '#F2D066'),
         iid: Math.random().toString(36).substring(2, 15),
       })),
     })),

@@ -26,6 +26,24 @@ export class EnzRankComponent {
     this.request = EnzymeSelectionRequest.example();
   }
 
+  uploadFile() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.txt, .fasta, .fa';
+    fileInput.onchange = (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const text = event.target?.result as string;
+          this.request.form.controls['enzymeSequence'].setValue(text);
+        };
+        reader.readAsText(file);
+      }
+    };
+    fileInput.click();
+  }
+
   getErrorString(errors: any) {
     return errors.map((error: any) => {
       const key = Object.keys(error)[0];

@@ -48,6 +48,7 @@
                             <button
                                 type="button"
                                 class="rounded-lg border border-[--surface-d] p-2"
+                                (click)="uploadFile()"
                             >
                                 <i class="pi pi-upload"></i>
                                 Upload
@@ -99,7 +100,7 @@ MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLD
                                                 No sequence found.
                                             </small>
                                             <small class="text-red-500" *ngSwitchCase="'containsColon'">
-                                                Sequence name cannot contain colon.
+                                                Sequence name "{{ errorKeyValPair[0].value }}" cannot contain colon.
                                             </small>
                                             <small class="text-red-500" *ngSwitchCase="'exceedsMaxSeqNum'">
                                                 Exceeds maximum number of sequences ({{ request.MAX_SEQ_NUM }}).
