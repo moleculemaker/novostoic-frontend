@@ -605,7 +605,7 @@
                 (ngModelChange)="intermediatesFilters$.next($event)"
             >
                 <ng-template pTemplate="item" let-item>
-                    {{ item.name }}
+                    {{ item.label }}
                 </ng-template>
                 <ng-template pTemplate="selectedItems">
                     {{ (filterIntermediatesStr$ | async) || 'Select intermediates' }}
@@ -624,7 +624,7 @@
                 (ngModelChange)="coFactorsFilters$.next($event)"
             >
                 <ng-template pTemplate="item" let-item>
-                    {{ item.name }}
+                    {{ item.label }}
                 </ng-template>
                 <ng-template pTemplate="selectedItems">
                     {{ (filterCoFactorsStr$ | async) || 'Select Co-Reactants & Co-Products' }}

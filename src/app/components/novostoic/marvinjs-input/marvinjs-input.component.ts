@@ -1,8 +1,5 @@
-import { Component, EventEmitter, Input, Output, forwardRef } from "@angular/core";
-import { AbstractControl, AsyncValidator, ControlValueAccessor, NG_ASYNC_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from "@angular/forms";
-import { BehaviorSubject, Observable, combineLatest, combineLatestWith, debounce, debounceTime, filter, first, map, of, share, shareReplay, single, switchMap, take, tap, throttleTime, withLatestFrom } from "rxjs";
-import { ChemicalAutoCompleteResponse } from "~/app/api/mmli-backend/v1";
-import { NovostoicService } from "~/app/services/novostoic.service";
+import { Component, EventEmitter, forwardRef, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
   selector: "app-marvinjs-input",
@@ -13,100 +10,63 @@ import { NovostoicService } from "~/app/services/novostoic.service";
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => MarvinjsInputComponent),
       multi: true
-    },
-    {
-      provide: NG_ASYNC_VALIDATORS,
-      useExisting: forwardRef(() => MarvinjsInputComponent),
-      multi: true
     }
   ]
 })
-export class MarvinjsInputComponent implements ControlValueAccessor, AsyncValidator {
+export class MarvinjsInputComponent implements OnChanges, ControlValueAccessor {
   @Input() placeholder: string = "";
-  @Input() errors: ValidationErrors | null;
-  @Input() dirty: boolean = false;
-  @Input() outputFormat: string = 'metanetx_id'
-  @Output() onChemicalValidated = new EventEmitter<ChemicalAutoCompleteResponse | null>();
+  @Input() ngModel: string = '';
+  @Output() ngModelChange = new EventEmitter<string>();
 
-  userInput$ = new BehaviorSubject<string>("");
+  showDialog = false;
 
-  showDialog$ = new BehaviorSubject(false);
+  #textInput = '';
+  #marvinInput = '';
 
-  validateCache = new Map();
-  validatedChemical$ = this.userInput$.pipe(
-    debounceTime(1000),
-    switchMap((v) => 
-      this.validateCache.has(v) 
-      ? of(this.validateCache.get(v) as ChemicalAutoCompleteResponse)
-      : this.novostoicService.validateChemical(v)
-    ),
-    withLatestFrom(this.userInput$),
-    tap(([chemical, v]) => {
-      if (!this.validateCache.has(v)) {
-        this.validateCache.set(v, chemical);
-        this.onChange(
-          chemical 
-          ? (chemical[this.outputFormat as keyof typeof chemical] || v) 
-          : v
-        );
-        this.onTouched();
-      }
-    }),
-  );
+  onChange: (value: string) => void = () => {};
+  onTouched: () => void = () => {};
 
-  smiles$ = this.validatedChemical$.pipe(
-    filter(([chemical, _]) => !!chemical),
-    map(([chemical, _]) => chemical!.smiles),
-  );
-
-  constructor(private novostoicService: NovostoicService) {}
-  
-  /* -------------------------------------------------------------------------- */
-  /*                      Control Value Accessor Interface                      */
-  /* -------------------------------------------------------------------------- */
-  disabled = false;
-  onChange = (value: string) => {};
-  onTouched = () => {};
-
-  writeValue(obj: string): void {
-    this.userInput$.next(obj);
+  get textInput() {
+    return this.#textInput;
   }
 
-  registerOnChange(fn: any): void {
+  set textInput(value: string) {
+    this.#textInput = value;
+    this.ngModelChange.emit(value);
+    this.onChange(value);
+    this.onTouched();
+  }
+
+  get marvinInput() {
+    return this.#marvinInput;
+  }
+
+  set marvinInput(value: string) {
+    this.#marvinInput = value;
+    this.textInput = value;
+  }
+
+  constructor() {
+    if (this.ngModel) {
+      this.#textInput = this.ngModel;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['ngModel']) {
+      this.#textInput = this.ngModel;
+    }
+  }
+
+  writeValue(value: string): void {
+    this.#textInput = value;
+  }
+
+  registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /*                          Async Validator Interface                         */
-  /* -------------------------------------------------------------------------- */
-  onValidatorChange = () => {};
-
-  validate(control: AbstractControl<any, any>): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    return this.validatedChemical$.pipe(
-      map(([chemical, _]) => {
-        if (chemical) {
-          if (chemical[this.outputFormat as keyof typeof chemical]) {
-            this.onChemicalValidated.emit(chemical);
-            return null;
-          } else {
-            return { [this.outputFormat]: true };
-          }
-        }
-        return { chemicalNotSupported: true };
-      }),
-      first()
-    );
-  }
-
-  registerOnValidatorChange?(fn: () => void): void {
-    this.onValidatorChange = fn;
   }
 }

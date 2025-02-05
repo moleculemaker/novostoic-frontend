@@ -76,6 +76,8 @@ import { CenterLayoutComponent } from './components/novostoic/center-layout/cent
 import { MoleculeImageComponent } from './components/novostoic/molecule-image/molecule-image.component';
 import { ChemicalInputComponent } from './components/novostoic/chemical-input/chemical-input.component';
 import { MoleculeInfoOverlayComponent } from './components/novostoic/molecule-info-overlay/molecule-info-overlay.component';
+import { MoleculeInputWithAmountComponent } from './components/novostoic/molecule-input-with-amount/molecule-input-with-amount.component';
+import { OptstoicChemicalValidatorDirective } from './directives/optstoic-chemical-validator.directive';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -106,6 +108,8 @@ const initAppFn = (envService: EnvironmentService) => {
     MoleculeImageComponent,
     ChemicalInputComponent,
     MoleculeInfoOverlayComponent,
+    MoleculeInputWithAmountComponent,
+    OptstoicChemicalValidatorDirective,
     // FileDragNDropDirective,
     // ConfigurationComponent,
     // ResultsComponent,

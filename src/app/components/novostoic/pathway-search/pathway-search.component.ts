@@ -16,7 +16,7 @@ import { ChemicalAutoCompleteResponse, JobType } from "~/app/api/mmli-backend/v1
   }
 })
 export class PathwaySearchComponent implements OnInit {
-  request = new PathwaySearchRequest();
+  request = new PathwaySearchRequest(this.novostoicService);
   editing$ = new BehaviorSubject(false);
   showDialog$ = new BehaviorSubject(false);
   warningVisible$ = new BehaviorSubject(false);
@@ -114,6 +114,16 @@ export class PathwaySearchComponent implements OnInit {
     });
   }
 
+  onNumberInputKeyDown(event: KeyboardEvent) {
+    if (event.key === "e" 
+      || event.key === "E" 
+      || event.key === "-" 
+      || event.key === "+"
+    ) {
+      event.preventDefault();
+    }
+  }
+
   confirmUsingExample() {
     this.confirmCallback = this.useExampleCallback;
     this.warningMessage = "The current overall stoichiometry input comes from the previous step - Overall Stoichiometry - of NovoStoic. If you click Use an Example, you are starting a new request on “Pathway Search”. You can find previous steps results in the Job Management.";
@@ -139,6 +149,6 @@ export class PathwaySearchComponent implements OnInit {
   useExampleCallback() {
     this.warningVisible$.next(false);
     this.editing$.next(true);
-    this.request = PathwaySearchRequest.useExample();
+    this.request = PathwaySearchRequest.useExample(this.novostoicService);
   }
 }

@@ -38,15 +38,14 @@
                 </div>
                 <app-marvinjs-input
                     placeholder="Name, SMILES, InChi, Kegg ID"
-                    [formControl]="request.form.controls['primaryPrecursor']"
-                    [errors]="request.form.controls['primaryPrecursor'].errors"
-                    [dirty]="request.form.controls['primaryPrecursor'].dirty"
-                    (onChemicalValidated)="onPrimaryPrecursorValidated($event)"
+                    formControlName="primaryPrecursor"
+                    appOptstoicChemicalValidator
+                    (onChemicalValidated)="request.primaryPrecursor = $event"
                 ></app-marvinjs-input>
                 <ng-container *ngIf="request.form.controls['primaryPrecursor'].value">
                     <ng-container *ngTemplateOutlet="moleculeImg; context: {
                             status: request.form.controls['primaryPrecursor'].status,
-                            molecule: (validatedPrimaryPrecursor$ | async)?.structure,
+                            molecule: request.primaryPrecursor?.structure,
                             styleClass: 'border-green-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid'
                         }"
                     ></ng-container>
@@ -96,15 +95,14 @@
                 </div>
                 <app-marvinjs-input
                     placeholder="Name, SMILES, InChi, Kegg ID"
-                    [formControl]="request.form.controls['targetMolecule']"
-                    [errors]="request.form.controls['targetMolecule'].errors"
-                    [dirty]="request.form.controls['targetMolecule'].dirty"
-                    (onChemicalValidated)="onTargetMoleculeValidated($event)"
+                    formControlName="targetMolecule"
+                    appOptstoicChemicalValidator
+                    (onChemicalValidated)="request.targetMolecule = $event"
                 ></app-marvinjs-input>
                 <ng-container *ngIf="request.form.controls['targetMolecule'].value">
                     <ng-container *ngTemplateOutlet="moleculeImg; context: {
                             status: request.form.controls['targetMolecule'].status,
-                            molecule: (validatedTargetMolecule$ | async)?.structure,
+                            molecule: request.targetMolecule?.structure,
                             styleClass: 'border-blue-primary relative mt-4 flex h-[200px] grow items-center justify-center rounded-md border border-solid'
                         }"
                     ></ng-container>
