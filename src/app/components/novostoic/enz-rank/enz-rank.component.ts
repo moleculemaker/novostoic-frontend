@@ -33,6 +33,8 @@ export class EnzRankComponent {
       switch (key) {
         case 'noSequence':
           return `No sequence found.`;
+        case 'containsColon':
+          return `Sequence name "${value}" cannot contain colon.`;
         case 'exceedsMaxSeqNum':
           return `Exceeds maximum number of sequences (${this.request.MAX_SEQ_NUM}).`;
         case 'headerCannotBeEmpty':

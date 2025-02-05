@@ -88,12 +88,18 @@ MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLD
                     >
                         <div class="flex gap-3">
                             <small>{{ request.validSeqNum }}/{{ request.totalSeqNum }} Enzyme Sequence{{ request.totalSeqNum > 1 ? 's' : '' }}</small>
-                            <ng-container *ngIf="request.form.controls['enzymeSequence'].errors?.['errors'] as errors">
+                            <ng-container *ngIf="
+                                request.form.controls['enzymeSequence'].dirty
+                                && request.form.controls['enzymeSequence'].errors?.['errors'] as errors
+                            ">
                                 <ng-container *ngIf="errors.length == 1; else multipleErrors">
                                     <ng-container *ngIf="(errors[0] | keyvalue) as errorKeyValPair">
                                         <ng-container [ngSwitch]="errorKeyValPair[0].key">
                                             <small class="text-red-500" *ngSwitchCase="'noSequence'">
                                                 No sequence found.
+                                            </small>
+                                            <small class="text-red-500" *ngSwitchCase="'containsColon'">
+                                                Sequence name cannot contain colon.
                                             </small>
                                             <small class="text-red-500" *ngSwitchCase="'exceedsMaxSeqNum'">
                                                 Exceeds maximum number of sequences ({{ request.MAX_SEQ_NUM }}).

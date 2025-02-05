@@ -14,7 +14,7 @@ export class EnzymeSelectionRequest {
   MAX_SEQ_NUM = 20;
   totalSeqNum = 0;
   validSeqNum = 0;
-  sequences: string[] = [];
+  sequencesMap: Map<string, string> = new Map();
 
   enzSeqValidator(control: AbstractControl): ValidationErrors | null {
     const sequence = control.value;
@@ -30,7 +30,7 @@ export class EnzymeSelectionRequest {
       return { errors: [{ exceedsMaxSeqNum: true }] }
     }
 
-    this.sequences = [];
+    this.sequencesMap = new Map();
     const errors = splitString.map((seq: string, idx: number) => {
       let aminoHeader: string = seq.split('\n')[0];
       let aminoSeq: string = seq.split('\n').slice(1).join('');
@@ -45,6 +45,10 @@ export class EnzymeSelectionRequest {
         return { headerCannotBeEmpty: idx }
       }
 
+      if (aminoHeader.indexOf(':') !== -1) {
+        return { containsColon: aminoSeqName }
+      }
+
       if (validAminoAcid.test(aminoSeq)) {
         return { invalidSequence: aminoSeqName }
       }
@@ -57,7 +61,7 @@ export class EnzymeSelectionRequest {
         return { sequenceLengthIs0: aminoSeqName }
       }
 
-      this.sequences.push(`${aminoSeqName}:${aminoSeq}`);
+      this.sequencesMap.set(`${aminoSeqName}:${aminoSeq}`, `>${seq}`);
       return null;
     });
 
@@ -109,7 +113,8 @@ export class EnzymeSelectionRequest {
     const jobInfo = {
       primary_precursor: 'N00001',
       add_info: `N00001:${this.primaryPrecursor.smiles}`,
-      enzyme_sequences: this.sequences,
+      enzyme_sequences: Array.from(this.sequencesMap.keys()),
+      user_input_map: Object.fromEntries(this.sequencesMap),
     };
     return {
       job_info: JSON.stringify(jobInfo),
