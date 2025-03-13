@@ -1,0 +1,18 @@
+<div class="flex gap-2 w-full">
+    <input
+        pInputText
+        type="number"
+        class="w-[48px]"
+        placeholder="0.0"
+        [step]="config.amount.step"
+        [min]="config.amount.min"
+        [max]="config.amount.max"
+        (keydown)="onNumberInputKeyDown($event)"
+        [(ngModel)]="inputAmount"
+    />
+    <app-marvinjs-input
+        class="grow"
+        placeholder="Name, SMILES, InChi, Kegg ID"
+        [(ngModel)]="inputMolecule"
+    ></app-marvinjs-input>
+</div>

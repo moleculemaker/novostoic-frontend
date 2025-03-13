@@ -4,56 +4,133 @@ import {
   NovostoicStoichiometry,
 } from "./overall-stoichiometry";
 import exampleResponse from './output.pathway.response.json'
+import { presenceEnforcementOnAmountAndMolecule, requireBothAmountAndMolecule } from "../validators/novostoic-chemical-validator";
+import { NovostoicService } from "../services/novostoic.service";
+import { ChemicalAutoCompleteResponse } from "../api/mmli-backend/v1/model/chemicalAutoCompleteResponse";
 
 export class PathwaySearchRequest {
+  primaryPrecursor: ChemicalAutoCompleteResponse | null = null;
+  targetMolecule: ChemicalAutoCompleteResponse | null = null;
+  coReactants: Array<ChemicalAutoCompleteResponse | null> = [];
+  coProducts: Array<ChemicalAutoCompleteResponse | null> = [];
+  pathwayParameterSettings = {
+    maxSteps: {
+      min: 0,
+      max: 10,
+      step: 1,
+      disableSignInput: true,
+      disableExponentialInput: true,
+    },
+    maxPathways: {
+      min: 0,
+      max: 10,
+      step: 1,
+      disableSignInput: true,
+      disableExponentialInput: true,
+    },
+    numEnzymeCandidates: {
+      min: 0,
+      max: 10,
+      step: 1,
+      disableSignInput: true,
+      disableExponentialInput: true,
+    },
+    primaryPrecursor: {
+      amount: {
+        min: 0.1,
+        max: Infinity,
+        step: 0.1,
+        disableSignInput: true,
+        disableExponentialInput: true,
+      },
+      required: true,
+    },
+    targetMolecule: {
+      amount: {
+        min: 0.1,
+        max: Infinity,
+        step: 0.1,
+        disableSignInput: true,
+        disableExponentialInput: true,
+      },
+      required: true,
+    },
+    coReactant: {
+      amount: {
+        min: 0.1,
+        max: Infinity,
+        step: 0.1,
+        disableSignInput: true,
+        disableExponentialInput: true,
+      },
+      required: false,
+    },
+    coProduct: {
+      amount: {
+        min: 0.1,
+        max: Infinity,
+        step: 0.1,
+        disableSignInput: true,
+        disableExponentialInput: true,
+      },
+      required: false,
+    },
+  };
+
   form = new FormGroup({
-    primaryPrecursor: this.createMoleculeInputWithAmount(),
-    targetMolecule: this.createMoleculeInputWithAmount(),
-    coReactants: new FormArray([this.createMoleculeInputWithAmount()]),
-    coProducts: new FormArray([this.createMoleculeInputWithAmount()]),
-    maxSteps: new FormControl(3, [Validators.required]),
-    maxPathways: new FormControl(3, [Validators.required]),
+    primaryPrecursor: this.createMoleculeInputWithAmount(
+      this.pathwayParameterSettings.primaryPrecursor.required
+    ),
+    targetMolecule: this.createMoleculeInputWithAmount(
+      this.pathwayParameterSettings.targetMolecule.required
+    ),
+    coReactants: new FormArray([this.createMoleculeInputWithAmount(
+      this.pathwayParameterSettings.coReactant.required
+    )]),
+    coProducts: new FormArray([this.createMoleculeInputWithAmount(
+      this.pathwayParameterSettings.coProduct.required
+    )]),
+    maxSteps: new FormControl(3, [
+      Validators.required, 
+      Validators.min(this.pathwayParameterSettings.maxSteps.min), 
+      Validators.max(this.pathwayParameterSettings.maxSteps.max)]
+    ),
+    maxPathways: new FormControl(3, [
+      Validators.required, 
+      Validators.min(this.pathwayParameterSettings.maxPathways.min), 
+      Validators.max(this.pathwayParameterSettings.maxPathways.max)
+    ]),
     thermodynamicReactionsFilterMode: new FormControl("none"),
     useEnzymeSelection: new FormControl(true),
-    numEnzymeCandidates: new FormControl(0, [Validators.required]),
+    numEnzymeCandidates: new FormControl(0, [
+      Validators.required, 
+      Validators.min(this.pathwayParameterSettings.numEnzymeCandidates.min), 
+      Validators.max(this.pathwayParameterSettings.numEnzymeCandidates.max)
+    ]),
     agreeToSubscription: new FormControl(false),
     subscriberEmail: new FormControl("", [Validators.email]),
   });
 
-  constructor() {
-    this.form.controls["coReactants"].controls.forEach((control) => {
-      control.get("molecule")?.valueChanges.subscribe((value) => {
-        if (value) {
-          control.get("amount")?.addValidators(Validators.required);
-        } else {
-          control.get("amount")?.clearValidators();
-        }
-      });
-    });
-
-    this.form.controls["coProducts"].controls.forEach((control) => {
-      control.get("molecule")?.valueChanges.subscribe((value) => {
-        if (value) {
-          control.get("amount")?.addValidators(Validators.required);
-        } else {
-          control.get("amount")?.clearValidators();
-        }
-      });
-    });
+  private createMoleculeInputWithAmount(required: boolean) {
+    return new FormGroup<{
+      amount: FormControl<number | null>,
+      molecule: FormControl<string | null>,
+    }>({
+      amount: new FormControl(null),
+      molecule: new FormControl(null),
+    }, {
+      validators: required ? [requireBothAmountAndMolecule] : [presenceEnforcementOnAmountAndMolecule],
+    })
   }
 
-  private createMoleculeInputWithAmount() {
-    return new FormGroup({
-      molecule: new FormControl<string>(""),
-      amount: new FormControl<number>(0, [Validators.min(1)]),
-    });
-  }
+  constructor(private novostoicService: NovostoicService) {}
 
   addPrimaryPercursorFromMolecule(molecule: NovostoicMolecule) {
     this.form.controls["primaryPrecursor"].setValue({
       molecule: molecule.metanetx_id || null,
       amount: 1,
     });
+    this.primaryPrecursor = molecule as ChemicalAutoCompleteResponse;
   }
 
   addTargetMoleculeFromMolecule(molecule: NovostoicMolecule) {
@@ -61,6 +138,7 @@ export class PathwaySearchRequest {
       molecule: molecule.metanetx_id || null,
       amount: 1,
     });
+    this.targetMolecule = molecule as ChemicalAutoCompleteResponse;
   }
 
   addFromStoichiometry(stoichiometry: NovostoicStoichiometry) {
@@ -75,6 +153,7 @@ export class PathwaySearchRequest {
           amount: r.amount,
         })),
     );
+    this.coReactants = stoichiometry.reactants.map((r) => r.molecule as ChemicalAutoCompleteResponse);
 
     this.form.controls["coProducts"].clear();
     for (let i = 0; i < stoichiometry.products.length; i++) {
@@ -87,33 +166,51 @@ export class PathwaySearchRequest {
           amount: r.amount,
         })),
     );
+    this.coProducts = stoichiometry.products.map((r) => r.molecule as ChemicalAutoCompleteResponse);
   }
 
   addCoReactant() {
     this.form.controls["coReactants"].push(
-      this.createMoleculeInputWithAmount(),
+      this.createMoleculeInputWithAmount(false),
     );
+    this.coReactants.push(null);
   }
 
   addCoProduct() {
-    this.form.controls["coProducts"].push(this.createMoleculeInputWithAmount());
+    this.form.controls["coProducts"].push(this.createMoleculeInputWithAmount(false));
+    this.coProducts.push(null);
   }
 
   removeCoReactant(index: number) {
     this.form.controls["coReactants"].removeAt(index);
+    this.coReactants.splice(index, 1);
   }
 
   removeCoProduct(index: number) {
     this.form.controls["coProducts"].removeAt(index);
+    this.coProducts.splice(index, 1);
   }
 
   resetStoichiometry() {
-    this.form.controls["primaryPrecursor"].reset();
-    this.form.controls["targetMolecule"].reset();
-    this.form.controls["coReactants"].controls = [];
-    this.form.controls["coProducts"].controls = [];
+    // Reset primary precursor and target molecule with initial values
+    this.form.controls["primaryPrecursor"].reset({
+      amount: null,
+      molecule: null
+    });
+    this.form.controls["targetMolecule"].reset({
+      amount: null,
+      molecule: null
+    });
+
+    // Clear and reset co-reactants
+    this.form.controls["coReactants"].clear();
     this.addCoReactant();
+    this.coReactants = [null];
+
+    // Clear and reset co-products
+    this.form.controls["coProducts"].clear();
     this.addCoProduct();
+    this.coProducts = [null];
   }
 
   resetSetting() {
@@ -124,8 +221,8 @@ export class PathwaySearchRequest {
     this.form.controls["numEnzymeCandidates"].reset(0);
   }
 
-  static useExample() {
-    const request = new PathwaySearchRequest();
+  static useExample(novostoicService: NovostoicService) {
+    const request = new PathwaySearchRequest(novostoicService);
     request.addCoProduct();
     // Create example request.
     request.form.setValue({
@@ -161,6 +258,51 @@ export class PathwaySearchRequest {
       agreeToSubscription: false, // Add agreeToSubscription property
       subscriberEmail: null, // Add subscriberEmail property
     });
+    request.primaryPrecursor = {
+      "name": "3-methyl-2-oxobutanoate",
+      "smiles": "CC(C)C(=O)C(=O)O",
+      "inchi": "InChI=1S/C5H8O3/c1-3(2)4(6)5(7)8/h3H,1-2H3,(H,7,8)/p-1",
+      "inchi_key": "InChIKey=QHKABHOOEWYVLI-UHFFFAOYSA-M",
+      "metanetx_id": "MNXM732866",
+      "kegg_id": "C00141",
+    };
+    request.targetMolecule = {
+      "name": "isobutanol",
+      "smiles": "CC(C)CO",
+      "inchi": "InChI=1S/C4H10O/c1-4(2)3-5/h4-5H,3H2,1-2H3",
+      "inchi_key": "InChIKey=ZXEKIIBDNHEJCQ-UHFFFAOYSA-N",
+      "metanetx_id": "MNXM5188",
+      "kegg_id": "C14710",
+    };
+    request.coReactants = [
+      {
+        "name": "NADH",
+        "smiles": "NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1",
+        "inchi": "InChI=1S/C21H29N7O14P2/c22-17-12-19(25-7-24-17)28(8-26-12)21-16(32)14(30)11(41-21)6-39-44(36,37)42-43(34,35)38-5-10-13(29)15(31)20(40-10)27-3-1-2-9(4-27)18(23)33/h1,3-4,7-8,10-11,13-16,20-21,29-32H,2,5-6H2,(H2,23,33)(H,34,35)(H,36,37)(H2,22,24,25)/p-2/t10-,11-,13-,14-,15-,16-,20-,21-/m1/s1",
+        "inchi_key": "InChIKey=BOPGDPNILDQYTO-NNYOXOHSSA-L",
+        "metanetx_id": "MNXM10",
+        "kegg_id": "C00004",
+      }
+    ];
+    request.coProducts = [
+      {
+        "name": "NAD(+)",
+        "smiles": "NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)([O-])OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)c1",
+        "inchi": "InChI=1S/C21H27N7O14P2/c22-17-12-19(25-7-24-17)28(8-26-12)21-16(32)14(30)11(41-21)6-39-44(36,37)42-43(34,35)38-5-10-13(29)15(31)20(40-10)27-3-1-2-9(4-27)18(23)33/h1-4,7-8,10-11,13-16,20-21,29-32H,5-6H2,(H5-,22,23,24,25,33,34,35,36,37)/p-1/t10-,11-,13-,14-,15-,16-,20-,21-/m1/s1",
+        "inchi_key": "InChIKey=BAWFJGJZGIEFAR-NNYOXOHSSA-M",
+        "metanetx_id": "MNXM8",
+        "kegg_id": "C00003",
+      },
+      {
+        "name": "CO2",
+        "smiles": "O=C=O",
+        "inchi": "InChI=1S/CO2/c2-1-3",
+        "inchi_key": "InChIKey=CURLTUGMZLYLDI-UHFFFAOYSA-N",
+        "metanetx_id": "MNXM13",
+        "kegg_id": "C00011",
+      }
+    ];
+      
     return request;
   }
 
@@ -182,13 +324,28 @@ export class PathwaySearchRequest {
   }
 
   toRequestBody() {
+    if (!this.primaryPrecursor || !this.targetMolecule) {
+      throw new Error("Primary precursor or target molecule not set");
+    }
     const jobInfo = {
-      substrate: this.form.controls["primaryPrecursor"].value,
-      product: this.form.controls["targetMolecule"].value,
+      substrate: {
+        amount: this.form.controls["primaryPrecursor"].value.amount,
+        molecule: this.primaryPrecursor!.metanetx_id,
+      },
+      product: {
+        amount: this.form.controls["targetMolecule"].value.amount,
+        molecule: this.targetMolecule!.metanetx_id,
+      },
       max_steps: this.form.controls["maxSteps"].value,
       iterations: this.form.controls["maxPathways"].value,
-      reactants: this.form.controls["coReactants"].value,
-      products: this.form.controls["coProducts"].value,
+      reactants: this.coReactants.map((c, i) => ({
+        amount: this.form.controls["coReactants"].at(i)?.value.amount,
+        molecule: c!.metanetx_id,
+      })),
+      products: this.coProducts.map((c, i) => ({
+        amount: this.form.controls["coProducts"].at(i)?.value.amount,
+        molecule: c!.metanetx_id,
+      })),
       num_enzymes: this.form.controls["numEnzymeCandidates"].value,
     };
     return {

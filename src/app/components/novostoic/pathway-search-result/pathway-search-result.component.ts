@@ -84,7 +84,10 @@ export class PathwaySearchResultComponent extends JobResult {
           }
         });
       });
-      return returnVal;
+      return returnVal.map((molecule) => ({
+        label: molecule.name,
+        value: molecule,
+      }));
     }),
   );
   intermediatesFilters$ = new BehaviorSubject<NovostoicMolecule[]>([]);
@@ -112,7 +115,10 @@ export class PathwaySearchResultComponent extends JobResult {
           });
         });
       });
-      return returnVal;
+      return returnVal.map((molecule) => ({
+        label: molecule.name,
+        value: molecule,
+      }));
     }),
   );
   coFactorsFilters$ = new BehaviorSubject<NovostoicMolecule[]>([]);

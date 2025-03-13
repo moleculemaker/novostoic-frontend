@@ -35,21 +35,20 @@
                 </div>
                 <app-marvinjs-input
                     placeholder="CC(=O)C(=O)O"
-                    [formControl]="request.form.controls['primaryPrecursor']"
-                    [errors]="request.form.controls['primaryPrecursor'].errors"
-                    [dirty]="request.form.controls['primaryPrecursor'].dirty"
+                    formControlName="primaryPrecursor"
+                    appOptstoicChemicalValidator
                     (onChemicalValidated)="request.setPrimaryPrecursor($event!)"
-                    outputFormat="smiles"
                 ></app-marvinjs-input>
 
                 <!-- Enzyme Sequence Input -->
                 <p-panel styleClass="mt-10">
                     <ng-template pTemplate="header">
-                        <span class="grow">Enzyme Sequence Input</span>
+                        <span class="grow">Enzyme Sequences Input</span>
                         <div class="flex gap-2">
                             <button
                                 type="button"
                                 class="rounded-lg border border-[--surface-d] p-2"
+                                (click)="uploadFile()"
                             >
                                 <i class="pi pi-upload"></i>
                                 Upload
@@ -74,13 +73,63 @@
                     <textarea
                         rows="5"
                         class="w-full border-none"
-                        placeholder="example: >sp|P68871|HBB_HUMAN Hemoglobin subunit beta OS=Homo sapiens GN=HBB PE=1 SV=2
-                        MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHLKGTFLKGTF"
+                        placeholder="Please enter enzyme amino acid sequence in FASTA format. Multiple enzyme sequences should be separated by a new line. Example:
+
+>sp|P68871|HBB_HUMAN Hemoglobin subunit beta OS=Homo sapiens GN=HBB PE=1 SV=2
+MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVLDNLKGTFATLSELHCDKLHVDPENFRLLGNHGKKVLGAFSDGLAHLDNLKGTFATLSELHLKGTFLKGTF"
                         pInputTextarea
                         [autoResize]="true"
                         [value]="request.form.controls['enzymeSequence'].value"
                         formControlName="enzymeSequence"
                     ></textarea>
+
+                    <hr />
+                    <div
+                        class="flex justify-between p-1 px-4 rounded-b-md bg-gray-50"
+                    >
+                        <div class="flex gap-3">
+                            <small>{{ request.validSeqNum }}/{{ request.totalSeqNum }} Enzyme Sequence{{ request.totalSeqNum > 1 ? 's' : '' }}</small>
+                            <ng-container *ngIf="
+                                request.form.controls['enzymeSequence'].dirty
+                                && request.form.controls['enzymeSequence'].errors?.['errors'] as errors
+                            ">
+                                <ng-container *ngIf="errors.length == 1; else multipleErrors">
+                                    <ng-container *ngIf="(errors[0] | keyvalue) as errorKeyValPair">
+                                        <ng-container [ngSwitch]="errorKeyValPair[0].key">
+                                            <small class="text-red-500" *ngSwitchCase="'noSequence'">
+                                                No sequence found.
+                                            </small>
+                                            <small class="text-red-500" *ngSwitchCase="'containsColon'">
+                                                Sequence name "{{ errorKeyValPair[0].value }}" cannot contain colon.
+                                            </small>
+                                            <small class="text-red-500" *ngSwitchCase="'exceedsMaxSeqNum'">
+                                                Exceeds maximum number of sequences ({{ request.MAX_SEQ_NUM }}).
+                                            </small>
+                                            <small class="text-red-500" *ngSwitchCase="'headerCannotBeEmpty'">
+                                                Header cannot be empty at sequence idx {{ errorKeyValPair[0].value }}.
+                                            </small>
+                                            <small class="text-red-500" *ngSwitchCase="'invalidSequence'">
+                                                Invalid sequence for sequence name "{{ errorKeyValPair[0].value }}".
+                                            </small>
+                                            <small class="text-red-500" *ngSwitchCase="'sequenceLengthGreaterThan1022'">
+                                                Sequence length greater than 1022 for sequence name "{{ errorKeyValPair[0].value }}".
+                                            </small>
+                                            <small class="text-red-500" *ngSwitchCase="'sequenceLengthIs0'">
+                                                Sequence length is 0 for sequence name "{{ errorKeyValPair[0].value }}".
+                                            </small>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                                <ng-template #multipleErrors>
+                                    <small class="flex items-center gap-1 text-red-500">
+                                        Multiple errors found.
+                                        <i class="pi pi-question-circle text-gray-400" [pTooltip]="getErrorString(errors)" [escape]="false"></i>
+                                    </small>
+                                </ng-template>
+                            </ng-container>
+                        </div>
+                        <small>Enzyme Selection</small>
+                    </div>
                 </p-panel>
             </div>
         </div>

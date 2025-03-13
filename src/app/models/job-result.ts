@@ -5,6 +5,7 @@ import { NovostoicService } from "../services/novostoic.service";
 export class JobResult {
     jobId: string;
     jobType: JobType;
+    jobInfo: any;
 
     isLoading$ = new BehaviorSubject(true);
     resultLoaded$ = new BehaviorSubject(false);
@@ -23,7 +24,10 @@ export class JobResult {
     );
 
     jobResultResponse$ = this.statusResponse$.pipe(
-        skipUntil(this.statusResponse$.pipe(filter((job) => job.phase === JobStatus.Completed))),
+        skipUntil(this.statusResponse$.pipe(
+            filter((job) => job.phase === JobStatus.Completed),
+            tap((job) => this.jobInfo = JSON.parse(job.job_info || '{}')),
+        )),
         switchMap(() => this.service.getResult(this.jobType, this.jobId)),
         delay(1000),
         tap(() => this.isLoading$.next(false)),
