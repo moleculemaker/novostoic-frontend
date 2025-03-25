@@ -78,6 +78,7 @@ import { ChemicalInputComponent } from './components/novostoic/chemical-input/ch
 import { MoleculeInfoOverlayComponent } from './components/novostoic/molecule-info-overlay/molecule-info-overlay.component';
 import { MoleculeInputWithAmountComponent } from './components/novostoic/molecule-input-with-amount/molecule-input-with-amount.component';
 import { OptstoicChemicalValidatorDirective } from './directives/optstoic-chemical-validator.directive';
+import { KetcherComponent } from "./components/novostoic/ketcher/ketcher.component";
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -90,6 +91,7 @@ const initAppFn = (envService: EnvironmentService) => {
 
     LandingPageComponent,
     OverallStoichiometryComponent,
+    KetcherComponent,
     SidebarComponent,
     AboutNovostoicComponent,
     OverallStoichiometryResultComponent,
