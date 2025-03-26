@@ -367,6 +367,7 @@
                                         [step]="request.pathwayParameterSettings.maxSteps.step"
                                         [min]="request.pathwayParameterSettings.maxSteps.min"
                                         [max]="request.pathwayParameterSettings.maxSteps.max"
+                                        [ngModel]="request.form.controls['maxSteps'].value"
                                         (keydown)="onNumberInputKeyDown($event)"
                                     />
                                     <p-slider
@@ -375,6 +376,7 @@
                                         [step]="request.pathwayParameterSettings.maxSteps.step"
                                         [min]="request.pathwayParameterSettings.maxSteps.min"
                                         [max]="request.pathwayParameterSettings.maxSteps.max"
+                                        [ngModel]="request.form.controls['maxSteps'].value"
                                     ></p-slider>
                                     <span
                                         class="flex items-center justify-between my-2"
@@ -404,6 +406,7 @@
                                         [max]="request.pathwayParameterSettings.maxPathways.max"
                                         (keydown)="onNumberInputKeyDown($event)"
                                         formControlName="maxPathways"
+                                        [ngModel]="request.form.controls['maxPathways'].value"
                                     />
                                     <p-slider
                                         class="w-full"
@@ -411,6 +414,7 @@
                                         [step]="request.pathwayParameterSettings.maxPathways.step"
                                         [min]="request.pathwayParameterSettings.maxPathways.min"
                                         [max]="request.pathwayParameterSettings.maxPathways.max"
+                                        [ngModel]="request.form.controls['maxPathways'].value"
                                     ></p-slider>
                                     <span
                                         class="flex items-center justify-between my-2"
@@ -457,6 +461,7 @@
                                         [max]="request.pathwayParameterSettings.numEnzymeCandidates.max"
                                         (keydown)="onNumberInputKeyDown($event)"
                                         formControlName="numEnzymeCandidates"
+                                        [ngModel]="request.form.controls['numEnzymeCandidates'].value"
                                     />
                                     <div>
                                         <p-slider
@@ -464,6 +469,7 @@
                                             [step]="request.pathwayParameterSettings.numEnzymeCandidates.step"
                                             [min]="request.pathwayParameterSettings.numEnzymeCandidates.min"
                                             [max]="request.pathwayParameterSettings.numEnzymeCandidates.max"
+                                            [ngModel]="request.form.controls['numEnzymeCandidates'].value"
                                         ></p-slider>
                                         <span
                                             class="flex items-center justify-between my-2"
