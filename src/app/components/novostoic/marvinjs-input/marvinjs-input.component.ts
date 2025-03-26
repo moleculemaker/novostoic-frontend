@@ -11,7 +11,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
       useExisting: forwardRef(() => MarvinjsInputComponent),
       multi: true
     }
-  ],
+  ]
 })
 export class MarvinjsInputComponent implements OnChanges, ControlValueAccessor {
   @Input() placeholder: string = "";
@@ -52,6 +52,10 @@ export class MarvinjsInputComponent implements OnChanges, ControlValueAccessor {
   set marvinInput(value: string) {
     this.#marvinInput = value;
     this.textInput = value;
+  }
+
+  setMarvinInputBypass(value: string) {
+    this.#marvinInput = value;
   }
 
   constructor() {

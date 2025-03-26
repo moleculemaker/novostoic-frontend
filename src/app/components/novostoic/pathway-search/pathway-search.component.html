@@ -92,7 +92,7 @@
                                         placeholder="Name, SMILES, InChi, Kegg ID"
                                         formControlName="molecule"
                                         appOptstoicChemicalValidator
-                                        (onChemicalValidated)="request.primaryPrecursor = $event"
+                                        (onChemicalValidationStatusChange)="request.primaryPrecursor = $event"
                                     >
                                         <div *ngIf="request.form.controls['primaryPrecursor'].dirty" errors>
                                             <div *ngIf="request.form.controls['primaryPrecursor'].errors?.['required']">
@@ -160,6 +160,7 @@
                                                 placeholder="Name, SMILES, InChi, Kegg ID"
                                                 formControlName="molecule"
                                                 appOptstoicChemicalValidator
+                                                (onChemicalValidationStatusChange)="request.coReactants[i] = $event"
                                             >
                                                 <div *ngIf="control.dirty" errors>
                                                     <div *ngIf="control.errors?.['amountOrMoleculeRequired']">
@@ -229,7 +230,7 @@
                                                 placeholder="Name, SMILES, InChi, Kegg ID"
                                                 formControlName="molecule"
                                                 appOptstoicChemicalValidator
-                                                (onChemicalValidated)="request.coProducts[i] = $event"
+                                                (onChemicalValidationStatusChange)="request.coProducts[i] = $event"
                                             >
                                                 <div *ngIf="control.dirty" errors>
                                                     <div *ngIf="control.errors?.['amountOrMoleculeRequired']">
@@ -289,7 +290,7 @@
                                         placeholder="Name, SMILES, InChi, Kegg ID"
                                         formControlName="molecule"
                                         appOptstoicChemicalValidator
-                                        (onChemicalValidated)="request.targetMolecule = $event"
+                                        (onChemicalValidationStatusChange)="request.targetMolecule = $event"
                                     >
                                         <div *ngIf="request.form.controls['targetMolecule'].dirty" errors>
                                             <div *ngIf="request.form.controls['targetMolecule'].errors?.['required']">

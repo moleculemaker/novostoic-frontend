@@ -13,6 +13,14 @@ import {
   Job
 } from "../api/mmli-backend/v1";
 
+export type LoadingStatus = 'loading' | 'loaded' | 'error' | 'na' | 'invalid' | 'empty';
+
+export type Loadable<T> = {
+  status: LoadingStatus;
+  error?: string;
+  data: T | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -61,7 +69,30 @@ export class NovostoicService {
     return this.novostoicService.getChemicalAutoCompleteChemicalAutoCompleteGet(searchString);
   }
 
-  validateChemical(searchString: string): Observable<ChemicalAutoCompleteResponse | null> {
-    return this.novostoicService.validateChemicalChemicalValidateGet(searchString);
+  validateChemical(searchString: string): Observable<Loadable<ChemicalAutoCompleteResponse>> {
+    return new Observable((observer) => {
+      observer.next({ status: 'loading', data: null });
+
+      const subscription = this.novostoicService.validateChemicalChemicalValidateGet(searchString).pipe(
+        map((res) => {
+          return res;
+        })
+      ).subscribe({
+        next: (res) => {
+          if (!res) {
+            observer.next({ status: 'invalid', error: 'Chemical not supported', data: null });
+          } else {
+            observer.next({ status: 'loaded', data: res });
+          }
+          observer.complete();
+        },
+        error: (err) => {
+          observer.next({ status: 'error', error: err.message, data: null });
+          observer.complete();
+        }
+      });
+
+      return () => subscription.unsubscribe();
+    });
   }
 }

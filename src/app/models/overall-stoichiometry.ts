@@ -1,14 +1,20 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { NovostoicService } from "../services/novostoic.service";
+import { Loadable, NovostoicService } from "../services/novostoic.service";
 import { ChemicalAutoCompleteResponse } from "../api/mmli-backend/v1";
 
 export class OverallStoichiometryRequest {
-  primaryPrecursor: ChemicalAutoCompleteResponse | null = null;
-  targetMolecule: ChemicalAutoCompleteResponse | null = null;
+  primaryPrecursor: Loadable<ChemicalAutoCompleteResponse> = {
+    status: 'na',
+    data: null,
+  };
+  targetMolecule: Loadable<ChemicalAutoCompleteResponse> = {
+    status: 'na',
+    data: null,
+  };
   
   form = new FormGroup({
-    primaryPrecursor: new FormControl("", [Validators.required]),
-    targetMolecule: new FormControl("", [Validators.required]),
+    primaryPrecursor: new FormControl(""),
+    targetMolecule: new FormControl(""),
     agreeToSubscription: new FormControl(false),
     subscriberEmail: new FormControl("", [Validators.email]),
   });
@@ -24,20 +30,26 @@ export class OverallStoichiometryRequest {
       subscriberEmail: "",
     });
     request.primaryPrecursor = {
-      "name": "pyruvate",
-      "smiles": "CC(=O)C(=O)O",
-      "inchi": "InChI=1S/C3H4O3/c1-2(4)3(5)6/h1H3,(H,5,6)/p-1",
-      "inchi_key": "InChIKey=LCTONWCANYUPML-UHFFFAOYSA-M",
-      "metanetx_id": "MNXM23",
-      "kegg_id": "C00022",
+      status: 'loaded',
+      data: {
+        "name": "pyruvate",
+        "smiles": "CC(=O)C(=O)O",
+        "inchi": "InChI=1S/C3H4O3/c1-2(4)3(5)6/h1H3,(H,5,6)/p-1",
+        "inchi_key": "InChIKey=LCTONWCANYUPML-UHFFFAOYSA-M",
+        "metanetx_id": "MNXM23",
+        "kegg_id": "C00022",
+      },
     };
     request.targetMolecule = {
-      "name": "tert-butanol",
-      "smiles": "CC(C)(C)O",
-      "inchi": "InChI=1S/C4H10O/c1-4(2,3)5/h5H,1-3H3",
-      "inchi_key": "InChIKey=DKGAVHZHDRPRBM-UHFFFAOYSA-N",
-      "metanetx_id": "MNXM22008",
-      "kegg_id": "C21389",
+      status: 'loaded',
+      data: {
+        "name": "tert-butanol",
+        "smiles": "CC(C)(C)O",
+        "inchi": "InChI=1S/C4H10O/c1-4(2,3)5/h5H,1-3H3",
+        "inchi_key": "InChIKey=DKGAVHZHDRPRBM-UHFFFAOYSA-N",
+        "metanetx_id": "MNXM22008",
+        "kegg_id": "C21389",
+      }
     };
     return request;
   }
@@ -55,12 +67,12 @@ export class OverallStoichiometryRequest {
   }
 
   toRequestBody() {
-    if (!this.primaryPrecursor || !this.targetMolecule) {
+    if (!this.primaryPrecursor.data || !this.targetMolecule.data) {
       throw new Error("Primary precursor or target molecule not set");
     }
     const jobInfo = {
-      primary_precursor: this.primaryPrecursor.metanetx_id,
-      target_molecule: this.targetMolecule.metanetx_id,
+      primary_precursor: this.primaryPrecursor.data.metanetx_id,
+      target_molecule: this.targetMolecule.data.metanetx_id,
     };
     return {
       email: this.form.controls['subscriberEmail'].value!,

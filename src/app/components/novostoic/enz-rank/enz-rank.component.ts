@@ -1,9 +1,10 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
-import { JobType } from "~/app/api/mmli-backend/v1";
+import { ChemicalAutoCompleteResponse, JobType } from "~/app/api/mmli-backend/v1";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { EnzymeSelectionRequest } from "~/app/models/enz-rank";
-import { NovostoicService } from "~/app/services/novostoic.service";
+import { Loadable, NovostoicService } from "~/app/services/novostoic.service";
+import { MarvinjsInputComponent } from "../marvinjs-input/marvinjs-input.component";
 
 @Component({
   selector: "app-enz-rank",
@@ -16,6 +17,8 @@ import { NovostoicService } from "~/app/services/novostoic.service";
 export class EnzRankComponent {
   request = new EnzymeSelectionRequest();
   exampleJobId = "23f7f85f3b0545839785efc6368b4fe5";
+
+  @ViewChild('ppInput') ppInput!: MarvinjsInputComponent;
 
   constructor(
     private router: Router, 
@@ -67,6 +70,14 @@ export class EnzRankComponent {
           return null;
       }
     }).filter((error: string | null) => error !== null).join('<br/>');
+  }
+
+  onValidationStatusChange(event: Loadable<ChemicalAutoCompleteResponse>) {
+    const { status, data } = event;
+    this.request.primaryPrecursor = event;
+    if (status === 'loaded') {
+      this.ppInput.setMarvinInputBypass(data?.smiles as string);
+    }
   }
 
   onSubmit() {
