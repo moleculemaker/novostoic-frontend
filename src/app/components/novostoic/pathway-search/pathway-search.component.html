@@ -6,7 +6,7 @@
     <div>
         <h5 class="font-bold opacity-100 leading-lg">Input an Overall Stoichiometry</h5>
         <h6 class="mt-1 leading-lg">
-            Pathway design using optimal overall stoichiometry. Make sure it is balanced.
+            Provide a balanced overall stiochiometry with a precursor, a target molecule, co-reactants, and co-rpoducts for pathway design.
         </h6>
 
         <!-- Pathway Search -->
@@ -89,7 +89,7 @@
                                     />
                                     <app-marvinjs-input 
                                         class="grow"
-                                        placeholder="Name, SMILES, InChi, Kegg ID"
+                                        placeholder="Name, SMILES, InChi, Kegg ID, or MetaNetX ID"
                                         formControlName="molecule"
                                         appOptstoicChemicalValidator
                                         (onChemicalValidationStatusChange)="request.primaryPrecursor = $event"
@@ -157,7 +157,7 @@
                                             />
                                             <app-marvinjs-input 
                                                 class="grow"
-                                                placeholder="Name, SMILES, InChi, Kegg ID"
+                                                placeholder="Name, SMILES, InChi, Kegg ID, or MetaNetX ID"
                                                 formControlName="molecule"
                                                 appOptstoicChemicalValidator
                                                 (onChemicalValidationStatusChange)="request.coReactants[i] = $event"
@@ -227,7 +227,7 @@
                                             />
                                             <app-marvinjs-input 
                                                 class="grow"
-                                                placeholder="Name, SMILES, InChi, Kegg ID"
+                                                placeholder="Name, SMILES, InChi, Kegg ID, or MetaNetX ID"
                                                 formControlName="molecule"
                                                 appOptstoicChemicalValidator
                                                 (onChemicalValidationStatusChange)="request.coProducts[i] = $event"
@@ -287,7 +287,7 @@
                                     />
                                     <app-marvinjs-input 
                                         class="grow"
-                                        placeholder="Name, SMILES, InChi, Kegg ID"
+                                        placeholder="Name, SMILES, InChi, Kegg ID, or MetaNetX ID"
                                         formControlName="molecule"
                                         appOptstoicChemicalValidator
                                         (onChemicalValidationStatusChange)="request.targetMolecule = $event"
@@ -442,9 +442,12 @@
                         </section>
                         <hr class="my-4" />
                         <section>
-                            <h6 class="font-semibold opacity-100 leading-base">Enzyme Selection for Novel Reactions</h6>
+                            <h6 class="font-semibold opacity-100 leading-base flex items-center gap-2">
+                                Enzyme Selection for Novel Reactions
+                                <i class="pi pi-info-circle" pTooltip="Rank-ordering known enzyme candidates for the novel reactions to select top enzyme candidates"></i>
+                            </h6>
                             <small class="block pt-1 italic opacity-60 leading-xl">
-                                Rank-ordering known enzyme candidates for the novel reactions to select top enzyme candidates
+                                Tip: More you choose, the longer it takes.
                             </small>
                             <div class="mt-1 shrink">
                                 <div class="flex items-center justify-between pr-2 my-2 leading-xl">
@@ -537,7 +540,7 @@
         </div>
         <div class="flex flex-col items-end gap-2">
             <p-button
-                [label]="request.form.status === 'PENDING' ? 'Validating...' : 'Pathway Search'"
+                [label]="request.form.status === 'PENDING' ? 'Validating...' : 'Run Job'"
                 type="submit"
                 styleClass="btn-submit-request"
                 [disabled]="!request.form.valid"

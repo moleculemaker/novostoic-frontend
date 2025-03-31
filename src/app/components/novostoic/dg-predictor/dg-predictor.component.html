@@ -6,7 +6,7 @@
     <div>
         <h5 class="font-bold opacity-100 leading-lg">Input Reactions</h5>
         <h6 class="mt-1 leading-lg">
-            You will get Gibbs free energy and to ensure thermodynamic feasibility of reactions. 
+            Enter known or/and novel reactions to calculate Gibbs free energy and check thermodynamic feasibility.
         </h6>
 
         <!-- Reaction Input -->
@@ -252,7 +252,7 @@
         </div>
         <div class="flex flex-col items-end gap-2">
             <p-button
-                [label]="request.form.status === 'PENDING' ? 'Validating...' : 'Calculate Gibbs Free Energy'"
+                [label]="request.form.status === 'PENDING' ? 'Validating...' : 'Run Job'"
                 type="submit"
                 styleClass="btn-submit-request"
                 [disabled]="!request.form.valid"

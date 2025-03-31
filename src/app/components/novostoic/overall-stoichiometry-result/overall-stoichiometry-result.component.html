@@ -24,7 +24,7 @@
                     <a href="/overall-stoichiometry" target="_blank">
                         <p-button styleClass="p-button-outlined">
                             <i class="mx-2 pi pi-plus"></i>
-                            Run a new Request
+                            Run New Request
                         </p-button>
                     </a>
                 </div>
@@ -131,12 +131,17 @@
                                 <th>
                                     <span
                                         class="underline decoration-dotted"
+                                        pTooltip="Overall stoichiometry is <span class='font-semibold'>NOT</span> a single reaction step.
+                                        It is a high level summarization of shortest pathways and reactions.(Reactants ->-> Products)"
+                                        [escape]="false"
                                         >Overall Stoichiometry</span
                                     >
                                 </th>
                                 <th pSortableColumn="yield">
                                     <span
                                         class="underline decoration-dotted"
+                                        pTooltip="<span class='font-semibold'>Theoretical Yield:</span> The maximum number of target molecules produced from one mole of a starting molecule"
+                                        [escape]="false"
                                         >Yield</span
                                     >
                                     <p-sortIcon
@@ -146,7 +151,7 @@
                                 <th pSortableColumn="deltaG">
                                     <span
                                         class="underline decoration-dotted"
-                                        pTooltip="<b class='font-bold'>Change in Gibbs Free Energy</b>
+                                        pTooltip="<span class='font-semibold'>Change in Gibbs Free Energy:</span>
                                         The larger negative values indicating greater thermodynamic feasibility."
                                         [escape]="false"
                                         >ΔrG’°</span
