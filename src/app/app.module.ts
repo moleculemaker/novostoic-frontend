@@ -74,10 +74,10 @@ import { DgPredictorResultComponent } from './components/novostoic/dg-predictor-
 import { MainLayoutComponent } from './components/novostoic/main-layout/main-layout.component';
 import { CenterLayoutComponent } from './components/novostoic/center-layout/center-layout.component';
 import { MoleculeImageComponent } from './components/novostoic/molecule-image/molecule-image.component';
-import { ChemicalInputComponent } from './components/novostoic/chemical-input/chemical-input.component';
 import { MoleculeInfoOverlayComponent } from './components/novostoic/molecule-info-overlay/molecule-info-overlay.component';
 import { MoleculeInputWithAmountComponent } from './components/novostoic/molecule-input-with-amount/molecule-input-with-amount.component';
 import { OptstoicChemicalValidatorDirective } from './directives/optstoic-chemical-validator.directive';
+import { KetcherComponent } from "./components/novostoic/ketcher/ketcher.component";
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig("/assets/config/envvars.json");
@@ -90,6 +90,7 @@ const initAppFn = (envService: EnvironmentService) => {
 
     LandingPageComponent,
     OverallStoichiometryComponent,
+    KetcherComponent,
     SidebarComponent,
     AboutNovostoicComponent,
     OverallStoichiometryResultComponent,
@@ -106,7 +107,6 @@ const initAppFn = (envService: EnvironmentService) => {
     MainLayoutComponent,
     CenterLayoutComponent,
     MoleculeImageComponent,
-    ChemicalInputComponent,
     MoleculeInfoOverlayComponent,
     MoleculeInputWithAmountComponent,
     OptstoicChemicalValidatorDirective,

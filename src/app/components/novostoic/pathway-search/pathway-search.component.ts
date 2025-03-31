@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
-import { BehaviorSubject, Observable, combineLatest, first, forkJoin, from, map, of, switchMap } from "rxjs";
+import { BehaviorSubject, Observable, combineLatest, filter, first, forkJoin, from, map, of, switchMap } from "rxjs";
 import { PathwaySearchRequest } from "~/app/models/pathway-search";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
 import { NovostoicService } from "~/app/services/novostoic.service";
@@ -67,29 +67,40 @@ export class PathwaySearchComponent implements OnInit {
           primaryPrecursor$, 
           targetMolecule$, 
           forkJoin(molecules$)
-        ]).subscribe(([
-          primaryPrecursor, 
-          targetMolecule, 
-          molecules
-        ]) => {
-          input.stoichiometry.reactants.forEach((reactant: { amount: number, molecule: any }) => {
-            reactant.molecule = molecules!.find((m: any) => m.metanetx_id === reactant.molecule);
+        ])
+          .pipe(
+            filter(([p, t, m]) => 
+              p.status === 'loaded' 
+              && t.status === 'loaded' 
+              && m.every((m) => m.status === 'loaded')
+            ),
+            map(([p, t, m]) => [
+              p.data as ChemicalAutoCompleteResponse, 
+              t.data as ChemicalAutoCompleteResponse, 
+              m.map((m) => m.data as ChemicalAutoCompleteResponse)
+            ])
+          )
+          .subscribe((result) => {
+            let [ primaryPrecursor, targetMolecule, molecules ] = result;
+            
+            input.stoichiometry.reactants.forEach((reactant: { amount: number, molecule: any }) => {
+              reactant.molecule = (molecules as ChemicalAutoCompleteResponse[]).find((m: any) => m.metanetx_id === reactant.molecule);
+            });
+
+            input.stoichiometry.products.forEach((product: { amount: number, molecule: any }) => {
+              product.molecule = (molecules as ChemicalAutoCompleteResponse[]).find((m: any) => m.metanetx_id === product.molecule);
+            });
+
+            this.primaryPrecursor$.next(primaryPrecursor as ChemicalAutoCompleteResponse);
+            this.targetMolecule$.next(targetMolecule as ChemicalAutoCompleteResponse);
+            this.stoichiometry$.next(input.stoichiometry);
+
+            this.request.addPrimaryPercursorFromMolecule(primaryPrecursor as Partial<ChemicalAutoCompleteResponse>);
+            this.request.addTargetMoleculeFromMolecule(targetMolecule as Partial<ChemicalAutoCompleteResponse>);
+            this.request.addFromStoichiometry(input.stoichiometry);
+
+            this.editing$.next(false);
           });
-
-          input.stoichiometry.products.forEach((product: { amount: number, molecule: any }) => {
-            product.molecule = molecules!.find((m: any) => m.metanetx_id === product.molecule);
-          });
-
-          this.primaryPrecursor$.next(primaryPrecursor);
-          this.targetMolecule$.next(targetMolecule);
-          this.stoichiometry$.next(input.stoichiometry);
-
-          this.request.addPrimaryPercursorFromMolecule(primaryPrecursor!);
-          this.request.addTargetMoleculeFromMolecule(targetMolecule!);
-          this.request.addFromStoichiometry(input.stoichiometry);
-
-          this.editing$.next(false);
-        });
       } else {
         this.editing$.next(true);
       }

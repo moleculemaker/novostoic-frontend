@@ -5,14 +5,14 @@ import {
 } from "./overall-stoichiometry";
 import exampleResponse from './output.pathway.response.json'
 import { presenceEnforcementOnAmountAndMolecule, requireBothAmountAndMolecule } from "../validators/novostoic-chemical-validator";
-import { NovostoicService } from "../services/novostoic.service";
+import { Loadable, NovostoicService } from "../services/novostoic.service";
 import { ChemicalAutoCompleteResponse } from "../api/mmli-backend/v1/model/chemicalAutoCompleteResponse";
 
 export class PathwaySearchRequest {
-  primaryPrecursor: ChemicalAutoCompleteResponse | null = null;
-  targetMolecule: ChemicalAutoCompleteResponse | null = null;
-  coReactants: Array<ChemicalAutoCompleteResponse | null> = [];
-  coProducts: Array<ChemicalAutoCompleteResponse | null> = [];
+  primaryPrecursor: Loadable<ChemicalAutoCompleteResponse> = { status: 'na', data: null };
+  targetMolecule: Loadable<ChemicalAutoCompleteResponse> = { status: 'na', data: null };
+  coReactants: Array<Loadable<ChemicalAutoCompleteResponse>> = [];
+  coProducts: Array<Loadable<ChemicalAutoCompleteResponse>> = [];
   pathwayParameterSettings = {
     maxSteps: {
       min: 0,
@@ -130,7 +130,7 @@ export class PathwaySearchRequest {
       molecule: molecule.metanetx_id || null,
       amount: 1,
     });
-    this.primaryPrecursor = molecule as ChemicalAutoCompleteResponse;
+    this.primaryPrecursor = { status: 'loaded', data: molecule as ChemicalAutoCompleteResponse };
   }
 
   addTargetMoleculeFromMolecule(molecule: NovostoicMolecule) {
@@ -138,7 +138,7 @@ export class PathwaySearchRequest {
       molecule: molecule.metanetx_id || null,
       amount: 1,
     });
-    this.targetMolecule = molecule as ChemicalAutoCompleteResponse;
+    this.targetMolecule = { status: 'loaded', data: molecule as ChemicalAutoCompleteResponse };
   }
 
   addFromStoichiometry(stoichiometry: NovostoicStoichiometry) {
@@ -153,7 +153,7 @@ export class PathwaySearchRequest {
           amount: r.amount,
         })),
     );
-    this.coReactants = stoichiometry.reactants.map((r) => r.molecule as ChemicalAutoCompleteResponse);
+    this.coReactants = stoichiometry.reactants.map((r) => ({ status: 'loaded', data: r.molecule as ChemicalAutoCompleteResponse }));
 
     this.form.controls["coProducts"].clear();
     for (let i = 0; i < stoichiometry.products.length; i++) {
@@ -166,19 +166,19 @@ export class PathwaySearchRequest {
           amount: r.amount,
         })),
     );
-    this.coProducts = stoichiometry.products.map((r) => r.molecule as ChemicalAutoCompleteResponse);
+    this.coProducts = stoichiometry.products.map((r) => ({ status: 'loaded', data: r.molecule as ChemicalAutoCompleteResponse }));
   }
 
   addCoReactant() {
     this.form.controls["coReactants"].push(
       this.createMoleculeInputWithAmount(false),
     );
-    this.coReactants.push(null);
+    this.coReactants.push({ status: 'na', data: null });
   }
 
   addCoProduct() {
     this.form.controls["coProducts"].push(this.createMoleculeInputWithAmount(false));
-    this.coProducts.push(null);
+    this.coProducts.push({ status: 'na', data: null });
   }
 
   removeCoReactant(index: number) {
@@ -205,12 +205,12 @@ export class PathwaySearchRequest {
     // Clear and reset co-reactants
     this.form.controls["coReactants"].clear();
     this.addCoReactant();
-    this.coReactants = [null];
+    this.coReactants = [{ status: 'na', data: null }];
 
     // Clear and reset co-products
     this.form.controls["coProducts"].clear();
     this.addCoProduct();
-    this.coProducts = [null];
+    this.coProducts = [{ status: 'na', data: null }];
   }
 
   resetSetting() {
@@ -259,47 +259,62 @@ export class PathwaySearchRequest {
       subscriberEmail: null, // Add subscriberEmail property
     });
     request.primaryPrecursor = {
-      "name": "3-methyl-2-oxobutanoate",
-      "smiles": "CC(C)C(=O)C(=O)O",
-      "inchi": "InChI=1S/C5H8O3/c1-3(2)4(6)5(7)8/h3H,1-2H3,(H,7,8)/p-1",
+      status: 'loaded',
+      data: {
+        "name": "3-methyl-2-oxobutanoate",
+        "smiles": "CC(C)C(=O)C(=O)O",
+        "inchi": "InChI=1S/C5H8O3/c1-3(2)4(6)5(7)8/h3H,1-2H3,(H,7,8)/p-1",
       "inchi_key": "InChIKey=QHKABHOOEWYVLI-UHFFFAOYSA-M",
       "metanetx_id": "MNXM732866",
-      "kegg_id": "C00141",
+        "kegg_id": "C00141",
+      }
     };
     request.targetMolecule = {
-      "name": "isobutanol",
-      "smiles": "CC(C)CO",
+      status: 'loaded',
+      data: {
+        "name": "isobutanol",
+        "smiles": "CC(C)CO",
       "inchi": "InChI=1S/C4H10O/c1-4(2)3-5/h4-5H,3H2,1-2H3",
       "inchi_key": "InChIKey=ZXEKIIBDNHEJCQ-UHFFFAOYSA-N",
       "metanetx_id": "MNXM5188",
       "kegg_id": "C14710",
-    };
+    }
+  };
     request.coReactants = [
       {
-        "name": "NADH",
+        status: 'loaded',
+        data: {
+          "name": "NADH",
         "smiles": "NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1",
         "inchi": "InChI=1S/C21H29N7O14P2/c22-17-12-19(25-7-24-17)28(8-26-12)21-16(32)14(30)11(41-21)6-39-44(36,37)42-43(34,35)38-5-10-13(29)15(31)20(40-10)27-3-1-2-9(4-27)18(23)33/h1,3-4,7-8,10-11,13-16,20-21,29-32H,2,5-6H2,(H2,23,33)(H,34,35)(H,36,37)(H2,22,24,25)/p-2/t10-,11-,13-,14-,15-,16-,20-,21-/m1/s1",
         "inchi_key": "InChIKey=BOPGDPNILDQYTO-NNYOXOHSSA-L",
         "metanetx_id": "MNXM10",
         "kegg_id": "C00004",
       }
+    }
     ];
     request.coProducts = [
       {
-        "name": "NAD(+)",
-        "smiles": "NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)([O-])OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)c1",
+        status: 'loaded',
+        data: {
+          "name": "NAD(+)",
+          "smiles": "NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)([O-])OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)c1",
         "inchi": "InChI=1S/C21H27N7O14P2/c22-17-12-19(25-7-24-17)28(8-26-12)21-16(32)14(30)11(41-21)6-39-44(36,37)42-43(34,35)38-5-10-13(29)15(31)20(40-10)27-3-1-2-9(4-27)18(23)33/h1-4,7-8,10-11,13-16,20-21,29-32H,5-6H2,(H5-,22,23,24,25,33,34,35,36,37)/p-1/t10-,11-,13-,14-,15-,16-,20-,21-/m1/s1",
-        "inchi_key": "InChIKey=BAWFJGJZGIEFAR-NNYOXOHSSA-M",
-        "metanetx_id": "MNXM8",
-        "kegg_id": "C00003",
+          "inchi_key": "InChIKey=BAWFJGJZGIEFAR-NNYOXOHSSA-M",
+          "metanetx_id": "MNXM8",
+          "kegg_id": "C00003",
+        }
       },
       {
-        "name": "CO2",
-        "smiles": "O=C=O",
-        "inchi": "InChI=1S/CO2/c2-1-3",
-        "inchi_key": "InChIKey=CURLTUGMZLYLDI-UHFFFAOYSA-N",
-        "metanetx_id": "MNXM13",
-        "kegg_id": "C00011",
+        status: 'loaded',
+        data: {
+          "name": "CO2",
+          "smiles": "O=C=O",
+          "inchi": "InChI=1S/CO2/c2-1-3",
+          "inchi_key": "InChIKey=CURLTUGMZLYLDI-UHFFFAOYSA-N",
+          "metanetx_id": "MNXM13",
+          "kegg_id": "C00011",
+        }
       }
     ];
       
@@ -324,27 +339,27 @@ export class PathwaySearchRequest {
   }
 
   toRequestBody() {
-    if (!this.primaryPrecursor || !this.targetMolecule) {
+    if (!this.primaryPrecursor.data || !this.targetMolecule.data) {
       throw new Error("Primary precursor or target molecule not set");
     }
     const jobInfo = {
       substrate: {
         amount: this.form.controls["primaryPrecursor"].value.amount,
-        molecule: this.primaryPrecursor!.metanetx_id,
+        molecule: this.primaryPrecursor.data!.metanetx_id,
       },
       product: {
         amount: this.form.controls["targetMolecule"].value.amount,
-        molecule: this.targetMolecule!.metanetx_id,
+        molecule: this.targetMolecule.data!.metanetx_id,
       },
       max_steps: this.form.controls["maxSteps"].value,
       iterations: this.form.controls["maxPathways"].value,
       reactants: this.coReactants.map((c, i) => ({
         amount: this.form.controls["coReactants"].at(i)?.value.amount,
-        molecule: c!.metanetx_id,
+        molecule: c.data!.metanetx_id,
       })),
       products: this.coProducts.map((c, i) => ({
         amount: this.form.controls["coProducts"].at(i)?.value.amount,
-        molecule: c!.metanetx_id,
+        molecule: c.data!.metanetx_id,
       })),
       num_enzymes: this.form.controls["numEnzymeCandidates"].value,
     };

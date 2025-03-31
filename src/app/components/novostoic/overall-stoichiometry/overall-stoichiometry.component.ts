@@ -1,11 +1,11 @@
-import { Component } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { BehaviorSubject, map } from "rxjs";
 import { NovostoicTools } from "~/app/enums/novostoic-tools";
-import { NovostoicService } from "~/app/services/novostoic.service";
+import { Loadable, NovostoicService } from "~/app/services/novostoic.service";
 import { OverallStoichiometryRequest } from "~/app/models/overall-stoichiometry";
 import { ChemicalAutoCompleteResponse, JobType } from "~/app/api/mmli-backend/v1";
-import { DomSanitizer } from "@angular/platform-browser";
+import { MarvinjsInputComponent } from "../marvinjs-input/marvinjs-input.component";
 
 @Component({
   selector: "app-overall-stoichiometry",
@@ -16,10 +16,11 @@ import { DomSanitizer } from "@angular/platform-browser";
   }
 })
 export class OverallStoichiometryComponent {
+  @ViewChild('ppInput') ppInput!: MarvinjsInputComponent;
+  @ViewChild('tmInput') tmInput!: MarvinjsInputComponent;
+
   request = new OverallStoichiometryRequest(this.novostoicService);
   showDialog$ = new BehaviorSubject(false);
-  validatedPrimaryPrecursor$ = new BehaviorSubject<ChemicalAutoCompleteResponse | null>(null);
-  validatedTargetMolecule$ = new BehaviorSubject<ChemicalAutoCompleteResponse | null>(null);
 
   exampleJobId = "5a3cbcdca72d4fdaab33603725bb9ef8";
   examplePrimaryPrecursor = "C00022";
@@ -40,14 +41,18 @@ export class OverallStoichiometryComponent {
     this.showDialog$.next(false);
   }
 
-  onPrimaryPrecursorValidated(response: ChemicalAutoCompleteResponse | null) {
-    this.validatedPrimaryPrecursor$.next(response);
-    this.examplePrimaryPrecursorUsed = response?.kegg_id === this.examplePrimaryPrecursor;
-  }
-
-  onTargetMoleculeValidated(response: ChemicalAutoCompleteResponse | null) {
-    this.validatedTargetMolecule$.next(response);
-    this.exampleTargetMoleculeUsed = response?.kegg_id === this.exampleTargetMolecule;
+  onValidationStatusChange(role: 'primaryPrecursor' | 'targetMolecule', event: Loadable<ChemicalAutoCompleteResponse>) {
+    const { status, data } = event;
+    this.request[role] = event;
+    if (status === 'loaded') {
+      if (role === 'primaryPrecursor') {
+        this.ppInput.setMarvinInputBypass(data?.smiles as string ?? '');
+        this.examplePrimaryPrecursorUsed = data?.kegg_id === this.examplePrimaryPrecursor;
+      } else {
+        this.tmInput.setMarvinInputBypass(data?.smiles as string ?? '');
+        this.exampleTargetMoleculeUsed = data?.kegg_id === this.exampleTargetMolecule;
+      }
+    }
   }
 
   onSubmit() {

@@ -18,6 +18,13 @@
   }
 }
 
+::ng-deep .ng-invalid.ng-dirty > .marvin-filter-container {
+  border-color: var(--red-500);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 6px;
+}
+
 .marvin-editor-container {
   z-index: 9000 !important;
 

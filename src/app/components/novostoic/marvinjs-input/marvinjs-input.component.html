@@ -30,10 +30,7 @@
     [draggable]="false"
     [resizable]="false"
 >
-    <app-marvin-js-editor
-        class="marvin-editor"
-        [(ngModel)]="marvinInput"
-    ></app-marvin-js-editor>
+    <app-ketcher [(smiles)]="marvinInput"></app-ketcher>
     <ng-template pTemplate="footer">
         <p-button
             icon="pi pi-check"
