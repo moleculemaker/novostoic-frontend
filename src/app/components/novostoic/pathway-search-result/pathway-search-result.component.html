@@ -271,6 +271,10 @@
                 <small class="font-semibold leading-base opacity-60">InChi</small>
                 <span class="break-all">{{ molecule.inchi ? molecule.inchi : 'N/A' }}</span>
             </div>
+            <div class="flex flex-col gap-1">
+                <small class="font-semibold leading-base opacity-60">MetaNetX ID</small>
+                <span class="break-all">{{ molecule.metanetx_id ? molecule.metanetx_id : 'N/A' }}</span>
+            </div>
         </div>
     </p-scrollPanel>
 </ng-template>

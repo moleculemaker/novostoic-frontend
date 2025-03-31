@@ -26,10 +26,14 @@
     </div>
     <div *ngIf="showSmiles" class="flex justify-between mt-2">
         <span class="leading-base opacity-60">SMILES</span>
-        <span class="font-semibold text-end">{{ molecule.smiles }}</span>
+        <span class="font-semibold text-end">{{ molecule.smiles ? molecule.smiles : 'N/A' }}</span>
     </div>
     <div class="flex justify-between mt-2">
         <span class="leading-base opacity-60">KEGG ID</span>
-        <span class="font-semibold text-end">{{ molecule.kegg_id }}</span>
+        <span class="font-semibold text-end">{{ molecule.kegg_id ? molecule.kegg_id : 'N/A' }}</span>
+    </div>
+    <div class="flex justify-between mt-2">
+        <span class="leading-base opacity-60">MetaNetX ID</span>
+        <span class="font-semibold text-end">{{ molecule.metanetx_id ? molecule.metanetx_id : 'N/A' }}</span>
     </div>
 </ng-template>
