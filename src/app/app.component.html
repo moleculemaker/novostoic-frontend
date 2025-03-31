@@ -96,7 +96,15 @@
         <div class="spacer"></div>
 
         <div class="flex link">
-            <a class="flex items-center m-1 cursor-pointer" href="https://docs.google.com/document/d/1RQY7Y2x0gZV7GWwkVsk_i3KK3jYzWTp9cDhcC45blCI/edit?usp=sharing" target="_blank">
+            <a class="flex items-center m-1 cursor-pointer" (click)="tutorialMenu.toggle($event)">
+                <p-menu #tutorialMenu [model]="tutorialMenuItems" [popup]="true" appendTo="body" [baseZIndex]="9999">
+                    <ng-template pTemplate="item" let-item>
+                        <a class="flex items-center">
+                            <span class="ml-2">{{ item.label }}</span>
+                            <i [class]="item.icon"></i>
+                        </a>
+                    </ng-template>
+                </p-menu>
                 <i class="mr-1 pi pi-question-circle"></i> Tutorial
             </a>
             <a class="flex items-center m-1 ml-3 cursor-pointer" href="/about">

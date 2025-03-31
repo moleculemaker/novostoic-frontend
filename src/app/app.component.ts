@@ -28,6 +28,21 @@ export class AppComponent {
       : [];
   }
 
+  get tutorialMenuItems(): Array<MenuItem> {
+    return [
+      {
+        label: "PDF Document",
+        icon: "pi pi-arrow-up-right",
+        command: () => window.open("https://docs.google.com/document/d/1RQY7Y2x0gZV7GWwkVsk_i3KK3jYzWTp9cDhcC45blCI/edit?usp=sharing", "_blank"),
+      },
+      {
+        label: "Video Demo",
+        icon: "pi pi-arrow-up-right",
+        command: () => window.open("https://www.youtube.com/playlist?list=PLB1aNjF9YcxD5a987OV1RcvdjwRNKQtT0", "_blank"),
+      },
+    ];
+  }
+
   get userInfo() {
     return this.userInfoService.userInfo;
   }
