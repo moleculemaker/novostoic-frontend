@@ -11,8 +11,8 @@ interface ReactionFormControl {
 
 export class ThermodynamicalFeasibilityRequest {
   form = new FormGroup({
-    ph: new FormControl(5, [Validators.required]),
-    ionicStrength: new FormControl(0.3, [Validators.required]),
+    ph: new FormControl(7, [Validators.required]),
+    ionicStrength: new FormControl(0.1, [Validators.required]),
     reactions: new FormArray([
       this.createReactionKeggIDFormControl()
     ]),
