@@ -353,14 +353,18 @@ export class PathwaySearchRequest {
       },
       max_steps: this.form.controls["maxSteps"].value,
       iterations: this.form.controls["maxPathways"].value,
-      reactants: this.coReactants.map((c, i) => ({
-        amount: this.form.controls["coReactants"].at(i)?.value.amount,
-        molecule: c.data!.metanetx_id,
-      })),
-      products: this.coProducts.map((c, i) => ({
-        amount: this.form.controls["coProducts"].at(i)?.value.amount,
-        molecule: c.data!.metanetx_id,
-      })),
+      reactants: this.coReactants
+        .filter((c) => c.status === 'loaded')
+        .map((c, i) => ({
+          amount: this.form.controls["coReactants"].at(i)?.value.amount,
+          molecule: c.data!.metanetx_id,
+        })),
+      products: this.coProducts
+        .filter((c) => c.status === 'loaded')
+        .map((c, i) => ({
+          amount: this.form.controls["coProducts"].at(i)?.value.amount,
+          molecule: c.data!.metanetx_id,
+        })),
       num_enzymes: this.form.controls["numEnzymeCandidates"].value,
     };
     return {

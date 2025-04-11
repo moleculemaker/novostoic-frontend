@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, forwardRef, Output } from '@angular/core';
+import { Directive, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { AbstractControl, AsyncValidator, NG_ASYNC_VALIDATORS, ValidationErrors } from '@angular/forms';
 import { Loadable, NovostoicService } from '../services/novostoic.service';
 import { debounceTime, distinctUntilChanged, filter, first, map, Observable, of, startWith, switchMap, tap } from 'rxjs';
@@ -15,6 +15,7 @@ import { ChemicalAutoCompleteResponse } from '../api/mmli-backend/v1';
   ]
 })
 export class OptstoicChemicalValidatorDirective implements AsyncValidator {
+  @Input() mandateChemical = true;
   @Output() onChemicalValidationStatusChange = new EventEmitter<Loadable<ChemicalAutoCompleteResponse>>();
 
   constructor(private novostoicService: NovostoicService) { }
@@ -25,8 +26,9 @@ export class OptstoicChemicalValidatorDirective implements AsyncValidator {
         status: 'na',
         data: null
       });
-      return of({ required: true });
+      return this.mandateChemical ? of({ required: true }) : of(null);
     }
+
     return control.valueChanges.pipe(
       tap(() => {
         this.onChemicalValidationStatusChange.emit({

@@ -160,6 +160,7 @@
                                                 placeholder="Name, SMILES, InChi, Kegg ID, or MetaNetX ID"
                                                 formControlName="molecule"
                                                 appOptstoicChemicalValidator
+                                                [mandateChemical]="false"
                                                 (onChemicalValidationStatusChange)="request.coReactants[i] = $event"
                                             >
                                                 <div *ngIf="control.dirty" errors>
@@ -230,6 +231,7 @@
                                                 placeholder="Name, SMILES, InChi, Kegg ID, or MetaNetX ID"
                                                 formControlName="molecule"
                                                 appOptstoicChemicalValidator
+                                                [mandateChemical]="false"
                                                 (onChemicalValidationStatusChange)="request.coProducts[i] = $event"
                                             >
                                                 <div *ngIf="control.dirty" errors>
