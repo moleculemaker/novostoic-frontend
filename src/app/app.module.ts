@@ -154,7 +154,7 @@ const initAppFn = (envService: EnvironmentService) => {
     HttpClientModule,
     NgxMatomoTrackerModule.forRoot({
       siteId: 7,
-      trackerUrl: "https://matomo.mmli1.ncsa.illinois.edu/",
+      trackerUrl: "https://matomo.mmli2.ncsa.illinois.edu/",
     }),
     NgxMatomoRouterModule,
     MenuModule,
