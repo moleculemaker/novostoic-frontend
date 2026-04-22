@@ -29,5 +29,5 @@ extraDeploy:
   spec:
     redirectRegex:
       regex: "^https:\\/\\/novostoic\\.frontend\\.mmli\\d\\.ncsa\\.illinois\\.edu(\\/.*)"
-      replacement: "https://novostoic.platform.moleculemaker.org/${1}"
+      replacement: "https://novostoic.platform.moleculemaker.org${1}"
       permanent: true
