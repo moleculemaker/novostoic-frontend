@@ -38,7 +38,6 @@ import { LandingPageComponent } from "./components/landing-page/landing-page.com
 import { SidebarComponent } from "./components/novostoic/sidebar/sidebar.component";
 import { OverallStoichiometryComponent } from "./components/novostoic/overall-stoichiometry/overall-stoichiometry.component";
 import { AboutNovostoicComponent } from "./components/novostoic/about-novostoic/about-novostoic.component";
-import { MarvinJsModule } from "./components/novostoic/marvinjs/marvinjs.module";
 import { MarvinjsInputComponent } from "./components/novostoic/marvinjs-input/marvinjs-input.component";
 
 // import { ConfigurationComponent} from './components/chemscraper/configuration/configuration.component';
@@ -54,7 +53,6 @@ import { NgxMatomoRouterModule } from "@ngx-matomo/router";
 
 import { EnvironmentService } from "@services/environment.service";
 import { MenuModule } from "primeng/menu";
-// import { MarvinJsModule } from "./components/chemscraper/marvinjs/marvinjs.module";
 import { DialogModule } from "primeng/dialog";
 // import { ExportMenuComponent } from './components/chemscraper/results/export-menu/export-menu.component';
 // import { PdfContextViewerComponent } from './components/chemscraper/results/pdf-context-viewer/pdf-context-viewer.component';
@@ -162,7 +160,6 @@ const initAppFn = (envService: EnvironmentService) => {
 
     ApiModule.forRoot(() => new Configuration()),
     ReactiveFormsModule,
-    MarvinJsModule,
     DialogModule,
   ],
   providers: [
